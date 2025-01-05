@@ -11,6 +11,8 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -52,6 +54,7 @@ public class Robot extends LoggedRobot
 
         if(isReal()){
             Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+            new PowerDistribution(1, ModuleType.kRev);
             
             PathfindingCommand.warmupCommand().schedule();
         }
@@ -62,6 +65,8 @@ public class Robot extends LoggedRobot
 
                 Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
                 Logger.setReplaySource(new WPILOGReader(logPath));
+
+                setUseTiming(false);
             }
         }
 
