@@ -30,6 +30,7 @@ public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;    
     
+    @SuppressWarnings("resource")
     public Robot() {
         new RobotContainer();
 
@@ -53,7 +54,7 @@ public class Robot extends LoggedRobot
         }
 
         if(isReal()){
-            Logger.addDataReceiver(new WPILOGWriter("/U/logs"));
+            Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
             new PowerDistribution(1, ModuleType.kRev);
             
             PathfindingCommand.warmupCommand().schedule();
