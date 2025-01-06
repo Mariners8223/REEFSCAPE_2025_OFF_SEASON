@@ -25,6 +25,7 @@ import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
+import org.littletonrobotics.junction.wpilog.WPILOGWriter.AdvantageScopeOpenBehavior;
 
 public class Robot extends LoggedRobot
 {
@@ -64,7 +65,7 @@ public class Robot extends LoggedRobot
                 String logPath = LogFileUtil.findReplayLog();
                 ControllerMaster.getInstance().stopLoop();
 
-                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim")));
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"), AdvantageScopeOpenBehavior.ALWAYS));
                 Logger.setReplaySource(new WPILOGReader(logPath));
 
                 setUseTiming(false);
