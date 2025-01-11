@@ -8,14 +8,6 @@
         "type": "tabs",
         "children": [
           {
-            "id": "f4f05e3b2346353d",
-            "type": "leaf",
-            "state": {
-              "type": "graph",
-              "state": {}
-            }
-          },
-          {
             "id": "6e449c2dca56f06e",
             "type": "leaf",
             "state": {
@@ -24,6 +16,16 @@
                 "file": "Elevator/Elevator Requirements.md",
                 "mode": "source",
                 "source": false
+              }
+            }
+          },
+          {
+            "id": "0d97c8550cea89c3",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Elevator/Elevator Flowchart.md"
               }
             }
           }
@@ -94,7 +96,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Elevator/Elevator Requirements.md",
+                "file": "Elevator/Elevator Flowchart.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -111,7 +113,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Elevator/Elevator Requirements.md",
+                "file": "Elevator/Elevator Flowchart.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -134,7 +136,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Elevator/Elevator Requirements.md"
+                "file": "Elevator/Elevator Flowchart.md"
               }
             }
           }
@@ -156,10 +158,12 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "5476f687e6b02140",
+  "active": "0d97c8550cea89c3",
   "lastOpenFiles": [
+    "Elevator/Elevator Flowchart.md",
     "Elevator/Elevator Requirements.md",
-    "Elevator",
-    "Welcome.md"
+    "Welcome.md",
+    "Excalidraw",
+    "Elevator"
   ]
 }
