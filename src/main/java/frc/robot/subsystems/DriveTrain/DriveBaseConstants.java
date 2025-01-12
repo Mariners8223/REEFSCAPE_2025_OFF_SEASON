@@ -48,7 +48,7 @@ public class DriveBaseConstants {
                 Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
                         DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY :
                         CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY,
-                10,
+                10, //TODO find a good value for this
                 10,
                 20); //the constraints for pathPlanner
 
