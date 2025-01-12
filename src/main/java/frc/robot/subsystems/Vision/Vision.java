@@ -4,12 +4,12 @@
 
 package frc.robot.subsystems.Vision;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.logging.Logger;
 
+import org.littletonrobotics.junction.AutoLog;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -20,29 +20,53 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
+
+
 public class Vision extends SubsystemBase {
-  private final ArrayList<PhotonCamera> cameras = new ArrayList<>();
-  private final ArrayList<PhotonPoseEstimator> poseEstimators = new ArrayList<>();
+
+  @AutoLog
+  public static class VisionInputs{
+    public boolean hasTarget = false;
+    public Pose3d estimatedPose = new Pose3d();
+    public double timeStamp;
+    public double latency;
+  }
+
+  private final PhotonCamera[] cameras;
+  private final PhotonPoseEstimator[] poseEstimators;
+  private final VisionInputsAutoLogged[] inputs;
 
   private final Consumer<Pair<Pose2d, Double>> poseConsumer;
   /** Creates a new Vision. */
   public Vision(Consumer<Pair<Pose2d, Double>> poseConsumer) {
     AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
 
-    for(CameraConstants constants : CameraConstants.values()){
-      cameras.add(new PhotonCamera(constants.cameraName));
+    int numOfCameras = CameraConstants.values().length;
+
+    cameras = new PhotonCamera[numOfCameras];
+    poseEstimators = new PhotonPoseEstimator[numOfCameras];
+    inputs = new VisionInputsAutoLogged[numOfCameras];
+
+    CameraConstants[] constants = CameraConstants.values();
+
+    for(int i = 0; i < numOfCameras; i++){
+      cameras[i] = new PhotonCamera(constants[i].cameraName);
+      inputs[i] = new VisionInputsAutoLogged();
 
       PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(
         aprilTagFieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        constants.robotToCamera);
+        constants[i].robotToCamera);
 
       poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
-      poseEstimators.add(poseEstimator);  
+      poseEstimators[i] = poseEstimator;                                                                                                          
     }
 
     this.poseConsumer = poseConsumer;
@@ -50,13 +74,13 @@ public class Vision extends SubsystemBase {
 
   @Override
   public void periodic() {
-    for(int i = 0; i < cameras.size(); i++){
-      PhotonCamera camera = cameras.get(i);
-      PhotonPoseEstimator poseEstimator = poseEstimators.get(i);
+    for(int i = 0; i < cameras.length; i++){
+      PhotonCamera camera = cameras[i];
+      PhotonPoseEstimator poseEstimator = poseEstimators[i];
 
       List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
-      Optional<EstimatedRobotPose> lastPose = Optional.empty();
+      EstimatedRobotPose lastPose = null;
 
       for(PhotonPipelineResult result : results){
         if(!result.hasTargets()) continue;
@@ -67,10 +91,28 @@ public class Vision extends SubsystemBase {
 
         EstimatedRobotPose pose = optionalPose.get();
 
-        lastPose = Optional.of(pose);
+        lastPose = pose;
 
         poseConsumer.accept(new Pair<Pose2d,Double>(pose.estimatedPose.toPose2d(), pose.timestampSeconds));
       }
+
+      
+      inputs[i].hasTarget = results.get(results.size() - 1).hasTargets();
+
+      if(lastPose != null){
+        inputs[i].estimatedPose = lastPose.estimatedPose;
+        inputs[i].timeStamp = lastPose.timestampSeconds;
+        inputs[i].latency = RobotController.getMeasureTime().in(Units.Seconds) - inputs[i].timeStamp;
+      }else{
+        inputs[i].estimatedPose = new Pose3d();
+        inputs[i].timeStamp = -1;
+        inputs[i].timeStamp = -1;
+
+      }
+
+      Logger.processInputs(VisionConstants.CameraConstants.values()[i].cameraName, inputs[i]);
+
     }
+  
   }
 }
