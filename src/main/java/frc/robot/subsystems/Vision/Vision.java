@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.logging.Logger;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -55,6 +56,8 @@ public class Vision extends SubsystemBase {
 
       List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
+      Optional<EstimatedRobotPose> lastPose = Optional.empty();
+
       for(PhotonPipelineResult result : results){
         if(!result.hasTargets()) continue;
 
@@ -64,9 +67,10 @@ public class Vision extends SubsystemBase {
 
         EstimatedRobotPose pose = optionalPose.get();
 
+        lastPose = Optional.of(pose);
+
         poseConsumer.accept(new Pair<Pose2d,Double>(pose.estimatedPose.toPose2d(), pose.timestampSeconds));
       }
     }
-    // This method will be called once per scheduler run
   }
 }
