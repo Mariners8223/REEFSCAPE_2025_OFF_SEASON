@@ -19,6 +19,7 @@ public class VisionConstants {
         public final String cameraName;
 
         public final Transform3d robotToCamera;
+        
 
         private CameraConstants(String name, Transform3d robotToCamera){
             this.cameraName = name;
