@@ -5,9 +5,9 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
@@ -17,48 +17,56 @@ import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 public class Vision extends SubsystemBase {
-  private ArrayList<PhotonCamera> cameras = new ArrayList<>();
-  private ArrayList<PhotonPoseEstimator> photonPoseEstimators = new ArrayList<>();
+  private final ArrayList<PhotonCamera> cameras = new ArrayList<>();
+  private final ArrayList<PhotonPoseEstimator> poseEstimators = new ArrayList<>();
+
+  private final Consumer<Pair<Pose2d, Double>> poseConsumer;
   /** Creates a new Vision. */
-  public Vision() {
+  public Vision(Consumer<Pair<Pose2d, Double>> poseConsumer) {
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+
     for(CameraConstants constants : CameraConstants.values()){
       cameras.add(new PhotonCamera(constants.cameraName));
 
-      photonPoseEstimators
-    }
-    Transform3d robotToCam = new Transform3d(new Translation3d(0.5, 0.0, 0.5), new Rotation3d(0,0,0)); //Cam mounted facing forward, half a meter forward of center, half a meter up from center.
+      PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(
+        aprilTagFieldLayout,
+        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+        constants.robotToCamera);
 
+      poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+      poseEstimators.add(poseEstimator);  
+    }
+
+    this.poseConsumer = poseConsumer;
   }
 
   @Override
   public void periodic() {
-    for(PhotonCamera camera : cameras){
+    for(int i = 0; i < cameras.size(); i++){
+      PhotonCamera camera = cameras.get(i);
+      PhotonPoseEstimator poseEstimator = poseEstimators.get(i);
+
       List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
       for(PhotonPipelineResult result : results){
         if(!result.hasTargets()) continue;
 
-        AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+        Optional<EstimatedRobotPose> optionalPose = poseEstimator.update(result);
 
-        
+        if(optionalPose.isEmpty()) continue;
 
-    // Construct PhotonPoseEstimator
-  
+        EstimatedRobotPose pose = optionalPose.get();
 
+        poseConsumer.accept(new Pair<Pose2d,Double>(pose.estimatedPose.toPose2d(), pose.timestampSeconds));
       }
     }
     // This method will be called once per scheduler run
   }
-   public Optional<EstimatedRobotPose> getEstimatedGlobalPose(Pose2d prevEstimatedRobotPose) {
-        photonPoseEstimator.setReferencePose(prevEstimatedRobotPose);
-        return photonPoseEstimator.update();
-    }
 }
