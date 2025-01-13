@@ -22,5 +22,8 @@ public interface ElevatorIO
     public void resetMotorEncoder();
     public void moveMotorByPosition(double position);
 
+    public double getCurrentPosition();
+    public double getCurrentHeight();
+
     public void Update(ElevatorInputs inputs);
 }
