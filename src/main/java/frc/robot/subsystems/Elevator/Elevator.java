@@ -30,19 +30,12 @@ public class Elevator extends SubsystemBase {
     io.moveMotorByPosition(position);
   }
 
-  public void setLevelVariable(ElevatorLevel level){
-    this.level = level;
-  }
   public ElevatorLevel getLevel(){
     return this.level;
   }
 
   public double getCurrentPosition(){
     return io.getCurrentPosition();
-  }
-
-  public double getCurrentHeight(){
-    return inputs.elevatorHeight; // TODO: Make actual formula
   }
 
   @Override

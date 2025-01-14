@@ -6,7 +6,6 @@ package frc.robot.commands.Elevator;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -27,12 +26,8 @@ public class MoveToLevel extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (desiredLevel == ElevatorLevel.Moving || desiredLevel == ElevatorLevel.NULL) this.cancel();
-
     desiredHeight = desiredLevel.getHeight();
     elevator.moveMotorByPosition(desiredHeight);
-
-    elevator.setLevelVariable(ElevatorLevel.Moving);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,16 +36,11 @@ public class MoveToLevel extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    if (!interrupted){
-      elevator.setLevelVariable(desiredLevel);
-    }
-  }
+  public void end(boolean interrupted) { }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return ((elevator.getLevel() == desiredLevel) 
-    || (Math.abs(elevator.getCurrentHeight() - desiredHeight) <= ElevatorConstants.ELEVATOR_TOLERANCE));
+    return (elevator.getLevel() == desiredLevel);
   }
 }
