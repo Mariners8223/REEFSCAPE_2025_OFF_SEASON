@@ -31,6 +31,17 @@ public class Elevator extends SubsystemBase {
   public void setLevelVariable(ElevatorLevel level){
     this.level = level;
   }
+  public ElevatorLevel getLevel(){
+    return this.level;
+  }
+
+  public double getCurrentPosition(){
+    return io.getCurrentPosition();
+  }
+
+  public double getCurrentHeight(){
+    return getCurrentPosition() * ElevatorConstants.GEAR_RATIO; // TODO: Make actual formula
+  }
 
   @Override
   public void periodic() {
