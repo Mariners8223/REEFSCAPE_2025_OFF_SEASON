@@ -2,14 +2,14 @@ package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 
 public class VisionConstants {
     public enum CameraConstants{
         FRONT_LEFT("front left",
             new Transform3d(
-                0, 0, 0,
-                new Rotation3d(0, 0, 0))),
-
+                0.11, -0.31, 0.167,
+                new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-90)))),
 
         BACK_MIDDLE("back middle",
             new Transform3d(
