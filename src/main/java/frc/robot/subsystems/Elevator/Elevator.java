@@ -17,6 +17,8 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     // io = new IO();
     level = ElevatorLevel.NULL;
+
+    this.resetMotorEncoder();
   }
 
   public void resetMotorEncoder(){
@@ -40,7 +42,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getCurrentHeight(){
-    return getCurrentPosition() * ElevatorConstants.GEAR_RATIO; // TODO: Make actual formula
+    return inputs.elevatorHeight; // TODO: Make actual formula
   }
 
   @Override
