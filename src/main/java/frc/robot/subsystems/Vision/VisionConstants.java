@@ -31,5 +31,10 @@ public class VisionConstants {
             return cameraName;
         }
     }
- 
+    //TODO test to find better numbers
+    public static final double maxHightDeveation = 0.05;
+    public static final double maxMultiAmbiguity = 0.5;
+    public static final double maxSingleAmbiguity = 0.3;
+
+
 }
