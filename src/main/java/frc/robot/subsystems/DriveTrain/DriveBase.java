@@ -8,8 +8,11 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -291,6 +294,17 @@ public class DriveBase extends SubsystemBase {
      */
     public void addVisionMeasurement(Pose2d visionPose, double timeStamp) {
         poseEstimator.addVisionMeasurement(visionPose, timeStamp);
+    }
+
+    /**
+     * updates pose Estimator with vision measurements
+     *
+     * @param visionPose the pose of the robot from vision
+     * @param timeStamp  the time stamp of the vision measurement
+     * @param stdDevs    the standard deviations of the vision measurements
+     */
+    public void addVisionMeasurement(Pose2d visionPose, double timeStamp, Matrix<N3, N1> stdDevs) {
+        poseEstimator.addVisionMeasurement(visionPose, timeStamp, stdDevs);
     }
 
     /**
