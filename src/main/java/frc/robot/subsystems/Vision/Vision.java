@@ -6,19 +6,23 @@ package frc.robot.subsystems.Vision;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.units.Units;
@@ -30,6 +34,7 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 public class Vision extends SubsystemBase {
 
+  private  final  AprilTagFieldLayout fieldLayout;
   @AutoLog
   public static class VisionInputs{
     public boolean hasTarget = false;
@@ -42,10 +47,10 @@ public class Vision extends SubsystemBase {
   private final PhotonPoseEstimator[] poseEstimators;
   private final VisionInputsAutoLogged[] inputs;
 
-  private final Consumer<Pair<Pose2d, Double>> poseConsumer;
+  private final VisionConsumer poseConsumer;
   /** Creates a new Vision. */
-  public Vision(Consumer<Pair<Pose2d, Double>> poseConsumer) {
-    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
+  public Vision(VisionConsumer poseConsumer) {
+    fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
     int numOfCameras = CameraConstants.values().length;
 
@@ -60,7 +65,7 @@ public class Vision extends SubsystemBase {
       inputs[i] = new VisionInputsAutoLogged();
 
       PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(
-        aprilTagFieldLayout,
+        fieldLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
         constants[i].robotToCamera);
 
@@ -82,18 +87,42 @@ public class Vision extends SubsystemBase {
 
       EstimatedRobotPose lastPose = null;
 
-      for(PhotonPipelineResult result : results){
+      for(PhotonPipelineResult result : results) {
         if(!result.hasTargets()) continue;
 
-        Optional<EstimatedRobotPose> optionalPose = poseEstimator.update(result);
+        double poseAmbiguity;
+        Pose3d robotPose;
+        double timeStamp = result.getTimestampSeconds();
 
-        if(optionalPose.isEmpty()) continue;
+        var estimatedPose = poseEstimator.update(result);
 
-        EstimatedRobotPose pose = optionalPose.get();
+        if(estimatedPose.isEmpty()) continue;
 
-        lastPose = pose;
+        robotPose = estimatedPose.get().estimatedPose;
 
-        poseConsumer.accept(new Pair<Pose2d,Double>(pose.estimatedPose.toPose2d(), pose.timestampSeconds));
+        boolean rejectPoseX =
+                robotPose.getX() < 0
+              ||robotPose.getX() > fieldLayout.getFieldLength();
+        boolean rejectPoseY =
+                robotPose.getY() < 0
+              ||robotPose.getY() > fieldLayout.getFieldWidth();
+        boolean rejectPoseZ =
+                Math.abs(robotPose.getZ()) > VisionConstants.maxHightDeveation;
+        boolean rejectPose = rejectPoseX || rejectPoseY || rejectPoseZ;
+        if (rejectPose) continue;
+
+
+        if(result.multitagResult.isPresent()){
+          poseAmbiguity = result.multitagResult.get().estimatedPose.ambiguity;
+          if (poseAmbiguity > VisionConstants.maxMultiAmbiguity) continue;
+
+        }else{
+          poseAmbiguity = result.getTargets().get(0).poseAmbiguity;
+          if (poseAmbiguity > VisionConstants.maxSingleAmbiguity) continue;
+
+        }
+
+        poseConsumer.accept(robotPose.toPose2d(), timeStamp, VecBuilder.fill(poseAmbiguity, poseAmbiguity, poseAmbiguity));
       }
 
       
@@ -114,5 +143,10 @@ public class Vision extends SubsystemBase {
 
     }
   
+  }
+
+  @FunctionalInterface
+  public interface VisionConsumer{
+    void accept(Pose2d pose, double timeStamp, Matrix<N3, N1> stdDevs);
   }
 }
