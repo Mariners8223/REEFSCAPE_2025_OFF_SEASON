@@ -4,12 +4,12 @@
 
 package frc.robot.subsystems.Vision;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import org.littletonrobotics.junction.AutoLog;
@@ -18,7 +18,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -35,12 +34,17 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 public class Vision extends SubsystemBase {
 
   private  final  AprilTagFieldLayout fieldLayout;
+
+
   @AutoLog
   public static class VisionInputs{
     public boolean hasTarget = false;
     public Pose3d estimatedPose = new Pose3d();
     public double timeStamp;
     public double latency;
+    public double poseAmbiguity;
+
+    // public Pose3d[] rejectedPoses = new ArrayList<>();
   }
 
   private final PhotonCamera[] cameras;
@@ -69,7 +73,7 @@ public class Vision extends SubsystemBase {
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
         constants[i].robotToCamera);
 
-      poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+      poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT);
 
       poseEstimators[i] = poseEstimator;                                                                                                          
     }
@@ -86,6 +90,8 @@ public class Vision extends SubsystemBase {
       List<PhotonPipelineResult> results = camera.getAllUnreadResults();
 
       EstimatedRobotPose lastPose = null;
+      PhotonPipelineResult lastResult = null;
+      double lastPoseAmbiguity = 1;
 
       for(PhotonPipelineResult result : results) {
         if(!result.hasTargets()) continue;
@@ -100,46 +106,60 @@ public class Vision extends SubsystemBase {
 
         robotPose = estimatedPose.get().estimatedPose;
 
-        boolean rejectPoseX =
-                robotPose.getX() < 0
-              ||robotPose.getX() > fieldLayout.getFieldLength();
-        boolean rejectPoseY =
-                robotPose.getY() < 0
-              ||robotPose.getY() > fieldLayout.getFieldWidth();
-        boolean rejectPoseZ =
-                Math.abs(robotPose.getZ()) > VisionConstants.maxHightDeveation;
-        boolean rejectPose = rejectPoseX || rejectPoseY || rejectPoseZ;
-        if (rejectPose) continue;
+        // boolean rejectPoseX =
+        //         robotPose.getX() < 0
+        //       ||robotPose.getX() > fieldLayout.getFieldLength();
+        // boolean rejectPoseY =
+        //         robotPose.getY() < 0
+        //       ||robotPose.getY() > fieldLayout.getFieldWidth();
+        // boolean rejectPoseZ =
+        //         Math.abs(robotPose.getZ()) > VisionConstants.maxHightDeveation;
+        // boolean rejectPose = rejectPoseX || rejectPoseY || rejectPoseZ;
+        // if (rejectPose){
+        //   // inputs[i].rejectedPoses.add(robotPose);
+        //   continue;
+        // }
 
+        boolean rejectPoseAmbiguity;
 
         if(result.multitagResult.isPresent()){
           poseAmbiguity = result.multitagResult.get().estimatedPose.ambiguity;
-          if (poseAmbiguity > VisionConstants.maxMultiAmbiguity) continue;
-
+          rejectPoseAmbiguity = poseAmbiguity > VisionConstants.maxMultiAmbiguity;
         }else{
           poseAmbiguity = result.getTargets().get(0).poseAmbiguity;
-          if (poseAmbiguity > VisionConstants.maxSingleAmbiguity) continue;
-
+          rejectPoseAmbiguity = poseAmbiguity > VisionConstants.maxSingleAmbiguity;
         }
 
-        poseConsumer.accept(robotPose.toPose2d(), timeStamp, VecBuilder.fill(poseAmbiguity, poseAmbiguity, poseAmbiguity));
+        if(rejectPoseAmbiguity){
+          // inputs[i].rejectedPoses.add(robotPose);
+          continue;
+        }
+
+        lastPose = estimatedPose.get();
+        lastResult = result;
+        lastPoseAmbiguity = poseAmbiguity;
+
+        poseConsumer.accept(robotPose.toPose2d(), timeStamp,
+                VecBuilder.fill(poseAmbiguity * VisionConstants.xStdDev, poseAmbiguity * VisionConstants.yStdDev, poseAmbiguity * VisionConstants.ThetaStdDev));
       }
 
-      
-      inputs[i].hasTarget = results.get(results.size() - 1).hasTargets();
-
       if(lastPose != null){
+        inputs[i].hasTarget = lastResult.hasTargets();
         inputs[i].estimatedPose = lastPose.estimatedPose;
         inputs[i].timeStamp = lastPose.timestampSeconds;
         inputs[i].latency = RobotController.getMeasureTime().in(Units.Seconds) - inputs[i].timeStamp;
+        inputs[i].poseAmbiguity = lastPoseAmbiguity;
       }else{
         inputs[i].estimatedPose = new Pose3d();
         inputs[i].timeStamp = -1;
         inputs[i].timeStamp = -1;
-
+        inputs[i].poseAmbiguity = 1;
+        inputs[i].hasTarget = false;
       }
 
       Logger.processInputs(VisionConstants.CameraConstants.values()[i].cameraName, inputs[i]);
+
+      // inputs[i].rejectedPoses.clear();
 
     }
   
