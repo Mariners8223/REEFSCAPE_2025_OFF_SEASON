@@ -304,7 +304,7 @@ public class DriveBase extends SubsystemBase {
 
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(Xspeed, Yspeed, rotationSpeed);
 
-        ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(fieldRelativeSpeeds, getRotation2d());
+        ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getRotation2d());
 
         targetStates = driveTrainKinematics.toSwerveModuleStates(robotRelativeSpeeds, centerOfRotation);
         SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, MAX_FREE_WHEEL_SPEED);
