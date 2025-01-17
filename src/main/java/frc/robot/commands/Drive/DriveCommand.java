@@ -11,8 +11,6 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 
-import java.util.function.BooleanSupplier;
-
 import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS;
 
 public class DriveCommand extends Command {
@@ -22,6 +20,8 @@ public class DriveCommand extends Command {
 
     private final double MAX_FREE_WHEEL_SPEED;
     private final double MAX_OMEGA_RAD_PER_SEC;
+
+    private boolean isFlipped = false;
 
     public DriveCommand(DriveBase driveBase, CommandPS5Controller controller) {
         this.driveBase = driveBase;
@@ -40,12 +40,11 @@ public class DriveCommand extends Command {
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
     }
 
-    BooleanSupplier isFlipped = () -> DriverStation.getAlliance().isPresent() &&
-            DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-
     @Override
     public void initialize() {
         driveBase.drive(new ChassisSpeeds());
+        isFlipped = DriverStation.getAlliance().isPresent() &&
+        DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
     }
 
     private static double deadBand(double value) {
@@ -56,7 +55,12 @@ public class DriveCommand extends Command {
     @Override
     public void execute() {
         //calculates a value from 1 to the max wheel speed based on the R2 axis
-        double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
+        // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
+        double R2Axis  = 1 - (0.5 + controller.getR2Axis() / 2);
+
+        if(R2Axis <= 0.1) {
+            R2Axis = 0.1;
+        }
 
         //sets the value of the 3 vectors we need (accounting for drift)
         double leftX = -deadBand(controller.getLeftY());
@@ -71,9 +75,7 @@ public class DriveCommand extends Command {
 
         Rotation2d gyroAngle = driveBase.getRotation2d();
 
-        if(isFlipped.getAsBoolean()) {
-            gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
-        }
+        if(isFlipped) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
 
         ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, gyroAngle);
 
