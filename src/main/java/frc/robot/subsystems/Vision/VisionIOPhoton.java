@@ -3,7 +3,6 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;
-import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -11,8 +10,7 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.Optional;
 
 public class VisionIOPhoton implements VisionIO {

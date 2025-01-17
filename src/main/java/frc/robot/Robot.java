@@ -13,6 +13,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -89,6 +91,9 @@ public class Robot extends LoggedRobot
 
 
         ControllerMaster.getInstance();
+
+        SmartDashboard.putNumber("stdXY", 0);
+        SmartDashboard.putNumber("stdTheta", 0);
     }
     
     
@@ -96,6 +101,8 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
+        VisionConstants.XYstdFactor = SmartDashboard.getNumber("stdXY", 0);
+        VisionConstants.thetaStdFactor = SmartDashboard.getNumber("stdTheta", 0);
     }
     
     

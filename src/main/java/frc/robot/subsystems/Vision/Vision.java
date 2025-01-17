@@ -16,6 +16,8 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.RobotType;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 
@@ -37,7 +39,8 @@ public class Vision extends SubsystemBase {
         CameraConstants[] constants = CameraConstants.values();
 
         for (int i = 0; i < numOfCameras; i++) {
-            cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT);
+            if(Constants.ROBOT_TYPE != RobotType.REPLAY) cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT);
+            else cameras[i] = new VisionCamera(constants[i].cameraName);
         }
 
         this.poseConsumer = poseConsumer;
@@ -154,6 +157,18 @@ public class Vision extends SubsystemBase {
 
         public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout) {
             this(new VisionIOPhoton(constants, fieldLayout), constants.cameraName);
+        }
+
+        public VisionCamera(String cameraName){
+            this.camera = new VisionIO() {
+                @Override
+                public void update(VisionInputsAutoLogged inputs) {
+                }
+            };
+
+            this.cameraName = cameraName;
+            inputs = new VisionInputsAutoLogged();
+
         }
 
         public void update() {
