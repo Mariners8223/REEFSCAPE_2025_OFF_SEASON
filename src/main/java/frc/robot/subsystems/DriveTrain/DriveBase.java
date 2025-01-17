@@ -166,13 +166,13 @@ public class DriveBase extends SubsystemBase {
                 },
                 this);
 
-        new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
-                setModulesBrakeMode(true)
-                , () ->
-        {
-            if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
-        }
-        ).ignoringDisable(true));
+        // new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
+        //         setModulesBrakeMode(true)
+        //         , () ->
+        // {
+        //     if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
+        // }
+        // ).ignoringDisable(true));
 
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
                 this.setDefaultCommand(new DriveCommand(this, RobotContainer.driveController)),
@@ -193,7 +193,7 @@ public class DriveBase extends SubsystemBase {
             SwerveModulePosition[] positions = new SwerveModulePosition[4];
             for (int i = 0; i < 4; i++) positions[i] = modules[i].modulePeriodic();
 
-            poseEstimator.resetPosition(new Rotation2d(), positions, currentPose);
+            poseEstimator.resetPosition(currentPose.getRotation(), positions, currentPose);
 
             gyro.reset(currentPose.getRotation());
         }).withName("Reset Only Direction").ignoringDisable(true);
