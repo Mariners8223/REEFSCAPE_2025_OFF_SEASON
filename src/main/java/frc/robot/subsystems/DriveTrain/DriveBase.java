@@ -163,13 +163,15 @@ public class DriveBase extends SubsystemBase {
                 },
                 this);
 
-        new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
-                setModulesBrakeMode(true)
-                , () ->
-        {
-            if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
-        }
-        ).ignoringDisable(true));
+                setModulesBrakeMode(true);
+
+        // new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
+        //         setModulesBrakeMode(true)
+        //         , () ->
+        // {
+        //     if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
+        // }
+        // ).ignoringDisable(true));
 
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
                 this.setDefaultCommand(new DriveCommand(this, RobotContainer.driveController)),
@@ -183,16 +185,18 @@ public class DriveBase extends SubsystemBase {
     public Command resetOnlyDirection() {
         return new InstantCommand(() -> {
             if (DriverStation.getAlliance().isPresent()) if (DriverStation.getAlliance().get() == Alliance.Blue)
-                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
+                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(0));
             else currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(-Math.PI));
             else currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
 
             SwerveModulePosition[] positions = new SwerveModulePosition[4];
             for (int i = 0; i < 4; i++) positions[i] = modules[i].modulePeriodic();
 
-            poseEstimator.resetPosition(new Rotation2d(), positions, currentPose);
-
             gyro.reset(currentPose.getRotation());
+
+
+            poseEstimator.resetPosition(currentPose.getRotation(), positions, currentPose);
+
         }).withName("Reset Only Direction").ignoringDisable(true);
     }
 
@@ -304,7 +308,7 @@ public class DriveBase extends SubsystemBase {
 
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(Xspeed, Yspeed, rotationSpeed);
 
-        ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(fieldRelativeSpeeds, getRotation2d());
+        ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, getRotation2d());
 
         targetStates = driveTrainKinematics.toSwerveModuleStates(robotRelativeSpeeds, centerOfRotation);
         SwerveDriveKinematics.desaturateWheelSpeeds(targetStates, MAX_FREE_WHEEL_SPEED);
