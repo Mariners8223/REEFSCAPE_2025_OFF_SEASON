@@ -5,7 +5,8 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface VisionIO {
     VisionFrame[] emptyFrame =
-            {new VisionFrame(false, -1, -1, new Pose3d(), 1, EstimationType.SINGLE_TARGET, 0)};
+            {new VisionFrame(false, -1, -1, new Pose3d(), 1,
+                    EstimationType.SINGLE_TARGET, -1, new Double[]{-1.0})};
 
     void update(VisionInputsAutoLogged inputs);
 
@@ -17,12 +18,24 @@ public interface VisionIO {
             Pose3d robotPose,
             double poseAmbiguity,
             EstimationType estimationType,
-            double averageTargetDistance
+            double averageTargetDistance,
+            Double[] distanceToTags
     ){}
 
     enum EstimationType{
-        SINGLE_TARGET,
-        MULTIPLE_TARGETS,
+        SINGLE_TARGET(VisionConstants.maxSingleAmbiguity),
+        MULTIPLE_TARGETS(VisionConstants.maxMultiAmbiguity),
+        ;
+
+        EstimationType(double maxAmbiguity) {
+            this.maxAmbiguity = maxAmbiguity;
+        }
+
+        private final double maxAmbiguity;
+
+        public double getMaxAmbiguity() {
+            return maxAmbiguity;
+        }
     }
 
     @AutoLog

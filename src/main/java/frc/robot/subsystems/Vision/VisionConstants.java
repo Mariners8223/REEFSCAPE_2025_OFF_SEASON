@@ -22,6 +22,11 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.5;
     public static final double maxSingleAmbiguity = 0.3;
 
+    public static final double XstdFactor = 0.1;
+    public static final double YstdFactor = 0.1;
+    public static final double thetaStdFactor = 0.1;
+
+
 
     public enum CameraConstants{
         FRONT_LEFT("front left",

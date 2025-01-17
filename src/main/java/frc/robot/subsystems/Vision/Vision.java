@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Vision;
 
+import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.Matrix;
@@ -17,6 +18,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
+import org.photonvision.PhotonPoseEstimator;
+import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 public class Vision extends SubsystemBase {
@@ -66,7 +70,7 @@ public class Vision extends SubsystemBase {
                     continue;
                 }
 
-                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.estimationType());
+                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.distanceToTags(), frame.estimationType());
 
                 poseConsumer.accept(frame.robotPose().toPose2d(), frame.timeStamp(), stdDevs);
 
@@ -88,31 +92,47 @@ public class Vision extends SubsystemBase {
      * @return whether the pose is in a valid location
      */
     private boolean checkPoseLocation(Pose3d pose) {
-        //TODO check if the pose is in a valid location
-        return true;
+        double poseX = pose.getX();
+        double poseY = pose.getY();
+        double poseZ = pose.getZ();
+
+        if (poseX >= VisionConstants.FIELD_LAYOUT.getFieldLength() || poseX < 0) return false;
+        if (poseY >= VisionConstants.FIELD_LAYOUT.getFieldWidth() || poseY < 0) return false;
+        return !(Math.abs(poseZ) > VisionConstants.maxHeightDeviation);
     }
 
     /**
      * Checks if the pose ambiguity is good enough for proceeding
-     * @param poseAmbiguity the ambiguity of the pose (0 is no ambiguity, 1 is no idea)
+     *
+     * @param poseAmbiguity  the ambiguity of the pose (0 is no ambiguity, 1 is no idea)
      * @param estimationType the type of estimation used
      * @return whether the pose ambiguity is within acceptable bounds
      */
     private boolean checkPoseAmbiguity(double poseAmbiguity, VisionIO.EstimationType estimationType) {
-        //TODO check if the pose ambiguity is within acceptable bounds
-        return true;
+        if (estimationType == null) {
+            return false;
+        }
+        return poseAmbiguity <= estimationType.getMaxAmbiguity();
     }
 
     /**
      * calculates the standard deviations for the pose based on the average distance to the tags
      *
      * @param averageTagDistance the average distance to the tags
-     * @param estimationType the type of estimation used
+     * @param estimationType     the type of estimation used
      * @return the standard deviations for the pose
      */
-    private Matrix<N3, N1> getStdDevs(double averageTagDistance, VisionIO.EstimationType estimationType) {
-        //TODO get the standard deviations for the pose
-        return VecBuilder.fill(0.1, 0.1, 0.1);
+    private Matrix<N3, N1> getStdDevs(double averageTagDistance, Double[] distanceToTags, VisionIO.EstimationType estimationType) {
+        double combination = 0;
+
+        for (double distanceToTag : distanceToTags) {
+            combination += Math.pow(distanceToTag - averageTagDistance, 2.0);
+        }
+
+        double variance = combination / (distanceToTags.length - 1);
+        double std = Math.sqrt(variance);
+
+        return VecBuilder.fill(std * VisionConstants.XstdFactor, std * VisionConstants.YstdFactor, std * VisionConstants.thetaStdFactor);
     }
 
     @FunctionalInterface
@@ -121,26 +141,26 @@ public class Vision extends SubsystemBase {
     }
 
 
-    private static class VisionCamera{
+    private static class VisionCamera {
         private final VisionIO camera;
         private final String cameraName;
         private final VisionInputsAutoLogged inputs;
 
-        public VisionCamera(VisionIO camera, String cameraName){
+        public VisionCamera(VisionIO camera, String cameraName) {
             this.camera = camera;
             this.cameraName = cameraName;
             this.inputs = new VisionInputsAutoLogged();
         }
 
-        public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout){
+        public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout) {
             this(new VisionIOPhoton(constants, fieldLayout), constants.cameraName);
         }
 
-        public void update(){
+        public void update() {
             camera.update(inputs);
         }
 
-        public void log(){
+        public void log() {
             Logger.processInputs(cameraName, inputs);
         }
     }
