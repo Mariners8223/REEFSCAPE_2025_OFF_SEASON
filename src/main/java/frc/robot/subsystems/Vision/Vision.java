@@ -13,7 +13,6 @@ import edu.wpi.first.math.numbers.N3;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,11 +21,7 @@ import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 public class Vision extends SubsystemBase {
 
-    private final AprilTagFieldLayout fieldLayout;
-
-    private final VisionIO[] cameras;
-    private final String[] cameraNames;
-    private final VisionInputsAutoLogged[] inputs;
+    private final VisionCamera[] cameras;
 
     private final VisionConsumer poseConsumer;
 
@@ -34,20 +29,15 @@ public class Vision extends SubsystemBase {
      * Creates a new Vision.
      */
     public Vision(VisionConsumer poseConsumer) {
-        fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
         int numOfCameras = CameraConstants.values().length;
 
-        cameras = new VisionIO[numOfCameras];
-        cameraNames = new String[numOfCameras];
-        inputs = new VisionInputsAutoLogged[numOfCameras];
+        cameras = new VisionCamera[numOfCameras];
 
         CameraConstants[] constants = CameraConstants.values();
 
         for (int i = 0; i < numOfCameras; i++) {
-            cameras[i] = new VisionIOPhoton(constants[i], fieldLayout);
-            cameraNames[i] = constants[i].cameraName;
-            inputs[i] = new VisionInputsAutoLogged();
+            cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT);
         }
 
         this.poseConsumer = poseConsumer;
@@ -55,15 +45,15 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        for (int i = 0; i < cameras.length; i++) {
-            cameras[i].update(inputs[i]);
+        for (VisionCamera camera : cameras) {
+            camera.update();
+            camera.log();
 
-            Logger.processInputs(cameraNames[i], inputs[i]);
-
+            // For logging purposes
             ArrayList<Pose3d> acceptedPoses = new ArrayList<>();
             ArrayList<Pose3d> rejectedPoses = new ArrayList<>();
 
-            for (VisionIO.VisionFrame frame : inputs[i].visionFrames) {
+            for (VisionIO.VisionFrame frame : camera.inputs.visionFrames) {
                 if (!frame.hasTarget()) continue;
 
                 if (!checkPoseLocation(frame.robotPose())) {
@@ -83,23 +73,43 @@ public class Vision extends SubsystemBase {
                 acceptedPoses.add(frame.robotPose());
             }
 
-            Logger.recordOutput("Vision/" + cameraNames[i] + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
-
-            Logger.recordOutput("Vision/" + cameraNames[i] + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
+            Logger.recordOutput("Vision/" + camera.cameraName + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
+            Logger.recordOutput("Vision/" + camera.cameraName + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
         }
 
     }
 
+    /**
+     * If the pose is in a valid location.
+     * The pose is valid if it is within the field
+     * and the height of the robot is in tolerance
+     *
+     * @param pose the calculated pose
+     * @return whether the pose is in a valid location
+     */
     private boolean checkPoseLocation(Pose3d pose) {
         //TODO check if the pose is in a valid location
         return true;
     }
 
+    /**
+     * Checks if the pose ambiguity is good enough for proceeding
+     * @param poseAmbiguity the ambiguity of the pose (0 is no ambiguity, 1 is no idea)
+     * @param estimationType the type of estimation used
+     * @return whether the pose ambiguity is within acceptable bounds
+     */
     private boolean checkPoseAmbiguity(double poseAmbiguity, VisionIO.EstimationType estimationType) {
         //TODO check if the pose ambiguity is within acceptable bounds
         return true;
     }
 
+    /**
+     * calculates the standard deviations for the pose based on the average distance to the tags
+     *
+     * @param averageTagDistance the average distance to the tags
+     * @param estimationType the type of estimation used
+     * @return the standard deviations for the pose
+     */
     private Matrix<N3, N1> getStdDevs(double averageTagDistance, VisionIO.EstimationType estimationType) {
         //TODO get the standard deviations for the pose
         return VecBuilder.fill(0.1, 0.1, 0.1);
@@ -108,5 +118,30 @@ public class Vision extends SubsystemBase {
     @FunctionalInterface
     public interface VisionConsumer {
         void accept(Pose2d pose, double timeStamp, Matrix<N3, N1> stdDevs);
+    }
+
+
+    private static class VisionCamera{
+        private final VisionIO camera;
+        private final String cameraName;
+        private final VisionInputsAutoLogged inputs;
+
+        public VisionCamera(VisionIO camera, String cameraName){
+            this.camera = camera;
+            this.cameraName = cameraName;
+            this.inputs = new VisionInputsAutoLogged();
+        }
+
+        public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout){
+            this(new VisionIOPhoton(constants, fieldLayout), constants.cameraName);
+        }
+
+        public void update(){
+            camera.update(inputs);
+        }
+
+        public void log(){
+            Logger.processInputs(cameraName, inputs);
+        }
     }
 }
