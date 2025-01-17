@@ -180,10 +180,12 @@ public class DriveBase extends SubsystemBase {
      */
     public Command resetOnlyDirection() {
         return new InstantCommand(() -> {
-            if (DriverStation.getAlliance().isPresent()) if (DriverStation.getAlliance().get() == Alliance.Blue)
-                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(0));
-            else currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(-Math.PI));
-            else currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
+            Pose2d currentPose = this.getPose();
+
+            if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red)
+                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(Math.PI));
+            else
+                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
 
             SwerveModulePosition[] positions = new SwerveModulePosition[4];
             for (int i = 0; i < 4; i++) positions[i] = modules[i].modulePeriodic();
@@ -211,7 +213,7 @@ public class DriveBase extends SubsystemBase {
         SwerveModulePosition[] positions = new SwerveModulePosition[4];
         for (int i = 0; i < 4; i++) positions[i] = modules[i].modulePeriodic();
 
-        poseEstimator.resetPosition(new Rotation2d(), positions, newPose);
+        poseEstimator.resetPosition(newPose.getRotation(), positions, newPose);
 
         gyro.reset(newPose.getRotation());
         currentPose = newPose;
