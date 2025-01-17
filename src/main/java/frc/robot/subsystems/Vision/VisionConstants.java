@@ -13,7 +13,7 @@ public class VisionConstants {
             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
     public static final PhotonPoseEstimator.PoseStrategy FALLBACK_STRATEGY =
-            PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY;
+            PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
 
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
@@ -22,8 +22,7 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.5;
     public static final double maxSingleAmbiguity = 0.3;
 
-    public static final double XstdFactor = 0.1;
-    public static final double YstdFactor = 0.1;
+    public static final double XYstdFactor = 0.1;
     public static final double thetaStdFactor = 0.1;
 
 
@@ -31,13 +30,13 @@ public class VisionConstants {
     public enum CameraConstants{
         FRONT_LEFT("front left",
             new Transform3d(
-                0.11, -0.31, 0.167,
-                new Rotation3d(0, Units.degreesToRadians(15), Units.degreesToRadians(-90)))),
+                -0.11, 0.31, 0.163,
+                new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(90))));
 
-        BACK_MIDDLE("back middle",
-            new Transform3d(
-                0, 0, 0,
-                new Rotation3d(0, 0, 0)));
+//        BACK_MIDDLE("back middle",
+//            new Transform3d(
+//                0, 0, 0,
+//                new Rotation3d(0, 0, 0)));
 
         public final String cameraName;
 

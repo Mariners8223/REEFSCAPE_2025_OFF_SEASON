@@ -3,6 +3,7 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
@@ -68,14 +69,12 @@ public class VisionIOPhoton implements VisionIO {
         EstimationType estimationType;
         double poseAmbiguity;
         double averageTargetDist = 0;
-        ArrayList<Double> distanceToTags = new ArrayList<>();
         if(result.multitagResult.isPresent()){
             estimationType = EstimationType.MULTIPLE_TARGETS;
             poseAmbiguity = result.multitagResult.get().estimatedPose.ambiguity;
 
             for(PhotonTrackedTarget target : result.getTargets()){
                 double distanceToTag = target.getBestCameraToTarget().getTranslation().getNorm();
-                distanceToTags.add(distanceToTag);
                 averageTargetDist += distanceToTag;
             }
         }
@@ -84,7 +83,6 @@ public class VisionIOPhoton implements VisionIO {
             poseAmbiguity = result.getTargets().get(0).poseAmbiguity;
 
             averageTargetDist = result.getTargets().get(0).getBestCameraToTarget().getTranslation().getNorm();
-            distanceToTags.add(averageTargetDist);
         }
 
         return new VisionFrame(
@@ -95,7 +93,7 @@ public class VisionIOPhoton implements VisionIO {
                 poseAmbiguity,
                 estimationType,
                 averageTargetDist / result.getTargets().size(),
-                distanceToTags.toArray(new Double[0])
+                result.getTargets().size()
         );
     }
 }

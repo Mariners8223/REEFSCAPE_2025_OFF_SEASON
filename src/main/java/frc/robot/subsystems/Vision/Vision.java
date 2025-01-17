@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.Vision;
 
-import java.sql.PreparedStatement;
 import java.util.ArrayList;
 
 import edu.wpi.first.math.Matrix;
@@ -18,9 +17,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 public class Vision extends SubsystemBase {
@@ -70,7 +66,7 @@ public class Vision extends SubsystemBase {
                     continue;
                 }
 
-                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.distanceToTags(), frame.estimationType());
+                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType());
 
                 poseConsumer.accept(frame.robotPose().toPose2d(), frame.timeStamp(), stdDevs);
 
@@ -115,25 +111,29 @@ public class Vision extends SubsystemBase {
         return poseAmbiguity <= estimationType.getMaxAmbiguity();
     }
 
-    /**
+        /**
      * calculates the standard deviations for the pose based on the average distance to the tags
      *
      * @param averageTagDistance the average distance to the tags
      * @param estimationType     the type of estimation used
      * @return the standard deviations for the pose
      */
-    private Matrix<N3, N1> getStdDevs(double averageTagDistance, Double[] distanceToTags, VisionIO.EstimationType estimationType) {
-        double combination = 0;
+    private Matrix<N3, N1> getStdDevs(double averageTagDistance, double tagCount, VisionIO.EstimationType estimationType) {
+        // Calculate standard deviations
+        double stdDevFactor =
+                Math.pow(averageTagDistance, 2.0) / tagCount;
 
-        for (double distanceToTag : distanceToTags) {
-            combination += Math.pow(distanceToTag - averageTagDistance, 2.0);
+        double linearStdDev = VisionConstants.XYstdFactor * stdDevFactor;
+        double angularStdDev = VisionConstants.thetaStdFactor * stdDevFactor;
+        if (estimationType == VisionIO.EstimationType.MULTIPLE_TARGETS) {
+            linearStdDev *= VisionConstants.XYstdFactor;
+            angularStdDev *= VisionConstants.thetaStdFactor;
         }
 
-        double variance = combination / (distanceToTags.length - 1);
-        double std = Math.sqrt(variance);
-
-        return VecBuilder.fill(std * VisionConstants.XstdFactor, std * VisionConstants.YstdFactor, std * VisionConstants.thetaStdFactor);
+        return VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev);
     }
+
+
 
     @FunctionalInterface
     public interface VisionConsumer {
