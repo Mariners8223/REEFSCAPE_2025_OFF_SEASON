@@ -192,7 +192,6 @@ public class DriveBase extends SubsystemBase {
 
             gyro.reset(currentPose.getRotation());
 
-
             poseEstimator.resetPosition(currentPose.getRotation(), positions, currentPose);
 
         }).withName("Reset Only Direction").ignoringDisable(true);
