@@ -3,6 +3,7 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import org.photonvision.PhotonPoseEstimator;
 
 public class VisionConstants {
     public enum CameraConstants{
@@ -19,9 +20,14 @@ public class VisionConstants {
         public final String cameraName;
 
         public final Transform3d robotToCamera;
-        
 
-        private CameraConstants(String name, Transform3d robotToCamera){
+        public static final PhotonPoseEstimator.PoseStrategy MAIN_STRATEGY =
+                PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
+
+        public static final PhotonPoseEstimator.PoseStrategy FALLBACK_STRATEGY =
+                PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY;
+
+        CameraConstants(String name, Transform3d robotToCamera){
             this.cameraName = name;
             this.robotToCamera = robotToCamera;
         }
@@ -32,7 +38,7 @@ public class VisionConstants {
         }
     }
     //TODO test to find better numbers
-    public static final double maxHightDeveation = 0.05;
+    public static final double maxHeightDeviation = 0.05;
     public static final double maxMultiAmbiguity = 0.5;
     public static final double maxSingleAmbiguity = 0.3;
 

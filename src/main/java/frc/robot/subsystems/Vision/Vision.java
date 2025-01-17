@@ -4,147 +4,109 @@
 
 package frc.robot.subsystems.Vision;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
-import org.photonvision.PhotonCamera;
-import org.photonvision.PhotonPoseEstimator;
-import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Vision.VisionConstants.CameraConstants;
 
 
-
 public class Vision extends SubsystemBase {
 
-  private  final  AprilTagFieldLayout fieldLayout;
-  @AutoLog
-  public static class VisionInputs{
-    public boolean hasTarget = false;
-    public Pose3d estimatedPose = new Pose3d();
-    public double timeStamp;
-    public double latency;
-  }
+    private final AprilTagFieldLayout fieldLayout;
 
-  private final PhotonCamera[] cameras;
-  private final PhotonPoseEstimator[] poseEstimators;
-  private final VisionInputsAutoLogged[] inputs;
+    private final VisionIO[] cameras;
+    private final String[] cameraNames;
+    private final VisionInputsAutoLogged[] inputs;
 
-  private final VisionConsumer poseConsumer;
-  /** Creates a new Vision. */
-  public Vision(VisionConsumer poseConsumer) {
-    fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    private final VisionConsumer poseConsumer;
 
-    int numOfCameras = CameraConstants.values().length;
+    /**
+     * Creates a new Vision.
+     */
+    public Vision(VisionConsumer poseConsumer) {
+        fieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    cameras = new PhotonCamera[numOfCameras];
-    poseEstimators = new PhotonPoseEstimator[numOfCameras];
-    inputs = new VisionInputsAutoLogged[numOfCameras];
+        int numOfCameras = CameraConstants.values().length;
 
-    CameraConstants[] constants = CameraConstants.values();
+        cameras = new VisionIO[numOfCameras];
+        cameraNames = new String[numOfCameras];
+        inputs = new VisionInputsAutoLogged[numOfCameras];
 
-    for(int i = 0; i < numOfCameras; i++){
-      cameras[i] = new PhotonCamera(constants[i].cameraName);
-      inputs[i] = new VisionInputsAutoLogged();
+        CameraConstants[] constants = CameraConstants.values();
 
-      PhotonPoseEstimator poseEstimator = new PhotonPoseEstimator(
-        fieldLayout,
-        PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        constants[i].robotToCamera);
-
-      poseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
-
-      poseEstimators[i] = poseEstimator;                                                                                                          
-    }
-
-    this.poseConsumer = poseConsumer;
-  }
-
-  @Override
-  public void periodic() {
-    for(int i = 0; i < cameras.length; i++){
-      PhotonCamera camera = cameras[i];
-      PhotonPoseEstimator poseEstimator = poseEstimators[i];
-
-      List<PhotonPipelineResult> results = camera.getAllUnreadResults();
-
-      EstimatedRobotPose lastPose = null;
-
-      for(PhotonPipelineResult result : results) {
-        if(!result.hasTargets()) continue;
-
-        double poseAmbiguity;
-        Pose3d robotPose;
-        double timeStamp = result.getTimestampSeconds();
-
-        var estimatedPose = poseEstimator.update(result);
-
-        if(estimatedPose.isEmpty()) continue;
-
-        robotPose = estimatedPose.get().estimatedPose;
-
-        boolean rejectPoseX =
-                robotPose.getX() < 0
-              ||robotPose.getX() > fieldLayout.getFieldLength();
-        boolean rejectPoseY =
-                robotPose.getY() < 0
-              ||robotPose.getY() > fieldLayout.getFieldWidth();
-        boolean rejectPoseZ =
-                Math.abs(robotPose.getZ()) > VisionConstants.maxHightDeveation;
-        boolean rejectPose = rejectPoseX || rejectPoseY || rejectPoseZ;
-        if (rejectPose) continue;
-
-
-        if(result.multitagResult.isPresent()){
-          poseAmbiguity = result.multitagResult.get().estimatedPose.ambiguity;
-          if (poseAmbiguity > VisionConstants.maxMultiAmbiguity) continue;
-
-        }else{
-          poseAmbiguity = result.getTargets().get(0).poseAmbiguity;
-          if (poseAmbiguity > VisionConstants.maxSingleAmbiguity) continue;
+        for (int i = 0; i < numOfCameras; i++) {
+            cameras[i] = new VisionIOPhoton(constants[i], fieldLayout);
+            cameraNames[i] = constants[i].cameraName;
+            inputs[i] = new VisionInputsAutoLogged();
         }
 
-        lastPose = estimatedPose.get();
+        this.poseConsumer = poseConsumer;
+    }
 
-        poseConsumer.accept(robotPose.toPose2d(), timeStamp, VecBuilder.fill(poseAmbiguity, poseAmbiguity, poseAmbiguity));
-      }
+    @Override
+    public void periodic() {
+        for (int i = 0; i < cameras.length; i++) {
+            cameras[i].update(inputs[i]);
 
-      
-      inputs[i].hasTarget = results.get(results.size() - 1).hasTargets();
+            Logger.processInputs(cameraNames[i], inputs[i]);
 
-      if(lastPose != null){
-        inputs[i].estimatedPose = lastPose.estimatedPose;
-        inputs[i].timeStamp = lastPose.timestampSeconds;
-        inputs[i].latency = RobotController.getMeasureTime().in(Units.Seconds) - inputs[i].timeStamp;
-      }else{
-        inputs[i].estimatedPose = new Pose3d();
-        inputs[i].timeStamp = -1;
-        inputs[i].timeStamp = -1;
+            ArrayList<Pose3d> acceptedPoses = new ArrayList<>();
+            ArrayList<Pose3d> rejectedPoses = new ArrayList<>();
 
-      }
+            for (VisionIO.VisionFrame frame : inputs[i].visionFrames) {
+                if (!frame.hasTarget()) continue;
 
-      Logger.processInputs(VisionConstants.CameraConstants.values()[i].cameraName, inputs[i]);
+                if (!checkPoseLocation(frame.robotPose())) {
+                    rejectedPoses.add(frame.robotPose());
+                    continue;
+                }
+
+                if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
+                    rejectedPoses.add(frame.robotPose());
+                    continue;
+                }
+
+                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.estimationType());
+
+                poseConsumer.accept(frame.robotPose().toPose2d(), frame.timeStamp(), stdDevs);
+
+                acceptedPoses.add(frame.robotPose());
+            }
+
+            Logger.recordOutput("Vision/" + cameraNames[i] + "/Accepted Poses", acceptedPoses.toArray(new Pose3d[0]));
+
+            Logger.recordOutput("Vision/" + cameraNames[i] + "/Rejected Poses", rejectedPoses.toArray(new Pose3d[0]));
+        }
 
     }
-  
-  }
 
-  @FunctionalInterface
-  public interface VisionConsumer{
-    void accept(Pose2d pose, double timeStamp, Matrix<N3, N1> stdDevs);
-  }
+    private boolean checkPoseLocation(Pose3d pose) {
+        //TODO check if the pose is in a valid location
+        return true;
+    }
+
+    private boolean checkPoseAmbiguity(double poseAmbiguity, VisionIO.EstimationType estimationType) {
+        //TODO check if the pose ambiguity is within acceptable bounds
+        return true;
+    }
+
+    private Matrix<N3, N1> getStdDevs(double averageTagDistance, VisionIO.EstimationType estimationType) {
+        //TODO get the standard deviations for the pose
+        return VecBuilder.fill(0.1, 0.1, 0.1);
+    }
+
+    @FunctionalInterface
+    public interface VisionConsumer {
+        void accept(Pose2d pose, double timeStamp, Matrix<N3, N1> stdDevs);
+    }
 }
