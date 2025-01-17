@@ -572,7 +572,7 @@ public class DriveBase extends SubsystemBase {
         }
 
         gyro.update();
-        poseEstimator.update(gyro.getRotation2d(), positions);
+        poseEstimator.updateWithTime(Logger.getTimestamp(), gyro.getRotation2d(), positions);
         currentPose = poseEstimator.getEstimatedPosition();
 
         Logger.recordOutput("DriveBase/estimatedPose", currentPose);

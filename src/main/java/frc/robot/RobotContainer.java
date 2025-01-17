@@ -29,13 +29,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
-import frc.robot.subsystems.Vision.Vision;
 
 public class RobotContainer {
     public static DriveBase driveBase;
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
-    public static Vision vision;
 
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
@@ -45,8 +43,6 @@ public class RobotContainer {
         driveBase = new DriveBase();
 
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
-
-        vision = new Vision(driveBase::addVisionMeasurement);
 
         configureBindings();
 
