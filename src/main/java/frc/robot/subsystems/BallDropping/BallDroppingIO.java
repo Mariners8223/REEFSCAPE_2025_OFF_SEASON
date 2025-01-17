@@ -10,17 +10,16 @@ public interface BallDroppingIO {
     @AutoLog
     public static class balldroppingInputs{
         double dropperPower;
+        double angle;
     }
 
     //angle motor io
     public void resetAngleEncoder();
     public void reachAngle(double angleToReach);
-    public double getAngle();
 
     //dropping motor io
     public void setDropperMotorPower(double dropperPower);
     public void stopDropperMotor();
-    public double getDropperMotorPower();
 
     public void Update(balldroppingInputs inputs);
 }

@@ -4,18 +4,15 @@
 
 package frc.robot.subsystems.BallDropping;
 
-//import frc.robot.subsystems.BallDropping.BallDroppingIO;
+import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.BallDropping.BallDroppingIO.balldroppingInputs;
 
 public class BallDropping extends SubsystemBase{
-
     BallDroppingIO io;
-    balldroppingInputs inputs = new balldroppingInputs();
+    balldroppingInputsAutoLogged inputs = new balldroppingInputsAutoLogged();
 
     public BallDropping(){
-        // TODO: add IOReal 
         this.resetAngleEncoder();
     }
 
@@ -29,7 +26,7 @@ public class BallDropping extends SubsystemBase{
     }
 
     public double getAngle(){
-        return io.getAngle();
+        return inputs.angle;
     }
 
     //dropper subsystems
@@ -42,12 +39,13 @@ public class BallDropping extends SubsystemBase{
     }
 
     public double getDropperMotorPower(){
-        return io.getDropperMotorPower();
+        return inputs.dropperPower;
     }
 
     //update logs
     @Override
     public void periodic() {
         io.Update(inputs);
+        Logger.processInputs(getName(), inputs);
     }
 }
