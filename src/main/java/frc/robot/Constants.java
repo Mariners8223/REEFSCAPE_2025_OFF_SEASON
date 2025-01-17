@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * Add your docs here.
@@ -14,6 +16,8 @@ public class Constants {
         DEVELOPMENT,
         REPLAY
     }
+
+    public static Pose2d REEF_1 = new Pose2d(13.5, 5.3, Rotation2d.fromDegrees(-120));
 
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
 }

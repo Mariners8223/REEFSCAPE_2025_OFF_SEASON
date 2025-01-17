@@ -60,6 +60,10 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
+
+        Command fuck = driveBase.findPath(Constants.REEF_1);
+
+        driveController.cross().whileTrue(fuck);
     }
 
 
