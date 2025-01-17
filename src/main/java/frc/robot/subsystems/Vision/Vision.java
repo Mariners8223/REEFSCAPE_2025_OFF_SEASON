@@ -5,11 +5,9 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.List;
-import java.util.Optional;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import org.littletonrobotics.junction.AutoLog;
@@ -18,7 +16,6 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -119,8 +116,9 @@ public class Vision extends SubsystemBase {
         }else{
           poseAmbiguity = result.getTargets().get(0).poseAmbiguity;
           if (poseAmbiguity > VisionConstants.maxSingleAmbiguity) continue;
-
         }
+
+        lastPose = estimatedPose.get();
 
         poseConsumer.accept(robotPose.toPose2d(), timeStamp, VecBuilder.fill(poseAmbiguity, poseAmbiguity, poseAmbiguity));
       }
