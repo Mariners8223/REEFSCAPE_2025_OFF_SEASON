@@ -1,5 +1,7 @@
 package frc.robot.subsystems.DriveTrain.SwerveModules;
 
+import com.pathplanner.lib.config.ModuleConfig;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.util.PIDFGains;
 
@@ -32,10 +34,17 @@ public enum CompBotConstants {
     public static final double STEER_GEAR_RATIO = 12.8;
     public static final double WHEEL_RADIUS_METERS = 0.0508;
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
-
     public static final double MAX_WHEEL_LINEAR_VELOCITY = 4.5;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 50;
+    public static final int DRIVE_MOTOR_CURRENT_THERSHOLD = 80;
 
-    public static final DCMotor DRIVE_MOTOR_MODEL = DCMotor.getKrakenX60(1);
+    public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
+        WHEEL_RADIUS_METERS,
+        MAX_WHEEL_LINEAR_VELOCITY,
+        1, //TODO find real mew
+        DCMotor.getKrakenX60(1),
+        DRIVE_MOTOR_CURRENT_LIMIT,
+        1);
 
     /**
      * the motor id for the drive motor

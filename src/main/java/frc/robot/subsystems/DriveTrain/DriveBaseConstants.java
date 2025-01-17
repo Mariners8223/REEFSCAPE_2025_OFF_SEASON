@@ -24,17 +24,10 @@ public class DriveBaseConstants {
     public static final class PathPlanner {
         public static final double PATH_ERROR_TOLERANCE = 0.1; //the max error in position before pathPlanner replans the path in meters
         public static final double PATH_ERROR_SPIKE_TOLERANCE = 1; //the max position spike before path planner replans the path in meters
-
-
-        public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
-                PATH_ERROR_TOLERANCE,
-                PATH_ERROR_SPIKE_TOLERANCE,
-                DISTANCE_BETWEEN_WHEELS,
-                Constants.ROBOT_TYPE == RobotType.COMPETITION ?
-                        CompBotConstants.DRIVE_MOTOR_MODEL :
-                        DevBotConstants.DRIVE_MOTOR_MODEL,
-                DISTANCE_BETWEEN_WHEELS,
-                PIGEON_ID);
+        
+        public static final ModuleConfig MODULE_CONFIG = Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
+                DevBotConstants.MODULE_CONFIG :
+                CompBotConstants.MODULE_CONFIG;
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
                 20,
@@ -43,9 +36,7 @@ public class DriveBaseConstants {
                 MODULE_TRANSLATIONS);
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
-                        DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY :
-                        CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY,
+                MODULE_CONFIG.maxDriveVelocityMPS,
                 10, //TODO find a good value for this
                 10,
                 5); //the constraints for pathPlanner
