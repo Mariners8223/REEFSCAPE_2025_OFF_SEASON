@@ -14,6 +14,20 @@ public class Constants {
         DEVELOPMENT,
         REPLAY
     }
+    public enum reef{
+        REEF1,
+        REEF2,
+        REEF3,
+        REEF4,
+        REEF5,
+        REEF6,
+        REEF7,
+        REEF8,
+        REEF9,
+        REEF10,
+        REEF11,
+        REEF12,
+    }
 
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
 }
