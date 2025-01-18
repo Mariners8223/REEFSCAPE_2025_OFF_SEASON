@@ -1,5 +1,0 @@
-- Know exact height (of third stage) according to encoder
-- Move up and down according to setpoint
-- Reset encoder at start of match
-- Stay in place
-- 
