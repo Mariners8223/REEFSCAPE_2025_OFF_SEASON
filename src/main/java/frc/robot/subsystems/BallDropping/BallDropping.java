@@ -14,6 +14,7 @@ public class BallDropping extends SubsystemBase{
 
     public BallDropping(){
         this.resetAngleEncoder();
+        io = new BallDroppingIO();
     }
 
     //Angle subsystems
