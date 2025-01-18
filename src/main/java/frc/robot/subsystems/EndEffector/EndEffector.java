@@ -25,6 +25,10 @@ public class EndEffector extends SubsystemBase {
     io.setLeftMotorPower(PowerToSet);
   }
 
+  public boolean gpLoaded(){
+    return true; //TODO add fucntion
+  }
+
   public void stopMotors(){
     io.setLeftMotorPower(0);
     io.setRightMotorPower(0);
