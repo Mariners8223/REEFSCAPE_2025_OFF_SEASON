@@ -17,6 +17,7 @@ import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -62,7 +63,17 @@ public class RobotContainer {
     public static Command getAutoCommand() {
         return autoChooser.get();
     }
-
+public static void confignamedcommand() {
+    NamedCommands.registerCommand("intake", new InstantCommand());
+    NamedCommands.registerCommand("outtake l1", new InstantCommand());
+    NamedCommands.registerCommand("outtake l23", new InstantCommand());
+    NamedCommands.registerCommand("outtake l4", new InstantCommand());
+    NamedCommands.registerCommand("ball drop l2", new InstantCommand());
+    NamedCommands.registerCommand("ball drop l3", new InstantCommand());
+    NamedCommands.registerCommand("ball drop off", new InstantCommand());
+    
+}
+    
 
 
 

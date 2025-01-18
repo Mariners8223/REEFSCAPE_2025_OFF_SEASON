@@ -41,7 +41,7 @@ public enum DevBotConstants {
     public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
         WHEEL_RADIUS_METERS,
         MAX_WHEEL_LINEAR_VELOCITY,
-        1, //TODO find real mew
+        0.9,
         DCMotor.getKrakenX60(1),
         DRIVE_MOTOR_CURRENT_LIMIT,
         1);
