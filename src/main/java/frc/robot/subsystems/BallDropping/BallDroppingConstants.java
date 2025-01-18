@@ -11,7 +11,7 @@ public class BallDroppingConstants {
     public class AngleMotor{
         //TODO: Find all constants!!!
 
-        public static final double AngleToReach = 90; 
+        public static final double AngleToReach = 0.25; 
         public static final double AngleToReset = 0; 
 
         public static final ControllerLocation location = null;
@@ -22,6 +22,8 @@ public class BallDroppingConstants {
         
         public static final PIDFGains AnglePID = new PIDFGains(0,0,0);
     }
+
+    public static final double AngleTolarance = 0.01;
 
     public class DropperMotor{
         public static final double PowerToReach = 1;//what power to use for the drop

@@ -7,23 +7,25 @@ package frc.robot.commands.BallDropping;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.BallDropping.BallDroppingConstants;
+import frc.robot.subsystems.BallDropping.BallDroppingConstants.AngleMotor;
+import frc.robot.subsystems.BallDropping.BallDroppingConstants.DropperMotor;
 
-
-public class AngleMotorOff extends Command {
-  BallDropping balldrop;
-
-  public AngleMotorOff() {
-    balldrop = new BallDropping();
-
-    addRequirements(balldrop);
+public class BallDropOnForLow extends Command {
+  private final BallDropping ballDrop;
+  
+  public BallDropOnForLow(BallDropping ballDrop) {
+    this.ballDrop = ballDrop;
+    addRequirements(ballDrop);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    balldrop.reachAngle(BallDroppingConstants.AngleMotor.AngleToReset);
+    ballDrop.setDropperMotorPower(-DropperMotor.PowerToReach);
+    ballDrop.reachAngle(AngleMotor.AngleToReach);
   }
 
+/* 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {}
@@ -31,10 +33,12 @@ public class AngleMotorOff extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
+*/
+
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return balldrop.getAngle() == BallDroppingConstants.AngleMotor.AngleToReset;
+    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReach) <= BallDroppingConstants.AngleTolarance;
   }
 }

@@ -15,8 +15,8 @@ import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 
 public class BallDroppinIOReal implements BallDroppingIO{
-    MarinersController angleMotor;
-    VictorSPX dropperMotor;
+    private final MarinersController angleMotor;
+    private final VictorSPX dropperMotor;
 
     public BallDroppinIOReal(){
        angleMotor = configueAngleMotor();
@@ -29,6 +29,7 @@ public class BallDroppinIOReal implements BallDroppingIO{
 
         motor.setPIDF(BallDroppingConstants.AngleMotor.AnglePID);
         motor.getMeasurements().setGearRatio(BallDroppingConstants.AngleMotor.gearRatio);
+        
         return motor;
     }
     private VictorSPX configueDropperMotor(){
