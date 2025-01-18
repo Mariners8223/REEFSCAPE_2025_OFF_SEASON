@@ -12,7 +12,7 @@ public class RobotAutoConstants {
 
     public static ArrayList<Pose2d> reefPoses = new ArrayList<>();
 
-    enum FeederLocations{
+    public static enum FeederLocations{
         TOP,
         BOTTOM;
 

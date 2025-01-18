@@ -1,5 +1,6 @@
-package frc.robot.subsystems.RobotAuto;
+package frc.robot.subsystems.RobotAuto.MasterCommand;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
@@ -7,7 +8,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 public class HomeToReef extends Command {
     private final DriveBase driveBase;
 
-    public HomeToReef(DriveBase driveBase) {
+    public HomeToReef(DriveBase driveBase, Pose2d targetPose) {
         this.driveBase = driveBase;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)

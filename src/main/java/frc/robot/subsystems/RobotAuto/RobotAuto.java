@@ -24,8 +24,7 @@ public class RobotAuto extends SubsystemBase {
     private final Command moveElevatorToIntake;
     private final Command intakeCommand;
 
-    public RobotAuto(DriveBase driveBase, Elevator elevator, EndEffector endEffector, BallDropping ballDropping,
-                     Trigger masterTrigger, Trigger ballDroppingTrigger) {
+    public RobotAuto(DriveBase driveBase, Elevator elevator, EndEffector endEffector) {
         RobotAutoConstants.FeederLocations location = RobotAutoConstants.FeederLocations.TOP;
 
         triangleSize = calculateTriangleArea(location.bottomLeft, location.bottomRight, location.topLeft);
