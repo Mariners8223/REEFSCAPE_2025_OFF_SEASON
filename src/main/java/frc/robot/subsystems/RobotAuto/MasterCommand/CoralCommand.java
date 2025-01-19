@@ -21,6 +21,7 @@ public class CoralCommand extends Command {
 
     private final DriveBase driveBase;
     private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
+    private final Supplier<Pose2d> targetPoseSupplier;
 
     private final MoveToLevel moveElevatorCommand;
     private final Eject ejectCommand;
@@ -29,8 +30,10 @@ public class CoralCommand extends Command {
     private final Command adjustmentPhase;
 
 
-    public CoralCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, Supplier<ElevatorConstants.ElevatorLevel> levelSupplier) {
+    public CoralCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector,
+                        Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Pose2d> targetPoseSupplier) {
         this.driveBase = driveBase;
+        this.targetPoseSupplier = targetPoseSupplier;
 
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake);
         ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1);
@@ -49,7 +52,7 @@ public class CoralCommand extends Command {
 
     @Override
     public void initialize() {
-        Pose2d targetPose = driveBase.getPose().nearest(RobotAutoConstants.reefPoses);
+        Pose2d targetPose = targetPoseSupplier.get();
         Command pathCommand = driveBase.findPath(targetPose);
         homeToReef.setTargetPose(targetPose);
 
