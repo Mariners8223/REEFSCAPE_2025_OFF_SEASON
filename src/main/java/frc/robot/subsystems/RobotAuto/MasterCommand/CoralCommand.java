@@ -1,6 +1,5 @@
 package frc.robot.subsystems.RobotAuto.MasterCommand;
 
-import com.fasterxml.jackson.core.PrettyPrinter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -20,35 +19,48 @@ import java.util.function.Supplier;
 public class CoralCommand extends Command {
     private Command coralCommand;
 
-    private final Command moveElevatorCommand;
-    private final Command ejectCommand;
-    private final Command elevatorToHome;
-
     private final DriveBase driveBase;
+    private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
+
+    private final MoveToLevel moveElevatorCommand;
+    private final Eject ejectCommand;
+    private final Command elevatorToHome;
+    private final HomeToReef homeToReef;
+    private final Command adjustmentPhase;
+
 
     public CoralCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, Supplier<ElevatorConstants.ElevatorLevel> levelSupplier) {
         this.driveBase = driveBase;
 
-        moveElevatorCommand = new MoveToLevel(elevator, levelSupplier);
-        ejectCommand = new Eject(endEffector, () -> getMotorPower(levelSupplier.get()));
+        moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake);
+        ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1);
 
         elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
+
+        homeToReef = new HomeToReef(driveBase, RobotAutoConstants.reefPoses.get(0));
+
+        this.adjustmentPhase = new ParallelCommandGroup(
+                homeToReef,
+                moveElevatorCommand
+        );
+
+        this.levelSupplier = levelSupplier;
     }
 
     @Override
     public void initialize() {
         Pose2d targetPose = driveBase.getPose().nearest(RobotAutoConstants.reefPoses);
-
         Command pathCommand = driveBase.findPath(targetPose);
+        homeToReef.setTargetPose(targetPose);
 
-        Command homeToReef = new HomeToReef(driveBase, targetPose);
+        ElevatorConstants.ElevatorLevel level = levelSupplier.get();
+
+        moveElevatorCommand.setDesiredLevel(level);
+        ejectCommand.setMotorPower(getMotorPower(level));
 
         coralCommand = new SequentialCommandGroup(
                 pathCommand,
-                new ParallelCommandGroup(
-                        moveElevatorCommand,
-                        homeToReef
-                ),
+                adjustmentPhase,
                 ejectCommand,
                 elevatorToHome
         );
