@@ -65,10 +65,10 @@ public class RobotContainer {
     }
 public static void confignamedcommand() {
     NamedCommands.registerCommand("intake", new InstantCommand());
-    NamedCommands.registerCommand("outtake l1", new InstantCommand());
-    NamedCommands.registerCommand("outtake l2", new InstantCommand());
-    NamedCommands.registerCommand("outtake l3", new InstantCommand());
-    NamedCommands.registerCommand("outtake l4", new InstantCommand());
+    NamedCommands.registerCommand("eject l1", new InstantCommand());
+    NamedCommands.registerCommand("eject l2", new InstantCommand());
+    NamedCommands.registerCommand("eject l3", new InstantCommand());
+    NamedCommands.registerCommand("eject l4", new InstantCommand());
     NamedCommands.registerCommand("ball drop l2", new InstantCommand());
     NamedCommands.registerCommand("ball drop l3", new InstantCommand());
     NamedCommands.registerCommand("ball drop off", new InstantCommand());

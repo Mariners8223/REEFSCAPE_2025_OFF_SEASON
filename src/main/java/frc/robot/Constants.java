@@ -26,7 +26,7 @@ public class Constants {
         REEF9,
         REEF10,
         REEF11,
-        REEF12,
+        REEF12;
     }
 
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
