@@ -4,9 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
-import java.util.function.Function;
 
-import edu.wpi.first.math.Pair;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
@@ -70,9 +68,7 @@ public class ElevatorConstants {
     }
 
     public static final double ELEVATOR_TOLERANCE = 0.1;
-
     public static final double HEIGHT_TO_ROTATION = 1;
-    public static final double ROTATION_TO_HEIGHT = 1 / HEIGHT_TO_ROTATION;
 
     public static final double X_ON_ROBOT = 1;
     public static final double Y_ON_ROBOT = 1;

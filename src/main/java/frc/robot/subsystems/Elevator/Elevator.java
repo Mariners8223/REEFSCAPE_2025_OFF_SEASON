@@ -4,42 +4,50 @@
 
 package frc.robot.subsystems.Elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
-import frc.robot.subsystems.Elevator.ElevatorIO.ElevatorInputs;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new Elevator. */
-  ElevatorIO io;
-  ElevatorInputs inputs = new ElevatorInputs(); /// TODO: Check about AutoLogged
-  ElevatorLevel level;
+  private final ElevatorIO io;
+  private final ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
+  private ElevatorLevel currentLevel;
 
   public Elevator() {
-    // io = new IO();
-    level = ElevatorLevel.NULL;
+    io = new ElevatorIOVortex();
+
+    currentLevel = ElevatorLevel.NULL;
 
     this.resetMotorEncoder();
   }
 
   public void resetMotorEncoder(){
     io.resetMotorEncoder();
-    level = ElevatorLevel.Bottom;
+    currentLevel = ElevatorLevel.Bottom;
   }
 
-  public void moveMotorByPosition(double position){
-    io.moveMotorByPosition(position);
+  public void moveMotorByPosition(ElevatorLevel desiredLevel){
+    Logger.recordOutput("Elevator/Desired Level", desiredLevel.name());
+    io.moveMotorByPosition(desiredLevel.getHeight());
   }
 
-  public ElevatorLevel getLevel(){
-    return this.level;
+  public ElevatorLevel getCurrentLevel(){
+    return this.currentLevel;
   }
 
-  public double getCurrentPosition(){
-    return io.getCurrentPosition();
+  public double getCurrentHeight(){
+    return inputs.elevatorHeight;
   }
 
   @Override
   public void periodic() {
     io.Update(inputs);
+    Logger.processInputs(getName(), inputs);
+
+    currentLevel = ElevatorLevel.findNearestLevel(getCurrentHeight());
+
+    Logger.recordOutput("Elevator/CurrentLevel", currentLevel.name());
   }
 }
