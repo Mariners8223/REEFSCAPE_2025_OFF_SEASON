@@ -45,7 +45,7 @@ public class ElevatorConstants {
         public static final ControllerLocation CONTROLLER_LOCATION = null;
 
         public static final int MOTOR_ID = 0;
-        public static final double GEAR_RATIO = 1;
+        public static final double GEAR_RATIO = 5;
 
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
@@ -53,7 +53,10 @@ public class ElevatorConstants {
         public static final double SOFT_MINIMUM = 0;
         public static final double SOFT_MAXIMUM = 0;
 
-        public static final PIDFGains PID_GAINS = null;
+        public static final PIDFGains PID_GAINS = new PIDFGains(
+            20,
+            0,
+            0);
         
         public static final boolean IS_INVERTED = false;
     }
@@ -70,8 +73,11 @@ public class ElevatorConstants {
     public static final double ELEVATOR_TOLERANCE = 0.1;
     public static final double HEIGHT_TO_ROTATION = 1;
 
-    public static final double X_ON_ROBOT = 1;
-    public static final double Y_ON_ROBOT = 1;
+    public static final double X_ON_ROBOT = 0;
+    public static final double Y_ON_ROBOT = 0;
 
     public static final double FEED_FORWARD = 1;
+
+    public static final double ELEVATOR_WEIGHT = 1;
+    public static final double PULLEY_RADIUS = 0.03;
 }

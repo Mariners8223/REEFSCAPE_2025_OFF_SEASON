@@ -16,7 +16,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorLevel currentLevel;
 
   public Elevator() {
-    io = new ElevatorIOVortex();
+    io = new ElevatorIOSim();
 
     currentLevel = ElevatorLevel.NULL;
 
@@ -49,5 +49,6 @@ public class Elevator extends SubsystemBase {
     currentLevel = ElevatorLevel.findNearestLevel(getCurrentHeight());
 
     Logger.recordOutput("Elevator/CurrentLevel", currentLevel.name());
+    Logger.recordOutput("Elevator/Current Command", this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "Null");
   }
 }
