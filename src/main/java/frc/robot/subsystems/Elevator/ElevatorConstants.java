@@ -51,7 +51,7 @@ public class ElevatorConstants {
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
 
         public static final double SOFT_MINIMUM = 0;
-        public static final double SOFT_MAXIMUM = 0;
+        public static final double SOFT_MAXIMUM = 6;
 
         public static final PIDFGains PID_GAINS = new PIDFGains(
             20,

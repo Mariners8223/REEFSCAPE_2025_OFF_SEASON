@@ -4,53 +4,32 @@
 
 package frc.robot.subsystems.Elevator;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
-import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
 /** Add your docs here. */
 public class ElevatorIOSim implements ElevatorIO{
     private final ElevatorSim elevator;
-    // private final PIDController PID;
-
-      private final ProfiledPIDController pidController;
+    private final PIDController pidController;
     
     public ElevatorIOSim(){
-        // elevator = new ElevatorSim(
-        //     DCMotor.getNeoVortex(2),
-        //     ElevatorConstants.LeadMotor.GEAR_RATIO,
-        //     ElevatorConstants.ELEVATOR_WEIGHT, 
-        //     ElevatorConstants.PULLEY_RADIUS, 
-        //     ElevatorLevel.Bottom.getHeight(),
-        //     ElevatorLevel.L4.getHeight(),
-        //     false,
-        //     ElevatorLevel.Bottom.getHeight());
-
         elevator =
             new ElevatorSim(
-                DCMotor.getVex775Pro(4),
-                5,
-                4,
-                0.1,
-                0,
-                6,
+                DCMotor.getNeoVortex(2),
+                ElevatorConstants.LeadMotor.GEAR_RATIO,
+                ElevatorConstants.ELEVATOR_WEIGHT,
+                ElevatorConstants.PULLEY_RADIUS,
+                ElevatorConstants.LeadMotor.SOFT_MINIMUM,
+                ElevatorConstants.LeadMotor.SOFT_MAXIMUM,
                 true,
-                0,
+                ElevatorConstants.ElevatorLevel.Bottom.getHeight(),
                 0.0, 0.0);
         
         // PID = new PIDController(ElevatorConstants.LeadMotor.PID_GAINS.getP(), ElevatorConstants.LeadMotor.PID_GAINS.getI(), ElevatorConstants.LeadMotor.PID_GAINS.getD());
-        pidController = new ProfiledPIDController(
-            ElevatorConstants.LeadMotor.PID_GAINS.getP(),
-            ElevatorConstants.LeadMotor.PID_GAINS.getI(),
-            ElevatorConstants.LeadMotor.PID_GAINS.getD(),
-            new TrapezoidProfile.Constraints(2.45, 2.45));
+        pidController = ElevatorConstants.LeadMotor.PID_GAINS.createPIDController();
     }
 
     public void resetMotorEncoder(){
@@ -58,7 +37,7 @@ public class ElevatorIOSim implements ElevatorIO{
     }
 
     public void moveMotorByPosition(double position){
-        pidController.setGoal(position);
+        pidController.setSetpoint(position);
     }
 
     public void Update(ElevatorInputs inputs){

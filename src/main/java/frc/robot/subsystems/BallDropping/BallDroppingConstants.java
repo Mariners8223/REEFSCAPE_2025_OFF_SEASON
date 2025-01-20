@@ -14,7 +14,7 @@ public class BallDroppingConstants {
         public static final double AngleToReach = 0.25; 
         public static final double AngleToReset = 0; 
 
-        public static final ControllerLocation location = null;
+        public static final ControllerLocation location = ControllerLocation.MOTOR;
         public static final int id = 0;
         public static final boolean isBrushless = true;
         public static final PIDFGains PID_gains = null;
