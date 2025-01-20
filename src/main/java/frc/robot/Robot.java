@@ -15,8 +15,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -128,6 +126,8 @@ public class Robot extends LoggedRobot
         Constants.FeederLocation.checkAlliance(!isRedAlliance);
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
 
+        RobotContainer.configureBindings();
+
         autonomousCommand = RobotContainer.getAutoCommand();
         
         if (autonomousCommand != null)
@@ -152,8 +152,6 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.cancel();
         }
-
-        (new MoveToLevel(RobotContainer.elevator, ElevatorLevel.L4)).schedule();
     }
     
     

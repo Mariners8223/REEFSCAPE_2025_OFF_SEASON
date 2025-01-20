@@ -6,6 +6,7 @@ package frc.robot.subsystems.EndEffector;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class EndEffector extends SubsystemBase {
@@ -49,5 +50,11 @@ public class EndEffector extends SubsystemBase {
     public void periodic() {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
+
+        Command currentCommand = getCurrentCommand();
+
+        String commandName = currentCommand == null ? "None" : currentCommand.getName();
+
+        Logger.recordOutput("EndEffector/Current Command", commandName);
     }
 }

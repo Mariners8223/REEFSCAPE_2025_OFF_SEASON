@@ -1,6 +1,8 @@
 package frc.robot.subsystems.RobotAuto;
 
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,8 +45,13 @@ public class RobotAuto extends SubsystemBase {
 
         Pose2d robotPose = driveBase.getPose();
 
-        if(notWithinFeeder(robotPose, Constants.FeederLocation.LEFT)
-                && notWithinFeeder(robotPose, Constants.FeederLocation.RIGHT)){
+        boolean withinLeftFeeder = withinFeeder(robotPose, Constants.FeederLocation.LEFT);
+        boolean withinRightFeeder = withinFeeder(robotPose, Constants.FeederLocation.RIGHT);
+
+        Logger.recordOutput("AutoIntake/Within left feeder", withinLeftFeeder);
+        Logger.recordOutput("AutoIntake/Within right feeder", withinRightFeeder);
+
+        if(!withinLeftFeeder && !withinRightFeeder){
             if(intakeCommand.isScheduled()) intakeCommand.cancel();
             return;
         }
@@ -61,7 +68,7 @@ public class RobotAuto extends SubsystemBase {
         }
     }
 
-    private boolean notWithinFeeder(Pose2d robotPose, Constants.FeederLocation feeder){
+    private boolean withinFeeder(Pose2d robotPose, Constants.FeederLocation feeder){
         return withinTriangle(robotPose, feeder.getCorner(0), feeder.getCorner(1), feeder.getCorner(2))
                 || withinTriangle(robotPose, feeder.getCorner(3), feeder.getCorner(1), feeder.getCorner(2));
     }
