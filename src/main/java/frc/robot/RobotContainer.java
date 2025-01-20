@@ -23,6 +23,7 @@ import frc.robot.subsystems.RobotAuto.RobotAuto;
 import frc.robot.subsystems.RobotAuto.MasterCommand.HomeToReef;
 import frc.robot.subsystems.RobotAuto.MasterCommand.MasterCommand;
 
+import frc.robot.subsystems.Vision.Vision;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -46,6 +47,7 @@ public class RobotContainer {
     public static DriveBase driveBase;
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
+    public static Vision vision;
 
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
@@ -61,10 +63,7 @@ public class RobotContainer {
 
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
-        // elevator = new Elevator();
-        // endEffector = new EndEffector();
-        // ballDropping = new BallDropping();
-        // robotAuto = new RobotAuto(driveBase, elevator, endEffector);
+        vision = new Vision(driveBase::addVisionMeasurement);
 
         field = new Field2d();
 

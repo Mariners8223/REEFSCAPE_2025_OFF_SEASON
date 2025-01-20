@@ -8,7 +8,11 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -295,6 +299,22 @@ public class DriveBase extends SubsystemBase {
     }
 
     /**
+     * updates pose Estimator with vision measurements
+     *
+     * @param visionPose the pose of the robot from vision
+     * @param timeStamp  the time stamp of the vision measurement
+     * @param stdDevs    the standard deviations of the vision measurements
+     */
+    public void addVisionMeasurement(Pose2d visionPose, double timeStamp, Matrix<N3, N1> stdDevs) {
+        poseEstimator.addVisionMeasurement(visionPose, timeStamp, stdDevs);
+    }
+
+    /**
+     * drives the robot relative to itself
+     *
+     * @param Xspeed        the X speed of the robot (forward is positive) m/s
+     * @param Yspeed        the Y speed of the robot (left is positive) m/s
+     * @param rotationSpeed the rotation of the robot (left is positive) rad/s
      * drives the robot
      * @param chassisSpeeds the target chassis speeds of the robot
      */
@@ -520,7 +540,7 @@ public class DriveBase extends SubsystemBase {
         }
 
         gyro.update();
-        poseEstimator.updateWithTime(Logger.getTimestamp(), gyro.getRotation2d(), positions);
+        poseEstimator.update(gyro.getRotation2d(), positions);
         currentPose = poseEstimator.getEstimatedPosition();
 
         Logger.recordOutput("DriveBase/estimatedPose", currentPose);

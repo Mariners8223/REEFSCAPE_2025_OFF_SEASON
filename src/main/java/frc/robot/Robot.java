@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -93,6 +94,9 @@ public class Robot extends LoggedRobot
         ControllerMaster.getInstance();
 
         SmartDashboard.putBoolean("beam breaker", false);
+
+        SmartDashboard.putNumber("stdXY", 0);
+        SmartDashboard.putNumber("stdTheta", 0);
     }
     
     
@@ -101,6 +105,8 @@ public class Robot extends LoggedRobot
     {
         CommandScheduler.getInstance().run();
         // RobotContainer.endEffector.setGpLoaded(SmartDashboard.getBoolean("beam breaker", false));
+        VisionConstants.XYstdFactor = SmartDashboard.getNumber("stdXY", 0);
+        VisionConstants.thetaStdFactor = SmartDashboard.getNumber("stdTheta", 0);
     }
     
     
