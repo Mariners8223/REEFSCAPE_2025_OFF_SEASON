@@ -21,7 +21,7 @@ public class ElevatorConstants {
         Moving(-1),
         NULL(-1);
 
-        private double height;
+        private final double height;
 
         private ElevatorLevel(double height){
             this.height = height;
@@ -41,7 +41,7 @@ public class ElevatorConstants {
         
     }
 
-    public class LeadMotor{
+    public static class LeadMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = null;
 
         public static final int MOTOR_ID = 0;
@@ -61,7 +61,7 @@ public class ElevatorConstants {
         public static final boolean IS_INVERTED = false;
     }
 
-    public class FollowMotor{
+    public static class FollowMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = null;
         public static final int MOTOR_ID = 0;
         public static final boolean IS_BRUSHLESS = true;

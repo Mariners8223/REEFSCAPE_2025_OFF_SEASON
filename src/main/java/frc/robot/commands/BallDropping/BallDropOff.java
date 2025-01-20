@@ -34,6 +34,6 @@ public class BallDropOff extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReset) <= BallDroppingConstants.AngleTolarance;
+    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReset) <= BallDroppingConstants.AngleTolerance;
   }
 }

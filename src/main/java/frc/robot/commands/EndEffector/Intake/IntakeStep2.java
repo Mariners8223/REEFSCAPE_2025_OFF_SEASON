@@ -18,6 +18,7 @@ public class IntakeStep2 extends Command {
   @Override
   public void end(boolean interrupted) {
     endEffector.stopMotors();
+    endEffector.setGpLoaded(!interrupted);
   }
 
   @Override

@@ -9,12 +9,13 @@ import org.littletonrobotics.junction.Logger;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BallDropping extends SubsystemBase{
-    BallDroppingIO io;
-    balldroppingInputsAutoLogged inputs = new balldroppingInputsAutoLogged();
+    private final BallDroppingIO io;
+    private final BallDroppingInputsAutoLogged inputs = new BallDroppingInputsAutoLogged();
 
     public BallDropping(){
-        this.resetAngleEncoder();
-        io = new BallDroppinIOReal();
+        io = new BallDroppingIOReal();
+
+        io.resetAngleEncoder();
     }
 
     //Angle subsystems

@@ -33,13 +33,12 @@ public class ElevatorIOVortex implements ElevatorIO {
         return motor;
     }
 
-    private MarinersSparkBase configureFollowMotor(){
+    private void configureFollowMotor(){
         MarinersSparkBase motor;
         motor = new MarinersSparkBase("Follow Elevator Motor", ElevatorConstants.FollowMotor.CONTROLLER_LOCATION, 
             ElevatorConstants.FollowMotor.MOTOR_ID, ElevatorConstants.FollowMotor.IS_BRUSHLESS, ElevatorConstants.FollowMotor.MOTOR_TYPE);
         
         motor.setMotorAsFollower(this.motorLead, ElevatorConstants.FollowMotor.IS_INVERTED);
-        return motor;
     }
 
     public void resetMotorEncoder(){

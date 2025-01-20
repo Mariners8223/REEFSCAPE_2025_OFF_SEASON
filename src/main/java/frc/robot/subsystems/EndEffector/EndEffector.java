@@ -7,41 +7,47 @@ package frc.robot.subsystems.EndEffector;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-//import frc.robot.subsystems.EndEffector.EndEffectorIO.EndEffectorInputs;
 
 public class EndEffector extends SubsystemBase {
-  private final EndEffectorIO io;
-  private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
+    private final EndEffectorIO io;
+    private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
 
-  public EndEffector() {
-    io = new EndEffectorIOReal();
-  }
+    private boolean gpLoaded = true;
 
-  public void setRightMotorPower(double PowerToSet){
-    io.setRightMotorPower(PowerToSet);
-  }
-  
-  public void setLeftMotorPower(double PowerToSet){
-    io.setLeftMotorPower(PowerToSet);
-  }
+    public EndEffector() {
+        io = new EndEffectorIOReal();
+    }
 
-  public boolean gpLoaded(){
-    return true; //TODO add fucntion
-  }
+    public void setRightMotorPower(double PowerToSet) {
+        io.setRightMotorPower(PowerToSet);
+    }
 
-  public void stopMotors(){
-    io.setLeftMotorPower(0);
-    io.setRightMotorPower(0);
-  }
+    public void setLeftMotorPower(double PowerToSet) {
+        io.setLeftMotorPower(PowerToSet);
+    }
 
-  public boolean isGpDetected(){
-    return inputs.beamBreakValue;
-  }
+    public boolean gpLoaded() {
+        return gpLoaded;
+    }
+
+    public void setGpLoaded(boolean gpLoaded) {
+        Logger.recordOutput("EndEffector/game piece loaded", gpLoaded);
+        this.gpLoaded = gpLoaded;
+    }
+
+    public void stopMotors() {
+        io.setLeftMotorPower(0);
+        io.setRightMotorPower(0);
+    }
+
+    public boolean isGpDetected() {
+        return inputs.beamBreakValue;
+    }
 
 
-  @Override
-  public void periodic() {
-    io.Update(inputs);
-    Logger.processInputs(getName(), inputs);
-  }
+    @Override
+    public void periodic() {
+        io.Update(inputs);
+        Logger.processInputs(getName(), inputs);
+    }
 }

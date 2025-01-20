@@ -59,43 +59,13 @@ public class ElevatorIOSim implements ElevatorIO{
 
     public void moveMotorByPosition(double position){
         pidController.setGoal(position);
-        // elevator.setInput(PID.calculate(elevator.getPositionMeters()));
-        // elevator.setInputVoltage(PID.calculate(elevator.getPositionMeters()));
-        // elevator.setInputVoltage(1000);
-        // elevator.setInputVoltage(PID.calculate(elevator.getPositionMeters(), position));
-        // reachGoal(position);
-
-        // elevator.setState(0, 10);
-        // elevator.setInputVoltage(10);
-    }
-
-    public void reachGoal(double goal) {
-        pidController.setGoal(goal);
-    
-        // With the setpoint value we run PID control like normal
-        double pidOutput = pidController.calculate(elevator.getPositionMeters());
-        elevator.setInputVoltage(pidOutput);
     }
 
     public void Update(ElevatorInputs inputs){
-        // elevator.setInput(10);
-        // elevator.setState(elevator.getPositionMeters(), 100);
         elevator.setInput(pidController.calculate(elevator.getPositionMeters()));
-        elevator.update(1);
+        elevator.update(0.02);
 
         inputs.elevatorHeight = elevator.getPositionMeters();
         inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d());
-
-        Logger.recordOutput("Elevator/PID Setpoint", pidController.getSetpoint().position);
-        Logger.recordOutput("Elevator/PID Calculate", pidController.calculate(elevator.getPositionMeters(), pidController.getSetpoint()));
-        Logger.recordOutput("Elevator/Elevator Draw Amps", elevator.getCurrentDrawAmps());
-
-        Logger.recordOutput("Elevator/Elevator Input 0", elevator.getInput(0));
-        Logger.recordOutput("Elevator/Elevator Output 0", elevator.getOutput(0));
-
-        // Logger.recordOutput("Elevator/Elevator Input 1", elevator.getInput(1));
-        Logger.recordOutput("Elevator/Elevator Output 1", elevator.getOutput(1));
-
-        Logger.recordOutput("Elevator/Velocity", elevator.getVelocityMetersPerSecond());
     }
 }

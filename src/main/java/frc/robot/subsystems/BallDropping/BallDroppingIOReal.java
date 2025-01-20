@@ -14,16 +14,16 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 
-public class BallDroppinIOReal implements BallDroppingIO{
+public class BallDroppingIOReal implements BallDroppingIO{
     private final MarinersController angleMotor;
     private final VictorSPX dropperMotor;
 
-    public BallDroppinIOReal(){
-       angleMotor = configueAngleMotor();
-       dropperMotor = configueDropperMotor();
+    public BallDroppingIOReal(){
+       angleMotor = configureAngleMotor();
+       dropperMotor = configureDropperMotor();
     }
 
-    private MarinersController configueAngleMotor(){
+    private MarinersController configureAngleMotor(){
         MarinersController motor = new MarinersSparkBase("angle motor", BallDroppingConstants.AngleMotor.location, 
         BallDroppingConstants.AngleMotor.id, true, MotorType.SPARK_FLEX);
 
@@ -32,9 +32,8 @@ public class BallDroppinIOReal implements BallDroppingIO{
         
         return motor;
     }
-    private VictorSPX configueDropperMotor(){
-        VictorSPX motor = new VictorSPX(BallDroppingConstants.DropperMotor.id);
-        return motor;
+    private VictorSPX configureDropperMotor(){
+        return new VictorSPX(BallDroppingConstants.DropperMotor.id);
     }
 
 
@@ -59,7 +58,7 @@ public class BallDroppinIOReal implements BallDroppingIO{
         setDropperMotorPower(0);
     }
 
-    public void Update(balldroppingInputs inputs){
+    public void Update(BallDroppingInputs inputs){
         inputs.angle = angleMotor.getPosition();
         inputs.dropperPower = dropperMotor.getMotorOutputPercent();        
     }

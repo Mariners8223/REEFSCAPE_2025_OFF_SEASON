@@ -8,7 +8,7 @@ import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 public class BallDroppingConstants {
-    public class AngleMotor{
+    public static class AngleMotor{
         //TODO: Find all constants!!!
 
         public static final double AngleToReach = 0.25; 
@@ -23,9 +23,9 @@ public class BallDroppingConstants {
         public static final PIDFGains AnglePID = new PIDFGains(0,0,0);
     }
 
-    public static final double AngleTolarance = 0.01;
+    public static final double AngleTolerance = 0.01;
 
-    public class DropperMotor{
+    public static class DropperMotor{
         public static final double PowerToReach = 1;//what power to use for the drop
         public static final int id = 0;
         public static final double maxDropperPower = 0.8;
