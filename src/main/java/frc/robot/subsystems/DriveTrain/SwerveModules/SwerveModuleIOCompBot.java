@@ -33,6 +33,8 @@ public class SwerveModuleIOCompBot extends SwerveModuleIO {
                 constants.DRIVE_MOTOR_PID,
                 CompBotConstants.DRIVE_GEAR_RATIO / CompBotConstants.WHEEL_CIRCUMFERENCE_METERS);
 
+        driveMotor.setCurrentLimits(CompBotConstants.DRIVE_MOTOR_CURRENT_LIMIT, CompBotConstants.DRIVE_MOTOR_CURRENT_THERSHOLD);
+
         steerMotor = new MarinersSparkBase(
                 name.name() + " Steer Motor",
                 MarinersController.ControllerLocation.RIO,

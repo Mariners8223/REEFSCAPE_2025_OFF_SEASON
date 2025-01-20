@@ -26,7 +26,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
         driveMotor.setMotorInverted(constants.DRIVE_INVERTED);
 
-        driveMotor.setCurrentLimits(60, 90);
+        driveMotor.setCurrentLimits(DevBotConstants.DRIVE_MOTOR_CURRENT_LIMIT, DevBotConstants.DRIVE_MOTOR_CURRENT_THERSHOLD);
 
         driveMotor.setMotorDeadBandVoltage(constants.DRIVE_KS);
 
