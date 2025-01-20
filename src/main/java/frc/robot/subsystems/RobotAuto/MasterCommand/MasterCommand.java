@@ -1,13 +1,14 @@
 package frc.robot.subsystems.RobotAuto.MasterCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
+import frc.robot.commands.BallDropping.BallDropOff;
+import frc.robot.commands.BallDropping.BallDropOnForHigh;
+import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
+import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -19,33 +20,36 @@ import java.util.function.Supplier;
 
 
 public class MasterCommand extends Command {
+    private Constants.ReefLocation targetReef = Constants.ReefLocation.REEF_1;
+    private boolean shouldDropBall = false;
 
     private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
-    private final Supplier<Pose2d> targetPoseSupplier;
+    private final Supplier<Constants.ReefLocation> targetReefSupplier;
+    private final Supplier<Boolean> shouldDropBallSupplier;
 
     private final Command coralCommand;
 
     private final ReefFinderWrapper pathCommand;
     private final MoveToLevel moveElevatorCommand;
     private final Eject ejectCommand;
-    private final Command elevatorToHome;
     private final HomeToReef homeToReef;
-    private final Command adjustmentPhase;
 
 
-    public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector,
-                         Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Pose2d> targetPoseSupplier) {
-        
-        this.targetPoseSupplier = targetPoseSupplier;
+    public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, BallDropping ballDropping,
+                         Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier,
+                         Supplier<Boolean> dropBall) {
+
+        this.targetReefSupplier = targetReefSupplier;
+        this.shouldDropBallSupplier = dropBall;
 
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake);
         ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1);
 
-        elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
+        Command elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1.getPose());
 
-        this.adjustmentPhase = new ParallelCommandGroup(
+        Command adjustmentPhase = new ParallelCommandGroup(
                 homeToReef,
                 moveElevatorCommand
         );
@@ -54,23 +58,36 @@ public class MasterCommand extends Command {
 
         this.levelSupplier = levelSupplier;
 
+        Command ballDroppingCommand = new SequentialCommandGroup(
+                new BallDropOnForHigh(ballDropping).onlyIf(() -> targetReef.isBallInUpPosition()),
+                new BallDropOnForLow(ballDropping).onlyIf(() -> !targetReef.isBallInUpPosition()),
+                new WaitCommand(2),
+                new BallDropOff(ballDropping)
+        ).onlyIf(() -> shouldDropBall);
+
         coralCommand = new SequentialCommandGroup(
-            pathCommand,
-            adjustmentPhase,
-            ejectCommand,
-            elevatorToHome  
+                pathCommand,
+                ballDroppingCommand,
+                adjustmentPhase,
+                ejectCommand,
+                elevatorToHome
         );
     }
 
-    public Command getPathCommand(){
+    public Command getPathCommand() {
         return pathCommand;
     }
 
     @Override
     public void initialize() {
-        Pose2d targetPose = targetPoseSupplier.get();
+        targetReef = targetReefSupplier.get();
+        Pose2d targetPose = targetReef.getPose();
+        shouldDropBall = shouldDropBallSupplier.get();
 
-        pathCommand.setTargetPose(targetPose);
+
+        pathCommand.setTargetPose(
+                shouldDropBall && !targetReef.isBallDropInSamePose() ? new Pose2d() : targetPose);
+
         homeToReef.setTargetPose(targetPose);
 
         ElevatorConstants.ElevatorLevel level = levelSupplier.get();
@@ -81,9 +98,9 @@ public class MasterCommand extends Command {
         coralCommand.initialize();
     }
 
-    private EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level){
-        return switch (level){
-            case L2,L3 -> EndEffectorConstants.MotorPower.L2_3;
+    private EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level) {
+        return switch (level) {
+            case L2, L3 -> EndEffectorConstants.MotorPower.L2_3;
             case L4 -> EndEffectorConstants.MotorPower.L4;
             default -> EndEffectorConstants.MotorPower.L1;
         };

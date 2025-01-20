@@ -9,8 +9,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 
 /**
  * Add your docs here.
@@ -22,12 +20,9 @@ public class Constants {
         REPLAY
     }
 
-    public static Pose2d REEF_1 = new Pose2d(13.5, 5.3, Rotation2d.fromDegrees(-30));
-
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
 
     public enum ReefLocation {
-        //HEY
         REEF_1(3.14, 3.85, 0),
         REEF_2(3.14, 4.2, 0),
         REEF_3(3.645, 5.07, -60),
@@ -47,8 +42,19 @@ public class Constants {
             return pose;
         }
 
-        public static void checkAlliance(boolean isBlue){
-            if(isBlue) return;
+        public boolean isBallInUpPosition(){
+            return switch (this){
+                case REEF_1, REEF_2, REEF_5, REEF_6, REEF_9, REEF_10 -> true;
+                case REEF_3, REEF_4, REEF_7, REEF_8, REEF_11, REEF_12 -> false;
+            };
+        }
+
+        public boolean isBallDropInSamePose(){
+            return (this.ordinal() + 1)%2 == 0;
+        }
+
+        public static void checkAlliance(boolean isBlue) {
+            if (isBlue) return;
 
             AprilTagFields fields = AprilTagFields.k2025Reefscape;
 
@@ -69,35 +75,35 @@ public class Constants {
 
     public static enum FeederLocation {
         LEFT(6.6, false,
-        1.18, 7, -50),
+                1.18, 7, -50),
 
         RIGHT(1.5, true,
-            1.8, 1, 50);
+                1.8, 1, 50);
 
         private double yLine;
         private static double xLine = 2;
 
         private static boolean xLineLarger = true;
-        private boolean yLineLarger;
+        private final boolean yLineLarger;
 
         private Pose2d robotPose;
 
-        public boolean witihnFeeder(Pose2d currentPose){
+        public boolean withinFeeder(Pose2d currentPose) {
             boolean withinX =
-                xLineLarger ? currentPose.getX() <= xLine : currentPose.getX() >= xLine;
+                    xLineLarger ? currentPose.getX() <= xLine : currentPose.getX() >= xLine;
 
             boolean withinY =
-                yLineLarger ? currentPose.getY() <= yLine : currentPose.getY() >= yLine;
+                    yLineLarger ? currentPose.getY() <= yLine : currentPose.getY() >= yLine;
 
             return withinX && withinY;
         }
 
-        public Pose2d getRobotPose(){
+        public Pose2d getRobotPose() {
             return robotPose;
         }
 
-        public static void checkAlliance(boolean isBlue){
-            if(isBlue) return;
+        public static void checkAlliance(boolean isBlue) {
+            if (isBlue) return;
 
             AprilTagFields fields = AprilTagFields.k2025Reefscape;
 
@@ -121,7 +127,7 @@ public class Constants {
                     Rotation2d.fromDegrees(prevRightPose.getRotation().getDegrees() - 180));
         }
 
-        FeederLocation(double yLine, boolean yLineLarger, double robotPoseX, double robotPoseY, double robotPoseDeg){
+        FeederLocation(double yLine, boolean yLineLarger, double robotPoseX, double robotPoseY, double robotPoseDeg) {
             this.yLine = yLine;
             this.yLineLarger = yLineLarger;
 
