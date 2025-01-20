@@ -9,7 +9,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 
 /**
  * Add your docs here.
@@ -65,31 +64,28 @@ public class Constants {
     }
 
     public static enum FeederLocation {
-        LEFT(2, 7.2,
-                1.6, 7.5,
-                0.9, 6.35,
-                0.7, 6.6,
-                1.18, 7, -50
-        ),
+        LEFT(6.6, false,
+        1.18, 7, -50),
 
-        RIGHT(0.91, 1.63,
-                0.68, 1.36,
-                1.97, 1,
-                1.721, 0.65,
-                1.8, 1, 50
-        );
+        RIGHT(1.5, true,
+            1.8, 1, 50);
 
-        //order is:
-        //topRight corner
-        //topLeft corner
-        //bottomRight corner
-        //bottomLeft corner
-        private final Translation2d[] corners = new Translation2d[4];
+        private double yLine;
+        private static double xLine = 2;
+
+        private static boolean xLineLarger = true;
+        private boolean yLineLarger;
 
         private Pose2d robotPose;
 
-        public Translation2d getCorner(int index){
-            return corners[index];
+        public boolean witihnFeeder(Pose2d currentPose){
+            boolean withinX =
+                xLineLarger ? currentPose.getX() <= xLine : currentPose.getX() >= xLine;
+
+            boolean withinY =
+                yLineLarger ? currentPose.getY() <= yLine : currentPose.getY() >= yLine;
+
+            return withinX && withinY;
         }
 
         public Pose2d getRobotPose(){
@@ -99,21 +95,17 @@ public class Constants {
         public static void checkAlliance(boolean isBlue){
             if(isBlue) return;
 
-            Translation2d[] prevLeftFeeder = LEFT.corners.clone();
-            Translation2d[] prevRightFeeder = RIGHT.corners.clone();
-
             AprilTagFields fields = AprilTagFields.k2025Reefscape;
 
             AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(fields);
 
-            for(int i = 0; i < 4; i++){
-                RIGHT.corners[i] = new Translation2d(layout.getFieldLength() - prevLeftFeeder[i].getX(),
-                        prevLeftFeeder[i].getY());
+            xLine = layout.getFieldLength() - xLine;
+            xLineLarger = false;
 
-                LEFT.corners[i] = new Translation2d(layout.getFieldLength() - prevRightFeeder[i].getX(),
-                        prevRightFeeder[i].getY());
-            }
+            double temp = LEFT.yLine;
 
+            LEFT.yLine = layout.getFieldWidth() - RIGHT.yLine;
+            RIGHT.yLine = layout.getFieldWidth() - temp;
 
             Pose2d prevLeftPose = LEFT.robotPose;
             Pose2d prevRightPose = RIGHT.robotPose;
@@ -125,14 +117,9 @@ public class Constants {
                     Rotation2d.fromDegrees(prevRightPose.getRotation().getDegrees() - 180));
         }
 
-        FeederLocation(double topRightX, double topRightY, double topLeftX, double topLeftY,
-                       double bottomRightX,double bottomRightY, double bottomLeftX, double bottomLeftY,
-                       double robotPoseX, double robotPoseY, double robotPoseDeg){
-
-            corners[0] = new Translation2d(topRightX, topRightY);
-            corners[1] = new Translation2d(topLeftX, topLeftY);
-            corners[2] = new Translation2d(bottomRightX, bottomRightY);
-            corners[3] = new Translation2d(bottomLeftX, bottomLeftY);
+        FeederLocation(double yLine, boolean yLineLarger, double robotPoseX, double robotPoseY, double robotPoseDeg){
+            this.yLine = yLine;
+            this.yLineLarger = yLineLarger;
 
             robotPose = new Pose2d(robotPoseX, robotPoseY, Rotation2d.fromDegrees(robotPoseDeg));
         }
