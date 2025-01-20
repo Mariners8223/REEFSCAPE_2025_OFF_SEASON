@@ -5,10 +5,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Intake.Intake;
-import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -25,9 +24,10 @@ public class RobotAuto extends SubsystemBase {
     private final Command intakeCommand;
 
     public RobotAuto(DriveBase driveBase, Elevator elevator, EndEffector endEffector) {
-        RobotAutoConstants.FeederLocations location = RobotAutoConstants.FeederLocations.TOP;
+        Constants.FeederLocation location = Constants.FeederLocation.LEFT;
 
-        triangleSize = calculateTriangleArea(location.bottomLeft, location.bottomRight, location.topLeft);
+        triangleSize =
+                calculateTriangleArea(location.getCorner(0), location.getCorner(1), location.getCorner(2));
 
         this.endEffector = endEffector;
         this.driveBase = driveBase;
@@ -43,8 +43,8 @@ public class RobotAuto extends SubsystemBase {
 
         Pose2d robotPose = driveBase.getPose();
 
-        if(!withinFeeder(robotPose, RobotAutoConstants.FeederLocations.TOP)
-                && !withinFeeder(robotPose, RobotAutoConstants.FeederLocations.BOTTOM)){
+        if(notWithinFeeder(robotPose, Constants.FeederLocation.LEFT)
+                && notWithinFeeder(robotPose, Constants.FeederLocation.RIGHT)){
             if(intakeCommand.isScheduled()) intakeCommand.cancel();
             return;
         }
@@ -61,9 +61,9 @@ public class RobotAuto extends SubsystemBase {
         }
     }
 
-    private boolean withinFeeder(Pose2d robotPose, RobotAutoConstants.FeederLocations feeder){
-        return withinTriangle(robotPose, feeder.bottomLeft, feeder.bottomRight, feeder.topLeft)
-                || withinTriangle(robotPose, feeder.bottomRight, feeder.topLeft, feeder.topRight);
+    private boolean notWithinFeeder(Pose2d robotPose, Constants.FeederLocation feeder){
+        return withinTriangle(robotPose, feeder.getCorner(0), feeder.getCorner(1), feeder.getCorner(2))
+                || withinTriangle(robotPose, feeder.getCorner(3), feeder.getCorner(1), feeder.getCorner(2));
     }
 
     private boolean withinTriangle(Pose2d robotPose, Translation2d point1, Translation2d point2, Translation2d point3){
