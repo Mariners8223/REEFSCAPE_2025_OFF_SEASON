@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.Elevator;
 
-import edu.wpi.first.math.Pair;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
@@ -13,8 +12,8 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 
 /** Add your docs here. */
 public class ElevatorIOVortex implements ElevatorIO {
-    MarinersSparkBase motorLead;
-    MarinersSparkBase motorFollow;
+    private final MarinersSparkBase motorLead;
+    private final MarinersSparkBase motorFollow;
 
     public ElevatorIOVortex(){
         this.motorLead = configureLeadMotor();
@@ -25,7 +24,8 @@ public class ElevatorIOVortex implements ElevatorIO {
         MarinersSparkBase motor;
         motor = new MarinersSparkBase("Lead Elevator Motor", ElevatorConstants.LeadMotor.CONTROLLER_LOCATION, 
             ElevatorConstants.LeadMotor.MOTOR_ID, ElevatorConstants.LeadMotor.IS_BRUSHLESS, 
-            ElevatorConstants.LeadMotor.MOTOR_TYPE, ElevatorConstants.LeadMotor.PID_GAINS, ElevatorConstants.LeadMotor.GEAR_RATIO);
+            ElevatorConstants.LeadMotor.MOTOR_TYPE, ElevatorConstants.LeadMotor.PID_GAINS,
+            ElevatorConstants.LeadMotor.GEAR_RATIO / ElevatorConstants.HEIGHT_TO_ROTATION);
 
         motor.enableSoftLimits(ElevatorConstants.LeadMotor.SOFT_MINIMUM, ElevatorConstants.LeadMotor.SOFT_MAXIMUM);
 
@@ -45,20 +45,15 @@ public class ElevatorIOVortex implements ElevatorIO {
     }
 
     public void resetMotorEncoder(){
-        motorLead.setMotorEncoderPosition(0);
+        motorLead.setMotorEncoderPosition(ElevatorLevel.Bottom.getHeight());
     }
 
     public void moveMotorByPosition(double position){
         motorLead.setReference(position, ControlMode.Position, ElevatorConstants.FEED_FORWARD);
     }
 
-    public double getCurrentPosition(){
-        return motorLead.getPosition();
-    }
-
     public void Update(ElevatorInputs inputs){
-        inputs.elevatorHeight = getCurrentPosition() * ElevatorConstants.ROTATION_TO_HEIGHT;
+        inputs.elevatorHeight = motorLead.getPosition();
         inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d()); // Check if this is resource intensive
-        inputs.currentLevel = ElevatorLevel.findNearestLevel(inputs.elevatorHeight);
     }
 }

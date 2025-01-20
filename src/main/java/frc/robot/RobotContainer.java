@@ -39,11 +39,13 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
+import frc.robot.subsystems.Elevator.Elevator;
 
 public class RobotContainer {
     public static DriveBase driveBase;
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
+    public static Elevator elevator;
 
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
@@ -55,6 +57,7 @@ public class RobotContainer {
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
         driveBase = new DriveBase();
+        elevator = new Elevator();
 
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
