@@ -45,7 +45,7 @@ public class Constants {
         }
 
         public static void checkAlliance(boolean isBlue){
-            if(!isBlue) return;
+            if(isBlue) return;
 
             AprilTagFields fields = AprilTagFields.k2025Reefscape;
 
@@ -97,7 +97,7 @@ public class Constants {
         }
 
         public static void checkAlliance(boolean isBlue){
-            if(!isBlue) return;
+            if(isBlue) return;
 
             Translation2d[] prevLeftFeeder = LEFT.corners.clone();
             Translation2d[] prevRightFeeder = RIGHT.corners.clone();

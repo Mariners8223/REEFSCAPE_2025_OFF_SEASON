@@ -78,6 +78,6 @@ public class ElevatorConstants {
 
     public static final double FEED_FORWARD = 1;
 
-    public static final double ELEVATOR_WEIGHT = 1;
-    public static final double PULLEY_RADIUS = 0.03;
+    public static final double ELEVATOR_WEIGHT = 20;
+    public static final double PULLEY_RADIUS = 0.02;
 }

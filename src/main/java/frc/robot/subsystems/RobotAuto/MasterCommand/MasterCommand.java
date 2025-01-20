@@ -20,13 +20,12 @@ import java.util.function.Supplier;
 
 public class MasterCommand extends Command {
 
-    private final DriveBase driveBase;
     private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
     private final Supplier<Pose2d> targetPoseSupplier;
 
-    private Command coralCommand;
+    private final Command coralCommand;
 
-    private Command pathCommand;
+    private final ReefFinderWrapper pathCommand;
     private final MoveToLevel moveElevatorCommand;
     private final Eject ejectCommand;
     private final Command elevatorToHome;
@@ -37,7 +36,6 @@ public class MasterCommand extends Command {
     public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector,
                          Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Pose2d> targetPoseSupplier) {
         
-        this.driveBase = driveBase;
         this.targetPoseSupplier = targetPoseSupplier;
 
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake);
@@ -52,7 +50,16 @@ public class MasterCommand extends Command {
                 moveElevatorCommand
         );
 
+        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1.getPose());
+
         this.levelSupplier = levelSupplier;
+
+        coralCommand = new SequentialCommandGroup(
+            pathCommand,
+            adjustmentPhase,
+            ejectCommand,
+            elevatorToHome  
+        );
     }
 
     public Command getPathCommand(){
@@ -62,20 +69,14 @@ public class MasterCommand extends Command {
     @Override
     public void initialize() {
         Pose2d targetPose = targetPoseSupplier.get();
-        pathCommand = driveBase.findPath(targetPose);
+
+        pathCommand.setTargetPose(targetPose);
         homeToReef.setTargetPose(targetPose);
 
         ElevatorConstants.ElevatorLevel level = levelSupplier.get();
 
         moveElevatorCommand.changeDesiredlevel(level);
         ejectCommand.setMotorPower(getMotorPower(level));
-
-        coralCommand = new SequentialCommandGroup(
-                pathCommand,
-                adjustmentPhase,
-                ejectCommand,
-                elevatorToHome
-        );
 
         coralCommand.initialize();
     }

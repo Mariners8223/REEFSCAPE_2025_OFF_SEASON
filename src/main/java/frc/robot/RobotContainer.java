@@ -85,7 +85,7 @@ public class RobotContainer {
             ReefLocation.values()[(int) MathUtil.clamp(SmartDashboard.getNumber("reef location", 1) - 1, 0, 11)].getPose();
 
         driveController.cross().whileTrue(
-            new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose));
+            new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose).onlyIf(endEffector::gpLoaded));
     }
 
 

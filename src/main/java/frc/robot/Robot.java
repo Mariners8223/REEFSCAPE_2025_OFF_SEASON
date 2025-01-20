@@ -11,6 +11,7 @@ import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -122,6 +123,11 @@ public class Robot extends LoggedRobot
     @Override
     public void autonomousInit()
     {
+        boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+
+        Constants.FeederLocation.checkAlliance(!isRedAlliance);
+        Constants.ReefLocation.checkAlliance(!isRedAlliance);
+
         autonomousCommand = RobotContainer.getAutoCommand();
         
         if (autonomousCommand != null)
