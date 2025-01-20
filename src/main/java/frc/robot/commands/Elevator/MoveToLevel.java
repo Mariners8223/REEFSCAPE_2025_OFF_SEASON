@@ -8,8 +8,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
-import java.util.function.Supplier;
-
 public class MoveToLevel extends Command {
   /** Creates a new MoveToSetpoint. */
   private final Elevator elevator;

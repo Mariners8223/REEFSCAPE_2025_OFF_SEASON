@@ -13,11 +13,9 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 /** Add your docs here. */
 public class ElevatorIOVortex implements ElevatorIO {
     private final MarinersSparkBase motorLead;
-    private final MarinersSparkBase motorFollow;
-
     public ElevatorIOVortex(){
         this.motorLead = configureLeadMotor();
-        this.motorFollow = configureFollowMotor();
+        configureFollowMotor();
     }
 
     private MarinersSparkBase configureLeadMotor(){

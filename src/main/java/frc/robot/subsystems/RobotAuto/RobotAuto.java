@@ -49,7 +49,7 @@ public class RobotAuto extends SubsystemBase {
             return;
         }
 
-        ElevatorConstants.ElevatorLevel level = elevator.getLevel();
+        ElevatorConstants.ElevatorLevel level = elevator.getCurrentLevel();
 
         if(!intakeCommand.isScheduled() && level == ElevatorConstants.ElevatorLevel.Intake){
             intakeCommand.schedule();

@@ -67,7 +67,7 @@ public class MasterCommand extends Command {
 
         ElevatorConstants.ElevatorLevel level = levelSupplier.get();
 
-        moveElevatorCommand.setDesiredLevel(level);
+        moveElevatorCommand.changeDesiredlevel(level);
         ejectCommand.setMotorPower(getMotorPower(level));
 
         coralCommand = new SequentialCommandGroup(

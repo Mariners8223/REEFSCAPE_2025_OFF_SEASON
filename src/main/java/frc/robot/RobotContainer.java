@@ -13,14 +13,8 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 
-import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.commands.EndEffector.EjectL1;
-import frc.robot.commands.EndEffector.EjectL2_3;
-import frc.robot.commands.EndEffector.EjectL4;
-import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
@@ -39,13 +33,11 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
-import frc.robot.subsystems.Elevator.Elevator;
 
 public class RobotContainer {
     public static DriveBase driveBase;
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
-    public static Elevator elevator;
 
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
@@ -77,25 +69,6 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        Command intakeCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake)
-                .andThen(new Intake(endEffector));
-
-        Command L1Command = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L1)
-                .andThen(new EjectL1(endEffector));
-
-        Command L2Command = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L2)
-                .andThen(new EjectL2_3(endEffector));
-
-        Command L3Command = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L3)
-                .andThen(new EjectL2_3(endEffector));
-
-        Command L4Command = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L4)
-                .andThen(new EjectL4(endEffector));
-
-        Command elevatorToBase = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
-
-
     }
 
 

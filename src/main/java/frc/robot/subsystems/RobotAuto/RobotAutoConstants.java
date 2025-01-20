@@ -1,13 +1,5 @@
 package frc.robot.subsystems.RobotAuto;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.DriverStation;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class RobotAutoConstants {
 
     public static class HomingConstants{
