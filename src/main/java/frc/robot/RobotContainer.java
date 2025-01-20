@@ -20,6 +20,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
+import frc.robot.subsystems.RobotAuto.MasterCommand.HomeToReef;
 import frc.robot.subsystems.RobotAuto.MasterCommand.MasterCommand;
 
 import org.json.simple.parser.ParseException;
@@ -60,10 +61,10 @@ public class RobotContainer {
 
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
-        elevator = new Elevator();
-        endEffector = new EndEffector();
-        ballDropping = new BallDropping();
-        robotAuto = new RobotAuto(driveBase, elevator, endEffector);
+        // elevator = new Elevator();
+        // endEffector = new EndEffector();
+        // ballDropping = new BallDropping();
+        // robotAuto = new RobotAuto(driveBase, elevator, endEffector);
 
         field = new Field2d();
 
@@ -85,11 +86,18 @@ public class RobotContainer {
         Supplier<Pose2d> targetPose = () ->
             ReefLocation.values()[(int) MathUtil.clamp(SmartDashboard.getNumber("reef location", 1) - 1, 0, 11)].getPose();
 
-        driveController.cross().whileTrue(
-            new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose).onlyIf(endEffector::gpLoaded));
+        HomeToReef homeToReef = new HomeToReef(driveBase, targetPose.get());
 
-        driveController.R1().whileTrue(driveBase.findPath(FeederLocation.RIGHT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
-        driveController.L1().whileTrue(driveBase.findPath(FeederLocation.LEFT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
+        driveController.cross().whileTrue(
+            new InstantCommand(() -> homeToReef.setTargetPose(targetPose.get()))
+            .andThen(homeToReef)
+        );
+
+        // driveController.cross().whileTrue(
+        //     new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose).onlyIf(endEffector::gpLoaded));
+
+        // driveController.R1().whileTrue(driveBase.findPath(FeederLocation.RIGHT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
+        // driveController.L1().whileTrue(driveBase.findPath(FeederLocation.LEFT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
     }
 
 

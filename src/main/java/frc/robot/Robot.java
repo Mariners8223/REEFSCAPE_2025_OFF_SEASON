@@ -100,7 +100,7 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
-        RobotContainer.endEffector.setGpLoaded(SmartDashboard.getBoolean("beam breaker", false));
+        // RobotContainer.endEffector.setGpLoaded(SmartDashboard.getBoolean("beam breaker", false));
     }
     
     
