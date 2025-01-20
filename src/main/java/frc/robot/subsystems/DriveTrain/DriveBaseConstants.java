@@ -33,10 +33,10 @@ public class DriveBaseConstants {
                 MODULE_TRANSLATIONS);
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                MODULE_CONFIG.maxDriveVelocityMPS,
-                10, //TODO find a good value for this
-                10,
-                5); //the constraints for pathPlanner
+                2,
+                1, //TODO find a good value for this
+                5,
+                1); //the constraints for pathPlanner
 
         public static final PIDFGains THETA_PID = new PIDFGains(7, 0, 0); //the pid gains for the PID Controller of the robot angle, units are radians per second
         public static final PIDFGains XY_PID = new PIDFGains(5.5, 0.055, 0.05); //the pid gains for the pid controller of the robot's velocity, units are meters per second
