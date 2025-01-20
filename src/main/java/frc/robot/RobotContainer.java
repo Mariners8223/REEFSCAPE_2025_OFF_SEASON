@@ -88,8 +88,8 @@ public class RobotContainer {
         driveController.cross().whileTrue(
             new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose).onlyIf(endEffector::gpLoaded));
 
-        driveController.R1().whileTrue(driveBase.findPath(FeederLocation.RIGHT.getRobotPose()));
-        driveController.L1().whileTrue(driveBase.findPath(FeederLocation.LEFT.getRobotPose()));
+        driveController.R1().whileTrue(driveBase.findPath(FeederLocation.RIGHT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
+        driveController.L1().whileTrue(driveBase.findPath(FeederLocation.LEFT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
     }
 
 
