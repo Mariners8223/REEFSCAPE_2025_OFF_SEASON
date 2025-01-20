@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.util.LocalADStarAK;
@@ -91,6 +92,8 @@ public class Robot extends LoggedRobot
 
 
         ControllerMaster.getInstance();
+
+        SmartDashboard.putBoolean("beam breaker", false);
     }
     
     
@@ -98,6 +101,7 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
+        RobotContainer.endEffector.setGpLoaded(SmartDashboard.getBoolean("beam breaker", false));
     }
     
     

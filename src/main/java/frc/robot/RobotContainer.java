@@ -10,12 +10,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-
+import frc.robot.Constants.ReefLocation;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.RobotAuto.MasterCommand.MasterCommand;
+
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -23,6 +27,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -69,6 +74,18 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
+
+        SmartDashboard.putNumber("elevatorLevel", 0);
+        SmartDashboard.putNumber("reef location", 0);
+
+        Supplier<ElevatorLevel> elevatorLevel = () ->
+            ElevatorLevel.values()[(int) MathUtil.clamp(SmartDashboard.getNumber("elevatorLevel", 1) - 1, 0, 3)];
+
+        Supplier<Pose2d> targetPose = () ->
+            ReefLocation.values()[(int) MathUtil.clamp(SmartDashboard.getNumber("reef location", 1) - 1, 0, 11)].getPose();
+
+        driveController.cross().whileTrue(
+            new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose));
     }
 
 
