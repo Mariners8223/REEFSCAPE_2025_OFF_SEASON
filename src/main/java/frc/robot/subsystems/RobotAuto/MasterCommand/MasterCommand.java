@@ -80,6 +80,15 @@ public class MasterCommand extends Command {
         coralCommand.initialize();
     }
 
+    private EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level){
+        return switch (level){
+            case L2,L3 -> EndEffectorConstants.MotorPower.L2_3;
+            case L4 -> EndEffectorConstants.MotorPower.L4;
+            default -> EndEffectorConstants.MotorPower.L1;
+        };
+    }
+
+
     @Override
     public void execute() {
         coralCommand.execute();
@@ -93,14 +102,6 @@ public class MasterCommand extends Command {
     @Override
     public boolean isFinished() {
         return coralCommand.isFinished();
-    }
-
-    private EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level){
-        return switch (level){
-            case L2,L3 -> EndEffectorConstants.MotorPower.L2_3;
-            case L4 -> EndEffectorConstants.MotorPower.L4;
-            default -> EndEffectorConstants.MotorPower.L1;
-        };
     }
 
     public Set<Subsystem> getRequirements() {
