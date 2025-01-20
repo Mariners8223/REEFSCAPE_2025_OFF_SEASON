@@ -1,5 +1,6 @@
 {
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
     "fileName": "Phoenix6-25.2.0.json",
     "name": "CTRE-Phoenix (v6)",
     "version": "25.2.0",
@@ -8,6 +9,11 @@
     "name": "CTRE-Phoenix (v6)",
     "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+    "fileName": "Phoenix6-25.2.1.json",
+    "name": "CTRE-Phoenix (v6)",
+    "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
     "frcYear": "2025",
     "uuid": "e995de00-2c64-4df5-8831-c1441420ff19",
     "mavenUrls": [
@@ -26,10 +32,14 @@
             "groupId": "com.ctre.phoenix6",
             "artifactId": "wpiapi-java",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0"
 ========
             "version": "25.2.1"
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1"
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
         }
     ],
     "jniDependencies": [
@@ -37,10 +47,14 @@
             "groupId": "com.ctre.phoenix6",
             "artifactId": "api-cpp",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -55,10 +69,14 @@
             "groupId": "com.ctre.phoenix6",
             "artifactId": "tools",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -73,10 +91,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "api-cpp-sim",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -91,10 +113,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "tools-sim",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -109,10 +135,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simTalonSRX",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -127,10 +157,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simVictorSPX",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -145,10 +179,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simPigeonIMU",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -163,10 +201,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simCANCoder",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -181,10 +223,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProTalonFX",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -199,10 +245,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProTalonFXS",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -217,10 +267,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProCANcoder",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -235,10 +289,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProPigeon2",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -253,10 +311,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProCANrange",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "isJar": false,
             "skipInvalidPlatforms": true,
             "validPlatforms": [
@@ -273,10 +335,14 @@
             "groupId": "com.ctre.phoenix6",
             "artifactId": "wpiapi-cpp",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_Phoenix6_WPI",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -293,10 +359,14 @@
             "groupId": "com.ctre.phoenix6",
             "artifactId": "tools",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_PhoenixTools",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -313,10 +383,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "wpiapi-cpp-sim",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_Phoenix6_WPISim",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -333,10 +407,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "tools-sim",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_PhoenixTools_Sim",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -353,10 +431,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simTalonSRX",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimTalonSRX",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -373,10 +455,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simVictorSPX",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimVictorSPX",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -393,10 +479,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simPigeonIMU",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimPigeonIMU",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -413,10 +503,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simCANCoder",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimCANCoder",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -433,10 +527,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProTalonFX",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimProTalonFX",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -453,10 +551,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProTalonFXS",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimProTalonFXS",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -473,10 +575,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProCANcoder",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimProCANcoder",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -493,10 +599,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProPigeon2",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimProPigeon2",
             "headerClassifier": "headers",
             "sharedLibrary": true,
@@ -513,10 +623,14 @@
             "groupId": "com.ctre.phoenix6.sim",
             "artifactId": "simProCANrange",
 <<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
+<<<<<<<< HEAD:vendordeps/Phoenix6-25.2.0.json
             "version": "25.2.0",
 ========
             "version": "25.2.1",
 >>>>>>>> end_effector:vendordeps/Phoenix6-25.2.1.json
+========
+            "version": "25.2.1",
+>>>>>>>> ball_dropping:vendordeps/Phoenix6-25.2.1.json
             "libName": "CTRE_SimProCANrange",
             "headerClassifier": "headers",
             "sharedLibrary": true,
