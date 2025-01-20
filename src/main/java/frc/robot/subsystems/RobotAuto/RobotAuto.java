@@ -42,8 +42,8 @@ public class RobotAuto extends SubsystemBase {
     public void periodic() {
         Pose2d robotPose = driveBase.getPose();
 
-        boolean withinLeftFeeder = FeederLocation.LEFT.witihnFeeder(robotPose);
-        boolean withinRightFeeder = FeederLocation.RIGHT.witihnFeeder(robotPose);
+        boolean withinLeftFeeder = FeederLocation.LEFT.withinFeeder(robotPose);
+        boolean withinRightFeeder = FeederLocation.RIGHT.withinFeeder(robotPose);
 
         Logger.recordOutput("AutoIntake/Within left feeder", withinLeftFeeder);
         Logger.recordOutput("AutoIntake/Within right feeder", withinRightFeeder);
@@ -54,7 +54,6 @@ public class RobotAuto extends SubsystemBase {
 
         if(withinLeftFeeder || withinRightFeeder) {
             if(!sequnceCommand.isScheduled()) sequnceCommand.schedule();
-            return;
         }
         else{
             if(sequnceCommand.isScheduled()) sequnceCommand.cancel();
