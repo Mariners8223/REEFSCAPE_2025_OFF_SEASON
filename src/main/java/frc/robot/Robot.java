@@ -124,6 +124,8 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.schedule();
         }
+
+        (new MoveToLevel(RobotContainer.elevator, ElevatorLevel.L1)).schedule();
     }
     
     
