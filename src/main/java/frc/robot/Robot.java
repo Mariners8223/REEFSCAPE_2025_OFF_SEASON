@@ -92,11 +92,6 @@ public class Robot extends LoggedRobot
 
 
         ControllerMaster.getInstance();
-
-        SmartDashboard.putBoolean("beam breaker", false);
-
-        SmartDashboard.putNumber("stdXY", 0);
-        SmartDashboard.putNumber("stdTheta", 0);
     }
     
     
@@ -104,9 +99,6 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
-        // RobotContainer.endEffector.setGpLoaded(SmartDashboard.getBoolean("beam breaker", false));
-        VisionConstants.XYstdFactor = SmartDashboard.getNumber("stdXY", 0);
-        VisionConstants.thetaStdFactor = SmartDashboard.getNumber("stdTheta", 0);
     }
     
     

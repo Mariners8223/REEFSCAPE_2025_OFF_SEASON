@@ -311,11 +311,6 @@ public class DriveBase extends SubsystemBase {
 
     /**
      * drives the robot relative to itself
-     *
-     * @param Xspeed        the X speed of the robot (forward is positive) m/s
-     * @param Yspeed        the Y speed of the robot (left is positive) m/s
-     * @param rotationSpeed the rotation of the robot (left is positive) rad/s
-     * drives the robot
      * @param chassisSpeeds the target chassis speeds of the robot
      */
     public void drive(ChassisSpeeds chassisSpeeds) {

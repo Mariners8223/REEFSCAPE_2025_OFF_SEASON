@@ -22,8 +22,8 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.5;
     public static final double maxSingleAmbiguity = 0.3;
 
-    public static double XYstdFactor = 0;
-    public static double thetaStdFactor = 0;
+    public static double XYstdFactor = 1.6;
+    public static double thetaStdFactor = 2;
 
 
 
