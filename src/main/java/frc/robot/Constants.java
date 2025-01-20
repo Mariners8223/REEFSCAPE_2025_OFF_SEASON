@@ -4,6 +4,14 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * Add your docs here.
@@ -14,8 +22,8 @@ public class Constants {
         DEVELOPMENT,
         REPLAY
     }
-    public enum reef{
-    //HEY
+    public enum reef
+    {
         REEF1 (5.864,3.8789,-180),
         REEF2 (5.85,4.21,-180),
         REEF3 (5.343,5.146,-120),
@@ -28,8 +36,18 @@ public class Constants {
         REEF10 (3.91,2.796,60),
         REEF11 (5.08,2.757,120),
         REEF12 (5.304,2.913,120);
-reef( double x, double y, double deg){
-    
+
+        private final Pose2d reefPose;
+        private reef(double x, double y, double degree){
+            reefPose = new Pose2d(
+                (DriverStation.getAlliance().get() == Alliance.Blue) ? x : 16-x, 
+                y, 
+                new Rotation2d(Units.radiansToDegrees(degree)));
+        }
+
+        public Pose2d getPose(){
+            return reefPose;
+        }
     }
 
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
