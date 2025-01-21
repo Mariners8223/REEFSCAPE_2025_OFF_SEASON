@@ -4,29 +4,32 @@
 
 package frc.robot.commands.EndEffector;
 
+import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffector.EndEffector;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 
-
-public class EjectL1 extends Command {
+public class Eject extends Command {
   private final EndEffector endEffector;
   private double startTime;
+  private MotorPower motorPower;
 
-  public EjectL1(EndEffector endEffector) {
+  public Eject(MotorPower motorPower, EndEffector endEffector) {
     this.endEffector = endEffector;
+    this.motorPower = motorPower;
 
     addRequirements(endEffector);
   }
 
-  // Called when the command is initially scheduled.
+  public void setLevel(MotorPower motorPower){
+    this.motorPower = motorPower;
+  }
+
   @Override
   public void initialize() {
-    endEffector.setLeftMotorPower(EndEffectorConstants.MotorPower.L1.leftMotorPower);
-    endEffector.setRightMotorPower(EndEffectorConstants.MotorPower.L1.rightMotorPower);
+    endEffector.setLeftMotorPower(motorPower.leftMotorPower);
+    endEffector.setRightMotorPower(motorPower.rightMotorPower);
 
     startTime = RobotController.getMeasureTime().in(Units.Seconds);
   }
@@ -38,6 +41,6 @@ public class EjectL1 extends Command {
 
   @Override
   public boolean isFinished() {
-    return RobotController.getMeasureTime().in(Units.Seconds) - startTime >= MotorPower.L1.ejectTime;
+    return RobotController.getMeasureTime().in(Units.Seconds) - startTime >= motorPower.ejectTime;
   }
 }
