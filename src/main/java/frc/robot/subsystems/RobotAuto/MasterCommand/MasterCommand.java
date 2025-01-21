@@ -84,9 +84,10 @@ public class MasterCommand extends Command {
         Pose2d targetPose = targetReef.getPose();
         shouldDropBall = shouldDropBallSupplier.get();
 
+        Pose2d alternatePose = Constants.ReefLocation.values()[(targetReef.ordinal() + 1)].getPose();
 
         pathCommand.setTargetPose(
-                shouldDropBall && !targetReef.isBallDropInSamePose() ? new Pose2d() : targetPose);
+                shouldDropBall && !targetReef.isBallDropInSamePose() ? alternatePose : targetPose);
 
         homeToReef.setTargetPose(targetPose);
 
