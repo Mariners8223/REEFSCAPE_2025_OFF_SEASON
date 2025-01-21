@@ -42,8 +42,8 @@ public class EndEffectorIOReal implements EndEffectorIO {
     }
 
     public void Update(EndEffectorInputs inputs){
-        inputs.RightPower = RightMotor.getMotorOutputPercent();
-        inputs.LeftPower = LeftMotor.getMotorOutputPercent();
+        inputs.rightPower = RightMotor.getMotorOutputPercent();
+        inputs.leftPower = LeftMotor.getMotorOutputPercent();
         inputs.beamBreakValue = EndEffectorConstants.beamBreakInverted ? !beamBreak.get() : beamBreak.get();
     }
 

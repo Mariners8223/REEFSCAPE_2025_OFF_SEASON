@@ -8,14 +8,21 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.subsystems.EndEffector.EndEffectorIO.EndEffectorInputs;
+import frc.robot.Robot;
 
 public class EndEffector extends SubsystemBase {
   private final EndEffectorIO io;
   private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
+  private boolean isGpLoaded;
 
   public EndEffector() {
-    io = new EndEffectorIOReal();
-  }
+      if(Robot.isSimulation()){
+        io = new EndEffectorIOSim();
+      }
+      else{
+        io = new EndEffectorIOReal();
+      }
+    }
 
   public void setRightMotorPower(double PowerToSet){
     io.setRightMotorPower(PowerToSet);
@@ -30,10 +37,18 @@ public class EndEffector extends SubsystemBase {
     io.setRightMotorPower(0);
   }
 
+  public void setLoadedValue(boolean value){
+    Logger.recordOutput("EndEffector/gp loaded", value);
+    isGpLoaded = value;
+  }
+
+  public boolean isGpLoaded(){
+    return isGpLoaded;
+  }
+
   public boolean isGpDetected(){
     return inputs.beamBreakValue;
   }
-
 
   @Override
   public void periodic() {
