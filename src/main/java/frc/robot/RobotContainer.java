@@ -27,9 +27,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
 public class RobotContainer {
     public static DriveBase driveBase;
@@ -59,6 +61,11 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
+
+        driveController.povUp().onTrue(new MoveToLevel(elevator, ElevatorLevel.L4));
+        driveController.povDown().onTrue(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+        driveController.povLeft().onTrue(new MoveToLevel(elevator, ElevatorLevel.L1));
+        driveController.povRight().onTrue(new MoveToLevel(elevator, ElevatorLevel.L2));
     }
 
 

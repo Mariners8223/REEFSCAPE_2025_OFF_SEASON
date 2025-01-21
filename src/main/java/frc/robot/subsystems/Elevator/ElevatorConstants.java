@@ -18,8 +18,7 @@ public class ElevatorConstants {
         L3(3),
         L4(4),
         Intake(5),
-        Moving(-1),
-        NULL(-1);
+        NULL(-10);
 
         private double height;
 
@@ -31,7 +30,7 @@ public class ElevatorConstants {
             return this.height;
         }
 
-        public static ElevatorLevel findNearestLevel(double height) { // I know it's not good, what's a better way?
+        public static ElevatorLevel findNearestLevel(double height) {
             for (ElevatorLevel level : ElevatorLevel.values()) {
                 double distance = Math.abs(level.getHeight() - height);
                 if (distance < ElevatorConstants.ELEVATOR_TOLERANCE) return level;
