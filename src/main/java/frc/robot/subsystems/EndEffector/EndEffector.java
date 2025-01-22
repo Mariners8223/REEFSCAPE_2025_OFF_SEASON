@@ -8,12 +8,22 @@ import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+//import frc.robot.subsystems.EndEffector.EndEffectorIO.EndEffectorInputs;
+import frc.robot.Robot;
 
 public class EndEffector extends SubsystemBase {
-    private final EndEffectorIO io;
-    private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
+  private final EndEffectorIO io;
+  private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
+  private boolean isGpLoaded;
 
-    private boolean gpLoaded = true;
+  public EndEffector() {
+      if(Robot.isSimulation()){
+        io = new EndEffectorIOSim();
+      }
+      else{
+        io = new EndEffectorIOReal();
+      }
+    }
 
     public EndEffector() {
         io = new EndEffectorIOReal();
@@ -23,38 +33,22 @@ public class EndEffector extends SubsystemBase {
         io.setRightMotorPower(PowerToSet);
     }
 
-    public void setLeftMotorPower(double PowerToSet) {
-        io.setLeftMotorPower(PowerToSet);
-    }
+  public void setLoadedValue(boolean value){
+    Logger.recordOutput("EndEffector/gp loaded", value);
+    isGpLoaded = value;
+  }
 
-    public boolean gpLoaded() {
-        return gpLoaded;
-    }
+  public boolean isGpLoaded(){
+    return isGpLoaded;
+  }
 
-    public void setGpLoaded(boolean gpLoaded) {
-        Logger.recordOutput("EndEffector/game piece loaded", gpLoaded);
-        this.gpLoaded = gpLoaded;
-    }
+  public boolean isGpDetected(){
+    return inputs.beamBreakValue;
+  }
 
-    public void stopMotors() {
-        io.setLeftMotorPower(0);
-        io.setRightMotorPower(0);
-    }
-
-    public boolean isGpDetected() {
-        return inputs.beamBreakValue;
-    }
-
-
-    @Override
-    public void periodic() {
-        io.Update(inputs);
-        Logger.processInputs(getName(), inputs);
-
-        Command currentCommand = getCurrentCommand();
-
-        String commandName = currentCommand == null ? "None" : currentCommand.getName();
-
-        Logger.recordOutput("EndEffector/Current Command", commandName);
-    }
+  @Override
+  public void periodic() {
+    io.Update(inputs);
+    Logger.processInputs(getName(), inputs);
+  }
 }

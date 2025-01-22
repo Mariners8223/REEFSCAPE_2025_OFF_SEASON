@@ -1,46 +1,47 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.commands.EndEffector;
 
+import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.EndEffector.EndEffector;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 public class Eject extends Command {
-    private final EndEffector endEffector;
-    private double startTime;
+  private final EndEffector endEffector;
+  private double startTime;
+  private MotorPower motorPower;
 
-    private EndEffectorConstants.MotorPower motorPower;
+  public Eject(MotorPower motorPower, EndEffector endEffector) {
+    this.endEffector = endEffector;
+    this.motorPower = motorPower;
 
-    public Eject(EndEffector endEffector, EndEffectorConstants.MotorPower motorPower) {
-        this.endEffector = endEffector;
+    addRequirements(endEffector);
+  }
 
-        this.motorPower = motorPower;
+  public void setLevel(MotorPower motorPower){
+    this.motorPower = motorPower;
+  }
 
-        addRequirements(endEffector);
-    }
+  @Override
+  public void initialize() {
+    endEffector.setLeftMotorPower(motorPower.leftMotorPower);
+    endEffector.setRightMotorPower(motorPower.rightMotorPower);
 
-    public void setMotorPower(EndEffectorConstants.MotorPower motorPower) {
-        this.motorPower = motorPower;
-    }
+    startTime = RobotController.getMeasureTime().in(Units.Seconds);
+  }
 
-    // Called when the command is initially scheduled.
-    @Override
-    public void initialize() {
+  @Override
+  public void end(boolean interrupted) {
+    endEffector.stopMotors();
+    endEffector.setLoadedValue(false);
+  }
 
-        endEffector.setLeftMotorPower(motorPower.leftMotorPower);
-        endEffector.setRightMotorPower(motorPower.rightMotorPower);
-
-        startTime = RobotController.getMeasureTime().in(Units.Seconds);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        endEffector.stopMotors();
-        endEffector.setGpLoaded(false);    }
-
-    @Override
-    public boolean isFinished() {
-        return RobotController.getMeasureTime().in(Units.Seconds) - startTime >= motorPower.ejectTime;
-    }
+  @Override
+  public boolean isFinished() {
+    return RobotController.getMeasureTime().in(Units.Seconds) - startTime >= motorPower.ejectTime;
+  }
 }

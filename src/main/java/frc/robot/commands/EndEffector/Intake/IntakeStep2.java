@@ -14,11 +14,10 @@ public class IntakeStep2 extends Command {
     addRequirements(endEffector);
   }
 
-
   @Override
   public void end(boolean interrupted) {
     endEffector.stopMotors();
-    endEffector.setGpLoaded(!interrupted);
+    endEffector.setLoadedValue(!interrupted);
   }
 
   @Override

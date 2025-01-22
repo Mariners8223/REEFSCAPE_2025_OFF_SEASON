@@ -10,14 +10,14 @@ import org.littletonrobotics.junction.AutoLog;
 public interface EndEffectorIO {
     @AutoLog
     public static class EndEffectorInputs{
-        double RightPower;
-        double LeftPower;
+        double rightPower;
+        double leftPower;
         boolean beamBreakValue;
     }
 
-    public void setRightMotorPower(double PowerToSet);
+    public void setRightMotorPower(double powerToSet);
 
-    public void setLeftMotorPower(double PowerToSet);
+    public void setLeftMotorPower(double powerToSet);
     
     public void Update(EndEffectorInputs inputs);  
 }
