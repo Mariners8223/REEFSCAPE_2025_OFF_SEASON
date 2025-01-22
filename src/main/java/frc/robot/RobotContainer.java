@@ -10,10 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import frc.robot.Constants.ReefLocation;
+import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
@@ -25,6 +29,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -50,30 +55,71 @@ public class RobotContainer {
     public static BallDropping ballDropping;
     public static RobotAuto robotAuto;
 
+    public static Supplier<ReefLocation> targetReefSupplier;
+    public static Supplier<ElevatorLevel> levelSupplier;
+    public static Supplier<Boolean> shouldDropBallSupplier;
+
+
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
+
         driveBase = new DriveBase();
+        elevator = new Elevator();
+        endEffector = new EndEffector();
+        ballDropping = new BallDropping();
+        robotAuto = new RobotAuto(driveBase, elevator, endEffector);
+        vision = new Vision(driveBase::addVisionMeasurement);
 
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
-        vision = new Vision(driveBase::addVisionMeasurement);
-        configNamedCommands();
-
         field = new Field2d();
-
         SmartDashboard.putData(field);
 
         configChooser();
+        configNamedCommands();
+
+        configureTargetReefSupplier();    
+        configureBallDropSupplier();
+        configureLevelSupplier();    
     }
 
+    public static void configureTargetReefSupplier() {
+        SmartDashboard.putNumber("target Reef", 1);
+
+        targetReefSupplier = () -> {
+            int reef = (int) SmartDashboard.getNumber("target Reef", 1);
+            
+            reef = MathUtil.clamp(reef, 1, 12);
+
+            return ReefLocation.values()[reef - 1];
+        };
+    }
+
+    public static void configureLevelSupplier(){
+        SmartDashboard.putNumber("target Level", 1);
+
+        levelSupplier = () -> {
+            int level = (int) SmartDashboard.getNumber("target Level", 1);
+
+            level = MathUtil.clamp(level, 1, 4);
+
+            return ElevatorLevel.values()[level];
+        };
+    }
+
+    public static void configureBallDropSupplier(){
+        SmartDashboard.putBoolean("should drop ball", false);
+
+        shouldDropBallSupplier = () -> SmartDashboard.getBoolean("should drop ball", false);
+    }
 
     public static void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
-    }
 
+        Command masterCommand = new MasterCommand(
+            driveBase, elevator, endEffector, ballDropping, levelSupplier, targetReefSupplier, shouldDropBallSupplier);
 
-    public static Command getAutoCommand() {
-        return autoChooser.get();
+        driveController.cross().whileTrue(masterCommand);
     }
 
     public static void configNamedCommands() {
@@ -88,6 +134,11 @@ public class RobotContainer {
 
     }
 
+
+
+    public static Command getAutoCommand() {
+        return autoChooser.get();
+    }
 
     private static final BooleanSupplier checkForPathChoiceUpdate = new BooleanSupplier() {
         private String lastAutoName = "InstantCommand";
