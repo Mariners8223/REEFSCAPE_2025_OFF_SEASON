@@ -9,9 +9,6 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
-import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-
 /**
  * Add your docs here.
  */
@@ -21,6 +18,8 @@ public class Constants {
         DEVELOPMENT,
         REPLAY
     }
+
+    public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT;
 
     public enum ReefLocation {
         REEF_1(3.173, 3.860, 0),
