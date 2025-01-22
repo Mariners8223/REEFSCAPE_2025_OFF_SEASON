@@ -121,6 +121,9 @@ public class RobotContainer {
             driveBase, elevator, endEffector, ballDropping, levelSupplier, targetReefSupplier, shouldDropBallSupplier);
 
         driveController.cross().whileTrue(masterCommand);
+
+        driveController.R1().whileTrue(driveBase.findPath(Constants.FeederLocation.RIGHT.getRobotPose()));
+        driveController.L1().whileTrue(driveBase.findPath(Constants.FeederLocation.LEFT.getRobotPose()));
     }
 
     public static void configNamedCommands() {

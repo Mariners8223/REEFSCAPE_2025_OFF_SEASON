@@ -86,11 +86,14 @@ public class MasterCommand extends Command {
         targetReef = targetReefSupplier.get(); // getting the target reef
         shouldDropBall = shouldDropBallSupplier.get(); // getting the ball drop status
 
-        Pose2d alternatePose = Constants.ReefLocation.values()[(targetReef.ordinal() + 1)].getPose(); // getting the alternate pose
+        Pose2d pathFinderTarget = targetReef.getPose();
+
+        if(shouldDropBall && !targetReef.isBallDropInSamePose()){
+            pathFinderTarget = Constants.ReefLocation.values()[(targetReef.ordinal() + 1)].getPose();
+        }
 
         // setting the target pose for the path command
-        pathCommand.setTargetPose(
-                shouldDropBall && !targetReef.isBallDropInSamePose() ? alternatePose : targetReef.getPose());
+        pathCommand.setTargetPose(pathFinderTarget);
 
         //setting the target pose for the adjustment phase
         homeToReef.setTargetPose(targetReef.getPose());
