@@ -46,6 +46,7 @@ public class RobotContainer {
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
         configureBindings();
+        configNamedCommands();
 
         field = new Field2d();
 
@@ -63,21 +64,18 @@ public class RobotContainer {
     public static Command getAutoCommand() {
         return autoChooser.get();
     }
-public static void confignamedcommand() {
-    NamedCommands.registerCommand("intake", new InstantCommand());
-    NamedCommands.registerCommand("eject l1", new InstantCommand());
-    NamedCommands.registerCommand("eject l2", new InstantCommand());
-    NamedCommands.registerCommand("eject l3", new InstantCommand());
-    NamedCommands.registerCommand("eject l4", new InstantCommand());
-    NamedCommands.registerCommand("ball drop l2", new InstantCommand());
-    NamedCommands.registerCommand("ball drop l3", new InstantCommand());
-    NamedCommands.registerCommand("ball drop off", new InstantCommand());
-    
-}
-    
 
+    public static void configNamedCommands() {
+        NamedCommands.registerCommand("intake", new InstantCommand());
+        NamedCommands.registerCommand("eject l1", new InstantCommand());
+        NamedCommands.registerCommand("eject l2", new InstantCommand());
+        NamedCommands.registerCommand("eject l3", new InstantCommand());
+        NamedCommands.registerCommand("eject l4", new InstantCommand());
+        NamedCommands.registerCommand("ball drop l2", new InstantCommand());
+        NamedCommands.registerCommand("ball drop l3", new InstantCommand());
+        NamedCommands.registerCommand("ball drop off", new InstantCommand());
 
-
+    }
 
 
     private static final BooleanSupplier checkForPathChoiceUpdate = new BooleanSupplier() {

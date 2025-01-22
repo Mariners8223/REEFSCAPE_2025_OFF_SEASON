@@ -4,16 +4,10 @@
 
 package frc.robot;
 
-import java.util.Optional;
-
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * Add your docs here.
@@ -24,6 +18,7 @@ public class Constants {
         DEVELOPMENT,
         REPLAY
     }
+
     public enum ReefLocation {
         REEF_1(3.173, 3.860, 0),
         REEF_2(3.173, 4.190, 0),
@@ -44,15 +39,15 @@ public class Constants {
             return pose;
         }
 
-        public boolean isBallInUpPosition(){
-            return switch (this){
+        public boolean isBallInUpPosition() {
+            return switch (this) {
                 case REEF_1, REEF_2, REEF_5, REEF_6, REEF_9, REEF_10 -> true;
                 case REEF_3, REEF_4, REEF_7, REEF_8, REEF_11, REEF_12 -> false;
             };
         }
 
-        public boolean isBallDropInSamePose(){
-            return (this.ordinal() + 1)%2 == 0;
+        public boolean isBallDropInSamePose() {
+            return (this.ordinal() + 1) % 2 == 0;
         }
 
         public static void checkAlliance(boolean isBlue) {
@@ -76,5 +71,4 @@ public class Constants {
     }
 
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
-}
 }
