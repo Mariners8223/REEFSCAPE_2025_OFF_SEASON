@@ -15,7 +15,7 @@ public class Eject extends Command {
   private double startTime;
   private MotorPower motorPower;
 
-  public Eject(MotorPower motorPower, EndEffector endEffector) {
+  public Eject(EndEffector endEffector, MotorPower motorPower) {
     this.endEffector = endEffector;
     this.motorPower = motorPower;
 

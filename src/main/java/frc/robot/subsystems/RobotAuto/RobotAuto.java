@@ -50,7 +50,7 @@ public class RobotAuto extends SubsystemBase {
 
         ElevatorConstants.ElevatorLevel level = elevator.getCurrentLevel();
 
-        if(endEffector.gpLoaded()) return;
+        if(endEffector.isGpLoaded()) return;
 
         if(withinLeftFeeder || withinRightFeeder) {
             if(!sequnceCommand.isScheduled()) sequnceCommand.schedule();
