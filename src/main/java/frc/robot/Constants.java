@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 
@@ -20,21 +22,19 @@ public class Constants {
         REPLAY
     }
 
-    public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT; //the type of robot the code is running on
-
     public enum ReefLocation {
-        REEF_1(3.14, 3.85, 0),
-        REEF_2(3.14, 4.2, 0),
-        REEF_3(3.645, 5.07, -60),
-        REEF_4(3.96, 3.1, -60),
-        REEF_5(5.02, 5.29, -120),
-        REEF_6(5.34, 5.146, -120),
-        REEF_7(5.85, 4.21, -180),
-        REEF_8(5.85, 3.88, -180),
-        REEF_9(5.51, 2.93, 120),
-        REEF_10(5.234, 2.8, 120),
-        REEF_11(4.06, 2.76, 60),
-        REEF_12(3.84, 2.91, 60);
+        REEF_1(3.173, 3.860, 0),
+        REEF_2(3.173, 4.190, 0),
+        REEF_3(3.686, 5.086, -60),
+        REEF_4(3.975, 5.246, -60),
+        REEF_5(5.053, 5.335, -120),
+        REEF_6(5.29, 5.08, -120),
+        REEF_7(5.803, 4.19, -180),
+        REEF_8(5.803, 3.86, -180),
+        REEF_9(5.289, 2.967, 120),
+        REEF_10(5.005, 2.807, 120),
+        REEF_11(3.973, 2.804, 60),
+        REEF_12(3.686, 2.97, 60);
 
         private Pose2d pose;
 
@@ -42,15 +42,15 @@ public class Constants {
             return pose;
         }
 
-        public boolean isBallInUpPosition(){
-            return switch (this){
+        public boolean isBallInUpPosition() {
+            return switch (this) {
                 case REEF_1, REEF_2, REEF_5, REEF_6, REEF_9, REEF_10 -> true;
                 case REEF_3, REEF_4, REEF_7, REEF_8, REEF_11, REEF_12 -> false;
             };
         }
 
-        public boolean isBallDropInSamePose(){
-            return (this.ordinal() + 1)%2 == 0;
+        public boolean isBallDropInSamePose() {
+            return (this.ordinal() + 1) % 2 == 0;
         }
 
         public static void checkAlliance(boolean isBlue) {

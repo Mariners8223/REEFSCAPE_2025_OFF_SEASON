@@ -57,6 +57,7 @@ public class RobotContainer {
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
         vision = new Vision(driveBase::addVisionMeasurement);
+        configNamedCommands();
 
         field = new Field2d();
 
@@ -75,7 +76,7 @@ public class RobotContainer {
         return autoChooser.get();
     }
 
-    public static void confignamedcommand() {
+    public static void configNamedCommands() {
         NamedCommands.registerCommand("intake", new InstantCommand());
         NamedCommands.registerCommand("eject l1", new InstantCommand());
         NamedCommands.registerCommand("eject l2", new InstantCommand());
