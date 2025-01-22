@@ -10,18 +10,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
-import frc.robot.Constants.FeederLocation;
-import frc.robot.Constants.ReefLocation;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
-import frc.robot.subsystems.RobotAuto.MasterCommand.HomeToReef;
-import frc.robot.subsystems.RobotAuto.MasterCommand.MasterCommand;
 
 import frc.robot.subsystems.Vision.Vision;
 import org.json.simple.parser.ParseException;
@@ -31,7 +25,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
@@ -39,7 +32,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
@@ -76,27 +68,6 @@ public class RobotContainer {
 
     public static void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        SmartDashboard.putNumber("elevatorLevel", 0);
-        SmartDashboard.putNumber("reef location", 0);
-
-        Supplier<ElevatorLevel> elevatorLevel = () ->
-            ElevatorLevel.values()[(int) MathUtil.clamp(SmartDashboard.getNumber("elevatorLevel", 1), 1, 4)];
-
-        Supplier<Pose2d> targetPose = () ->
-            ReefLocation.values()[(int) MathUtil.clamp(SmartDashboard.getNumber("reef location", 1) - 1, 0, 11)].getPose();
-
-        HomeToReef homeToReef = new HomeToReef(driveBase, targetPose.get());
-
-        driveController.circle().onTrue(new InstantCommand(() -> homeToReef.setTargetPose(targetPose.get())));
-
-        driveController.cross().whileTrue(homeToReef);
-
-        // driveController.cross().whileTrue(
-        //     new MasterCommand(driveBase, elevator, endEffector, elevatorLevel, targetPose).onlyIf(endEffector::gpLoaded));
-
-        // driveController.R1().whileTrue(driveBase.findPath(FeederLocation.RIGHT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
-        // driveController.L1().whileTrue(driveBase.findPath(FeederLocation.LEFT.getRobotPose()).onlyIf(() -> !endEffector.gpLoaded()));
     }
 
 

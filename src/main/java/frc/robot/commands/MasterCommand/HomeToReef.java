@@ -1,7 +1,6 @@
-package frc.robot.subsystems.RobotAuto.MasterCommand;
+package frc.robot.commands.MasterCommand;
 
 import org.littletonrobotics.junction.Logger;
-import org.opencv.core.Mat;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -69,11 +68,6 @@ public class HomeToReef extends Command {
         maxOutput = RobotAutoConstants.HomingConstants.MAX_HOME_SPEED_RADIANS_PER_SECOND;
         thetaOutput = MathUtil.clamp(thetaOutput, -maxOutput, maxOutput);
 
-
-        Logger.recordOutput("home to reef/xOutput", xOutput);
-        Logger.recordOutput("home to reef/yOutput", yOutput);
-        Logger.recordOutput("home to reef/thetaOutput", thetaOutput);
-
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(xOutput, yOutput, thetaOutput);
 
         ChassisSpeeds robotRelativeSpeeds =
@@ -101,6 +95,5 @@ public class HomeToReef extends Command {
     @Override
     public void end(boolean interrupted) {
         driveBase.drive(new ChassisSpeeds());
-        System.out.println("HomeToReef ended, interrupted: " + interrupted);
     }
 }
