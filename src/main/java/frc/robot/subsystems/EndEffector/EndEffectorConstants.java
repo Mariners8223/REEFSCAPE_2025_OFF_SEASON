@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.EndEffector;
 
+import frc.util.PIDFGains;
+import frc.util.MarinersController.MarinersController.ControllerLocation;
+import frc.util.MarinersController.MarinersSparkBase.MotorType;
+
 /** Add your docs here. */
 public class EndEffectorConstants {
     public static final int rightID = 2;
@@ -29,5 +33,24 @@ public class EndEffectorConstants {
             this.rightMotorPower = rightMotorPower;
             this.ejectTime = ejectTime;
         }
+    }
+
+    public static class FunnelMotor{
+        public static final ControllerLocation CONTROLLER_LOCATION = null;
+        public static final int MOTOR_ID = 4;
+        public static final boolean IS_BRUSHLESS = true;
+        public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
+
+        public static final boolean IS_INVERTED = false;
+
+        public static final PIDFGains PID_GAINS = new PIDFGains(
+            20,
+            0,
+            0);
+        public static final double GEAR_RATIO = 1;
+
+
+        public static final double target = 0;
+        public static final double tolerance = 0;
     }
 }

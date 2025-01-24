@@ -8,24 +8,35 @@ import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
+import frc.util.MarinersController.MarinersSparkBase;
 
 public class EndEffectorIOReal implements EndEffectorIO {
     private final VictorSPX RightMotor;
     private final VictorSPX LeftMotor;
+    private final MarinersSparkBase FunnelMotor;
     private final DigitalInput beamBreak;
 
 
     public EndEffectorIOReal(){
-        RightMotor = configueMotor(EndEffectorConstants.rightID);
-        LeftMotor = configueMotor(EndEffectorConstants.leftID);
+        RightMotor = configueEndEffectorMotor(EndEffectorConstants.rightID);
+        LeftMotor = configueEndEffectorMotor(EndEffectorConstants.leftID);
+        FunnelMotor = configueFunnelMotor();
         beamBreak = new DigitalInput(EndEffectorConstants.beamBreakPort);
     }
     
-    private VictorSPX configueMotor(int ID){
+    private VictorSPX configueEndEffectorMotor(int ID){
         VictorSPX motor = new VictorSPX(ID);
         return motor;
     }
 
+    private MarinersSparkBase configueFunnelMotor(){
+        MarinersSparkBase motor = new MarinersSparkBase("Funnel Motor", EndEffectorConstants.FunnelMotor.CONTROLLER_LOCATION, 
+            EndEffectorConstants.FunnelMotor.MOTOR_ID, EndEffectorConstants.FunnelMotor.IS_BRUSHLESS, 
+            EndEffectorConstants.FunnelMotor.MOTOR_TYPE, EndEffectorConstants.FunnelMotor.PID_GAINS, EndEffectorConstants.FunnelMotor.GEAR_RATIO);
+        motor.setMotorInverted(EndEffectorConstants.FunnelMotor.IS_INVERTED);
+        motor.setMotorIdleMode(true);
+        return motor;
+    }
 
     public void setRightMotorPower(double PowerToSet){
         double realPower = MathUtil.clamp(PowerToSet,-EndEffectorConstants.MotorPower.maxMotorPower,
@@ -41,9 +52,18 @@ public class EndEffectorIOReal implements EndEffectorIO {
         LeftMotor.set(VictorSPXControlMode.PercentOutput,realPower);
     }
 
+    public void moveFunnel(){
+        FunnelMotor.setReference(EndEffectorConstants.FunnelMotor.target, MarinersSparkBase.ControlMode.Position);
+    }
+
+    public void stopFunnel(){
+        FunnelMotor.stopMotor();
+    }
+
     public void Update(EndEffectorInputs inputs){
         inputs.rightPower = RightMotor.getMotorOutputPercent();
         inputs.leftPower = LeftMotor.getMotorOutputPercent();
+        inputs.funnelPosition = FunnelMotor.getPosition();
         inputs.beamBreakValue = EndEffectorConstants.beamBreakInverted ? !beamBreak.get() : beamBreak.get();
     }
 
