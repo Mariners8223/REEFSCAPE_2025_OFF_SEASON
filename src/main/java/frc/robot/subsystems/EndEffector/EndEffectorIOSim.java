@@ -27,6 +27,11 @@ public class EndEffectorIOSim implements EndEffectorIO{
     }
 
     @Override
+    public void resetFunnelEncoder(){
+        return;
+    }
+
+    @Override
     public void moveFunnel(){
         return; 
     }

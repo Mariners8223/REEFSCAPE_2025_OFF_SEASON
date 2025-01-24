@@ -22,6 +22,8 @@ public class EndEffectorIOReal implements EndEffectorIO {
         LeftMotor = configueEndEffectorMotor(EndEffectorConstants.leftID);
         FunnelMotor = configueFunnelMotor();
         beamBreak = new DigitalInput(EndEffectorConstants.beamBreakPort);
+
+        resetFunnelEncoder();
     }
     
     private VictorSPX configueEndEffectorMotor(int ID){
@@ -50,6 +52,10 @@ public class EndEffectorIOReal implements EndEffectorIO {
         EndEffectorConstants.MotorPower.maxMotorPower);
 
         LeftMotor.set(VictorSPXControlMode.PercentOutput,realPower);
+    }
+
+    public void resetFunnelEncoder(){
+        FunnelMotor.resetMotorEncoder();
     }
 
     public void moveFunnel(){

@@ -20,6 +20,8 @@ public interface EndEffectorIO {
 
     public void setLeftMotorPower(double powerToSet);
 
+    public void resetFunnelEncoder();
+
     public void moveFunnel();
 
     public void stopFunnel();
