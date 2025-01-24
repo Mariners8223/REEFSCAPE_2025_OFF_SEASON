@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class EndEffectorIOSim implements EndEffectorIO{
     private double rightMotorPower;
     private double leftMotorPower;
+    private double funnelPosition;
 
     public EndEffectorIOSim(){
         SmartDashboard.putBoolean("beam break value", false);
@@ -26,9 +27,20 @@ public class EndEffectorIOSim implements EndEffectorIO{
     }
 
     @Override
+    public void moveFunnel(){
+        return; 
+    }
+
+    @Override
+    public void stopFunnel(){
+        return;
+    }
+
+    @Override
     public void Update(EndEffectorInputs inputs) {
         inputs.leftPower = leftMotorPower;
         inputs.rightPower = rightMotorPower;
+        inputs.funnelPosition = funnelPosition;
         inputs.beamBreakValue = SmartDashboard.getBoolean("beam break value", false);
     }
 
