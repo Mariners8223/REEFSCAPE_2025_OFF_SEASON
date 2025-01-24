@@ -36,7 +36,7 @@ public class Eject extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    endEffector.stopEndEffectorMotors();
+    endEffector.stopMotors();
     endEffector.setLoadedValue(false);
   }
 
