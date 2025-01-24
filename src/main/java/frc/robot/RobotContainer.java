@@ -31,6 +31,7 @@ import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
 public class RobotContainer {
@@ -38,6 +39,7 @@ public class RobotContainer {
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
     public static Elevator elevator;
+    public static ElevatorSYSID elevatorSYSID;
 
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
@@ -48,6 +50,7 @@ public class RobotContainer {
         elevator = new Elevator();
 
         driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        elevatorSYSID = new ElevatorSYSID(elevator);
 
         configureBindings();
 

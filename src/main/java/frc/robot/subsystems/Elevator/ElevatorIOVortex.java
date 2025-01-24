@@ -6,6 +6,8 @@ package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersController.ControlMode;
@@ -52,6 +54,13 @@ public class ElevatorIOVortex implements ElevatorIO {
     public void moveMotorByPosition(double position){
         motorLead.setReference(position, ControlMode.Position, ElevatorConstants.FEED_FORWARD);
     }
+
+    public void setVoltage(double voltage){
+        motorLead.setVoltage(voltage);
+    }
+
+    public double getVoltage() {return 0;} // TODO: Return correct voltage
+    public double getVelocity() { return motorLead.getVelocity(); }
 
     public void Update(ElevatorInputs inputs){
         inputs.elevatorHeight = motorLead.getPosition();

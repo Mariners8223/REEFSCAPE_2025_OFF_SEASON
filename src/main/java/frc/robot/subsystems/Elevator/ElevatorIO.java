@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.Elevator;
 
+import java.util.function.Consumer;
+
 import org.littletonrobotics.junction.AutoLog;
 
 import edu.wpi.first.math.geometry.Pose3d;
@@ -19,6 +21,10 @@ public interface ElevatorIO
 
     public void resetMotorEncoder();
     public void moveMotorByPosition(double position);
+
+    public void setVoltage(double voltage);
+    public double getVoltage();
+    public double getVelocity();
 
     public void Update(ElevatorInputs inputs);
 }

@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
@@ -23,6 +24,9 @@ import org.littletonrobotics.junction.LoggedRobot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
@@ -125,7 +129,7 @@ public class Robot extends LoggedRobot
             autonomousCommand.schedule();
         }
 
-        (new MoveToLevel(RobotContainer.elevator, ElevatorLevel.L1)).schedule();
+        RobotContainer.elevatorSYSID.getElevatorDynamic(Direction.kForward).schedule();
     }
     
     
@@ -145,7 +149,7 @@ public class Robot extends LoggedRobot
             autonomousCommand.cancel();
         }
 
-        (new MoveToLevel(RobotContainer.elevator, ElevatorLevel.L4)).schedule();
+        RobotContainer.elevatorSYSID.getElevatorQuasistatic(Direction.kReverse).schedule();
     }
     
     
@@ -161,6 +165,7 @@ public class Robot extends LoggedRobot
     public void testInit()
     {
         CommandScheduler.getInstance().cancelAll();
+        new InstantCommand(() -> RobotContainer.elevator.resetMotorEncoder()).schedule();
     }
     
     

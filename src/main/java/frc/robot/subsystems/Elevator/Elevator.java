@@ -43,6 +43,10 @@ public class Elevator extends SubsystemBase {
     return inputs.elevatorHeight;
   }
 
+  public void setVoltage(double voltage) { io.setVoltage(voltage); }
+  public double getVoltage() {return io.getVoltage();}
+  public double getVelocity() { return io.getVelocity();}
+
   @Override
   public void periodic() {
     io.Update(inputs);
@@ -52,5 +56,10 @@ public class Elevator extends SubsystemBase {
 
     Logger.recordOutput("Elevator/CurrentLevel", currentLevel.name());
     Logger.recordOutput("Elevator/Current Command", this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "Null");
+
+    Logger.recordOutput("Elevator/SYSID/Voltage", getVoltage());
+    Logger.recordOutput("Elevator/SYSID/Position", getCurrentHeight());
+    Logger.recordOutput("Elevator/SYSID/Velocity", getVelocity());
   }
 }
+
