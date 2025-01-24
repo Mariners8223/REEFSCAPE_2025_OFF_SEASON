@@ -12,17 +12,12 @@ public interface EndEffectorIO {
     public static class EndEffectorInputs{
         double rightPower;
         double leftPower;
-        double funnelPosition;
         boolean beamBreakValue;
     }
 
     public void setRightMotorPower(double powerToSet);
 
     public void setLeftMotorPower(double powerToSet);
-
-    public void moveFunnel();
-
-    public void stopFunnel();
     
     public void Update(EndEffectorInputs inputs);  
 }

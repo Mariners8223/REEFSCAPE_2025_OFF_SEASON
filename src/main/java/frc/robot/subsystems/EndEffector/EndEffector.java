@@ -31,34 +31,14 @@ public class EndEffector extends SubsystemBase {
         io.setRightMotorPower(PowerToSet);
     }
 
-    public void moveFunnel() {
-        io.moveFunnel();
-    }
-
-    public void stopEndEffectorMotors() {
+    public void stopMotors() {
         io.setLeftMotorPower(0);
         io.setRightMotorPower(0);
-    }
-
-    public void stopFunnelMotor(){
-        io.stopFunnel();
     }
 
     public void setLoadedValue(boolean value) {
         Logger.recordOutput("EndEffector/gp loaded", value);
         isGpLoaded = value;
-    }
-
-    public double getRightMotorPower(){
-        return inputs.rightPower;
-    }
-
-    public double getLeftMotorPower(){
-        return inputs.leftPower;
-    }
-
-    public double getFunnelPosition(){
-        return inputs.funnelPosition;
     }
 
     public boolean isGpLoaded() {
