@@ -33,7 +33,7 @@ public enum DevBotConstants {
     public static final double WHEEL_RADIUS_METERS = 0.0508;
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
 
-    public static final double MAX_WHEEL_LINEAR_VELOCITY = 4.5;
+    public static final double MAX_WHEEL_LINEAR_VELOCITY = 2;
 
     public static final DCMotor DRIVE_MOTOR_MODEL = DCMotor.getKrakenX60(1);
 

@@ -20,7 +20,7 @@ public class VisionConstants {
     //TODO test to find better numbers
     public static final double maxHeightDeviation = 0.05;
     public static final double maxMultiAmbiguity = 0.5;
-    public static final double maxSingleAmbiguity = 0.3;
+    public static final double maxSingleAmbiguity = 0.1;
 
     public static double XYstdFactor = 0;
     public static double thetaStdFactor = 0;
@@ -28,7 +28,7 @@ public class VisionConstants {
 
 
     public enum CameraConstants{
-        FRONT_LEFT("front left",
+        FRONT_LEFT("FrontLeft",
             new Transform3d(
                 //0.132, -0.35, 0.166,
                 0.11, -0.29, 0.166,
