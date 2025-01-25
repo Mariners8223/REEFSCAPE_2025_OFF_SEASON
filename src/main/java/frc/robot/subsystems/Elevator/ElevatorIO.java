@@ -4,10 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
-import java.util.function.Consumer;
-
 import org.littletonrobotics.junction.AutoLog;
-
 import edu.wpi.first.math.geometry.Pose3d;
 
 /** Add your docs here. */

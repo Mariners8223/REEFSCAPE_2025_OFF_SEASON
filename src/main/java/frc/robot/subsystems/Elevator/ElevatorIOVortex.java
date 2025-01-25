@@ -4,13 +4,10 @@
 
 package frc.robot.subsystems.Elevator;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
-import frc.robot.subsystems.Elevator.ElevatorConstants.LeadMotor;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersController.ControlMode;
