@@ -25,6 +25,7 @@ import org.littletonrobotics.junction.LoggedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import org.littletonrobotics.junction.Logger;
@@ -129,7 +130,11 @@ public class Robot extends LoggedRobot
             autonomousCommand.schedule();
         }
 
-        RobotContainer.elevatorSYSID.getElevatorDynamic(Direction.kForward).schedule();
+        new SequentialCommandGroup(RobotContainer.elevatorSYSID.getElevatorDynamic(Direction.kForward),
+            RobotContainer.elevatorSYSID.getElevatorDynamic(Direction.kReverse),
+            RobotContainer.elevatorSYSID.getElevatorQuasistatic(Direction.kForward),
+            RobotContainer.elevatorSYSID.getElevatorQuasistatic(Direction.kReverse))
+            .schedule();
     }
     
     
@@ -149,7 +154,9 @@ public class Robot extends LoggedRobot
             autonomousCommand.cancel();
         }
 
-        RobotContainer.elevatorSYSID.getElevatorQuasistatic(Direction.kReverse).schedule();
+        new SequentialCommandGroup(RobotContainer.elevatorSYSID.getElevatorQuasistatic(Direction.kForward),
+            RobotContainer.elevatorSYSID.getElevatorQuasistatic(Direction.kReverse))
+            .schedule();
     }
     
     
