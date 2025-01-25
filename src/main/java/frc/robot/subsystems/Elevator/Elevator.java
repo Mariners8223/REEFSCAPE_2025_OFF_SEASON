@@ -16,7 +16,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorLevel currentLevel;
 
   public Elevator() {
-    io = new ElevatorIOSim();
+    io = new ElevatorIOVortex();
 
     currentLevel = ElevatorLevel.NULL;
 

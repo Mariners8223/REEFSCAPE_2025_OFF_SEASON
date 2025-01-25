@@ -29,9 +29,9 @@ public class ElevatorSYSID {
     public ElevatorSYSID(Elevator elevator){
         routine = new SysIdRoutine(
             new Config(
-                null,
-                null,
-                Time.ofBaseUnits(8, Seconds),
+                Voltage.ofBaseUnits(0.1, Volts).per(Seconds),
+                Voltage.ofBaseUnits(3, Volts),
+                Time.ofBaseUnits(20, Seconds),
                 (state) -> Logger.recordOutput("Elevator/SYSID/State", state.toString())
             ),
             
