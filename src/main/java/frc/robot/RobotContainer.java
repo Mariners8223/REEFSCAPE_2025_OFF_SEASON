@@ -118,6 +118,10 @@ public class RobotContainer {
     }
 
     public static void configureOperatorBinding() {
+        //port 2-12 + A0 are reefs in order (2 to A0) (2 is 1, 3 is 2 and so on) (A0 is 12)
+        //port A1 is for ball dropping
+        //ports A2-A5 are elevator levels (A2 is L1, A3 is L2, A4 is L3, A5 is L4)
+
         for (int i = 0; i < 12; i++) {
             ReefLocation location = ReefLocation.values()[i];
 
