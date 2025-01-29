@@ -12,8 +12,7 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.subsystems.BallDropping.BallDropping;
@@ -39,7 +38,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
@@ -66,7 +64,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        operatorController = new CommandGenericHID(1);
+        operatorController = new CommandPS4Controller(1);
 
         driveBase = new DriveBase();
         elevator = new Elevator();
@@ -123,7 +121,7 @@ public class RobotContainer {
         for (int i = 0; i < 12; i++) {
             ReefLocation location = ReefLocation.values()[i];
 
-            operatorController.button(i).onTrue(new InstantCommand(() -> setSelectedReef(location)));
+            operatorController.button(i + 1).onTrue(new InstantCommand(() -> setSelectedReef(location)));
         }
 
         for(int i = 0; i < 4; i++){
