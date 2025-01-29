@@ -122,7 +122,8 @@ public class Robot extends LoggedRobot
         Constants.FeederLocation.checkAlliance(!isRedAlliance);
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
 
-        RobotContainer.configureBindings();
+        RobotContainer.configureDriveBindings();
+        RobotContainer.configureOperatorBinding();
 
         autonomousCommand = RobotContainer.getAutoCommand();
         

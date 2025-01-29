@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.MasterCommand.MasterCommand;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -44,17 +46,18 @@ import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
 public class RobotContainer {
     public static DriveBase driveBase;
-    public static CommandPS5Controller driveController;
-    public static DriveBaseSYSID driveBaseSYSID;
-    public static Vision vision;
-
-    public static Field2d field;
-    public static LoggedDashboardChooser<Command> autoChooser;
-
     public static Elevator elevator;
     public static EndEffector endEffector;
     public static BallDropping ballDropping;
     public static RobotAuto robotAuto;
+    public static Vision vision;
+
+    public static Field2d field;
+    public static LoggedDashboardChooser<Command> autoChooser;
+    public static DriveBaseSYSID driveBaseSYSID;
+
+    public static CommandPS5Controller driveController;
+    public static CommandGenericHID operatorController;
 
     public static Supplier<ReefLocation> targetReefSupplier;
     public static Supplier<ElevatorLevel> levelSupplier;
@@ -63,6 +66,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
+        operatorController = new CommandGenericHID(1);
 
         driveBase = new DriveBase();
         elevator = new Elevator();
@@ -79,9 +83,9 @@ public class RobotContainer {
         configChooser();
         configNamedCommands();
 
-        configureTargetReefSupplier();    
+        configureTargetReefSupplier();
         configureBallDropSupplier();
-        configureLevelSupplier();    
+        configureLevelSupplier();
     }
 
     public static void configureTargetReefSupplier() {
@@ -89,14 +93,14 @@ public class RobotContainer {
 
         targetReefSupplier = () -> {
             int reef = (int) SmartDashboard.getNumber("target Reef", 1);
-            
+
             reef = MathUtil.clamp(reef, 1, 12);
 
             return ReefLocation.values()[reef - 1];
         };
     }
 
-    public static void configureLevelSupplier(){
+    public static void configureLevelSupplier() {
         SmartDashboard.putNumber("target Level", 1);
 
         levelSupplier = () -> {
@@ -108,17 +112,34 @@ public class RobotContainer {
         };
     }
 
-    public static void configureBallDropSupplier(){
+
+    public static void configureBallDropSupplier() {
         SmartDashboard.putBoolean("should drop ball", false);
 
         shouldDropBallSupplier = () -> SmartDashboard.getBoolean("should drop ball", false);
     }
 
-    public static void configureBindings() {
+    public static void configureOperatorBinding() {
+        for (int i = 0; i < 12; i++) {
+            ReefLocation location = ReefLocation.values()[i];
+
+            operatorController.button(i).onTrue(new InstantCommand(() -> setSelectedReef(location)));
+        }
+
+        for(int i = 0; i < 4; i++){
+            ElevatorLevel level = ElevatorLevel.values()[i + 1];
+
+            operatorController.pov(i * 90).onTrue(new InstantCommand(() -> setSelectedLevel(level)));
+        }
+
+        operatorController.button(12).onTrue(new InstantCommand(() -> setDropBallInCycle(!shouldDropBallInCycle())));
+    }
+
+    public static void configureDriveBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         Command masterCommand = new MasterCommand(
-            driveBase, elevator, endEffector, ballDropping, levelSupplier, targetReefSupplier, shouldDropBallSupplier);
+                driveBase, elevator, endEffector, ballDropping, levelSupplier, targetReefSupplier, shouldDropBallSupplier);
 
         driveController.cross().whileTrue(masterCommand);
 
@@ -135,9 +156,39 @@ public class RobotContainer {
         NamedCommands.registerCommand("ball drop l2", new InstantCommand());
         NamedCommands.registerCommand("ball drop l3", new InstantCommand());
         NamedCommands.registerCommand("ball drop off", new InstantCommand());
-
     }
 
+
+    private static ReefLocation selectedReef = ReefLocation.REEF_1;
+    private static ElevatorLevel selectedLevel = ElevatorLevel.L1;
+    private static boolean dropBallInCycle = false;
+
+    private static ReefLocation getSelectedReef() {
+        return selectedReef;
+    }
+
+    private static ElevatorLevel getSelectedLevel() {
+        return selectedLevel;
+    }
+
+    private static boolean shouldDropBallInCycle() {
+        return dropBallInCycle;
+    }
+
+    private static void setSelectedReef(ReefLocation reef) {
+        Logger.recordOutput("Selection/Reef", reef.name());
+        selectedReef = reef;
+    }
+
+    private static void setSelectedLevel(ElevatorLevel level) {
+        Logger.recordOutput("Selection/Level", level.name());
+        selectedLevel = level;
+    }
+
+    private static void setDropBallInCycle(boolean dropBall) {
+        Logger.recordOutput("Selection/Should Drop Ball", dropBall);
+        dropBallInCycle = dropBall;
+    }
 
 
     public static Command getAutoCommand() {
