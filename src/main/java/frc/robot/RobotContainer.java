@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -26,7 +25,6 @@ import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
 import org.json.simple.parser.ParseException;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -57,11 +55,11 @@ public class RobotContainer {
     public static LoggedDashboardChooser<Command> autoChooser;
     public static DriveBaseSYSID driveBaseSYSID;
 
-    public static CommandPS5Controller driveController;
+    public static CommandXboxController driveController;
     public static CommandGenericHID operatorController;
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(0);
+        driveController = new CommandXboxController(0);
         operatorController = new CommandPS4Controller(1);
 
         driveBase = new DriveBase();
@@ -99,19 +97,31 @@ public class RobotContainer {
 
         operatorController.button(12).onTrue(new InstantCommand(() ->
                 robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+    }
 
-        BooleanSupplier isLevelsSelected = () ->
-                robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null;
+    public static ReefLocation configureTargetReefSupplier() {
+            int reef = (int) SmartDashboard.getNumber("target Reef", 1);
 
-        new Trigger(isLevelsSelected).onTrue(new SequentialCommandGroup(
-                new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
-                new WaitCommand(0.5),
-                new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
-        ));
+            reef = MathUtil.clamp(reef, 1, 12);
+
+            return ReefLocation.values()[reef - 1];
+    }
+
+    public static ElevatorLevel configureLevelSupplier() {
+            int level = (int) SmartDashboard.getNumber("target Level", 1);
+
+            level = MathUtil.clamp(level, 1, 4);
+
+            return ElevatorLevel.values()[level];
+    }
+
+
+    public static Boolean configureBallDropSupplier() {
+        return SmartDashboard.getBoolean("should drop ball", false);
     }
 
     public static void configureDriveBindings() {
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
+        driveController.start().onTrue(driveBase.resetOnlyDirection());
 
         Command masterCommand = new MasterCommand(
                 driveBase, elevator, endEffector, ballDropping,
@@ -123,11 +133,26 @@ public class RobotContainer {
             robotAuto.setDropBallInCycle(false);
         });
 
-        driveController.cross().whileTrue(masterCommand);
-        driveController.cross().onFalse(resetSelection);
+        BooleanSupplier isLevelsSelected = () ->
+        robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null;
 
-        driveController.R1().whileTrue(driveBase.findPath(Constants.FeederLocation.RIGHT.getRobotPose()));
-        driveController.L1().whileTrue(driveBase.findPath(Constants.FeederLocation.LEFT.getRobotPose()));
+        new Trigger(isLevelsSelected).onTrue(new SequentialCommandGroup(
+            new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
+));
+
+        driveController.x().whileTrue(masterCommand.onlyIf(isLevelsSelected));
+        driveController.x().onFalse(resetSelection);
+
+        driveController.b().onTrue(new InstantCommand(() -> {
+            RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+            RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+            RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+        }));
+
+        driveController.rightBumper().whileTrue(driveBase.findPath(Constants.FeederLocation.RIGHT.getRobotPose()));
+        driveController.leftBumper().whileTrue(driveBase.findPath(Constants.FeederLocation.LEFT.getRobotPose()));
     }
 
     public static void configNamedCommands() {
