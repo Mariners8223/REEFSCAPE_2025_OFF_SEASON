@@ -1,6 +1,7 @@
 package frc.robot.subsystems.RobotAuto;
 
 
+import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -61,6 +62,42 @@ public class RobotAuto extends SubsystemBase {
         }
     }
 
+
+    private Constants.ReefLocation selectedReef = Constants.ReefLocation.REEF_1;
+    private ElevatorConstants.ElevatorLevel selectedLevel = ElevatorConstants.ElevatorLevel.L1;
+    private boolean dropBallInCycle = false;
+
+    public Constants.ReefLocation getSelectedReef() {
+        return selectedReef;
+    }
+
+    public ElevatorConstants.ElevatorLevel getSelectedLevel() {
+        return selectedLevel;
+    }
+
+    public boolean shouldDropBallInCycle() {
+        return dropBallInCycle;
+    }
+
+    public void setSelectedReef(Constants.ReefLocation reef) {
+        String name = reef != null ? reef.name() : "None";
+
+        Logger.recordOutput("Selection/Reef", name);
+        selectedReef = reef;
+    }
+
+    public void setSelectedLevel(ElevatorConstants.ElevatorLevel level) {
+        String name = level != null ? level.name() : "None";
+
+        Logger.recordOutput("Selection/Level", name);
+        selectedLevel = level;
+
+    }
+
+    public void setDropBallInCycle(boolean dropBall) {
+        Logger.recordOutput("Selection/Should Drop Ball", dropBall);
+        dropBallInCycle = dropBall;
+    }
 
 }
 

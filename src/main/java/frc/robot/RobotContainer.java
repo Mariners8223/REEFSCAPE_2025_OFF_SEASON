@@ -12,6 +12,9 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.MasterCommand.MasterCommand;
@@ -57,11 +60,6 @@ public class RobotContainer {
     public static CommandPS5Controller driveController;
     public static CommandGenericHID operatorController;
 
-    public static Supplier<ReefLocation> targetReefSupplier;
-    public static Supplier<ElevatorLevel> levelSupplier;
-    public static Supplier<Boolean> shouldDropBallSupplier;
-
-
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
         operatorController = new CommandPS4Controller(1);
@@ -80,41 +78,6 @@ public class RobotContainer {
 
         configChooser();
         configNamedCommands();
-
-        configureTargetReefSupplier();
-        configureBallDropSupplier();
-        configureLevelSupplier();
-    }
-
-    public static void configureTargetReefSupplier() {
-        SmartDashboard.putNumber("target Reef", 1);
-
-        targetReefSupplier = () -> {
-            int reef = (int) SmartDashboard.getNumber("target Reef", 1);
-
-            reef = MathUtil.clamp(reef, 1, 12);
-
-            return ReefLocation.values()[reef - 1];
-        };
-    }
-
-    public static void configureLevelSupplier() {
-        SmartDashboard.putNumber("target Level", 1);
-
-        levelSupplier = () -> {
-            int level = (int) SmartDashboard.getNumber("target Level", 1);
-
-            level = MathUtil.clamp(level, 1, 4);
-
-            return ElevatorLevel.values()[level];
-        };
-    }
-
-
-    public static void configureBallDropSupplier() {
-        SmartDashboard.putBoolean("should drop ball", false);
-
-        shouldDropBallSupplier = () -> SmartDashboard.getBoolean("should drop ball", false);
     }
 
     public static void configureOperatorBinding() {
@@ -125,25 +88,43 @@ public class RobotContainer {
         for (int i = 0; i < 12; i++) {
             ReefLocation location = ReefLocation.values()[i];
 
-            operatorController.button(i + 1).onTrue(new InstantCommand(() -> setSelectedReef(location)));
+            operatorController.button(i + 1).onTrue(new InstantCommand(() -> robotAuto.setSelectedReef(location)));
         }
 
         for(int i = 0; i < 4; i++){
             ElevatorLevel level = ElevatorLevel.values()[i + 1];
 
-            operatorController.pov(i * 90).onTrue(new InstantCommand(() -> setSelectedLevel(level)));
+            operatorController.pov(i * 90).onTrue(new InstantCommand(() -> robotAuto.setSelectedLevel(level)));
         }
 
-        operatorController.button(12).onTrue(new InstantCommand(() -> setDropBallInCycle(!shouldDropBallInCycle())));
+        operatorController.button(12).onTrue(new InstantCommand(() ->
+                robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+
+        BooleanSupplier isLevelsSelected = () ->
+                robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null;
+
+        new Trigger(isLevelsSelected).onTrue(new SequentialCommandGroup(
+                new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
+                new WaitCommand(0.5),
+                new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
+        ));
     }
 
     public static void configureDriveBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         Command masterCommand = new MasterCommand(
-                driveBase, elevator, endEffector, ballDropping, levelSupplier, targetReefSupplier, shouldDropBallSupplier);
+                driveBase, elevator, endEffector, ballDropping,
+                robotAuto::getSelectedLevel, robotAuto::getSelectedReef, robotAuto::shouldDropBallInCycle);
+
+        Command resetSelection = new InstantCommand(() -> {
+            robotAuto.setSelectedLevel(null);
+            robotAuto.setSelectedReef(null);
+            robotAuto.setDropBallInCycle(false);
+        });
 
         driveController.cross().whileTrue(masterCommand);
+        driveController.cross().onFalse(resetSelection);
 
         driveController.R1().whileTrue(driveBase.findPath(Constants.FeederLocation.RIGHT.getRobotPose()));
         driveController.L1().whileTrue(driveBase.findPath(Constants.FeederLocation.LEFT.getRobotPose()));
@@ -158,38 +139,6 @@ public class RobotContainer {
         NamedCommands.registerCommand("ball drop l2", new InstantCommand());
         NamedCommands.registerCommand("ball drop l3", new InstantCommand());
         NamedCommands.registerCommand("ball drop off", new InstantCommand());
-    }
-
-
-    private static ReefLocation selectedReef = ReefLocation.REEF_1;
-    private static ElevatorLevel selectedLevel = ElevatorLevel.L1;
-    private static boolean dropBallInCycle = false;
-
-    private static ReefLocation getSelectedReef() {
-        return selectedReef;
-    }
-
-    private static ElevatorLevel getSelectedLevel() {
-        return selectedLevel;
-    }
-
-    private static boolean shouldDropBallInCycle() {
-        return dropBallInCycle;
-    }
-
-    private static void setSelectedReef(ReefLocation reef) {
-        Logger.recordOutput("Selection/Reef", reef.name());
-        selectedReef = reef;
-    }
-
-    private static void setSelectedLevel(ElevatorLevel level) {
-        Logger.recordOutput("Selection/Level", level.name());
-        selectedLevel = level;
-    }
-
-    private static void setDropBallInCycle(boolean dropBall) {
-        Logger.recordOutput("Selection/Should Drop Ball", dropBall);
-        dropBallInCycle = dropBall;
     }
 
 
