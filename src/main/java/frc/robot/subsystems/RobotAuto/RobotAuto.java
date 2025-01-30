@@ -1,7 +1,9 @@
 package frc.robot.subsystems.RobotAuto;
 
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -37,6 +39,13 @@ public class RobotAuto extends SubsystemBase {
             new Intake(endEffector),
             new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom)
         );
+
+        SmartDashboard.putBoolean("Level 1", false);
+        SmartDashboard.putBoolean("Level 2", false);
+        SmartDashboard.putBoolean("Level 3", false);
+        SmartDashboard.putBoolean("Level 4", false);
+
+        SmartDashboard.putBoolean("drop ball", false);
     }
 
     @Override
@@ -81,21 +90,28 @@ public class RobotAuto extends SubsystemBase {
 
     public void setSelectedReef(Constants.ReefLocation reef) {
         String name = reef != null ? reef.name() : "None";
-
         Logger.recordOutput("Selection/Reef", name);
+
+        if(reef != null) RobotContainer.field.getObject("selected reef").setPose(reef.getPose());
+        else RobotContainer.field.getObject("selected reef").setPoses();
+
         selectedReef = reef;
     }
 
     public void setSelectedLevel(ElevatorConstants.ElevatorLevel level) {
         String name = level != null ? level.name() : "None";
-
         Logger.recordOutput("Selection/Level", name);
-        selectedLevel = level;
 
+        if(level != null) SmartDashboard.putBoolean("Level " + (level.ordinal() + 1), true);
+        else SmartDashboard.putBoolean("Level " + (selectedLevel.ordinal() + 1), false);
+
+        selectedLevel = level;
     }
 
     public void setDropBallInCycle(boolean dropBall) {
         Logger.recordOutput("Selection/Should Drop Ball", dropBall);
+
+        SmartDashboard.putBoolean("drop ball", dropBall);
         dropBallInCycle = dropBall;
     }
 
