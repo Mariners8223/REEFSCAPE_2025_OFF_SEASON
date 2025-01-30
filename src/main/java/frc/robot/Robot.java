@@ -95,6 +95,15 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("target Reef", 1);
         SmartDashboard.putNumber("target Level", 1);
         SmartDashboard.putBoolean("should drop ball", false);
+
+        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION) checkFlip();
+    }
+
+    private static void checkFlip() {
+        boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+
+        Constants.FeederLocation.checkAlliance(!isRedAlliance);
+        Constants.ReefLocation.checkAlliance(!isRedAlliance);
     }
     
     
@@ -122,10 +131,7 @@ public class Robot extends LoggedRobot
     @Override
     public void autonomousInit()
     {
-        boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-
-        Constants.FeederLocation.checkAlliance(!isRedAlliance);
-        Constants.ReefLocation.checkAlliance(!isRedAlliance);
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION) checkFlip();
 
         autonomousCommand = RobotContainer.getAutoCommand();
         
