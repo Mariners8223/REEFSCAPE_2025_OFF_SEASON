@@ -61,12 +61,6 @@ public class ReefFinderWrapper extends Command {
     return pathCommand.getRequirements();
   }
 
-  /**
-   * Whether the given command should run when the robot is disabled. Override to return true if the
-   * command should run when disabled.
-   *
-   * @return whether the command should run when the robot is disabled
-   */
   @Override
   public boolean runsWhenDisabled() {
     return pathCommand.runsWhenDisabled();
