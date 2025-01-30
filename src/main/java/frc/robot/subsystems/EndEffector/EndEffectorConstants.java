@@ -36,10 +36,8 @@ public class EndEffectorConstants {
     }
 
     public static class FunnelMotor{
-        public static final ControllerLocation CONTROLLER_LOCATION = null;
+        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final int MOTOR_ID = 4;
-        public static final boolean IS_BRUSHLESS = true;
-        public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
 
         public static final boolean IS_INVERTED = false;
 
