@@ -66,7 +66,7 @@ public class ElevatorConstants {
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
 
-        public static final boolean IS_INVERTED = false;
+        public static final boolean IS_INVERTED = true;
     }
 
     public static final double ELEVATOR_TOLERANCE = 0.1;
