@@ -92,10 +92,6 @@ public class Robot extends LoggedRobot
 
         ControllerMaster.getInstance();
 
-        SmartDashboard.putNumber("target Reef", 1);
-        SmartDashboard.putNumber("target Level", 1);
-        SmartDashboard.putBoolean("should drop ball", false);
-
         if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION) checkFlip();
     }
 

@@ -80,6 +80,10 @@ public class RobotContainer {
         configNamedCommands();
         configureDriveBindings();
         configureOperatorBinding();
+
+        SmartDashboard.putNumber("target Reef", 1);
+        SmartDashboard.putNumber("target Level", 1);
+        SmartDashboard.putBoolean("should drop ball", false);
     }
 
     public static void configureOperatorBinding() {
@@ -146,8 +150,8 @@ public class RobotContainer {
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
         ));
 
-        driveController.x().whileTrue(masterCommand.onlyIf(isCycleReady));
-        driveController.x().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
+        driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
+        driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
 
         driveController.b().onTrue(new InstantCommand(() -> {
             RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
