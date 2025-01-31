@@ -19,7 +19,7 @@ public class VisionConstants {
 
     //TODO test to find better numbers
     public static final double maxHeightDeviation = 0.1;
-    public static final double maxMultiAmbiguity = 0.5;
+    public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.1;
 
     public static double XYstdFactor = 0.02;
