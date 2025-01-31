@@ -103,7 +103,7 @@ public class RobotContainer {
             operatorController.pov(i * 90).onTrue(new InstantCommand(() -> robotAuto.setSelectedLevel(level)));
         }
 
-        operatorController.button(12).onTrue(new InstantCommand(() ->
+        operatorController.button(13).onTrue(new InstantCommand(() ->
                 robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
     }
 
