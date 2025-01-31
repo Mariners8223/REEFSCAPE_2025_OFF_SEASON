@@ -21,7 +21,7 @@ public class ElevatorIOSim implements ElevatorIO{
     public ElevatorIOSim(){
         elevator = new ElevatorSim(
             DCMotor.getNeoVortex(2),
-            ElevatorConstants.LeadMotor.GEAR_RATIO,
+            ElevatorConstants.GEAR_RATIO,
             ElevatorConstants.ELEVATOR_WEIGHT, 
             ElevatorConstants.PULLEY_RADIUS, 
             ElevatorLevel.Bottom.getHeight(),
@@ -30,7 +30,7 @@ public class ElevatorIOSim implements ElevatorIO{
             ElevatorLevel.Bottom.getHeight(),
             0.05, 0.05);
 
-        pidController = new PIDController(ElevatorConstants.LeadMotor.PID_GAINS.getP(), ElevatorConstants.LeadMotor.PID_GAINS.getI(), ElevatorConstants.LeadMotor.PID_GAINS.getD());
+        pidController = new PIDController(ElevatorConstants.PID_GAINS.getP(), ElevatorConstants.PID_GAINS.getI(), ElevatorConstants.PID_GAINS.getD());
     }
 
     public void resetMotorEncoder(){

@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
@@ -46,10 +47,10 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        driveBase = new DriveBase();
+        // driveBase = new DriveBase();
         elevator = new Elevator();
 
-        driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
         elevatorSYSID = new ElevatorSYSID(elevator);
 
         configureBindings();
@@ -58,17 +59,24 @@ public class RobotContainer {
 
         SmartDashboard.putData(field);
 
-        configChooser();
+        // configChooser();
     }
 
 
     private void configureBindings() {
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
+        // driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new MoveToLevel(elevator, ElevatorLevel.L4));
         driveController.povDown().onTrue(new MoveToLevel(elevator, ElevatorLevel.Bottom));
-        driveController.povLeft().onTrue(new MoveToLevel(elevator, ElevatorLevel.L1));
+        driveController.povLeft().onTrue(new MoveToLevel(elevator, ElevatorLevel.L3));
         driveController.povRight().onTrue(new MoveToLevel(elevator, ElevatorLevel.L2));
+
+
+        driveController.triangle().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kForward));
+        driveController.cross().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kReverse));
+
+        driveController.circle().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kForward));
+        driveController.square().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kReverse));
     }
 
 

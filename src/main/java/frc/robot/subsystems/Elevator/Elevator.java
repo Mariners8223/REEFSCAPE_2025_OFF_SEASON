@@ -18,7 +18,7 @@ public class Elevator extends SubsystemBase {
   public Elevator() {
     io = new ElevatorIOVortex();
 
-    currentLevel = ElevatorLevel.NULL;
+    currentLevel = null;
 
     this.resetMotorEncoder();
   }
@@ -29,7 +29,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void moveMotorByPosition(ElevatorLevel desiredLevel){
-    if (desiredLevel == ElevatorLevel.NULL) return;
+    if (desiredLevel == null) return;
     
     Logger.recordOutput("Elevator/Desired Level", desiredLevel.name());
     io.moveMotorByPosition(desiredLevel.getHeight());
@@ -54,7 +54,7 @@ public class Elevator extends SubsystemBase {
 
     currentLevel = ElevatorLevel.findNearestLevel(getCurrentHeight());
 
-    Logger.recordOutput("Elevator/CurrentLevel", currentLevel.name());
+    Logger.recordOutput("Elevator/CurrentLevel", currentLevel == null ? "Unknown" : currentLevel.name());
     Logger.recordOutput("Elevator/Current Command", this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "Null");
 
     Logger.recordOutput("Elevator/SYSID/Voltage", getVoltage());
