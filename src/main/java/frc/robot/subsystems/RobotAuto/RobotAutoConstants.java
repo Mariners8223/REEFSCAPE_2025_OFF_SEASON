@@ -14,4 +14,10 @@ public class RobotAutoConstants {
         public static PIDFGains XY_PID = new PIDFGains(7, 10, 0, 0);
         public static PIDFGains THETA_PID = new PIDFGains(12, 0, 0, 0);
     }
+
+    public enum BallDropTime{
+        BEFORE,
+        PARALLEL,
+        AFTER
+    }
 }
