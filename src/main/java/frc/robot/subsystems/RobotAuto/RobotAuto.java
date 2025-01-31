@@ -89,21 +89,33 @@ public class RobotAuto extends SubsystemBase {
     }
 
     public void setSelectedReef(Constants.ReefLocation reef) {
-        String name = reef != null ? reef.name() : "None";
-        Logger.recordOutput("Selection/Reef", name);
+        String name;
 
-        if(reef != null) RobotContainer.field.getObject("selected reef").setPose(reef.getPose());
-        else RobotContainer.field.getObject("selected reef").setPoses();
+        if(reef != null){
+            RobotContainer.field.getObject("selected reef").setPose(reef.getPose());
+            name = reef.name();
+        }
+        else{
+            RobotContainer.field.getObject("selected reef").setPoses();
+            name = "None";
+        }
+
+        Logger.recordOutput("Selection/Reef", name);
 
         selectedReef = reef;
     }
 
     public void setSelectedLevel(ElevatorConstants.ElevatorLevel level) {
-        String name = level != null ? level.name() : "None";
-        Logger.recordOutput("Selection/Level", name);
+        String name;
 
-        if(level != null) SmartDashboard.putBoolean("Level " + (level.ordinal() + 1), true);
-        else SmartDashboard.putBoolean("Level " + (selectedLevel.ordinal() + 1), false);
+        SmartDashboard.putBoolean("Level " + (selectedLevel.ordinal() + 1), false);
+        if(level != null){
+            SmartDashboard.putBoolean("Level " + (level.ordinal() + 1), true);
+            name = level.name();
+        }
+        else name = "None";
+
+        Logger.recordOutput("Selection/Level", name);
 
         selectedLevel = level;
     }
