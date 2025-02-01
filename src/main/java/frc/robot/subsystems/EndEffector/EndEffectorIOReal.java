@@ -9,11 +9,12 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.util.MarinersController.MarinersSparkBase;
+import frc.util.MarinersController.MarinersTalonFX;
 
 public class EndEffectorIOReal implements EndEffectorIO {
     private final VictorSPX RightMotor;
     private final VictorSPX LeftMotor;
-    private final MarinersSparkBase FunnelMotor;
+    private final MarinersTalonFX FunnelMotor;
     private final DigitalInput beamBreak;
 
 
@@ -31,10 +32,9 @@ public class EndEffectorIOReal implements EndEffectorIO {
         return motor;
     }
 
-    private MarinersSparkBase configueFunnelMotor(){
-        MarinersSparkBase motor = new MarinersSparkBase("Funnel Motor", EndEffectorConstants.FunnelMotor.CONTROLLER_LOCATION, 
-            EndEffectorConstants.FunnelMotor.MOTOR_ID, EndEffectorConstants.FunnelMotor.IS_BRUSHLESS, 
-            EndEffectorConstants.FunnelMotor.MOTOR_TYPE, EndEffectorConstants.FunnelMotor.PID_GAINS, EndEffectorConstants.FunnelMotor.GEAR_RATIO);
+    private MarinersTalonFX configueFunnelMotor(){
+        MarinersTalonFX motor = new MarinersTalonFX("Funnel Motor", EndEffectorConstants.FunnelMotor.CONTROLLER_LOCATION, 
+            EndEffectorConstants.FunnelMotor.MOTOR_ID, EndEffectorConstants.FunnelMotor.PID_GAINS, EndEffectorConstants.FunnelMotor.GEAR_RATIO);
         motor.setMotorInverted(EndEffectorConstants.FunnelMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
         return motor;
