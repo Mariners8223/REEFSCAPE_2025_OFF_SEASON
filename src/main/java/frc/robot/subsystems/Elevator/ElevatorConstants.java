@@ -62,7 +62,7 @@ public class ElevatorConstants {
     public static final double kA = 0.11536;
     public static final double ELEVATOR_TOLERANCE = 0.1;
 
-    public static final Constraints PROFILE = new Constraints(2, 0.5);
+    public static final Constraints PROFILE = new Constraints(2.3, 5);
 
     public static final double ELEVATOR_WEIGHT = 1;
     public static final double PULLEY_RADIUS = 0.024;
