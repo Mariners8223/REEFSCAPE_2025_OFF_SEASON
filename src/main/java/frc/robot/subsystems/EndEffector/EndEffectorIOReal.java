@@ -62,6 +62,10 @@ public class EndEffectorIOReal implements EndEffectorIO {
         FunnelMotor.setReference(target, MarinersSparkBase.ControlMode.Position);
     }
 
+    public void setFunnelVoltage(double voltage){
+        FunnelMotor.setVoltage(voltage);
+    }
+
     public void stopFunnel(){
         FunnelMotor.stopMotor();
     }

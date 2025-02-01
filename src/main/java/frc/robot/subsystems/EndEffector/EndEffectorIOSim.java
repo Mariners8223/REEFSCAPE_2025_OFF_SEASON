@@ -8,8 +8,6 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants.FunnelMotor;
-import frc.util.PIDFGains;
 
 /** Add your docs here. */
 public class EndEffectorIOSim implements EndEffectorIO{
@@ -53,6 +51,11 @@ public class EndEffectorIOSim implements EndEffectorIO{
     @Override
     public void moveFunnel(double target){
         Pid.setSetpoint(target);
+    }
+
+    @Override
+    public void setFunnelVoltage(double voltage){
+        funnelSim.setInput(voltage);
     }
 
     @Override

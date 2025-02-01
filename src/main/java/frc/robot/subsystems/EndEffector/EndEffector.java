@@ -36,6 +36,10 @@ public class EndEffector extends SubsystemBase {
         io.moveFunnel(target);
     }
 
+    public void setFunnelVoltage(double voltage){
+        io.setFunnelVoltage(voltage);
+    }
+
     public void stopEndEffectorMotors() {
         io.setLeftMotorPower(0);
         io.setRightMotorPower(0);

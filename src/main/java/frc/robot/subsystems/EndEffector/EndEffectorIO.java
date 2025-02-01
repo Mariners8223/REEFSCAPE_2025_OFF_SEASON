@@ -24,6 +24,8 @@ public interface EndEffectorIO {
 
     public void moveFunnel(double target);
 
+    public void setFunnelVoltage(double voltage);
+
     public void stopFunnel();
     
     public void Update(EndEffectorInputs inputs);  
