@@ -58,8 +58,8 @@ public class EndEffectorIOReal implements EndEffectorIO {
         FunnelMotor.resetMotorEncoder();
     }
 
-    public void moveFunnel(){
-        FunnelMotor.setReference(EndEffectorConstants.FunnelMotor.target, MarinersSparkBase.ControlMode.Position);
+    public void moveFunnel(double target){
+        FunnelMotor.setReference(target, MarinersSparkBase.ControlMode.Position);
     }
 
     public void stopFunnel(){

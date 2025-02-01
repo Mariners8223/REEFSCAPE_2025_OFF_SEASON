@@ -33,7 +33,7 @@ public class EndEffector extends SubsystemBase {
   }
 
     public void moveFunnel() {
-        io.moveFunnel();
+        io.moveFunnel(EndEffectorConstants.FunnelMotor.target);
     }
 
     public void stopEndEffectorMotors() {

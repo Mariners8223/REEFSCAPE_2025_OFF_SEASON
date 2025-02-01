@@ -4,15 +4,34 @@
 
 package frc.robot.subsystems.EndEffector;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants.FunnelMotor;
+import frc.util.PIDFGains;
 
 /** Add your docs here. */
 public class EndEffectorIOSim implements EndEffectorIO{
     private double rightMotorPower;
     private double leftMotorPower;
-    private double funnelPosition;
+
+    private final SingleJointedArmSim funnelSim;
+    private final PIDController Pid;
 
     public EndEffectorIOSim(){
+        funnelSim = new SingleJointedArmSim(
+            DCMotor.getFalcon500(1),
+            EndEffectorConstants.FunnelMotor.GEAR_RATIO,
+            1,
+            0.5,
+            -Math.PI/6,
+            3/2 * Math.PI,
+            true,
+            -Math.PI/6, 0);
+        
+        Pid = EndEffectorConstants.FunnelMotor.PID_GAINS.createPIDController();
+
         SmartDashboard.putBoolean("beam break value", false);
     }
 
@@ -28,24 +47,27 @@ public class EndEffectorIOSim implements EndEffectorIO{
 
     @Override
     public void resetFunnelEncoder(){
-        return;
+        funnelSim.setState(-Math.PI/6, 0);
     }
 
     @Override
-    public void moveFunnel(){
-        return; 
+    public void moveFunnel(double target){
+        Pid.setSetpoint(target);
     }
 
     @Override
     public void stopFunnel(){
-        return;
+        funnelSim.setInput(0);
     }
 
     @Override
     public void Update(EndEffectorInputs inputs) {
+        funnelSim.setInput(Pid.calculate(funnelSim.getAngleRads()));
+        funnelSim.update(0.02);
+
+        inputs.funnelPosition = funnelSim.getAngleRads();
         inputs.leftPower = leftMotorPower;
         inputs.rightPower = rightMotorPower;
-        inputs.funnelPosition = funnelPosition;
         inputs.beamBreakValue = SmartDashboard.getBoolean("beam break value", false);
     }
 

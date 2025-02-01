@@ -22,7 +22,7 @@ public interface EndEffectorIO {
 
     public void resetFunnelEncoder();
 
-    public void moveFunnel();
+    public void moveFunnel(double target);
 
     public void stopFunnel();
     
