@@ -6,7 +6,6 @@ package frc.robot.subsystems.EndEffector;
 
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
-import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 /** Add your docs here. */
 public class EndEffectorConstants {
@@ -48,7 +47,8 @@ public class EndEffectorConstants {
         public static final double GEAR_RATIO = 1;
 
 
-        public static final double target = 0;
-        public static final double tolerance = 0;
+        public static final double COLLECT_POSITION = 0;
+        public static final double CLIMB_POSITION = 0;
+        public static final double TOLERANCE = 0;
     }
 }

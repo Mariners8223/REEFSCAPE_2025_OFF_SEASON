@@ -10,15 +10,17 @@ import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 public class moveFunnel extends Command {
   private final EndEffector endEffector;
+  private final double target;
 
-  public moveFunnel(EndEffector endEffector){
+  public moveFunnel(EndEffector endEffector, double target){
     this.endEffector = endEffector;
+    this.target = target;
     addRequirements(endEffector);
   }
 
   @Override
   public void initialize(){
-    endEffector.moveFunnel();
+    endEffector.moveFunnel(target);
   }
 
   @Override
@@ -28,6 +30,6 @@ public class moveFunnel extends Command {
 
   @Override
   public boolean isFinished(){
-    return Math.abs(endEffector.getFunnelPosition() - EndEffectorConstants.FunnelMotor.target) < EndEffectorConstants.FunnelMotor.tolerance;
+    return Math.abs(endEffector.getFunnelPosition() - target) < EndEffectorConstants.FunnelMotor.TOLERANCE;
   }
 }

@@ -32,8 +32,8 @@ public class EndEffector extends SubsystemBase {
     io.setLeftMotorPower(PowerToSet);
   }
 
-    public void moveFunnel() {
-        io.moveFunnel(EndEffectorConstants.FunnelMotor.target);
+    public void moveFunnel(double target){
+        io.moveFunnel(target);
     }
 
     public void stopEndEffectorMotors() {
