@@ -49,7 +49,7 @@ public class Constants {
         }
 
         public boolean isBallDropInSamePose() {
-            return (this.ordinal() + 1) % 2 == 0;
+            return (this.ordinal()) % 2 == 0;
         }
 
         public static void checkAlliance(boolean isBlue) {

@@ -107,7 +107,7 @@ public class MasterCommand extends Command {
 
 
         if (shouldDropBall && !targetReef.isBallDropInSamePose()) {
-            pathFinderTarget = Constants.ReefLocation.values()[(targetReef.ordinal() + 1)].getPose();
+            pathFinderTarget = Constants.ReefLocation.values()[(targetReef.ordinal() - 1)].getPose();
         }
 
         // setting the target pose for the path command
