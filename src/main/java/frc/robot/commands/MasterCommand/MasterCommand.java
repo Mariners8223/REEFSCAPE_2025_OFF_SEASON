@@ -86,7 +86,7 @@ public class MasterCommand extends Command {
     private RobotAutoConstants.BallDropTime getBallDropTime(ElevatorConstants.ElevatorLevel level) {
         return switch (level) {
             case L1 -> RobotAutoConstants.BallDropTime.AFTER;
-            case L2, L3 -> RobotAutoConstants.BallDropTime.PARALLEL;
+            case L4 -> RobotAutoConstants.BallDropTime.PARALLEL;
             default -> RobotAutoConstants.BallDropTime.BEFORE;
         };
     }
