@@ -44,7 +44,7 @@ public class ElevatorConstants {
     public static class LeadMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = null;
 
-        public static final int MOTOR_ID = 0;
+        public static final int MOTOR_ID = 16;
         public static final double GEAR_RATIO = 5;
 
         public static final boolean IS_BRUSHLESS = true;
@@ -58,12 +58,12 @@ public class ElevatorConstants {
             0,
             0);
         
-        public static final boolean IS_INVERTED = false;
+        public static final boolean IS_INVERTED = true;
     }
 
     public static class FollowMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = null;
-        public static final int MOTOR_ID = 0;
+        public static final int MOTOR_ID = 17;
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
 

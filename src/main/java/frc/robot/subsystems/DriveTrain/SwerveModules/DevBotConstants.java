@@ -6,25 +6,25 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import frc.util.PIDFGains;
 
 public enum DevBotConstants {
-    FRONT_LEFT(3, 4, 5,
+    FRONT_LEFT(6, 10, 14,
             true, false, -0.42578125,
             new PIDFGains(3, 0, 0, 1.8749), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
             0.13777, 1.8887, 0.18407, 0.19704, 1.7025, 0.10185),
 
-    FRONT_RIGHT(6, 7, 8,
+    FRONT_RIGHT(12, 4, 5,
     true, false, 0.3933,
             new PIDFGains(3, 0, 0, 1.8552), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
             0.063408, 1.8552, 0.10686, 0.19704, 1.7025, 0.10185),
 
-    BACK_LEFT(9, 10, 11,
+    BACK_LEFT(9, 7, 11,
     true, false, 0.4968,
             new PIDFGains(3, 0, 0, 1.9608), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
             0.19252, 1.9943, 0.14615, 0.2, 1.7386, 0.12048  ),
 
-    BACK_RIGHT(12, 13, 14,
+    BACK_RIGHT(3, 13, 8,
     true, false, -0.1574,
             new PIDFGains(3, 0, 0, 1.8443), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID

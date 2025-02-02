@@ -15,7 +15,7 @@ public class BallDroppingConstants {
         public static final double AngleToReset = 0; 
 
         public static final ControllerLocation location = ControllerLocation.MOTOR;
-        public static final int id = 0;
+        public static final int id = 24;
         public static final boolean isBrushless = true;
         public static final PIDFGains PID_gains = null;
         public static final double gearRatio = 1;
@@ -27,7 +27,7 @@ public class BallDroppingConstants {
 
     public static class DropperMotor{
         public static final double PowerToReach = 1;//what power to use for the drop
-        public static final int id = 0;
+        public static final int id = 20;
         public static final double maxDropperPower = 0.8;
     }
 }

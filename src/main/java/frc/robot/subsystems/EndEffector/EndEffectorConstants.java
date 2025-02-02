@@ -9,8 +9,8 @@ import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 /** Add your docs here. */
 public class EndEffectorConstants {
-    public static final int rightID = 2;
-    public static final int leftID = 3;
+    public static final int rightID = 22;
+    public static final int leftID = 21;
     public static final int beamBreakPort = 1;
 
     public static final boolean beamBreakInverted = true;
@@ -36,7 +36,7 @@ public class EndEffectorConstants {
 
     public static class FunnelMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-        public static final int MOTOR_ID = 4;
+        public static final int MOTOR_ID = 23;
 
         public static final boolean IS_INVERTED = false;
 
