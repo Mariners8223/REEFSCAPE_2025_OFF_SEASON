@@ -16,7 +16,6 @@ import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 
 import java.util.Set;
-import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 
