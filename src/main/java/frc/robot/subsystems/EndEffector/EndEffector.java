@@ -31,9 +31,21 @@ public class EndEffector extends SubsystemBase {
         io.setRightMotorPower(PowerToSet);
     }
 
-    public void stopMotors() {
+    public void moveFunnel(double target){
+        io.moveFunnel(target);
+    }
+
+    public void setFunnelVoltage(double voltage){
+        io.setFunnelVoltage(voltage);
+    }
+
+    public void stopEndEffectorMotors() {
         io.setLeftMotorPower(0);
         io.setRightMotorPower(0);
+    }
+
+    public void stopFunnelMotor(){
+        io.stopFunnel();
     }
 
     public void setLoadedValue(boolean value) {
@@ -41,9 +53,21 @@ public class EndEffector extends SubsystemBase {
         isGpLoaded = value;
     }
 
-    public boolean isGpLoaded() {
-        return isGpLoaded;
+    public double getRightMotorPower(){
+        return inputs.rightPower;
     }
+
+    public double getLeftMotorPower(){
+        return inputs.leftPower;
+    }
+
+    public double getFunnelPosition(){
+        return inputs.funnelPosition;
+    }
+
+  public boolean isGpLoaded(){
+    return isGpLoaded;
+  }
 
     public boolean isGpDetected() {
         return inputs.beamBreakValue;
