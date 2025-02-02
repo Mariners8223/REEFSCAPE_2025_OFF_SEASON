@@ -6,14 +6,14 @@ package frc.robot.subsystems.Climb;
 
 /** Add your docs here. */
 public class ClimbConstants {
-    public static final int MOTOR_ID = 0;
-    public static final int GEAR_RATIO = 0;
-    public static final int ROTATIONS_TO_METERS = 0;
+    public static final int MOTOR_ID = 18;
+    public static final double GEAR_RATIO = 15;
+    public static final double ROTATIONS_TO_METERS = 0.024 * 2 * Math.PI; // TODO: Fix
 
-    public static final double CLIMB_POWER = -0.8;
-    public static final double SOFT_MINIMUM = 0;
-    public static final double SOFT_MAXIMUM = 1;
+    public static final double CLIMB_POWER = -0.35;
+    public static final double SOFT_MINIMUM = -0.8; // TODO: Fix
+    public static final double SOFT_MAXIMUM = 0;
     public static final boolean IS_INVERTED = false;
-    public static final double START_POSITION = 0;
-    public static final double MOMENT_OF_INERTIA = 0;
+    public static final double START_POSITION = 0.125;
+    public static final double MOMENT_OF_INERTIA = 1;
 }
