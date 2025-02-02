@@ -35,6 +35,8 @@ public class BallDropping extends SubsystemBase{
         io.setDropperMotorPower(dropperPower);
     }
 
+    public void setVoltage(double voltage) { io.setVoltage(voltage);}
+
     public void stopDropperMotor(){
         setDropperMotorPower(0);
     }

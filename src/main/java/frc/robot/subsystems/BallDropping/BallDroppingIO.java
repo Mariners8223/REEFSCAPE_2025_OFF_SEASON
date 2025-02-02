@@ -20,6 +20,7 @@ public interface BallDroppingIO {
     //dropping motor io
     public void setDropperMotorPower(double dropperPower);
     public void stopDropperMotor();
+    public  void setVoltage(double voltage);
 
     public void Update(balldroppingInputs inputs);
 }

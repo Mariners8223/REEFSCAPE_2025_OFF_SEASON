@@ -2,8 +2,7 @@
 
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
-package frc.robot;
+package frc.robot.subsystems.BallDropping;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +12,9 @@ import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 
+import frc.robot.commands.BallDropping.BallDropOff;
+import frc.robot.commands.BallDropping.BallDropOnForHigh;
+import frc.robot.commands.BallDropping.BallDropOnForLow;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -40,9 +42,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        driveBase = new DriveBase();
+        //driveBase = new DriveBase();
+        ballDropping = new BallDropping();
 
-        driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        //driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        ballDroppingSYSID = BallDroppingSYSID(ballDropping);
 
         configureBindings();
 
@@ -50,12 +54,16 @@ public class RobotContainer {
 
         SmartDashboard.putData(field);
 
-        configChooser();
+        //configChooser();
     }
 
 
     private void configureBindings() {
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
+        //driveController.options().onTrue(driveBase.resetOnlyDirection());
+
+        driveController.povUp().onTrue(new BallDropOnForHigh(ballDropping));
+        driveController.povDown().onTrue(new BallDropOnForLow(ballDropping));
+        driveController.povDownLeft().onTrue(new BallDropOff(ballDropping));
     }
 
 
