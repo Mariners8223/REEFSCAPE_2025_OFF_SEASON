@@ -77,11 +77,11 @@ public class RobotContainer {
         driveController.povLeft().onTrue(new moveFunnel(endEffector, FunnelMotor.COLLECT_POSITION));
         
 
-        driveController.triangle().whileTrue(endEffectorSYSID.getElevatorDynamic(Direction.kForward));
-        driveController.cross().whileTrue(endEffectorSYSID.getElevatorDynamic(Direction.kReverse));
+        driveController.triangle().whileTrue(endEffectorSYSID.getEndEffectorDynamic(Direction.kForward));
+        driveController.cross().whileTrue(endEffectorSYSID.getEndEffectorDynamic(Direction.kReverse));
 
-        driveController.circle().whileTrue(endEffectorSYSID.getElevatorQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(endEffectorSYSID.getElevatorQuasistatic(Direction.kReverse));
+        driveController.circle().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kForward));
+        driveController.square().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kReverse));
     }
 
 

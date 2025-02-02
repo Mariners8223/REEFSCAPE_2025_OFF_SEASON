@@ -37,11 +37,11 @@ public class EndEffectorSYSID {
             ));
     }
 
-    public Command getElevatorQuasistatic(Direction direction){
+    public Command getEndEffectorQuasistatic(Direction direction){
         return routine.quasistatic(direction);
     }
 
-    public Command getElevatorDynamic(Direction direction){
+    public Command getEndEffectorDynamic(Direction direction){
         return routine.dynamic(direction);
     }
 }
