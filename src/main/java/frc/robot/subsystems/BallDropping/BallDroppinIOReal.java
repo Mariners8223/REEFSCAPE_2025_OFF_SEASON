@@ -29,6 +29,10 @@ public class BallDroppinIOReal implements BallDroppingIO{
 
         motor.setPIDF(BallDroppingConstants.AngleMotor.AnglePID);
         motor.getMeasurements().setGearRatio(BallDroppingConstants.AngleMotor.gearRatio);
+
+        motor.setMotorInverted(BallDroppingConstants.AngleMotor.isInverted);
+        
+        motor.setMaxMinOutput(3, 3);
         
         return motor;
     }
@@ -44,7 +48,11 @@ public class BallDroppinIOReal implements BallDroppingIO{
     }
 
     public void reachAngle(double angleToReach){
-        angleMotor.setReference(angleToReach, ControlMode.Position);
+        angleMotor.setReference(angleToReach, ControlMode.Position, calculateFeedForward(angleMotor.getPosition()));
+    }
+
+    private double calculateFeedForward(double motorRotaiton){
+        return Math.sin(motorRotaiton * 2 * Math.PI) * BallDroppingConstants.AngleMotor.motorFeedForward;
     }
 
     //dropping motor implement
@@ -62,6 +70,11 @@ public class BallDroppinIOReal implements BallDroppingIO{
     public void Update(balldroppingInputs inputs){
         inputs.angle = angleMotor.getPosition();
         inputs.dropperPower = dropperMotor.getMotorOutputPercent();        
+    }
+
+    @Override
+    public void setVoltage(double voltage) {
+       angleMotor.setVoltage(voltage);
     }
 
 

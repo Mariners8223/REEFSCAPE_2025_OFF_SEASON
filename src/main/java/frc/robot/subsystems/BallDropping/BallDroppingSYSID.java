@@ -25,8 +25,8 @@ public class BallDroppingSYSID {
     public BallDroppingSYSID(BallDropping ballDropping){
         routine = new SysIdRoutine(
                 new Config(
-                        Voltage.ofBaseUnits(0.5, Volts).per(Seconds),
-                        Voltage.ofBaseUnits(2, Volts),
+                        Voltage.ofBaseUnits(0.2, Volts).per(Seconds),
+                        Voltage.ofBaseUnits(1, Volts),
                         Time.ofBaseUnits(100, Seconds),
                         (state) -> Logger.recordOutput("BallDropping/SYSID/State", state.toString())
                 ),

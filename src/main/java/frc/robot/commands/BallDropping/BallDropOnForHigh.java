@@ -22,7 +22,7 @@ public class BallDropOnForHigh extends Command {
   @Override
   public void initialize() {
     ballDrop.setDropperMotorPower(DropperMotor.PowerToReach);
-    ballDrop.reachAngle(AngleMotor.AngleToReach);
+    ballDrop.reachAngle(AngleMotor.AngleToReachTop);
   }
 
 /* 
@@ -38,6 +38,6 @@ public class BallDropOnForHigh extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReach) <= BallDroppingConstants.AngleTolarance;
+    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReachTop) <= BallDroppingConstants.AngleTolarance;
   }
 }

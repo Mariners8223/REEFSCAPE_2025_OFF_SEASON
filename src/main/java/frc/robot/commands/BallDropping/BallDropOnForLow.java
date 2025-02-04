@@ -21,8 +21,8 @@ public class BallDropOnForLow extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ballDrop.setDropperMotorPower(-DropperMotor.PowerToReach);
-    ballDrop.reachAngle(AngleMotor.AngleToReach);
+    ballDrop.setDropperMotorPower(DropperMotor.PowerToReach);
+    ballDrop.reachAngle(AngleMotor.AngleToReachBootom);
   }
 
 /* 
@@ -39,6 +39,6 @@ public class BallDropOnForLow extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReach) <= BallDroppingConstants.AngleTolarance;
+    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReachBootom) <= BallDroppingConstants.AngleTolarance;
   }
 }

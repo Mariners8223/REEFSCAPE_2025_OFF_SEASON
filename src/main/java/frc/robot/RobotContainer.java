@@ -29,6 +29,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.BallDropping.BallDroppingSYSID;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -68,8 +69,14 @@ public class RobotContainer {
         //driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new BallDropOnForHigh(ballDropping));
-        driveController.povDown().onTrue(new BallDropOnForLow(ballDropping));
-        driveController.povDownLeft().onTrue(new BallDropOff(ballDropping));
+        driveController.povRight().onTrue(new BallDropOnForLow(ballDropping));
+        driveController.povDown().onTrue(new BallDropOff(ballDropping));
+
+        driveController.cross().whileTrue(ballDroppingSYSID.getBallDroppingDynamic(Direction.kForward));
+        driveController.square().whileTrue(ballDroppingSYSID.getBallDroppingDynamic(Direction.kReverse));
+
+        driveController.circle().whileTrue(ballDroppingSYSID.getBallDroppingQuasistatic(Direction.kForward));
+        driveController.triangle().whileTrue(ballDroppingSYSID.getBallDroppingQuasistatic(Direction.kReverse));
     }
 
 

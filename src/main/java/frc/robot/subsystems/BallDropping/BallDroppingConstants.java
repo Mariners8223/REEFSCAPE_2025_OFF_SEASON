@@ -11,23 +11,26 @@ public class BallDroppingConstants {
     public class AngleMotor{
         //TODO: Find all constants!!!
 
-        public static final double AngleToReach = 0.25; 
+        public static final double AngleToReachTop = 0.38; 
+        public static final double AngleToReachBootom = 0.22;
         public static final double AngleToReset = 0; 
 
-        public static final ControllerLocation location = null;
-        public static final int id = 0;
+        public static final ControllerLocation location = ControllerLocation.MOTOR;
+        public static final int id = 24;
         public static final boolean isBrushless = true;
-        public static final PIDFGains PID_gains = null;
-        public static final double gearRatio = 1;
+        public static final double gearRatio = 9;
+        public static final boolean isInverted = true;
+
+        public static final double motorFeedForward = 0.2;
         
-        public static final PIDFGains AnglePID = new PIDFGains(0,0,0);
+        public static final PIDFGains AnglePID = new PIDFGains(0.7,0,0);
     }
 
     public static final double AngleTolarance = 0.01;
 
     public class DropperMotor{
-        public static final double PowerToReach = 1;//what power to use for the drop
-        public static final int id = 0;
+        public static final double PowerToReach = -0.8;//what power to use for the drop
+        public static final int id = 20;
         public static final double maxDropperPower = 0.8;
     }
 }
