@@ -48,6 +48,8 @@ public class ElevatorIOVortex implements ElevatorIO {
             ElevatorConstants.FollowMotor.MOTOR_ID, ElevatorConstants.FollowMotor.IS_BRUSHLESS, ElevatorConstants.FollowMotor.MOTOR_TYPE);
         
         motor.setMotorAsFollower(this.motorLead, ElevatorConstants.FollowMotor.IS_INVERTED);
+
+        motor.setMotorIdleMode(true);
         return motor;
     }
 

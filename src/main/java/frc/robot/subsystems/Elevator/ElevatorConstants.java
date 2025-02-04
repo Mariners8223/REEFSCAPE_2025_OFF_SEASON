@@ -16,7 +16,7 @@ public class ElevatorConstants {
         L1(0.61),
         L2(0.89),
         L3(1.20),
-        L4(1.88);
+        L4(1.9);
 
         private double height;
 
@@ -58,11 +58,11 @@ public class ElevatorConstants {
     public static final double X_ON_ROBOT = 0;
     public static final double Y_ON_ROBOT = 0;
 
-    public static final double kV = 1.7535;
-    public static final double kA = 0.11536;
+    public static final double kV = 1.6819;
+    public static final double kA = 0.24043;
     public static final double ELEVATOR_TOLERANCE = 0.1;
 
-    public static final Constraints PROFILE = new Constraints(2.3, 5);
+    public static final Constraints PROFILE = new Constraints(2.3, 2.5);
 
     public static final double ELEVATOR_WEIGHT = 1;
     public static final double PULLEY_RADIUS = 0.024;
@@ -74,12 +74,12 @@ public class ElevatorConstants {
     public static final double SOFT_MAXIMUM = ElevatorLevel.L4.getHeight();
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
-        7,
+        1,
         0,
         0,
         0,
         ELEVATOR_TOLERANCE,
         0.01);
-    public static final double FEED_FORWARD = 0.20108;
-    public static final double STATIC_FEEDFORWARD = 0.20595;
+    public static final double FEED_FORWARD = 0.38946;
+    public static final double STATIC_FEEDFORWARD = 0.30782;
 }

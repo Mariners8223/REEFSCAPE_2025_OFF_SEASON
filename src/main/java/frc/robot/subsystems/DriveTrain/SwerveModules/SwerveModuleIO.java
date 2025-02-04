@@ -93,15 +93,18 @@ public abstract class SwerveModuleIO{
         CANcoder canCoder = new CANcoder(absEncoderID);
 
         CANcoderConfiguration config = new CANcoderConfiguration();
-        config.FutureProofConfigs = false;
+        canCoder.getConfigurator().apply(config);
+
+        config.FutureProofConfigs = true;
 
         config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.5;
+
         config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
         config.MagnetSensor.MagnetOffset = -absoluteEncoderZeroOffset;
 
         canCoder.getConfigurator().apply(config);
 
-        canCoder.setPosition(canCoder.getAbsolutePosition().getValueAsDouble());
+        // canCoder.setPosition(canCoder.getAbsolutePosition().getValueAsDouble());
 
         canCoder.getPosition().setUpdateFrequency(updateRate);
         canCoder.getVelocity().setUpdateFrequency(updateRate);
