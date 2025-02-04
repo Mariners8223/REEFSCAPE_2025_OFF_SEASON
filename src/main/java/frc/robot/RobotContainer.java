@@ -47,7 +47,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        // driveBase = new DriveBase();
+        driveBase = new DriveBase();
         elevator = new Elevator();
 
         // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
