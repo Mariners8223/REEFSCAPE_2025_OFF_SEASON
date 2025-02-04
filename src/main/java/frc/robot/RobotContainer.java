@@ -28,15 +28,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.moveFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
-import frc.robot.subsystems.Elevator.Elevator;
-import frc.robot.subsystems.Elevator.ElevatorSYSID;
-import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.FunnelMotor;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
@@ -46,8 +42,6 @@ public class RobotContainer {
     public static DriveBase driveBase;
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
-    public static Elevator elevator;
-    public static ElevatorSYSID elevatorSYSID;
 
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
@@ -57,13 +51,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        // driveBase = new DriveBase();
-        elevator = new Elevator();
-        // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
-        elevatorSYSID = new ElevatorSYSID(elevator);
+        //driveBase = new DriveBase();
+        //driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
-        endEffectorSYSID = new EndEffectorSYSID(endEffector);
         endEffector = new EndEffector();
+        endEffectorSYSID = new EndEffectorSYSID(endEffector);
         endEffector.setLoadedValue(false);
 
         configureBindings();
@@ -72,24 +64,12 @@ public class RobotContainer {
 
         SmartDashboard.putData(field);
 
-        // configChooser();
+        // configChoosr();
     }
 
 
     private void configureBindings() {
-        // driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        driveController.povUp().onTrue(new MoveToLevel(elevator, ElevatorLevel.L4));
-        driveController.povDown().onTrue(new MoveToLevel(elevator, ElevatorLevel.Bottom));
-        driveController.povLeft().onTrue(new MoveToLevel(elevator, ElevatorLevel.L3));
-        driveController.povRight().onTrue(new MoveToLevel(elevator, ElevatorLevel.L2));
-
-
-        driveController.triangle().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kForward));
-        driveController.cross().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kReverse));
-
-        driveController.circle().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kReverse));
+        //driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new Intake(endEffector).onlyIf(() -> !endEffector.isGpLoaded()));
         driveController.povDown().onTrue(new Eject(MotorPower.L1, endEffector).onlyIf(endEffector::isGpLoaded));
