@@ -27,6 +27,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
@@ -35,14 +37,17 @@ public class RobotContainer {
     public static CommandPS5Controller driveController;
     public static DriveBaseSYSID driveBaseSYSID;
 
+    public static Climb climb;
+
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        driveBase = new DriveBase();
+        climb = new Climb();
+        // driveBase = new DriveBase();
 
-        driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
         configureBindings();
 
@@ -50,12 +55,13 @@ public class RobotContainer {
 
         SmartDashboard.putData(field);
 
-        configChooser();
+        // configChooser();
     }
 
 
     private void configureBindings() {
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
+        driveController.cross().whileTrue(new ClimbCommand(climb));
+        // driveController.options().onTrue(driveBase.resetOnlyDirection());
     }
 
 

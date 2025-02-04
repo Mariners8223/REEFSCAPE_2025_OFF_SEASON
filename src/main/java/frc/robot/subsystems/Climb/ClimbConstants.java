@@ -13,7 +13,7 @@ public class ClimbConstants {
     public static final double CLIMB_POWER = -0.35;
     public static final double SOFT_MINIMUM = -0.8; // TODO: Fix
     public static final double SOFT_MAXIMUM = 0;
-    public static final boolean IS_INVERTED = false;
+    public static final boolean IS_INVERTED = true;
     public static final double START_POSITION = 0.125;
     public static final double MOMENT_OF_INERTIA = 1;
 }

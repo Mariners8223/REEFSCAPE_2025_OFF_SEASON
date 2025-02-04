@@ -24,7 +24,7 @@ public class ClimbCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (Timer.getMatchTime() < 120) cancel();
+    // if (Timer.getMatchTime() < 120) cancel();
     climb.setMotorPower(ClimbConstants.CLIMB_POWER);
   }
 
@@ -41,6 +41,7 @@ public class ClimbCommand extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return climb.isAtLimit();
+    // return climb.isAtLimit();
+    return false;
   }
 }
