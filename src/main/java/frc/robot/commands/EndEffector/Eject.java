@@ -35,7 +35,6 @@ public class Eject extends Command {
     endEffector.setRightMotorPower(motorPower.rightMotorPower);
 
     startTime = RobotController.getMeasureTime().in(Units.Seconds);
-    Logger.recordOutput("shit time", RobotController.getMeasureTime().in(Units.Seconds));
   }
 
   @Override

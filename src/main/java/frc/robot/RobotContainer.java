@@ -28,11 +28,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.moveFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.FunnelMotor;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
@@ -46,6 +49,7 @@ public class RobotContainer {
     public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
 
+    public static Elevator elevator;
     public static EndEffector endEffector;
     public static EndEffectorSYSID endEffectorSYSID;
 
@@ -53,9 +57,10 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(0);
         //driveBase = new DriveBase();
         //driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        elevator = new Elevator();
 
         endEffector = new EndEffector();
-        endEffectorSYSID = new EndEffectorSYSID(endEffector);
+        // endEffectorSYSID = new EndEffectorSYSID(endEffector);
         endEffector.setLoadedValue(false);
 
         configureBindings();
@@ -73,15 +78,21 @@ public class RobotContainer {
 
         driveController.povUp().onTrue(new Intake(endEffector).onlyIf(() -> !endEffector.isGpLoaded()));
         driveController.povDown().onTrue(new Eject(MotorPower.L1, endEffector).onlyIf(endEffector::isGpLoaded));
-        driveController.povRight().onTrue(new moveFunnel(endEffector, FunnelMotor.CLIMB_POSITION));
-        driveController.povLeft().onTrue(new moveFunnel(endEffector, FunnelMotor.COLLECT_POSITION));
+        driveController.povRight().onTrue(new Eject(MotorPower.L2_3, endEffector).onlyIf(endEffector::isGpLoaded));
+        driveController.povLeft().onTrue(new Eject(MotorPower.L4, endEffector).onlyIf(endEffector::isGpLoaded));
+        // driveController.povRight().onTrue(new moveFunnel(endEffector, FunnelMotor.CLIMB_POSITION));
+        // driveController.povLeft().onTrue(new moveFunnel(endEffector, FunnelMotor.COLLECT_POSITION));
         
+        driveController.cross().onTrue(new MoveToLevel(elevator, ElevatorLevel.L2));
+        driveController.circle().onTrue(new MoveToLevel(elevator, ElevatorLevel.L3));
+        driveController.square().onTrue(new MoveToLevel(elevator, ElevatorLevel.L4));
+        driveController.triangle().onTrue(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
-        driveController.triangle().whileTrue(endEffectorSYSID.getEndEffectorDynamic(Direction.kForward));
-        driveController.cross().whileTrue(endEffectorSYSID.getEndEffectorDynamic(Direction.kReverse));
+        // driveController.triangle().whileTrue(endEffectorSYSID.getEndEffectorDynamic(Direction.kForward));
+        // driveController.cross().whileTrue(endEffectorSYSID.getEndEffectorDynamic(Direction.kReverse));
 
-        driveController.circle().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kForward));
-        driveController.square().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kReverse));
+        // driveController.circle().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kForward));
+        // driveController.square().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kReverse));
     }
 
 

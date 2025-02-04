@@ -14,9 +14,9 @@ public class ElevatorConstants {
     public enum ElevatorLevel{
         Bottom(0.60),
         L1(0.61),
-        L2(0.89),
+        L2(0.85),
         L3(1.20),
-        L4(1.9);
+        L4(1.92);
 
         private double height;
 
@@ -62,7 +62,7 @@ public class ElevatorConstants {
     public static final double kA = 0.24043;
     public static final double ELEVATOR_TOLERANCE = 0.1;
 
-    public static final Constraints PROFILE = new Constraints(2.3, 2.5);
+    public static final Constraints PROFILE = new Constraints(2.3, 8);
 
     public static final double ELEVATOR_WEIGHT = 1;
     public static final double PULLEY_RADIUS = 0.024;
@@ -74,7 +74,7 @@ public class ElevatorConstants {
     public static final double SOFT_MAXIMUM = ElevatorLevel.L4.getHeight();
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
-        1,
+        1.5,
         0,
         0,
         0,
