@@ -19,16 +19,17 @@ public class EndEffectorIOReal implements EndEffectorIO {
 
 
     public EndEffectorIOReal(){
-        RightMotor = configueEndEffectorMotor(EndEffectorConstants.rightID);
-        LeftMotor = configueEndEffectorMotor(EndEffectorConstants.leftID);
+        RightMotor = configueEndEffectorMotor(EndEffectorConstants.rightID, true);
+        LeftMotor = configueEndEffectorMotor(EndEffectorConstants.leftID, false);
         FunnelMotor = configueFunnelMotor();
         beamBreak = new DigitalInput(EndEffectorConstants.beamBreakPort);
 
         resetFunnelEncoder();
     }
     
-    private VictorSPX configueEndEffectorMotor(int ID){
+    private VictorSPX configueEndEffectorMotor(int ID, boolean isInverted){
         VictorSPX motor = new VictorSPX(ID);
+        motor.setInverted(isInverted);
         return motor;
     }
 

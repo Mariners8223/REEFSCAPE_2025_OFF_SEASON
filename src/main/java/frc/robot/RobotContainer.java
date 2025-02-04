@@ -51,11 +51,11 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        driveBase = new DriveBase();
-        driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        //driveBase = new DriveBase();
+        //driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
-        endEffectorSYSID = new EndEffectorSYSID(endEffector);
         endEffector = new EndEffector();
+        endEffectorSYSID = new EndEffectorSYSID(endEffector);
         endEffector.setLoadedValue(false);
 
         configureBindings();
@@ -64,12 +64,12 @@ public class RobotContainer {
 
         SmartDashboard.putData(field);
 
-        configChooser();
+        // configChoosr();
     }
 
 
     private void configureBindings() {
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
+        //driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new Intake(endEffector).onlyIf(() -> !endEffector.isGpLoaded()));
         driveController.povDown().onTrue(new Eject(MotorPower.L1, endEffector).onlyIf(endEffector::isGpLoaded));

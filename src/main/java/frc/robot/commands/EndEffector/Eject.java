@@ -6,6 +6,9 @@ package frc.robot.commands.EndEffector;
 
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -32,6 +35,7 @@ public class Eject extends Command {
     endEffector.setRightMotorPower(motorPower.rightMotorPower);
 
     startTime = RobotController.getMeasureTime().in(Units.Seconds);
+    Logger.recordOutput("shit time", RobotController.getMeasureTime().in(Units.Seconds));
   }
 
   @Override
