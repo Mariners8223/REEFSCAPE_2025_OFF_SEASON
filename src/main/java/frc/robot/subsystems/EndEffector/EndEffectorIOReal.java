@@ -39,7 +39,7 @@ public class EndEffectorIOReal implements EndEffectorIO {
         motor.setMotorInverted(EndEffectorConstants.FunnelMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
 
-        motor.setMaxMinOutput(3, 3);
+        motor.setMaxMinOutput(6, 3);
         return motor;
     }
 

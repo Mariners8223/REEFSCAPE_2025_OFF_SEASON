@@ -42,8 +42,11 @@ public class EndEffectorConstants {
         public static final boolean IS_INVERTED = true;
 
         public static final PIDFGains PID_GAINS = new PIDFGains(
-            1.5,
+            3,
             0,
+            1,
+            0,
+            0.1,
             0);
         public static final double GEAR_RATIO = 3;
 
