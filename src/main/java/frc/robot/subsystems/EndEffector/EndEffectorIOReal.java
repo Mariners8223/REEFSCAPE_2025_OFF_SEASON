@@ -38,6 +38,8 @@ public class EndEffectorIOReal implements EndEffectorIO {
             EndEffectorConstants.FunnelMotor.MOTOR_ID, EndEffectorConstants.FunnelMotor.PID_GAINS, EndEffectorConstants.FunnelMotor.GEAR_RATIO);
         motor.setMotorInverted(EndEffectorConstants.FunnelMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
+
+        motor.setMaxMinOutput(3, 3);
         return motor;
     }
 
