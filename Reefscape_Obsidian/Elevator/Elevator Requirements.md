@@ -2,4 +2,3 @@
 - Move up and down according to setpoint
 - Reset encoder at start of match
 - Stay in place
-- 
