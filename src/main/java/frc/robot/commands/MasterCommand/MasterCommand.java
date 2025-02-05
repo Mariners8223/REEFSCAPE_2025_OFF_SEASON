@@ -1,12 +1,14 @@
 package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.commands.BallDropping.Cycle.BallDropHigh;
 import frc.robot.commands.BallDropping.Cycle.BallDropLow;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.YeetFunnel;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -52,9 +54,8 @@ public class MasterCommand extends Command {
         Command adjustmentPhase = new ParallelCommandGroup(
                 homeToReef,
                 moveElevatorCommand,
-                createBallDropCommand(ballDropping).onlyIf(() ->
-                        shouldDropBall && checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL) &&
-                                targetReef.isBallDropInSamePose())
+                createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
+                        checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL))
         );
 
         // eject phase (releasing the game piece)
@@ -66,34 +67,44 @@ public class MasterCommand extends Command {
         // the main command
         coralCommand = new SequentialCommandGroup(
                 pathCommand,
-                createBallDropCommand(ballDropping).onlyIf(() ->
-                        (shouldDropBall && checkBallDropTime(RobotAutoConstants.BallDropTime.BEFORE)) ||
-                                !targetReef.isBallDropInSamePose()), // ball drop before the reef
+                createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
+                        checkBallDropTime(RobotAutoConstants.BallDropTime.BEFORE)),// ball drop before the reef
                 adjustmentPhase,
                 ejectCommand,
                 elevatorToHome,
-                createBallDropCommand(ballDropping).onlyIf(() ->
-                        shouldDropBall && checkBallDropTime(RobotAutoConstants.BallDropTime.AFTER) &&
-                                targetReef.isBallDropInSamePose()) // ball drop after the reef
+                createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
+                        checkBallDropTime(RobotAutoConstants.BallDropTime.AFTER)) // ball drop after the reef
         );
     }
 
     private boolean checkBallDropTime(RobotAutoConstants.BallDropTime time) {
-        return getBallDropTime(level) == time;
+        return getBallDropTime(level, targetReef.isBallDropInSamePose(), targetReef.isBallInUpPosition()) == time
+                && shouldDropBall;
     }
 
-    private RobotAutoConstants.BallDropTime getBallDropTime(ElevatorConstants.ElevatorLevel level) {
-        return switch (level) {
-            case L1 -> RobotAutoConstants.BallDropTime.AFTER;
-            case L4 -> RobotAutoConstants.BallDropTime.PARALLEL;
-            default -> RobotAutoConstants.BallDropTime.BEFORE;
-        };
+    private RobotAutoConstants.BallDropTime getBallDropTime(ElevatorConstants.ElevatorLevel level, boolean samePosition, boolean ballDropUp) {
+        if (!samePosition) return RobotAutoConstants.BallDropTime.BEFORE;
+
+        if (level == ElevatorConstants.ElevatorLevel.L4 || level == ElevatorConstants.ElevatorLevel.L1)
+            return RobotAutoConstants.BallDropTime.PARALLEL;
+
+        if (level == ElevatorConstants.ElevatorLevel.L3) return RobotAutoConstants.BallDropTime.AFTER;
+
+        if (ballDropUp) return RobotAutoConstants.BallDropTime.PARALLEL;
+        else {
+            new Alert("illegal ball drop", Alert.AlertType.kWarning).set(true);
+
+            return RobotAutoConstants.BallDropTime.NEVER;
+        }
     }
 
-    private Command createBallDropCommand(BallDropping ballDropping) {
+    private Command createBallDropCommand(BallDropping ballDropping, EndEffector endEffector) {
         return new SequentialCommandGroup(
                 new BallDropLow(ballDropping).onlyIf(() -> !targetReef.isBallInUpPosition()),
-                new BallDropHigh(ballDropping).onlyIf(() -> targetReef.isBallInUpPosition())
+                new SequentialCommandGroup(
+                        new BallDropHigh(ballDropping),
+                        new YeetFunnel(endEffector)
+                ).onlyIf(() -> targetReef.isBallInUpPosition())
         );
     }
 

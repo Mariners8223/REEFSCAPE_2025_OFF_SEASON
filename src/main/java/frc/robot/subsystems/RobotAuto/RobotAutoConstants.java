@@ -18,6 +18,7 @@ public class RobotAutoConstants {
     public enum BallDropTime{
         BEFORE,
         PARALLEL,
-        AFTER
+        AFTER,
+        NEVER
     }
 }
