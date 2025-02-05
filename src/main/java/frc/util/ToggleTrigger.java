@@ -8,12 +8,15 @@ public class ToggleTrigger {
     private boolean lastState = false;
 
     public ToggleTrigger(Trigger trigger, Command command) {
+
+        Command fullCommand = command.andThen(new InstantCommand(() -> lastState = false));
+
         Runnable action = () -> {
             if (lastState) {
-                command.cancel();
+                fullCommand.cancel();
                 lastState = false;
             } else {
-                command.schedule();
+                fullCommand.schedule();
                 lastState = true;
             }
         };
