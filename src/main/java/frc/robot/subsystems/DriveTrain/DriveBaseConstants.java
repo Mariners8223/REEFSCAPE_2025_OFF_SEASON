@@ -30,9 +30,7 @@ public class DriveBaseConstants {
                 PATH_ERROR_TOLERANCE,
                 PATH_ERROR_SPIKE_TOLERANCE,
                 DISTANCE_BETWEEN_WHEELS,
-                Constants.ROBOT_TYPE == RobotType.COMPETITION ?
-                        CompBotConstants.DRIVE_MOTOR_MODEL :
-                        DevBotConstants.DRIVE_MOTOR_MODEL,
+                CompBotConstants.DRIVE_MOTOR_MODEL,
                 DISTANCE_BETWEEN_WHEELS,
                 PIGEON_ID);
 
