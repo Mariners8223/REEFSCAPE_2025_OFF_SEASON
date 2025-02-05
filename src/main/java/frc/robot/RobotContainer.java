@@ -55,7 +55,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        //driveBase = new DriveBase();
+        driveBase = new DriveBase();
         //driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
         elevator = new Elevator();
 
@@ -74,7 +74,7 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        //driveController.options().onTrue(driveBase.resetOnlyDirection());
+        driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new Intake(endEffector).onlyIf(() -> !endEffector.isGpLoaded()));
         driveController.povDown().onTrue(new Eject(MotorPower.L1, endEffector).onlyIf(endEffector::isGpLoaded));
