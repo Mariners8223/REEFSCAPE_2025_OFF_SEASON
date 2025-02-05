@@ -91,11 +91,9 @@ public class MasterCommand extends Command {
         if (level == ElevatorConstants.ElevatorLevel.L3) return RobotAutoConstants.BallDropTime.AFTER;
 
         if (ballDropUp) return RobotAutoConstants.BallDropTime.PARALLEL;
-        else {
-            new Alert("illegal ball drop", Alert.AlertType.kWarning).set(true);
 
-            return RobotAutoConstants.BallDropTime.NEVER;
-        }
+        else return RobotAutoConstants.BallDropTime.NEVER;
+
     }
 
     private Command createBallDropCommand(BallDropping ballDropping, EndEffector endEffector) {
@@ -114,6 +112,13 @@ public class MasterCommand extends Command {
         shouldDropBall = shouldDropBallSupplier.get(); // getting the ball drop status
         level = levelSupplier.get(); // getting the target level
         Pose2d pathFinderTarget = targetReef.getPose(); // setting the target pose for the path command
+
+        if(checkBallDropTime(RobotAutoConstants.BallDropTime.NEVER)){
+            new Alert("illegal ball drop", Alert.AlertType.kWarning).set(true);
+
+            cancel();
+            return;
+        }
 
 
         if (shouldDropBall && !targetReef.isBallDropInSamePose()) {
