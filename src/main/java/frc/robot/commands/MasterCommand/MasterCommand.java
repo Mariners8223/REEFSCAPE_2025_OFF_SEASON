@@ -46,7 +46,7 @@ public class MasterCommand extends Command {
         this.levelSupplier = levelSupplier;
 
         // pathfinder phase (finding the path to the selected reef)
-        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1.getPose());
+        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1.getPose()); // setting the default target pose
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1.getPose());
