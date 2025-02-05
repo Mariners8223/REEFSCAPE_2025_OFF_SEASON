@@ -62,16 +62,16 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandXboxController(0);
-        operatorController = new CommandPS4Controller(1);
+        // operatorController = new CommandPS4Controller(1);
 
         driveBase = new DriveBase();
-        elevator = new Elevator();
-        endEffector = new EndEffector();
-        ballDropping = new BallDropping();
-        robotAuto = new RobotAuto(driveBase, elevator, endEffector);
-        vision = new Vision(driveBase::addVisionMeasurement);
+        // elevator = new Elevator();
+        // endEffector = new EndEffector();
+        // ballDropping = new BallDropping();
+        // robotAuto = new RobotAuto(driveBase, elevator, endEffector);
+        // vision = new Vision(driveBase::addVisionMeasurement);
 
-        driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
         field = new Field2d();
         SmartDashboard.putData(field);
