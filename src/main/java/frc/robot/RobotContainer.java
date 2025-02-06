@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
@@ -56,6 +57,12 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
+
+        driveController.cross().whileTrue(driveBaseSYSID.getSteerMotorsRoutineDynamic(Direction.kForward));
+        driveController.triangle().whileTrue(driveBaseSYSID.getSteerMotorsRoutineDynamic(Direction.kReverse));
+
+        driveController.square().whileTrue(driveBaseSYSID.getSteerMotorsRoutineQuasistatic(Direction.kForward));
+        driveController.circle().whileTrue(driveBaseSYSID.getSteerMotorsRoutineQuasistatic(Direction.kReverse));
     }
 
 
