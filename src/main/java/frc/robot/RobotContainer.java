@@ -45,7 +45,7 @@ public class RobotContainer {
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
         climb = new Climb();
-        // driveBase = new DriveBase();
+        driveBase = new DriveBase();
 
         // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
 
@@ -61,7 +61,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         driveController.cross().whileTrue(new ClimbCommand(climb));
-        // driveController.options().onTrue(driveBase.resetOnlyDirection());
+        driveController.options().onTrue(driveBase.resetOnlyDirection());
     }
 
 
