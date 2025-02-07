@@ -58,11 +58,14 @@ public class RobotContainer {
     private void configureBindings() {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
 
-        driveController.cross().whileTrue(driveBaseSYSID.getSteerMotorsRoutineDynamic(Direction.kForward));
-        driveController.triangle().whileTrue(driveBaseSYSID.getSteerMotorsRoutineDynamic(Direction.kReverse));
+        driveController.cross().onTrue(driveBase.startModuleSteerCalibration());
+        driveController.square().onTrue(driveBase.stopModuleSteerCalibration());
 
-        driveController.square().whileTrue(driveBaseSYSID.getSteerMotorsRoutineQuasistatic(Direction.kForward));
-        driveController.circle().whileTrue(driveBaseSYSID.getSteerMotorsRoutineQuasistatic(Direction.kReverse));
+        // driveController.cross().whileTrue(driveBaseSYSID.getSteerMotorsRoutineDynamic(Direction.kForward));
+        // driveController.triangle().whileTrue(driveBaseSYSID.getSteerMotorsRoutineDynamic(Direction.kReverse));
+
+        // driveController.square().whileTrue(driveBaseSYSID.getSteerMotorsRoutineQuasistatic(Direction.kForward));
+        // driveController.circle().whileTrue(driveBaseSYSID.getSteerMotorsRoutineQuasistatic(Direction.kReverse));
     }
 
 

@@ -9,26 +9,26 @@ public enum DevBotConstants {
     FRONT_LEFT(6, 10, 14,
             false, false, -0.361328125,
             new PIDFGains(3, 0, 0, 1.8749), //Drive mtor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.13777, 1.8887, 0.18407, 0.19704, 1.7025, 0.10185),
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.13777, 1.8887, 0.18407, 0.35464, 1.7245, 0.23146),
 
     FRONT_RIGHT(12, 4, 5,
     false, false, 0.09130859375,
             new PIDFGains(3, 0, 0, 1.8552), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.063408, 1.8552, 0.10686, 0.19704, 1.7025, 0.10185),
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.063408, 1.8552, 0.10686, 0.28713, 1.6793, 0.17791),
 
     BACK_LEFT(9, 7, 11,
     false, false, -0.00244140625,
             new PIDFGains(3, 0, 0, 1.9608), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.19252, 1.9943, 0.14615, 0.2, 1.7386, 0.12048  ),
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.19252, 1.9943, 0.14615, 0.22659, 1.7941, 0.39017),
 
     BACK_RIGHT(3, 13, 8,
     false, false, -0.3974609375,
             new PIDFGains(3, 0, 0, 1.8443), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.081338, 1.8486, 0.087161, 0.14, 1.602, 0.11135);
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.081338, 1.8486, 0.087161, 0.43868, 1.8036, 0.35004);
 
     public static final double DRIVE_GEAR_RATIO = 5.14;
     public static final double STEER_GEAR_RATIO = 12.8;
