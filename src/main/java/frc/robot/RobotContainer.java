@@ -63,11 +63,11 @@ public class RobotContainer {
 
         
 
-        driveController.cross().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kForward));
-        driveController.triangle().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kReverse));
+        driveController.cross().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kForward));
+        driveController.triangle().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kReverse));
 
-        driveController.square().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kForward));
-        driveController.circle().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kReverse));
+        driveController.square().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kForward));
+        driveController.circle().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kReverse));
     }
 
 
@@ -76,7 +76,7 @@ public class RobotContainer {
     }
 
 
-    
+
 
 
 

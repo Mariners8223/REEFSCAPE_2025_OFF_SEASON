@@ -38,7 +38,7 @@ public class DriveBaseConstants {
                 PIGEON_ID);
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
-                20,
+                53.3,
                 6.883,
                 MODULE_CONFIG,
                 MODULE_TRANSLATIONS);
