@@ -8,29 +8,33 @@ import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 public class BallDroppingConstants {
-    public class AngleMotor{
+    public static class AngleMotor{
         //TODO: Find all constants!!!
 
-        public static final double AngleToReachTop = 0.38; 
-        public static final double AngleToReachBootom = 0.22;
-        public static final double AngleToReset = 0; 
+        public static final double ANGLE_TO_REACH_TOP = 0.38;
+        public static final double ANGLE_TO_REACH_BOTTOM = 0.22;
+        public static final double ANGLE_TO_RESET = 0;
 
-        public static final ControllerLocation location = ControllerLocation.MOTOR;
-        public static final int id = 24;
-        public static final boolean isBrushless = true;
-        public static final double gearRatio = 9;
-        public static final boolean isInverted = true;
+        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
+        public static final int ID = 24;
+        public static final double GEAR_RATIO = 9;
+        public static final boolean IS_INVERTED = true;
 
-        public static final double motorFeedForward = 0.2;
-        
-        public static final PIDFGains AnglePID = new PIDFGains(0.7,0,0);
+        public static final double MOTOR_FEED_FORWARD = 0.2;
+
+        public static final double ANGLE_TOLERANCE = 0.01;
+
+        public static final PIDFGains ANGLE_PID = new PIDFGains(0.7,0,0);
     }
 
-    public static final double AngleTolarance = 0.01;
 
-    public class DropperMotor{
-        public static final double PowerToReach = -0.8;//what power to use for the drop
-        public static final int id = 20;
-        public static final double maxDropperPower = 0.8;
+    public static class DropperMotor{
+        public static final double POWER_TO_REACH = 0.8;//what power to use for the drop
+        public static final boolean IS_INVERTED = false;
+        public static final int ID = 20;
+        public static final double MAX_DROPPER_POWER = 0.8;
     }
+
+    public static double HIGH_BALL_DROP_TIME = 1;
+    public static double LOW_BALL_DROP_TIME = 1;
 }

@@ -10,10 +10,10 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class BallDropping extends SubsystemBase{
     BallDroppingIO io;
-    balldroppingInputsAutoLogged inputs = new balldroppingInputsAutoLogged();
+    BallDroppingInputsAutoLogged inputs = new BallDroppingInputsAutoLogged();
 
     public BallDropping(){
-        io = new BallDroppinIOReal();
+        io = new BallDroppingIOReal();
 
         this.resetAngleEncoder();
     }
@@ -40,10 +40,6 @@ public class BallDropping extends SubsystemBase{
 
     public void stopDropperMotor(){
         setDropperMotorPower(0);
-    }
-
-    public double getDropperMotorPower(){
-        return inputs.dropperPower;
     }
 
     //update logs

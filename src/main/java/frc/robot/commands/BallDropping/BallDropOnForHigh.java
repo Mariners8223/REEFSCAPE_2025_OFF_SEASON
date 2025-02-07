@@ -6,7 +6,6 @@ package frc.robot.commands.BallDropping;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.BallDropping.BallDropping;
-import frc.robot.subsystems.BallDropping.BallDroppingConstants;
 import frc.robot.subsystems.BallDropping.BallDroppingConstants.AngleMotor;
 import frc.robot.subsystems.BallDropping.BallDroppingConstants.DropperMotor;
 
@@ -21,23 +20,13 @@ public class BallDropOnForHigh extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    ballDrop.setDropperMotorPower(DropperMotor.PowerToReach);
-    ballDrop.reachAngle(AngleMotor.AngleToReachTop);
+    ballDrop.setDropperMotorPower(DropperMotor.POWER_TO_REACH);
+    ballDrop.reachAngle(AngleMotor.ANGLE_TO_REACH_TOP);
   }
-
-/* 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
-
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {}
-*/
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(ballDrop.getAngle() - AngleMotor.AngleToReachTop) <= BallDroppingConstants.AngleTolarance;
+    return Math.abs(ballDrop.getAngle() - AngleMotor.ANGLE_TO_REACH_TOP) <= AngleMotor.ANGLE_TOLERANCE;
   }
 }

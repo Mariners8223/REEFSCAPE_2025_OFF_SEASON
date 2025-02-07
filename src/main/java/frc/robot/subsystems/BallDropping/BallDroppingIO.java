@@ -8,19 +8,18 @@ import org.littletonrobotics.junction.AutoLog;
 
 public interface BallDroppingIO {
     @AutoLog
-    public static class balldroppingInputs{
+    class BallDroppingInputs {
         double dropperPower;
         double angle;
     }
 
     //angle motor io
-    public void resetAngleEncoder();
-    public void reachAngle(double angleToReach);
+    void resetAngleEncoder();
+    void reachAngle(double angleToReach);
 
     //dropping motor io
-    public void setDropperMotorPower(double dropperPower);
-    public void stopDropperMotor();
-    public  void setVoltage(double voltage);
+    void setDropperMotorPower(double dropperPower);
+    void setVoltage(double voltage);
 
-    public void Update(balldroppingInputs inputs);
+    void Update(BallDroppingInputs inputs);
 }
