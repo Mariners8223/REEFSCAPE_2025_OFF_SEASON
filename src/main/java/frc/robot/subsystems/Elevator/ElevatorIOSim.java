@@ -43,8 +43,6 @@ public class ElevatorIOSim implements ElevatorIO{
 
 
     public void setVoltage(double voltage){ elevator.setInputVoltage(voltage); }
-    public double getVoltage() { return elevator.getInput().get(0, 0); }
-    public double getVelocity() { return elevator.getVelocityMetersPerSecond(); }
 
     public void Update(ElevatorInputs inputs){
         // elevator.setInput(pidController.calculate(elevator.getPositionMeters()));

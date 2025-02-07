@@ -11,17 +11,15 @@ import edu.wpi.first.math.geometry.Pose3d;
 public interface ElevatorIO 
 {
     @AutoLog
-    public static class ElevatorInputs{
+    class ElevatorInputs{
         Pose3d elevator3DPose;
         double elevatorHeight;
     }
 
-    public void resetMotorEncoder();
-    public void moveMotorByPosition(double position);
+    void resetMotorEncoder();
+    void moveMotorByPosition(double position);
 
-    public void setVoltage(double voltage);
-    public double getVoltage();
-    public double getVelocity();
+    void setVoltage(double voltage);
 
-    public void Update(ElevatorInputs inputs);
+    void Update(ElevatorInputs inputs);
 }

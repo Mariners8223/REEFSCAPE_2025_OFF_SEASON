@@ -44,8 +44,6 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setVoltage(double voltage) { io.setVoltage(voltage); }
-  public double getVoltage() {return io.getVoltage();}
-  public double getVelocity() { return io.getVelocity();}
 
   @Override
   public void periodic() {
@@ -55,11 +53,7 @@ public class Elevator extends SubsystemBase {
     currentLevel = ElevatorLevel.findNearestLevel(getCurrentHeight());
 
     Logger.recordOutput("Elevator/CurrentLevel", currentLevel == null ? "Unknown" : currentLevel.name());
-    Logger.recordOutput("Elevator/Current Command", this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "Null");
-
-    Logger.recordOutput("Elevator/SYSID/Voltage", getVoltage());
-    Logger.recordOutput("Elevator/SYSID/Position", getCurrentHeight());
-    Logger.recordOutput("Elevator/SYSID/Velocity", getVelocity());
+    Logger.recordOutput("Elevator/Current Command", this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "None");
   }
 }
 
