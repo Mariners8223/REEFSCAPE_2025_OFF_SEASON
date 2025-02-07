@@ -9,24 +9,24 @@ import org.littletonrobotics.junction.AutoLog;
 /** Add your docs here. */
 public interface EndEffectorIO {
     @AutoLog
-    public static class EndEffectorInputs{
+    class EndEffectorInputs{
         double rightPower;
         double leftPower;
         double funnelPosition;
         boolean beamBreakValue;
     }
 
-    public void setRightMotorPower(double powerToSet);
+    void setRightMotorPower(double powerToSet);
 
-    public void setLeftMotorPower(double powerToSet);
+    void setLeftMotorPower(double powerToSet);
 
-    public void resetFunnelEncoder();
+    void resetFunnelEncoder();
 
-    public void moveFunnel(double target);
+    void moveFunnel(double target);
 
-    public void setFunnelVoltage(double voltage);
+    void setFunnelVoltage(double voltage);
 
-    public void stopFunnel();
+    void stopFunnel();
     
-    public void Update(EndEffectorInputs inputs);  
+    void Update(EndEffectorInputs inputs);
 }

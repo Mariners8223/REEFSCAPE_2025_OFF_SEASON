@@ -24,7 +24,7 @@ public class EndEffectorIOSim implements EndEffectorIO{
             1,
             0.5,
             -Math.PI/6,
-            3/2 * Math.PI,
+            (double) 3 /2 * Math.PI,
             true,
             -Math.PI/6, 0);
         

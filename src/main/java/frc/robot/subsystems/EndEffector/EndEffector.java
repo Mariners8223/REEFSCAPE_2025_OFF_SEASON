@@ -11,32 +11,33 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 
 public class EndEffector extends SubsystemBase {
-  private final EndEffectorIO io;
-  private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
-  private boolean isGpLoaded;
+    private final EndEffectorIO io;
+    private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
+    private boolean isGpLoaded;
 
-  public EndEffector() {
-      if(Robot.isSimulation()){
-        io = new EndEffectorIOSim();
-      }
-      else{
-        io = new EndEffectorIOReal();
-      }
+    public EndEffector() {
+        if (Robot.isSimulation()) {
+            io = new EndEffectorIOSim();
+        } else {
+            io = new EndEffectorIOReal();
+        }
+
+        setLoadedValue(EndEffectorConstants.STARTS_WITH_GP);
     }
 
-  public void setRightMotorPower(double PowerToSet){
-    io.setRightMotorPower(PowerToSet);
-  }
-  
-  public void setLeftMotorPower(double PowerToSet){
-    io.setLeftMotorPower(PowerToSet);
-  }
+    public void setRightMotorPower(double PowerToSet) {
+        io.setRightMotorPower(PowerToSet);
+    }
 
-    public void moveFunnel(double target){
+    public void setLeftMotorPower(double PowerToSet) {
+        io.setLeftMotorPower(PowerToSet);
+    }
+
+    public void moveFunnel(double target) {
         io.moveFunnel(target);
     }
 
-    public void setFunnelVoltage(double voltage){
+    public void setFunnelVoltage(double voltage) {
         io.setFunnelVoltage(voltage);
     }
 
@@ -45,7 +46,7 @@ public class EndEffector extends SubsystemBase {
         io.setRightMotorPower(0);
     }
 
-    public void stopFunnelMotor(){
+    public void stopFunnelMotor() {
         io.stopFunnel();
     }
 
@@ -54,29 +55,21 @@ public class EndEffector extends SubsystemBase {
         isGpLoaded = value;
     }
 
-    public double getRightMotorPower(){
-        return inputs.rightPower;
-    }
-
-    public double getLeftMotorPower(){
-        return inputs.leftPower;
-    }
-
-    public double getFunnelPosition(){
+    public double getFunnelPosition() {
         return inputs.funnelPosition;
     }
 
-  public boolean isGpLoaded(){
-    return isGpLoaded;
-  }
+    public boolean isGpLoaded() {
+        return isGpLoaded;
+    }
 
-  public boolean isGpDetected(){
-    return inputs.beamBreakValue;
-  }
+    public boolean isGpDetected() {
+        return inputs.beamBreakValue;
+    }
 
-  @Override
-  public void periodic() {
-    io.Update(inputs);
-    Logger.processInputs(getName(), inputs);
-  }
+    @Override
+    public void periodic() {
+        io.Update(inputs);
+        Logger.processInputs(getName(), inputs);
+    }
 }
