@@ -20,6 +20,9 @@ public class DriveBaseConstants {
             new Translation2d(-DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2),
             new Translation2d(-DISTANCE_BETWEEN_WHEELS / 2, -DISTANCE_BETWEEN_WHEELS / 2)};
 
+    public static final double THETA_KS = 0.20501;
+    public static final double THETA_KV = 0.83139;
+    public static final double THETA_KA = 0.09286;
 
     public static final class PathPlanner {
         public static final double PATH_ERROR_TOLERANCE = 0.1; //the max error in position before pathPlanner replans the path in meters

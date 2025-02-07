@@ -70,9 +70,9 @@ public class DriveBaseSYSID {
 
         ThetaRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
-                    Units.Volts.of(0.5).per(Units.Second), //set if needed
+                    Units.Volts.of(0.4).per(Units.Second), //set if needed
                     Units.Volts.of(4), //set if needed
-                        null, //set if needed
+                        Units.Seconds.of(100), //set if needed
                         (state) -> Logger.recordOutput("SysIDStates/Theta", state.toString())
                 ),
                 new SysIdRoutine.Mechanism(
