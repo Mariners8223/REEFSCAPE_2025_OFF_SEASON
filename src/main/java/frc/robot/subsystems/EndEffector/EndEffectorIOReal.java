@@ -18,64 +18,66 @@ public class EndEffectorIOReal implements EndEffectorIO {
     private final DigitalInput beamBreak;
 
 
-    public EndEffectorIOReal(){
-        RightMotor = configueEndEffectorMotor(EndEffectorConstants.rightID, true);
-        LeftMotor = configueEndEffectorMotor(EndEffectorConstants.leftID, false);
-        FunnelMotor = configueFunnelMotor();
-        beamBreak = new DigitalInput(EndEffectorConstants.beamBreakPort);
+    public EndEffectorIOReal() {
+        RightMotor = configureEndEffectorMotor(EndEffectorConstants.RIGHT_ID, EndEffectorConstants.RIGHT_INVERTED);
+        LeftMotor = configureEndEffectorMotor(EndEffectorConstants.LEFT_ID, EndEffectorConstants.LEFT_INVERTED);
+        FunnelMotor = configureFunnelMotor();
+        beamBreak = new DigitalInput(EndEffectorConstants.BEAM_BREAK_PORT);
 
         resetFunnelEncoder();
     }
-    
-    private VictorSPX configueEndEffectorMotor(int ID, boolean isInverted){
+
+    private VictorSPX configureEndEffectorMotor(int ID, boolean isInverted) {
         VictorSPX motor = new VictorSPX(ID);
         motor.setInverted(isInverted);
         return motor;
     }
 
-    private MarinersTalonFX configueFunnelMotor(){
-        MarinersTalonFX motor = new MarinersTalonFX("Funnel Motor", EndEffectorConstants.FunnelMotor.CONTROLLER_LOCATION, 
-            EndEffectorConstants.FunnelMotor.MOTOR_ID, EndEffectorConstants.FunnelMotor.PID_GAINS, EndEffectorConstants.FunnelMotor.GEAR_RATIO);
+    private MarinersTalonFX configureFunnelMotor() {
+        MarinersTalonFX motor = new MarinersTalonFX("Funnel Motor", EndEffectorConstants.FunnelMotor.CONTROLLER_LOCATION,
+                EndEffectorConstants.FunnelMotor.MOTOR_ID, EndEffectorConstants.FunnelMotor.PID_GAINS, EndEffectorConstants.FunnelMotor.GEAR_RATIO);
         motor.setMotorInverted(EndEffectorConstants.FunnelMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
+
+        motor.setMaxMinOutput(6, 3);
         return motor;
     }
 
-    public void setRightMotorPower(double PowerToSet){
-        double realPower = MathUtil.clamp(PowerToSet,-EndEffectorConstants.MotorPower.maxMotorPower,
-        EndEffectorConstants.MotorPower.maxMotorPower);
+    public void setRightMotorPower(double PowerToSet) {
+        double realPower = MathUtil.clamp(PowerToSet, -EndEffectorConstants.MAX_MOTOR_POWER,
+                EndEffectorConstants.MAX_MOTOR_POWER);
 
-        RightMotor.set(VictorSPXControlMode.PercentOutput,realPower);
+        RightMotor.set(VictorSPXControlMode.PercentOutput, realPower);
     }
 
-    public void setLeftMotorPower(double PowerToSet){
-        double realPower = MathUtil.clamp(PowerToSet,-EndEffectorConstants.MotorPower.maxMotorPower,
-        EndEffectorConstants.MotorPower.maxMotorPower);
+    public void setLeftMotorPower(double PowerToSet) {
+        double realPower = MathUtil.clamp(PowerToSet, -EndEffectorConstants.MAX_MOTOR_POWER,
+                EndEffectorConstants.MAX_MOTOR_POWER);
 
-        LeftMotor.set(VictorSPXControlMode.PercentOutput,realPower);
+        LeftMotor.set(VictorSPXControlMode.PercentOutput, realPower);
     }
 
-    public void resetFunnelEncoder(){
+    public void resetFunnelEncoder() {
         FunnelMotor.resetMotorEncoder();
     }
 
-    public void moveFunnel(double target){
+    public void moveFunnel(double target) {
         FunnelMotor.setReference(target, MarinersSparkBase.ControlMode.Position);
     }
 
-    public void setFunnelVoltage(double voltage){
+    public void setFunnelVoltage(double voltage) {
         FunnelMotor.setVoltage(voltage);
     }
 
-    public void stopFunnel(){
+    public void stopFunnel() {
         FunnelMotor.stopMotor();
     }
 
-    public void Update(EndEffectorInputs inputs){
+    public void Update(EndEffectorInputs inputs) {
         inputs.rightPower = RightMotor.getMotorOutputPercent();
         inputs.leftPower = LeftMotor.getMotorOutputPercent();
         inputs.funnelPosition = FunnelMotor.getPosition();
-        inputs.beamBreakValue = EndEffectorConstants.beamBreakInverted ? !beamBreak.get() : beamBreak.get();
+        inputs.beamBreakValue = EndEffectorConstants.BEAM_BREAK_INVERTED != beamBreak.get();
     }
 
 }

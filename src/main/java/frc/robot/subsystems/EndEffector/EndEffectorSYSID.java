@@ -24,8 +24,8 @@ public class EndEffectorSYSID {
     public EndEffectorSYSID(EndEffector endEffector){
         routine = new SysIdRoutine(
             new Config(
-                Voltage.ofBaseUnits(0.5, Volts).per(Seconds),
-                Voltage.ofBaseUnits(2, Volts),
+                Voltage.ofBaseUnits(0.3, Volts).per(Seconds),
+                Voltage.ofBaseUnits(1, Volts),
                 Time.ofBaseUnits(100, Seconds),
                 (state) -> Logger.recordOutput("EndEffector/SYSID/State", state.toString())
             ),
