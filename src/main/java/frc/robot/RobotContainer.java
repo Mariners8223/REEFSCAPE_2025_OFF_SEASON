@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 
 import org.json.simple.parser.ParseException;
@@ -60,7 +61,7 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        driveController.cross().whileTrue(new ClimbCommand(climb));
+        driveController.cross().whileTrue(new ClimbCommand(climb).onlyIf(() -> Timer.getMatchTime() >= 120));
         driveController.options().onTrue(driveBase.resetOnlyDirection());
     }
 

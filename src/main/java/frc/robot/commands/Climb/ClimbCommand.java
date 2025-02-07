@@ -10,37 +10,33 @@ import frc.robot.subsystems.Climb.ClimbConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ClimbCommand extends Command {
-  Climb climb;
+    private final Climb climb;
 
-  /** Creates a new Climb. */
-  public ClimbCommand(Climb climb) {
-    this.climb = climb;
+    /**
+     * Creates a new Climb.
+     */
+    public ClimbCommand(Climb climb) {
+        this.climb = climb;
 
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(climb);
-  }
+        // Use addRequirements() here to declare subsystem dependencies.
+        addRequirements(climb);
+    }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-    // if (Timer.getMatchTime() < 120) cancel();
-    climb.setMotorPower(ClimbConstants.CLIMB_POWER);
-  }
+    // Called when the command is initially scheduled.
+    @Override
+    public void initialize() {
+        climb.setMotorPower(ClimbConstants.CLIMB_POWER);
+    }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {}
+    // Called once the command ends or is interrupted.
+    @Override
+    public void end(boolean interrupted) {
+        climb.setMotorPower(0);
+    }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    climb.setMotorPower(0);
-  }
-
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    // return climb.isAtLimit();
-    return false;
-  }
+    // Returns true when the command should end.
+    @Override
+    public boolean isFinished() {
+        return climb.isAtLimit();
+    }
 }

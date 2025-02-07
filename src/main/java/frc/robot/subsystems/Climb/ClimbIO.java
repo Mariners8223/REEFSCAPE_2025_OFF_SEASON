@@ -9,14 +9,14 @@ import org.littletonrobotics.junction.AutoLog;
 /** Add your docs here. */
 public interface ClimbIO {
     @AutoLog
-    public class ClimbInputs{
+    class ClimbInputs{
         double height;
     }
 
-    public void setPower(double power);
+    void setPower(double power);
 
-    public void resetPosition();
-    public double getPosition();
+    void resetPosition();
+    double getPosition();
 
-    public void Update(ClimbInputs inputs);
+    void Update(ClimbInputs inputs);
 }
