@@ -22,8 +22,6 @@ public class DriveBaseConstants {
 
 
     public static final class PathPlanner {
-        public static final boolean PLAN_PATH_TO_STARTING_POINT = true; //if pathplanner should plan a path to the starting point if the robot is not there
-        public static final boolean DYNAMIC_RE_PLANNING = true; //if pathplanner should replan the path if the robot is beyond the tolerance or if the spike is too big
         public static final double PATH_ERROR_TOLERANCE = 0.1; //the max error in position before pathPlanner replans the path in meters
         public static final double PATH_ERROR_SPIKE_TOLERANCE = 1; //the max position spike before path planner replans the path in meters
 
@@ -32,9 +30,7 @@ public class DriveBaseConstants {
                 PATH_ERROR_TOLERANCE,
                 PATH_ERROR_SPIKE_TOLERANCE,
                 DISTANCE_BETWEEN_WHEELS,
-                Constants.ROBOT_TYPE == RobotType.COMPETITION ?
-                        CompBotConstants.DRIVE_MOTOR_MODEL :
-                        DevBotConstants.DRIVE_MOTOR_MODEL,
+                CompBotConstants.DRIVE_MOTOR_MODEL,
                 DISTANCE_BETWEEN_WHEELS,
                 PIGEON_ID);
 
@@ -48,7 +44,7 @@ public class DriveBaseConstants {
                 Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
                         DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY :
                         CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY,
-                10,
+                10, //TODO find a good value for this
                 10,
                 20); //the constraints for pathPlanner
 

@@ -2,6 +2,7 @@ package frc.robot.subsystems.DriveTrain;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -21,8 +22,8 @@ public class DriveBaseSYSID {
 
         steerMotorsRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
-                        null, //set if needed
-                        null, //set if needed
+                        Units.Volts.of(0.5).per(Units.Second), //set if needed
+                        Units.Volts.of(4), //set if needed
                         null, //set if needed
                         (state) -> Logger.recordOutput("SysIDStates/Steer", state.toString())
                 ),
@@ -40,8 +41,8 @@ public class DriveBaseSYSID {
 
         driveMotorsRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
-                        null, //set if needed
-                        null, //set if needed
+                    Units.Volts.of(0.5).per(Units.Second), //set if needed
+                    Units.Volts.of(4), //set if needed
                         null, //set if needed
                         (state) -> Logger.recordOutput("SysIDStates/Drive", state.toString())
                 ),
@@ -69,8 +70,8 @@ public class DriveBaseSYSID {
 
         ThetaRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
-                        null, //set if needed
-                        null, //set if needed
+                    Units.Volts.of(0.5).per(Units.Second), //set if needed
+                    Units.Volts.of(4), //set if needed
                         null, //set if needed
                         (state) -> Logger.recordOutput("SysIDStates/Theta", state.toString())
                 ),
