@@ -65,9 +65,6 @@ public class ElevatorIOVortex implements ElevatorIO {
         motorLead.setVoltage(voltage);
     }
 
-    public double getVoltage() {return 0;} // TODO: Return correct voltage
-    public double getVelocity() { return motorLead.getVelocity(); }
-
     public void Update(ElevatorInputs inputs){
         inputs.elevatorHeight = motorLead.getPosition();
         inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d());
