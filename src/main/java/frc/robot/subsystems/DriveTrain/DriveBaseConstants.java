@@ -39,7 +39,7 @@ public class DriveBaseConstants {
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
                 53.3,
-                6.883,
+                5.502692,
                 MODULE_CONFIG,
                 MODULE_TRANSLATIONS);
 
