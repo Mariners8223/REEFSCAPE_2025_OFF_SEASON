@@ -20,15 +20,27 @@ public class DriveBaseConstants {
             new Translation2d(-DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2),
             new Translation2d(-DISTANCE_BETWEEN_WHEELS / 2, -DISTANCE_BETWEEN_WHEELS / 2)};
 
+    public static final double THETA_KS = 0.20501;
+    public static final double THETA_KV = 0.83139;
+    public static final double THETA_KA = 0.09286;
 
     public static final class PathPlanner {
         public static final ModuleConfig MODULE_CONFIG = Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
                 DevBotConstants.MODULE_CONFIG :
                 CompBotConstants.MODULE_CONFIG;
 
+
+        public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
+                PATH_ERROR_TOLERANCE,
+                PATH_ERROR_SPIKE_TOLERANCE,
+                DISTANCE_BETWEEN_WHEELS,
+                CompBotConstants.DRIVE_MOTOR_MODEL,
+                DISTANCE_BETWEEN_WHEELS,
+                PIGEON_ID);
+
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
-                20,
-                6.883,
+                53.3,
+                5.502692,
                 MODULE_CONFIG,
                 MODULE_TRANSLATIONS);
 

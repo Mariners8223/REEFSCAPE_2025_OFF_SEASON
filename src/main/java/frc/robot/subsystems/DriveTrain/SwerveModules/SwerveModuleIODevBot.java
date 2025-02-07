@@ -46,6 +46,8 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
         steerMotor.setProfile(20, 25);
 
+        steerMotor.setCurrentLimits(30, 40);
+
         CANcoder absEncoder = configCANCoder(constants.ABSOLUTE_ENCODER_ID, constants.ABSOLUTE_ZERO_OFFSET, (int) steerMotor.RUN_HZ);
 
         steerMotor.setMeasurements(new MarinersMeasurementsCTRE(
