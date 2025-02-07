@@ -17,7 +17,6 @@ public class VisionConstants {
 
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    //TODO test to find better numbers
     public static final double maxHeightDeviation = 0.1;
     public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.1;
@@ -28,16 +27,16 @@ public class VisionConstants {
 
 
     public enum CameraConstants{
-        FRONT_LEFT("FrontLeft",
+        END_EFFECTOR("EndEffector",
             new Transform3d(
-                0.11, -0.38, 0.166,
+                0.167, 0.0705, 0.31,
                 //0, 0, 0,
-                new Rotation3d(0, Units.degreesToRadians(-19), Units.degreesToRadians(-91))));
+                new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(-19))));
 
-//        BACK_MIDDLE("back middle",
-//            new Transform3d(
-//                0, 0, 0,
-//                new Rotation3d(0, 0, 0)));
+       FUNNEL("Funnel",
+           new Transform3d(
+               0, 0, 0,
+               new Rotation3d(0, 0, 0)));
 
         public final String cameraName;
 
