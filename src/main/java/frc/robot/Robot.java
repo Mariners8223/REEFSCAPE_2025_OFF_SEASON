@@ -9,11 +9,16 @@ import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -28,9 +33,14 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter.AdvantageScopeOpenBehavior;
 
+import java.util.List;
+
 public class Robot extends LoggedRobot
 {
-    private Command autonomousCommand;    
+    private Command autonomousCommand;
+    private static final Field2d field = new Field2d();
+    private static boolean isRedAlliance = false;
+    private static AprilTagFieldLayout apriltagField;
     
     @SuppressWarnings("resource")
     public Robot() {
@@ -92,6 +102,9 @@ public class Robot extends LoggedRobot
         ControllerMaster.getInstance();
 
         if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION) checkFlip();
+
+        SmartDashboard.putData("Field", field);
+        apriltagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     }
 
     private static void checkFlip() {
@@ -100,7 +113,32 @@ public class Robot extends LoggedRobot
         Constants.FeederLocation.checkAlliance(!isRedAlliance);
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
     }
-    
+
+    public static void setRobotPoseField(Pose2d pose) {
+        if(isRedAlliance){
+            pose = new Pose2d(apriltagField.getFieldLength() - pose.getX(),
+                    apriltagField.getFieldWidth() - pose.getY(),
+                    pose.getRotation().plus(Rotation2d.k180deg));
+        }
+        field.setRobotPose(pose);
+    }
+
+    public static void setObjectPoseFiled(String name, Pose2d pose) {
+        if(isRedAlliance){
+            pose = new Pose2d(apriltagField.getFieldLength() - pose.getX(),
+                    apriltagField.getFieldWidth() - pose.getY(),
+                    pose.getRotation().plus(Rotation2d.k180deg));
+        }
+        field.getObject(name).setPose(pose);
+    }
+
+    public static void clearObjectPoseField(String name) {
+        field.getObject(name).setPoses();
+    }
+
+    public static void setTrajectoryField(String name, List<Pose2d> poses) {
+        field.getObject(name).setPoses(poses);
+    }
     
     @Override
     public void robotPeriodic()
@@ -127,6 +165,8 @@ public class Robot extends LoggedRobot
     public void autonomousInit()
     {
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION) checkFlip();
+
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
         autonomousCommand = RobotContainer.getAutoCommand();
         

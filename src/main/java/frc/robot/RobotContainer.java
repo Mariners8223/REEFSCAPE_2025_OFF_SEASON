@@ -37,12 +37,10 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
@@ -54,7 +52,6 @@ public class RobotContainer {
     public static RobotAuto robotAuto;
     public static Vision vision;
 
-    public static Field2d field;
     public static LoggedDashboardChooser<Command> autoChooser;
     public static DriveBaseSYSID driveBaseSYSID;
 
@@ -73,9 +70,6 @@ public class RobotContainer {
         // vision = new Vision(driveBase::addVisionMeasurement);
 
         // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
-
-        field = new Field2d();
-        SmartDashboard.putData(field);
 
         configChooser();
         configNamedCommands();
@@ -216,7 +210,7 @@ public class RobotContainer {
         autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
-        new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> field.getObject("AutoPath").setPoses()).ignoringDisable(true));
+        new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
     }
 
@@ -228,7 +222,8 @@ public class RobotContainer {
                     DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
             PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
-                path = invert ? path.flipPath() : path;
+//                path = invert ? path.flipPath() : path;
+                //no need cause the field inverts the path
 
                 poses.addAll(path.getPathPoses());
             });
@@ -236,6 +231,6 @@ public class RobotContainer {
             DriverStation.reportError("Error loading auto path", e.getStackTrace());
         }
 
-        field.getObject("AutoPath").setPoses(poses);
+        Robot.setTrajectoryField("AutoPath", poses);
     }
 }

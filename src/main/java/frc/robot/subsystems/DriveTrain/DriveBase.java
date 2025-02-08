@@ -16,6 +16,7 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Robot;
 import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
@@ -542,7 +543,7 @@ public class DriveBase extends SubsystemBase {
         Logger.recordOutput("DriveBase/ChassisSpeeds", getChassisSpeeds());
         Logger.recordOutput("DriveBase/targetStates", targetStates);
 
-        RobotContainer.field.setRobotPose(currentPose);
+        Robot.setRobotPoseField(currentPose);
 
         inputs.activeCommand = this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "None";
 

@@ -3,6 +3,7 @@ package frc.robot.subsystems.RobotAuto;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import org.littletonrobotics.junction.Logger;
 
@@ -92,11 +93,11 @@ public class RobotAuto extends SubsystemBase {
         String name;
 
         if(reef != null){
-            RobotContainer.field.getObject("selected reef").setPose(reef.getPose());
+            Robot.setObjectPoseFiled("selected reef", reef.getPose());
             name = reef.name();
         }
         else{
-            RobotContainer.field.getObject("selected reef").setPoses();
+            Robot.clearObjectPoseField("selected reef");
             name = "None";
         }
 
