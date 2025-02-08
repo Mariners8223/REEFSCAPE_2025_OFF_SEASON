@@ -29,8 +29,8 @@ public class BallDroppingConstants {
 
 
     public static class DropperMotor{
-        public static final double POWER_TO_REACH = 0.8;//what power to use for the drop
-        public static final boolean IS_INVERTED = false;
+        public static final double POWER_TO_REACH = 0.8; //what power to use for the drop
+        public static final boolean IS_INVERTED = true;
         public static final int ID = 20;
         public static final double MAX_DROPPER_POWER = 0.8;
     }

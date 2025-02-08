@@ -49,7 +49,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandPS5Controller(0);
-        //driveBase = new DriveBase();
+        driveBase = new DriveBase();
         ballDropping = new BallDropping();
 
         //driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
@@ -66,7 +66,7 @@ public class RobotContainer {
 
 
     private void configureBindings() {
-        //driveController.options().onTrue(driveBase.resetOnlyDirection());
+        driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new BallDropOnForHigh(ballDropping));
         driveController.povRight().onTrue(new BallDropOnForLow(ballDropping));
