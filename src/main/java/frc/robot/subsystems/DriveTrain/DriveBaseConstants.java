@@ -29,15 +29,6 @@ public class DriveBaseConstants {
                 DevBotConstants.MODULE_CONFIG :
                 CompBotConstants.MODULE_CONFIG;
 
-
-        public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
-                PATH_ERROR_TOLERANCE,
-                PATH_ERROR_SPIKE_TOLERANCE,
-                DISTANCE_BETWEEN_WHEELS,
-                CompBotConstants.DRIVE_MOTOR_MODEL,
-                DISTANCE_BETWEEN_WHEELS,
-                PIGEON_ID);
-
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
                 53.3,
                 5.502692,
