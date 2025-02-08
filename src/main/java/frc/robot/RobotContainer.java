@@ -30,6 +30,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.YeetFunnel;
 import frc.robot.commands.EndEffector.moveFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -77,11 +78,12 @@ public class RobotContainer {
         driveController.options().onTrue(driveBase.resetOnlyDirection());
 
         driveController.povUp().onTrue(new Intake(endEffector).onlyIf(() -> !endEffector.isGpLoaded()));
-        driveController.povDown().onTrue(new Eject(MotorPower.L1, endEffector).onlyIf(endEffector::isGpLoaded));
-        driveController.povRight().onTrue(new Eject(MotorPower.L2_3, endEffector).onlyIf(endEffector::isGpLoaded));
-        driveController.povLeft().onTrue(new Eject(MotorPower.L4, endEffector).onlyIf(endEffector::isGpLoaded));
-        // driveController.povRight().onTrue(new moveFunnel(endEffector, FunnelMotor.CLIMB_POSITION));
-        // driveController.povLeft().onTrue(new moveFunnel(endEffector, FunnelMotor.COLLECT_POSITION));
+        driveController.povDown().onTrue(new Eject(MotorPower.L4, endEffector).onlyIf(endEffector::isGpLoaded));
+        //driveController.povRight().onTrue(new Eject(MotorPower.L2_3, endEffector).onlyIf(endEffector::isGpLoaded));
+        //driveController.povLeft().onTrue(new Eject(MotorPower.L4, endEffector).onlyIf(endEffector::isGpLoaded));
+        driveController.povRight().onTrue(new moveFunnel(endEffector, FunnelMotor.CLIMB_POSITION));
+        driveController.povLeft().onTrue(new moveFunnel(endEffector, FunnelMotor.COLLECT_POSITION));
+        driveController.L2().onTrue(new YeetFunnel(endEffector));
         
         driveController.cross().onTrue(new MoveToLevel(elevator, ElevatorLevel.L2));
         driveController.circle().onTrue(new MoveToLevel(elevator, ElevatorLevel.L3));
@@ -93,6 +95,9 @@ public class RobotContainer {
 
         // driveController.circle().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kForward));
         // driveController.square().whileTrue(endEffectorSYSID.getEndEffectorQuasistatic(Direction.kReverse));
+
+        driveController.L1().onTrue(new InstantCommand(() -> endEffector.startFunnelPIDCalibration()));
+        driveController.R1().onTrue(new InstantCommand(() -> endEffector.endFunnelPIDCalibration()));
     }
 
 

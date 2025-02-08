@@ -67,6 +67,14 @@ public class EndEffector extends SubsystemBase {
         return inputs.beamBreakValue;
     }
 
+    public void startFunnelPIDCalibration(){
+        io.startFunnelPIDCalibration();
+    }
+    
+    public void endFunnelPIDCalibration(){
+        io.endFunnelPIDCalibration();
+    }
+
     @Override
     public void periodic() {
         io.Update(inputs);

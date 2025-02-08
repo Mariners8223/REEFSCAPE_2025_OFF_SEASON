@@ -27,6 +27,10 @@ public interface EndEffectorIO {
     void setFunnelVoltage(double voltage);
 
     void stopFunnel();
+
+    void startFunnelPIDCalibration();
+
+    void endFunnelPIDCalibration();
     
     void Update(EndEffectorInputs inputs);
 }

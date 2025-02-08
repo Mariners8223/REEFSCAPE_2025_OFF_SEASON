@@ -20,6 +20,7 @@ public class ElevatorConstants {
 
         private final double height;
 
+
         ElevatorLevel(double height){
             this.height = height;
         }
@@ -75,9 +76,9 @@ public class ElevatorConstants {
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
         1.5,
+        0.0,
         0,
-        0,
-        0,
+        0.3,
         ELEVATOR_TOLERANCE,
         0.01);
     public static final double FEED_FORWARD = 0.38946;

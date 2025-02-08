@@ -22,12 +22,12 @@ public class YeetFunnel extends Command {
     @Override
     public void initialize() {
       startTime = RobotController.getMeasureTime().in(Units.Seconds);
-        endEffector.setFunnelVoltage(4);
+        endEffector.setFunnelVoltage(-3);
     }
 
     @Override
     public boolean isFinished() {
-        return RobotController.getMeasureTime().in(Units.Seconds) - startTime > 0.5;
+        return RobotController.getMeasureTime().in(Units.Seconds) - startTime > 0.25;
     }
 
     @Override

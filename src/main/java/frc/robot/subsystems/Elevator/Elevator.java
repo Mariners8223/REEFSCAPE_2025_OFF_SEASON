@@ -31,7 +31,8 @@ public class Elevator extends SubsystemBase {
   public void moveMotorByPosition(ElevatorLevel desiredLevel){
     if (desiredLevel == null) return;
     
-    Logger.recordOutput("Elevator/Desired Level", desiredLevel.name());
+    //Logger.recordOutput("Elevator/Desired Level", desiredLevel.name());
+    Logger.recordOutput("Elevator/Desired Height", desiredLevel.getHeight());
     io.moveMotorByPosition(desiredLevel.getHeight());
   }
 

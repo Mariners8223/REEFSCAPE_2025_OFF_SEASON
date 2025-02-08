@@ -63,6 +63,14 @@ public class EndEffectorIOSim implements EndEffectorIO{
         funnelSim.setInput(0);
     }
 
+    public void startFunnelPIDCalibration(){
+        return;
+    }
+
+    public void endFunnelPIDCalibration(){
+        return;
+    }
+
     @Override
     public void Update(EndEffectorInputs inputs) {
         funnelSim.setInput(Pid.calculate(funnelSim.getAngleRads()));
