@@ -185,9 +185,11 @@ public class DriveBase extends SubsystemBase {
             Pose2d currentPose = this.getPose();
 
             if(DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red)
-                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(Math.PI));
-            else
+                //currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(Math.PI));
                 currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
+            else
+                //currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d());
+                currentPose = new Pose2d(currentPose.getX(), currentPose.getY(), new Rotation2d(Math.PI));
 
             SwerveModulePosition[] positions = new SwerveModulePosition[4];
             for (int i = 0; i < 4; i++) positions[i] = modules[i].modulePeriodic();

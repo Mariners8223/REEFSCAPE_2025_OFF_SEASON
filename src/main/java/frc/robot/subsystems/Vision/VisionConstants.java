@@ -5,6 +5,8 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
+
 import org.photonvision.PhotonPoseEstimator;
 
 public class VisionConstants {
@@ -29,14 +31,14 @@ public class VisionConstants {
     public enum CameraConstants{
         END_EFFECTOR("EndEffector",
             new Transform3d(
-                0.167, 0.0705, 0.31,
+                0.2, 0.1, 0.297,
                 //0, 0, 0,
-                new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(-19)))), 
+                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-17)))), 
 
        FUNNEL("Funnel",
            new Transform3d(
-               0.3275, 0.1975, 0.55,
-               new Rotation3d(0, -13, 19)));
+               -0.3, -0.18, 0.56,
+               new Rotation3d(0, Units.degreesToRadians(-14), Units.degreesToRadians(180))));
 
         public final String cameraName;
 
