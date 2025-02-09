@@ -31,7 +31,7 @@ public class VisionConstants {
             new Transform3d(
                 0.167, 0.0705, 0.31,
                 //0, 0, 0,
-                new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(-19))));
+                new Rotation3d(0, Units.degreesToRadians(0), Units.degreesToRadians(-19)))), 
 
        FUNNEL("Funnel",
            new Transform3d(
