@@ -13,6 +13,9 @@ import frc.util.MarinersController.MarinersController.ControlMode;
 /** Add your docs here. */
 public class ElevatorIOVortex implements ElevatorIO {
     private final MarinersSparkBase motorLead;
+    @SuppressWarnings("unused")
+    private final MarinersSparkBase motorFollow;
+
     public ElevatorIOVortex(){
         this.motorLead = configureLeadMotor();
         configureFollowMotor();
@@ -22,10 +25,16 @@ public class ElevatorIOVortex implements ElevatorIO {
         MarinersSparkBase motor;
         motor = new MarinersSparkBase("Lead Elevator Motor", ElevatorConstants.LeadMotor.CONTROLLER_LOCATION, 
             ElevatorConstants.LeadMotor.MOTOR_ID, ElevatorConstants.LeadMotor.IS_BRUSHLESS, 
-            ElevatorConstants.LeadMotor.MOTOR_TYPE, ElevatorConstants.LeadMotor.PID_GAINS,
-            ElevatorConstants.LeadMotor.GEAR_RATIO / ElevatorConstants.HEIGHT_TO_ROTATION);
+            ElevatorConstants.LeadMotor.MOTOR_TYPE, ElevatorConstants.PID_GAINS,
+            ElevatorConstants.GEAR_RATIO / ElevatorConstants.PULLEY_EXTENSION_RATIO);
 
-        motor.enableSoftLimits(ElevatorConstants.LeadMotor.SOFT_MINIMUM, ElevatorConstants.LeadMotor.SOFT_MAXIMUM);
+        motor.setStaticFeedForward(ElevatorConstants.STATIC_FEEDFORWARD);
+
+        motor.enableSoftLimits(ElevatorConstants.SOFT_MINIMUM, ElevatorConstants.SOFT_MAXIMUM);
+
+        motor.setMaxMinOutput(5, 5);
+
+        motor.setProfile(ElevatorConstants.PROFILE);
 
         motor.setMotorInverted(ElevatorConstants.LeadMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
@@ -39,6 +48,9 @@ public class ElevatorIOVortex implements ElevatorIO {
             ElevatorConstants.FollowMotor.MOTOR_ID, ElevatorConstants.FollowMotor.IS_BRUSHLESS, ElevatorConstants.FollowMotor.MOTOR_TYPE);
         
         motor.setMotorAsFollower(this.motorLead, ElevatorConstants.FollowMotor.IS_INVERTED);
+
+        motor.setMotorIdleMode(true);
+        return motor;
     }
 
     public void resetMotorEncoder(){
@@ -46,11 +58,15 @@ public class ElevatorIOVortex implements ElevatorIO {
     }
 
     public void moveMotorByPosition(double position){
-        motorLead.setReference(position, ControlMode.Position, ElevatorConstants.FEED_FORWARD);
+        motorLead.setReference(position, ControlMode.ProfiledPosition, ElevatorConstants.FEED_FORWARD);
+    }
+
+    public void setVoltage(double voltage){
+        motorLead.setVoltage(voltage);
     }
 
     public void Update(ElevatorInputs inputs){
         inputs.elevatorHeight = motorLead.getPosition();
-        inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d()); // Check if this is resource intensive
+        inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d());
     }
 }

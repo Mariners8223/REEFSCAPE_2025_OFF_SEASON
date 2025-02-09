@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
-
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
@@ -12,18 +12,15 @@ import frc.util.MarinersController.MarinersSparkBase.MotorType;
 /** Add your docs here. */
 public class ElevatorConstants {
     public enum ElevatorLevel{
-        Bottom(0),
-        L1(1),
-        L2(2),
-        L3(3),
-        L4(4),
-        Intake(5),
-        Moving(-1),
-        NULL(-1);
+        Bottom(0.60),
+        L1(0.61),
+        L2(0.89),
+        L3(1.20),
+        L4(1.9);
 
         private final double height;
 
-        private ElevatorLevel(double height){
+        ElevatorLevel(double height){
             this.height = height;
         }
 
@@ -31,53 +28,58 @@ public class ElevatorConstants {
             return this.height;
         }
 
-        public static ElevatorLevel findNearestLevel(double height) { // I know it's not good, what's a better way?
+        public static ElevatorLevel findNearestLevel(double height) {
             for (ElevatorLevel level : ElevatorLevel.values()) {
                 double distance = Math.abs(level.getHeight() - height);
                 if (distance < ElevatorConstants.ELEVATOR_TOLERANCE) return level;
             }
-            return ElevatorLevel.NULL;
+            return null;
         }
-        
     }
 
     public static class LeadMotor{
-        public static final ControllerLocation CONTROLLER_LOCATION = null;
-
+        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final int MOTOR_ID = 16;
-        public static final double GEAR_RATIO = 5;
-
         public static final boolean IS_BRUSHLESS = true;
-        public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
-
-        public static final double SOFT_MINIMUM = 0;
-        public static final double SOFT_MAXIMUM = 6;
-
-        public static final PIDFGains PID_GAINS = new PIDFGains(
-            20,
-            0,
-            0);
+        public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         
         public static final boolean IS_INVERTED = true;
     }
 
     public static class FollowMotor{
-        public static final ControllerLocation CONTROLLER_LOCATION = null;
+        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final int MOTOR_ID = 17;
         public static final boolean IS_BRUSHLESS = true;
-        public static final MotorType MOTOR_TYPE = MotorType.SPARK_MAX;
+        public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
 
         public static final boolean IS_INVERTED = true;
     }
 
-    public static final double ELEVATOR_TOLERANCE = 0.1;
-    public static final double HEIGHT_TO_ROTATION = 1;
-
     public static final double X_ON_ROBOT = 0;
     public static final double Y_ON_ROBOT = 0;
 
-    public static final double FEED_FORWARD = 1;
+    public static final double kV = 1.6819;
+    public static final double kA = 0.24043;
+    public static final double ELEVATOR_TOLERANCE = 0.1;
 
-    public static final double ELEVATOR_WEIGHT = 20;
-    public static final double PULLEY_RADIUS = 0.02;
+    public static final Constraints PROFILE = new Constraints(2.3, 2.5);
+
+    public static final double ELEVATOR_WEIGHT = 1;
+    public static final double PULLEY_RADIUS = 0.024;
+    
+    public static final double GEAR_RATIO = 5;
+    public static final double PULLEY_EXTENSION_RATIO = PULLEY_RADIUS * 2 * Math.PI * 2;
+
+    public static final double SOFT_MINIMUM = ElevatorLevel.Bottom.getHeight();
+    public static final double SOFT_MAXIMUM = ElevatorLevel.L4.getHeight();
+
+    public static final PIDFGains PID_GAINS = new PIDFGains(
+        1,
+        0,
+        0,
+        0,
+        ELEVATOR_TOLERANCE,
+        0.01);
+    public static final double FEED_FORWARD = 0.38946;
+    public static final double STATIC_FEEDFORWARD = 0.30782;
 }

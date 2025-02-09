@@ -13,35 +13,38 @@ import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 /** Add your docs here. */
 public class ElevatorIOSim implements ElevatorIO{
     private final ElevatorSim elevator;
-    private final PIDController pidController;
+    // private final PIDController PID;
+
+      private final PIDController pidController;
     
     public ElevatorIOSim(){
-        elevator =
-            new ElevatorSim(
-                DCMotor.getNeoVortex(2),
-                ElevatorConstants.LeadMotor.GEAR_RATIO,
-                ElevatorConstants.ELEVATOR_WEIGHT,
-                ElevatorConstants.PULLEY_RADIUS,
-                ElevatorConstants.LeadMotor.SOFT_MINIMUM,
-                ElevatorConstants.LeadMotor.SOFT_MAXIMUM,
-                true,
-                ElevatorConstants.ElevatorLevel.Bottom.getHeight(),
-                0.0, 0.0);
-        
-        // PID = new PIDController(ElevatorConstants.LeadMotor.PID_GAINS.getP(), ElevatorConstants.LeadMotor.PID_GAINS.getI(), ElevatorConstants.LeadMotor.PID_GAINS.getD());
-        pidController = ElevatorConstants.LeadMotor.PID_GAINS.createPIDController();
+        elevator = new ElevatorSim(
+            DCMotor.getNeoVortex(2),
+            ElevatorConstants.GEAR_RATIO,
+            ElevatorConstants.ELEVATOR_WEIGHT, 
+            ElevatorConstants.PULLEY_RADIUS, 
+            ElevatorLevel.Bottom.getHeight(),
+            ElevatorLevel.L4.getHeight(),
+            true,
+            ElevatorLevel.Bottom.getHeight(),
+            0.05, 0.05);
+
+        pidController = new PIDController(ElevatorConstants.PID_GAINS.getP(), ElevatorConstants.PID_GAINS.getI(), ElevatorConstants.PID_GAINS.getD());
     }
 
     public void resetMotorEncoder(){
-        elevator.setState(0, 0.1);
+        elevator.setState(0, 0);
     }
 
     public void moveMotorByPosition(double position){
         pidController.setSetpoint(position);
     }
 
+
+    public void setVoltage(double voltage){ elevator.setInputVoltage(voltage); }
+
     public void Update(ElevatorInputs inputs){
-        elevator.setInput(pidController.calculate(elevator.getPositionMeters()));
+        // elevator.setInput(pidController.calculate(elevator.getPositionMeters()));
         elevator.update(0.02);
 
         inputs.elevatorHeight = elevator.getPositionMeters();
