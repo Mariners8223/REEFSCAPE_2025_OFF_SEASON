@@ -18,7 +18,7 @@ public class ElevatorIOVortex implements ElevatorIO {
 
     public ElevatorIOVortex(){
         this.motorLead = configureLeadMotor();
-        configureFollowMotor();
+        this.motorFollow = configureFollowMotor();
     }
 
     private MarinersSparkBase configureLeadMotor(){
@@ -42,7 +42,7 @@ public class ElevatorIOVortex implements ElevatorIO {
         return motor;
     }
 
-    private void configureFollowMotor(){
+    private MarinersSparkBase configureFollowMotor(){
         MarinersSparkBase motor;
         motor = new MarinersSparkBase("Follow Elevator Motor", ElevatorConstants.FollowMotor.CONTROLLER_LOCATION, 
             ElevatorConstants.FollowMotor.MOTOR_ID, ElevatorConstants.FollowMotor.IS_BRUSHLESS, ElevatorConstants.FollowMotor.MOTOR_TYPE);
@@ -50,6 +50,7 @@ public class ElevatorIOVortex implements ElevatorIO {
         motor.setMotorAsFollower(this.motorLead, ElevatorConstants.FollowMotor.IS_INVERTED);
 
         motor.setMotorIdleMode(true);
+
         return motor;
     }
 

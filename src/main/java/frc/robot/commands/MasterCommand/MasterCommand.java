@@ -50,7 +50,7 @@ public class MasterCommand extends Command {
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1.getPose());
-        moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake);
+        moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
         Command adjustmentPhase = new ParallelCommandGroup(
                 homeToReef,
                 moveElevatorCommand,

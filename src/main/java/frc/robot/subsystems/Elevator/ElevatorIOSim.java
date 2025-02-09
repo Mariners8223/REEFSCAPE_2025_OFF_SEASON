@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
 /** Add your docs here. */
 public class ElevatorIOSim implements ElevatorIO{

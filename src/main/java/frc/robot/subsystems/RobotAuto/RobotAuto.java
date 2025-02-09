@@ -4,7 +4,6 @@ package frc.robot.subsystems.RobotAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -36,7 +35,7 @@ public class RobotAuto extends SubsystemBase {
         moveElevatorToBottom = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         sequnceCommand = new SequentialCommandGroup(
-            new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Intake),
+            new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom),
             new Intake(endEffector),
             new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom)
         );
