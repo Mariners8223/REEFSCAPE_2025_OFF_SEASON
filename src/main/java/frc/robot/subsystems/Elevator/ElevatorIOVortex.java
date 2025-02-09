@@ -32,12 +32,14 @@ public class ElevatorIOVortex implements ElevatorIO {
 
         motor.enableSoftLimits(ElevatorConstants.SOFT_MINIMUM, ElevatorConstants.SOFT_MAXIMUM);
 
-        motor.setMaxMinOutput(5, 5);
+        motor.setMaxMinOutput(6, 6);
 
         motor.setProfile(ElevatorConstants.PROFILE);
 
         motor.setMotorInverted(ElevatorConstants.LeadMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
+
+        motor.setCurrentLimits(35, 45);
 
         return motor;
     }

@@ -21,6 +21,8 @@ public class EndEffector extends SubsystemBase {
         } else {
             io = new EndEffectorIOReal();
         }
+
+        setLoadedValue(EndEffectorConstants.STARTS_WITH_GP);
     }
 
     public void setRightMotorPower(double PowerToSet) {
@@ -28,14 +30,14 @@ public class EndEffector extends SubsystemBase {
     }
 
     public void setLeftMotorPower(double PowerToSet) {
-        io.setRightMotorPower(PowerToSet);
+        io.setLeftMotorPower(PowerToSet);
     }
 
-    public void moveFunnel(double target){
+    public void moveFunnel(double target) {
         io.moveFunnel(target);
     }
 
-    public void setFunnelVoltage(double voltage){
+    public void setFunnelVoltage(double voltage) {
         io.setFunnelVoltage(voltage);
     }
 
@@ -44,7 +46,7 @@ public class EndEffector extends SubsystemBase {
         io.setRightMotorPower(0);
     }
 
-    public void stopFunnelMotor(){
+    public void stopFunnelMotor() {
         io.stopFunnel();
     }
 
@@ -53,24 +55,24 @@ public class EndEffector extends SubsystemBase {
         isGpLoaded = value;
     }
 
-    public double getRightMotorPower(){
-        return inputs.rightPower;
-    }
-
-    public double getLeftMotorPower(){
-        return inputs.leftPower;
-    }
-
-    public double getFunnelPosition(){
+    public double getFunnelPosition() {
         return inputs.funnelPosition;
     }
 
-  public boolean isGpLoaded(){
-    return isGpLoaded;
-  }
+    public boolean isGpLoaded() {
+        return isGpLoaded;
+    }
 
     public boolean isGpDetected() {
         return inputs.beamBreakValue;
+    }
+
+    public void startFunnelPIDCalibration(){
+        io.startFunnelPIDCalibration();
+    }
+    
+    public void endFunnelPIDCalibration(){
+        io.endFunnelPIDCalibration();
     }
 
     @Override

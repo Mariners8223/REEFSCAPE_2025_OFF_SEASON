@@ -13,7 +13,7 @@ public class YeetFunnel extends Command {
    private double startTime;
 
     public YeetFunnel(EndEffector endEffector) {
-       this.endEffector = endEffector;
+        this.endEffector = endEffector;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(endEffector);
@@ -21,17 +21,17 @@ public class YeetFunnel extends Command {
 
     @Override
     public void initialize() {
-        startTime = RobotController.getMeasureTime().in(Units.Seconds);
-        endEffector.setFunnelVoltage(4);
+      startTime = RobotController.getMeasureTime().in(Units.Seconds);
+        endEffector.setFunnelVoltage(-3);
     }
 
     @Override
     public boolean isFinished() {
-        return RobotController.getMeasureTime().in(Units.Seconds) - startTime > 2;
+        return RobotController.getMeasureTime().in(Units.Seconds) - startTime > 0.25;
     }
 
     @Override
     public void end(boolean interrupted) {
-      endEffector.moveFunnel(0);
+        endEffector.moveFunnel(0);
     }
 }

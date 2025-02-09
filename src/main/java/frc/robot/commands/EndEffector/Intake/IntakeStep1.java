@@ -18,8 +18,10 @@ public class IntakeStep1 extends Command {
 
   @Override
   public void end(boolean interrupted) {
-    endEffector.setRightMotorPower(EndEffectorConstants.MotorPower.INTAKE.rightMotorPower);
-    endEffector.setLeftMotorPower(EndEffectorConstants.MotorPower.INTAKE.leftMotorPower);
+    if(!interrupted){
+      endEffector.setRightMotorPower(EndEffectorConstants.MotorPower.INTAKE.rightMotorPower);
+      endEffector.setLeftMotorPower(EndEffectorConstants.MotorPower.INTAKE.leftMotorPower);
+    }
   }
 
   @Override

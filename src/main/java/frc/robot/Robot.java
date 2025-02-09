@@ -209,7 +209,7 @@ public class Robot extends LoggedRobot
     public void testInit()
     {
         CommandScheduler.getInstance().cancelAll();
-        new InstantCommand(() -> RobotContainer.elevator.resetMotorEncoder()).schedule();
+        // new InstantCommand(() -> RobotContainer.elevator.resetMotorEncoder()).schedule();
     }
     
     

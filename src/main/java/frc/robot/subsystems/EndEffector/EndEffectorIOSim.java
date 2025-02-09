@@ -24,7 +24,7 @@ public class EndEffectorIOSim implements EndEffectorIO{
             1,
             0.5,
             -Math.PI/6,
-            3/2 * Math.PI,
+            (double) 3 /2 * Math.PI,
             true,
             -Math.PI/6, 0);
         
@@ -61,6 +61,14 @@ public class EndEffectorIOSim implements EndEffectorIO{
     @Override
     public void stopFunnel(){
         funnelSim.setInput(0);
+    }
+
+    public void startFunnelPIDCalibration(){
+        return;
+    }
+
+    public void endFunnelPIDCalibration(){
+        return;
     }
 
     @Override
