@@ -37,6 +37,8 @@ public class MasterCommand extends Command {
     private Constants.ReefLocation targetReef = null;
     private ElevatorConstants.ElevatorLevel level = null;
 
+    private final Alert alert = new Alert("illegal ball drop", Alert.AlertType.kWarning);
+
     public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, BallDropping ballDropping,
                          Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier,
                          Supplier<Boolean> dropBall) {
@@ -114,7 +116,7 @@ public class MasterCommand extends Command {
         Pose2d pathFinderTarget = targetReef.getPose(); // setting the target pose for the path command
 
         if(checkBallDropTime(RobotAutoConstants.BallDropTime.NEVER)){
-            new Alert("illegal ball drop", Alert.AlertType.kWarning).set(true);
+            alert.set(true);
 
             cancel();
             return;
