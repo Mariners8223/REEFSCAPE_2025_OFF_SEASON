@@ -26,7 +26,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
         driveMotor.setMotorInverted(constants.DRIVE_INVERTED);
 
-        driveMotor.setCurrentLimits(60, 90);
+        driveMotor.setCurrentLimits(DevBotConstants.DRIVE_MOTOR_CURRENT_LIMIT, DevBotConstants.DRIVE_MOTOR_CURRENT_THERSHOLD);
 
         driveMotor.setMotorDeadBandVoltage(constants.DRIVE_KS);
 
@@ -45,6 +45,8 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
         steerMotor.enablePositionWrapping(-0.5, 0.5);
 
         steerMotor.setProfile(20, 25);
+
+        steerMotor.setCurrentLimits(30, 40);
 
         CANcoder absEncoder = configCANCoder(constants.ABSOLUTE_ENCODER_ID, constants.ABSOLUTE_ZERO_OFFSET, (int) steerMotor.RUN_HZ);
 

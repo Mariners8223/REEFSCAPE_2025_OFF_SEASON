@@ -1,41 +1,50 @@
 package frc.robot.subsystems.DriveTrain.SwerveModules;
 
+import com.pathplanner.lib.config.ModuleConfig;
+
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.util.PIDFGains;
 
 public enum DevBotConstants {
-    FRONT_LEFT(3, 4, 5,
-            true, false, -0.42578125,
-            new PIDFGains(3, 0, 0, 1.8749), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.13777, 1.8887, 0.18407, 0.19704, 1.7025, 0.10185),
+    FRONT_LEFT(6, 10, 14,
+            false, false, -0.361328125,
+            new PIDFGains(3, 0, 0, 1.8749), //Drive mtor PID
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.15113, 1.9058, 0.14576, 0.35464, 1.7245, 0.23146),
 
-    FRONT_RIGHT(6, 7, 8,
-            true, false, 0.3933,
+    FRONT_RIGHT(12, 4, 5,
+    false, false, 0.09130859375,
             new PIDFGains(3, 0, 0, 1.8552), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.063408, 1.8552, 0.10686, 0.19704, 1.7025, 0.10185),
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.15113, 1.9058, 0.14576, 0.28713, 1.6793, 0.17791),
 
-    BACK_LEFT(9, 10, 11,
-            true, false, 0.4968,
+    BACK_LEFT(9, 7, 11,
+    false, false, -0.00244140625,
             new PIDFGains(3, 0, 0, 1.9608), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.19252, 1.9943, 0.14615, 0.2, 1.7386, 0.12048  ),
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.10073, 1.8816, 0.12503, 0.22659, 1.7941, 0.39017),
 
-    BACK_RIGHT(12, 13, 14,
-            true, false, -0.1574,
+    BACK_RIGHT(3, 13, 8,
+    false, false, -0.3974609375,
             new PIDFGains(3, 0, 0, 1.8443), //Drive motor PID
-            new PIDFGains(25, 20, 0, 0, 0.001, 0.01), //Steer motor PID
-            0.081338, 1.8486, 0.087161, 0.14, 1.602, 0.11135);
+            new PIDFGains(35, 40, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.16066, 1.6962, 0.62667, 0.43868, 1.8036, 0.35004);
 
     public static final double DRIVE_GEAR_RATIO = 5.14;
     public static final double STEER_GEAR_RATIO = 12.8;
     public static final double WHEEL_RADIUS_METERS = 0.0508;
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
+    public static final double MAX_WHEEL_LINEAR_VELOCITY = 4.5;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 50;
+    public static final int DRIVE_MOTOR_CURRENT_THERSHOLD = 80;
 
-    public static final double MAX_WHEEL_LINEAR_VELOCITY = 2;
-
-    public static final DCMotor DRIVE_MOTOR_MODEL = DCMotor.getKrakenX60(1);
+    public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
+        WHEEL_RADIUS_METERS,
+        MAX_WHEEL_LINEAR_VELOCITY,
+        0.9,
+        DCMotor.getKrakenX60(1),
+        DRIVE_MOTOR_CURRENT_LIMIT,
+        1);
 
     /**
      * the motor id for the drive motor
