@@ -1,5 +1,5 @@
 
-package frc.robot.commands.EndEffector;
+package frc.robot.commands.EndEffector.Funnel;
 
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;

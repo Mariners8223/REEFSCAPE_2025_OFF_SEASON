@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.commands.Drive.RobotRelativeDrive;
+import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.commands.MasterCommand.PathPlannerWrapper;
 import frc.robot.subsystems.BallDropping.BallDropping;
@@ -25,6 +27,7 @@ import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
+import frc.util.ToggleTrigger;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -107,6 +110,8 @@ public class RobotContainer {
 
         operatorController.button(13).onTrue(new InstantCommand(() ->
                 robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+
+        operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
     }
 
     public static ReefLocation configureTargetReefSupplier() {
@@ -131,7 +136,8 @@ public class RobotContainer {
     }
 
     public static void configureDriveBindings() {
-        driveController.start().onTrue(driveBase.resetOnlyDirection());
+        BooleanSupplier isCycleReady = () ->
+                robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded();
 
         Command masterCommand = new MasterCommand(
                 driveBase, elevator, endEffector, ballDropping,
@@ -143,23 +149,25 @@ public class RobotContainer {
             robotAuto.setDropBallInCycle(false);
         });
 
-        BooleanSupplier isCycleReady = () ->
-                robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded();
+        Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
+        Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
+
+
+        driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
+        driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
+
+        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
+        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
+
+        new ToggleTrigger(driveController.a(), new RobotRelativeDrive(driveBase, driveController));
+
+        driveController.start().onTrue(driveBase.resetOnlyDirection());
 
         new Trigger(isCycleReady).onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
                 new WaitCommand(0.5),
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
         ));
-
-        driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
-        driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
-
-        Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
-        Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
-
-        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
-        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
     }
 
     public static void configNamedCommands() {

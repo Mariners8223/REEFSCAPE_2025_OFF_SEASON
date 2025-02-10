@@ -8,7 +8,7 @@ import frc.robot.commands.BallDropping.Cycle.BallDropHigh;
 import frc.robot.commands.BallDropping.Cycle.BallDropLow;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
-import frc.robot.commands.EndEffector.YeetFunnel;
+import frc.robot.commands.EndEffector.Funnel.YeetFunnel;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
