@@ -5,6 +5,8 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Unit;
+
 import org.photonvision.PhotonPoseEstimator;
 
 public class VisionConstants {
@@ -17,27 +19,26 @@ public class VisionConstants {
 
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
-    //TODO test to find better numbers
-    public static final double maxHeightDeviation = 0.05;
-    public static final double maxMultiAmbiguity = 0.5;
-    public static final double maxSingleAmbiguity = 0.3;
+    public static final double maxHeightDeviation = 0.1;
+    public static final double maxMultiAmbiguity = 0.3;
+    public static final double maxSingleAmbiguity = 0.1;
 
-    public static double XYstdFactor = 1.6;
-    public static double thetaStdFactor = 2;
+    public static double XYstdFactor = 0.02;
+    public static double thetaStdFactor = 0.02;
 
 
 
     public enum CameraConstants{
-        FRONT_LEFT("front left",
+        END_EFFECTOR("EndEffector",
             new Transform3d(
-                //0.132, -0.35, 0.166,
-                0.11, -0.29, 0.166,
-                new Rotation3d(0, Units.degreesToRadians(-17), Units.degreesToRadians(-90))));
+                0.2, 0.1, 0.297,
+                //0, 0, 0,
+                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-17)))), 
 
-//        BACK_MIDDLE("back middle",
-//            new Transform3d(
-//                0, 0, 0,
-//                new Rotation3d(0, 0, 0)));
+       FUNNEL("Funnel",
+           new Transform3d(
+               -0.3, -0.18, 0.56,
+               new Rotation3d(0, Units.degreesToRadians(-14), Units.degreesToRadians(180))));
 
         public final String cameraName;
 
