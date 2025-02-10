@@ -138,7 +138,7 @@ public class MasterCommand extends Command {
         coralCommand.initialize();
     }
 
-    private EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level) {
+    public static EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level) {
         return switch (level) {
             case L2, L3 -> EndEffectorConstants.MotorPower.L2_3;
             case L4 -> EndEffectorConstants.MotorPower.L4;

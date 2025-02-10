@@ -17,9 +17,14 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.commands.BallDropping.BallDropOff;
+import frc.robot.commands.BallDropping.BallDropOnForHigh;
+import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
+import frc.robot.commands.EndEffector.Intake.Intake;
+import frc.robot.commands.MasterCommand.ManualCycleCommand;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.commands.MasterCommand.PathPlannerWrapper;
 import frc.robot.subsystems.BallDropping.BallDropping;
@@ -120,6 +125,9 @@ public class RobotContainer {
 
         operatorController.povUpLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
                 Timer.getMatchTime() >= 120 && endEffector.getFunnelPosition() < -0.4));
+
+        operatorController.povUpLeft().onTrue(new Intake(endEffector).onlyIf(() ->
+                endEffector.getFunnelPosition() > -0.4));
     }
 
     public static ReefLocation configureTargetReefSupplier() {
@@ -168,6 +176,14 @@ public class RobotContainer {
         driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
 
         new ToggleTrigger(driveController.a(), new RobotRelativeDrive(driveBase, driveController));
+
+        driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
+
+        driveController.povUp().whileTrue(new BallDropOnForHigh(ballDropping));
+        driveController.povDown().whileTrue(new BallDropOnForLow(ballDropping));
+
+        driveController.povUp().onFalse(new BallDropOff(ballDropping));
+        driveController.povDown().onFalse(new BallDropOff(ballDropping));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 
