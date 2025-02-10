@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
@@ -20,8 +21,6 @@ public class DriveCommand extends Command {
 
     private final double MAX_FREE_WHEEL_SPEED;
     private final double MAX_OMEGA_RAD_PER_SEC;
-
-    private boolean isFlipped = false;
 
     public DriveCommand(DriveBase driveBase, CommandXboxController controller) {
         this.driveBase = driveBase;
@@ -43,11 +42,9 @@ public class DriveCommand extends Command {
     @Override
     public void initialize() {
         driveBase.drive(new ChassisSpeeds());
-        isFlipped = DriverStation.getAlliance().isPresent() &&
-        DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
     }
 
-    private static double deadBand(double value) {
+    public static double deadBand(double value) {
         return Math.abs(value) > 0.1 ? value : 0;
     }
 
@@ -75,16 +72,11 @@ public class DriveCommand extends Command {
 
         Rotation2d gyroAngle = driveBase.getRotation2d();
 
-        if(isFlipped) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
+        if(Robot.isRedAlliance) gyroAngle = gyroAngle.plus(Rotation2d.fromDegrees(180));
 
         ChassisSpeeds robotRelativeSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, gyroAngle);
 
         //drives the robot with the values
         driveBase.drive(robotRelativeSpeeds);
-    }
-
-    @Override
-    public void end(boolean interrupted) {
-        driveBase.drive(new ChassisSpeeds());
     }
 }

@@ -40,7 +40,7 @@ public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
     private static final Field2d field = new Field2d();
-    private static boolean isRedAlliance = false;
+    public static boolean isRedAlliance = false;
     private static AprilTagFieldLayout apriltagField;
     
     @SuppressWarnings("resource")
