@@ -12,15 +12,18 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.commands.MasterCommand.PathPlannerWrapper;
 import frc.robot.subsystems.BallDropping.BallDropping;
+import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
@@ -54,6 +57,7 @@ public class RobotContainer {
     public static BallDropping ballDropping;
     public static RobotAuto robotAuto;
     public static Vision vision;
+    public static Climb climb;
 
     public static LoggedDashboardChooser<Command> autoChooser;
     public static DriveBaseSYSID driveBaseSYSID;
@@ -69,6 +73,7 @@ public class RobotContainer {
         elevator = new Elevator();
         endEffector = new EndEffector();
         ballDropping = new BallDropping();
+        climb = new Climb();
         robotAuto = new RobotAuto(driveBase, elevator, endEffector);
         vision = new Vision(driveBase::addVisionMeasurement);
 
@@ -112,6 +117,9 @@ public class RobotContainer {
                 robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
 
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
+
+        operatorController.povUpLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
+                Timer.getMatchTime() >= 120 && endEffector.getFunnelPosition() < -0.4));
     }
 
     public static ReefLocation configureTargetReefSupplier() {
