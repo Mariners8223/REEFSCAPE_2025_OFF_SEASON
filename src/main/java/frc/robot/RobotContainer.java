@@ -63,22 +63,29 @@ public class RobotContainer {
         // operatorController = new CommandPS4Controller(1);
 
         driveBase = new DriveBase();
-        // elevator = new Elevator();
-        // endEffector = new EndEffector();
-        // ballDropping = new BallDropping();
-        // robotAuto = new RobotAuto(driveBase, elevator, endEffector);
-        // vision = new Vision(driveBase::addVisionMeasurement);
-
-        // driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        elevator = new Elevator();
+        endEffector = new EndEffector();
+        ballDropping = new BallDropping();
+        robotAuto = new RobotAuto(driveBase, elevator, endEffector);
+        vision = new Vision(driveBase::addVisionMeasurement);
 
         configChooser();
         configNamedCommands();
+        
         configureDriveBindings();
         configureOperatorBinding();
 
+        //until we have real driver station
         SmartDashboard.putNumber("target Reef", 1);
         SmartDashboard.putNumber("target Level", 1);
         SmartDashboard.putBoolean("should drop ball", false);
+
+
+        driveController.b().onTrue(new InstantCommand(() -> {
+            RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+            RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+            RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+        }));
     }
 
     public static void configureOperatorBinding() {
@@ -147,12 +154,6 @@ public class RobotContainer {
 
         driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
         driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
-
-        driveController.b().onTrue(new InstantCommand(() -> {
-            RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
-            RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
-            RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
-        }));
 
         Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
