@@ -121,11 +121,14 @@ public class RobotContainer {
         operatorController.button(13).onTrue(new InstantCommand(() ->
                 robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
 
+        //funnel flipping
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
 
+        //climb
         operatorController.povUpLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
                 Timer.getMatchTime() >= 120 && endEffector.getFunnelPosition() < -0.4));
 
+        //manual intake
         operatorController.povUpLeft().onTrue(new Intake(endEffector).onlyIf(() ->
                 endEffector.getFunnelPosition() > -0.4));
     }
@@ -169,16 +172,21 @@ public class RobotContainer {
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
 
 
+        //main cycle
         driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
         driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
 
+        //feeder path finder
         driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
         driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
 
+        //toggle type of drive for manual control
         new ToggleTrigger(driveController.a(), new RobotRelativeDrive(driveBase, driveController));
 
+        //manual cycle
         driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
 
+        //ball dropping manual control
         driveController.povUp().whileTrue(new BallDropOnForHigh(ballDropping));
         driveController.povDown().whileTrue(new BallDropOnForLow(ballDropping));
 
