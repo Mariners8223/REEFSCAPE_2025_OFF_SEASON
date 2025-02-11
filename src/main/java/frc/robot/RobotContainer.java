@@ -80,7 +80,7 @@ public class RobotContainer {
         ballDropping = new BallDropping();
         climb = new Climb();
         robotAuto = new RobotAuto(driveBase, elevator, endEffector);
-        vision = new Vision(driveBase::addVisionMeasurement);
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         configChooser();
         configNamedCommands();

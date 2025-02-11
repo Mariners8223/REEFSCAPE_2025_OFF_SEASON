@@ -5,6 +5,7 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
+import java.util.function.Supplier;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -30,7 +31,7 @@ public class Vision extends SubsystemBase {
     /**
      * Creates a new Vision.
      */
-    public Vision(VisionConsumer poseConsumer) {
+    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier) {
 
         int numOfCameras = CameraConstants.values().length;
 
@@ -39,7 +40,7 @@ public class Vision extends SubsystemBase {
         CameraConstants[] constants = CameraConstants.values();
 
         for (int i = 0; i < numOfCameras; i++) {
-            if(Constants.ROBOT_TYPE != RobotType.REPLAY) cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT);
+            if(Constants.ROBOT_TYPE != RobotType.REPLAY) cameras[i] = new VisionCamera(constants[i], VisionConstants.FIELD_LAYOUT, referncePoseSupplier);
             else cameras[i] = new VisionCamera(constants[i].cameraName);
         }
 
@@ -155,8 +156,8 @@ public class Vision extends SubsystemBase {
             this.inputs = new VisionInputsAutoLogged();
         }
 
-        public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout) {
-            this(new VisionIOPhoton(constants, fieldLayout), constants.cameraName);
+        public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout, Supplier<Pose2d> referencePoseSupplier) {
+            this(new VisionIOPhoton(constants, fieldLayout, referencePoseSupplier), constants.cameraName);
         }
 
         public VisionCamera(String cameraName){

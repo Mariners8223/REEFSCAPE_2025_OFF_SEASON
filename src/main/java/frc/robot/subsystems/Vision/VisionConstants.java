@@ -14,7 +14,7 @@ public class VisionConstants {
             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
     public static final PhotonPoseEstimator.PoseStrategy FALLBACK_STRATEGY =
-            PhotonPoseEstimator.PoseStrategy.CLOSEST_TO_CAMERA_HEIGHT;
+            PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS;
 
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
@@ -22,25 +22,25 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.1;
 
-    public static double XYstdFactor = 0.02;
-    public static double thetaStdFactor = 0.02;
+    public static double XYstdFactor = 0.04;
+    public static double thetaStdFactor = 0.06;
 
 
 
     public enum CameraConstants{
         END_EFFECTOR_CAMERA("EndEffectorCamera",
             new Transform3d(
-                //0.2, 0.1, 0.297,
-                0, 0, 0,
-                //new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-17)))), 
-                new Rotation3d(0,0,0))),
+                0.2, 0.1, 0.297,
+                // 0, 0, 0,
+                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-17)))), 
+                // new Rotation3d(0,0,0))),
 
        FUNNEL_CAMERA("FunnelCamera",
            new Transform3d(
-               //-0.3, -0.18, 0.56,
-               0, 0, 0,
-               //new Rotation3d(0, Units.degreesToRadians(-14), Units.degreesToRadians(180))));
-               new Rotation3d(0,0,0)));
+               -0.3, 0.18, 0.56,
+            //    0, 0, 0,
+               new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(180))));
+            //    new Rotation3d(0,0,0)));
 
         public final String cameraName;
 

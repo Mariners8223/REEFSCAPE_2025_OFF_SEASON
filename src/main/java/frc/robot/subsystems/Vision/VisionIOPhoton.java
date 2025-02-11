@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Vision;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import org.photonvision.EstimatedRobotPose;
@@ -12,18 +13,23 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public class VisionIOPhoton implements VisionIO {
     private final PhotonCamera camera;
     private final PhotonPoseEstimator poseEstimator;
 
+    private final Supplier<Pose2d> referncePoseSupplier;
 
-    public VisionIOPhoton(CameraConstants cameraConstants, AprilTagFieldLayout fieldLayout) {
+
+    public VisionIOPhoton(CameraConstants cameraConstants, AprilTagFieldLayout fieldLayout, Supplier<Pose2d> referencePoseSupplier) {
         camera = new PhotonCamera(cameraConstants.cameraName);
 
         poseEstimator = new PhotonPoseEstimator(fieldLayout, VisionConstants.MAIN_STRATEGY, cameraConstants.robotToCamera);
 
         poseEstimator.setMultiTagFallbackStrategy(VisionConstants.FALLBACK_STRATEGY);
+
+        this.referncePoseSupplier = referencePoseSupplier;
     }
 
 
@@ -55,6 +61,8 @@ public class VisionIOPhoton implements VisionIO {
         if(!result.hasTargets()){
             return emptyFrame[0];
         }
+
+        poseEstimator.setReferencePose(referncePoseSupplier.get());
 
         Optional<EstimatedRobotPose> poseEstimatorResult = poseEstimator.update(result);
 
