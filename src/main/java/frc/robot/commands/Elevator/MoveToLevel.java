@@ -27,7 +27,9 @@ public class MoveToLevel extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    elevator.moveMotorByPosition(desiredLevel);
+    if (desiredLevel != null){
+      elevator.moveMotorByPosition(desiredLevel);
+    }
   }
 
   // Called once the command ends or is interrupted.

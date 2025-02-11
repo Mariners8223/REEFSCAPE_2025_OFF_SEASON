@@ -75,7 +75,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         driveController = new CommandXboxController(0);
-        // operatorController = new CommandPS4Controller(1);
+        operatorController = new CommandGenericHID(1);
 
         driveBase = new DriveBase();
         elevator = new Elevator();
@@ -89,20 +89,20 @@ public class RobotContainer {
         configNamedCommands();
         
         configureDriveBindings();
-        // configureOperatorBinding();
+        configureOperatorBinding();
 
         //until we have real driver station
-        SmartDashboard.putNumber("target Reef", 1);
-        SmartDashboard.putNumber("target Level", 2);
-        SmartDashboard.putBoolean("should drop ball", false);
+        // SmartDashboard.putNumber("target Reef", 1);
+        // SmartDashboard.putNumber("target Level", 2);
+        // SmartDashboard.putBoolean("should drop ball", false);
 
 
-        driveController.b().onTrue(new InstantCommand(() -> {
-            RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
-            RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
-            RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
-            System.out.println("set new targets");
-        }));
+        // driveController.b().onTrue(new InstantCommand(() -> {
+        //     RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+        //     RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+        //     RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+        //     System.out.println("set new targets");
+        // }));
     }
 
     public static void configureOperatorBinding() {
@@ -179,14 +179,14 @@ public class RobotContainer {
         Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
 
-
+         
         //main cycle
-        driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
-        driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
+        // driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
+        // driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
 
         //feeder path finder
-        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
-        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
+        // driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
+        // driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
 
         Command robotRelativeDrive = new RobotRelativeDrive(driveBase, driveController);
 
@@ -216,8 +216,8 @@ public class RobotContainer {
         SequentialCommandGroup ejectSquance = new SequentialCommandGroup(
             ejectCommand,
             new MoveToLevel(elevator, ElevatorLevel.Bottom),
-            new InstantCommand(() -> robotRelativeDrive.cancel()),
-            resetSelection
+            new InstantCommand(() -> robotRelativeDrive.cancel())
+            //resetSelection
         );
 
         driveController.x().onFalse(ejectSquance);
