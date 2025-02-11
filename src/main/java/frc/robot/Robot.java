@@ -102,7 +102,10 @@ public class Robot extends LoggedRobot
 
         ControllerMaster.getInstance();
 
-        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION) checkFlip();
+        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
+            checkFlip();
+            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        }
 
         SmartDashboard.putData("Field", field);
         apriltagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);

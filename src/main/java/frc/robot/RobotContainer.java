@@ -86,7 +86,7 @@ public class RobotContainer {
         configNamedCommands();
         
         configureDriveBindings();
-        configureOperatorBinding();
+        // configureOperatorBinding();
 
         //until we have real driver station
         SmartDashboard.putNumber("target Reef", 1);
