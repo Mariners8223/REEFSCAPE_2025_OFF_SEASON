@@ -39,7 +39,7 @@ public class ElevatorIOVortex implements ElevatorIO {
         motor.setMotorInverted(ElevatorConstants.LeadMotor.IS_INVERTED);
         motor.setMotorIdleMode(true);
 
-        motor.setCurrentLimits(60, 70);
+        // motor.setCurrentLimits(60, 70);
 
         return motor;
     }

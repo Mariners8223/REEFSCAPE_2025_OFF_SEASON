@@ -22,6 +22,8 @@ import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.RobotRelativeDrive;
+import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.commands.MasterCommand.ManualCycleCommand;
@@ -32,6 +34,7 @@ import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
@@ -90,7 +93,7 @@ public class RobotContainer {
 
         //until we have real driver station
         SmartDashboard.putNumber("target Reef", 1);
-        SmartDashboard.putNumber("target Level", 1);
+        SmartDashboard.putNumber("target Level", 2);
         SmartDashboard.putBoolean("should drop ball", false);
 
 
@@ -98,6 +101,7 @@ public class RobotContainer {
             RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
             RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
             RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+            System.out.println("set new targets");
         }));
     }
 
@@ -142,9 +146,13 @@ public class RobotContainer {
     }
 
     public static ElevatorLevel configureLevelSupplier() {
-        int level = (int) SmartDashboard.getNumber("target Level", 1);
+        double shit = SmartDashboard.getNumber("target Level", 1);
+        System.out.println("woop woop " + shit);
+        int level = (int) shit;
 
         level = MathUtil.clamp(level, 1, 4);
+
+        System.out.println("new selcted level: " + level);
 
         return ElevatorLevel.values()[level];
     }
@@ -184,8 +192,24 @@ public class RobotContainer {
         new ToggleTrigger(driveController.a(), new RobotRelativeDrive(driveBase, driveController));
 
         //manual cycle
-        driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
+        // driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
+        MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
+        Eject ejectCommand = new Eject(endEffector, MotorPower.L1);
 
+        driveController.x().onTrue(
+            new InstantCommand(() -> {
+                moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel());
+                ejectCommand.setLevel(MasterCommand.getMotorPower(robotAuto.getSelectedLevel()));}
+                ).andThen(
+                moveToLevel
+            )
+        );
+
+        driveController.x().onFalse(
+                ejectCommand.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom))
+        );
+
+        
         //ball dropping manual control
         driveController.povUp().whileTrue(new BallDropOnForHigh(ballDropping));
         driveController.povDown().whileTrue(new BallDropOnForLow(ballDropping));

@@ -11,7 +11,7 @@ public class RobotRelativeDrive extends Command {
     private final DriveBase driveBase;
     private final CommandXboxController controller;
 
-    private static final double MAX_FREE_WHEEL_SPEED = 2;
+    private static final double MAX_FREE_WHEEL_SPEED = 1.25;
 
     public RobotRelativeDrive(DriveBase driveBase, CommandXboxController controller) {
         this.driveBase = driveBase;
