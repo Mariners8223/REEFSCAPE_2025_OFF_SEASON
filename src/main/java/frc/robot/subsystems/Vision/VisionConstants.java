@@ -14,7 +14,7 @@ public class VisionConstants {
             PhotonPoseEstimator.PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR;
 
     public static final PhotonPoseEstimator.PoseStrategy FALLBACK_STRATEGY =
-            PhotonPoseEstimator.PoseStrategy.AVERAGE_BEST_TARGETS;
+            PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY;
 
     public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
@@ -22,8 +22,8 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.1;
 
-    public static double XYstdFactor = 0.04;
-    public static double thetaStdFactor = 0.06;
+    public static double XYstdFactor = 0.06;
+    public static double thetaStdFactor = 0.08;
 
 
 
