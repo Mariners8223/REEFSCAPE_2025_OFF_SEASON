@@ -22,8 +22,8 @@ public class Constants {
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT;
 
     public enum ReefLocation {
-        REEF_1(3.173, 3.860, 0),
-        REEF_2(3.173, 4.190, 0),
+        REEF_1(3.175, 3.91, 0),
+        REEF_2(3.165, 4.190, 0),
         REEF_3(3.686, 5.086, -60),
         REEF_4(3.975, 5.246, -60),
         REEF_5(5.053, 5.335, -120),

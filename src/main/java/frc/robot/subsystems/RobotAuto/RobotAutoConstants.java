@@ -11,8 +11,8 @@ public class RobotAutoConstants {
         public static double XY_TOLERANCE = 0.01;
         public static double THETA_TOLERANCE = 0.01;
 
-        public static PIDFGains XY_PID = new PIDFGains(5, 6, 0);
-        public static PIDFGains THETA_PID = new PIDFGains(8, 1, 0);
+        public static PIDFGains XY_PID = new PIDFGains(8, 7, 0);
+        public static PIDFGains THETA_PID = new PIDFGains(12, 6, 0);
     }
 
     public enum BallDropTime{

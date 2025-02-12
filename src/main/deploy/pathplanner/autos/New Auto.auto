@@ -15,6 +15,12 @@
           "data": {
             "name": "home to reef 1"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject l3"
+          }
         }
       ]
     }
