@@ -38,7 +38,7 @@ public class PIDFGains {
       this._kI = kI;
       this._kD = kD;
       this._kF = 0;
-      this._tolerance = 0;
+      this._tolerance = Double.POSITIVE_INFINITY;
       this._iZone = 0;
       this._maxAcceleration = 0;
       this._maxVelocity = 0;
