@@ -21,20 +21,14 @@ public class RobotRelativeDrive extends Command {
 
     @Override
     public void execute() {
-        double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
-
-        if(R2Axis <= 0.1) {
-            R2Axis = 0.1;
-        }
-
         //sets the value of the 3 vectors we need
         double leftX = -deadBand(controller.getLeftY());
         double leftY = -deadBand(controller.getLeftX());
         double rightX = -deadBand(controller.getRightX());
 
-        leftX *= R2Axis * MAX_FREE_WHEEL_SPEED;
-        leftY *= R2Axis * MAX_FREE_WHEEL_SPEED;
-        rightX *= R2Axis * MAX_FREE_WHEEL_SPEED;
+        leftX *= MAX_FREE_WHEEL_SPEED;
+        leftY *= MAX_FREE_WHEEL_SPEED;
+        rightX *= MAX_FREE_WHEEL_SPEED;
 
         driveBase.drive(new ChassisSpeeds(leftX, leftY, rightX));
     }

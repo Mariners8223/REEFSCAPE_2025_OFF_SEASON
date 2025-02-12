@@ -188,11 +188,6 @@ public class RobotContainer {
         // driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
         // driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
 
-        Command robotRelativeDrive = new RobotRelativeDrive(driveBase, driveController);
-
-        //toggle type of drive for manual control
-        new ToggleTrigger(driveController.a(), robotRelativeDrive);
-
         //manual cycle
         // driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
@@ -207,20 +202,21 @@ public class RobotContainer {
             )
         );
 
+        driveController.x().whileTrue(new RobotRelativeDrive(driveBase, driveController));
+
         resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
             robotAuto.setSelectedReef(null);
             robotAuto.setDropBallInCycle(false);
         });
 
-        SequentialCommandGroup ejectSquance = new SequentialCommandGroup(
+        SequentialCommandGroup ejectSequence = new SequentialCommandGroup(
             ejectCommand,
-            new MoveToLevel(elevator, ElevatorLevel.Bottom),
-            new InstantCommand(() -> robotRelativeDrive.cancel())
+            new MoveToLevel(elevator, ElevatorLevel.Bottom)
             //resetSelection
         );
 
-        driveController.x().onFalse(ejectSquance);
+        driveController.x().onFalse(ejectSequence);
 
         
         
