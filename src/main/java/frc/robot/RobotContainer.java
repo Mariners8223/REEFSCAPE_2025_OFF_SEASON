@@ -20,13 +20,15 @@ import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
 import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
+import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
+import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
-import frc.robot.commands.MasterCommand.ManualCycleCommand;
+import frc.robot.commands.MasterCommand.HomeToReef;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.commands.MasterCommand.PathPlannerWrapper;
 import frc.robot.subsystems.BallDropping.BallDropping;
@@ -38,7 +40,6 @@ import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
-import frc.util.ToggleTrigger;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -53,7 +54,6 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
@@ -87,7 +87,7 @@ public class RobotContainer {
 
         configChooser();
         configNamedCommands();
-        
+
         configureDriveBindings();
         configureOperatorBinding();
 
@@ -179,14 +179,14 @@ public class RobotContainer {
         Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
 
-         
-        //main cycle
-        // driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
-        // driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
 
-        //feeder path finder
-        // driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
-        // driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
+        // main cycle
+        driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
+        driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
+
+        // feeder path finder
+        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
+        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
 
         //manual cycle
         // driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
@@ -194,12 +194,13 @@ public class RobotContainer {
         Eject ejectCommand = new Eject(endEffector, MotorPower.L1);
 
         driveController.x().onTrue(
-            new InstantCommand(() -> {
-                moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel());
-                ejectCommand.setLevel(MasterCommand.getMotorPower(robotAuto.getSelectedLevel()));}
+                new InstantCommand(() -> {
+                    moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel());
+                    ejectCommand.setLevel(MasterCommand.getMotorPower(robotAuto.getSelectedLevel()));
+                }
                 ).andThen(
-                moveToLevel
-            )
+                        moveToLevel
+                ).onlyIf(isCycleReady)
         );
 
         driveController.x().whileTrue(new RobotRelativeDrive(driveBase, driveController));
@@ -210,16 +211,15 @@ public class RobotContainer {
             robotAuto.setDropBallInCycle(false);
         });
 
-        SequentialCommandGroup ejectSequence = new SequentialCommandGroup(
-            ejectCommand,
-            new MoveToLevel(elevator, ElevatorLevel.Bottom)
-            //resetSelection
-        );
+        Command ejectSequence = new SequentialCommandGroup(
+                ejectCommand,
+                new MoveToLevel(elevator, ElevatorLevel.Bottom)
+                //resetSelection
+        ).onlyIf(isCycleReady);
 
         driveController.x().onFalse(ejectSequence);
 
-        
-        
+
         //ball dropping manual control
         driveController.povUp().whileTrue(new BallDropOnForHigh(ballDropping));
         driveController.povDown().whileTrue(new BallDropOnForLow(ballDropping));
@@ -237,14 +237,29 @@ public class RobotContainer {
     }
 
     public static void configNamedCommands() {
-        NamedCommands.registerCommand("intake", new InstantCommand());
-        NamedCommands.registerCommand("eject l1", new InstantCommand());
-        NamedCommands.registerCommand("eject l2", new InstantCommand());
-        NamedCommands.registerCommand("eject l3", new InstantCommand());
-        NamedCommands.registerCommand("eject l4", new InstantCommand());
-        NamedCommands.registerCommand("ball drop l2", new InstantCommand());
-        NamedCommands.registerCommand("ball drop l3", new InstantCommand());
-        NamedCommands.registerCommand("ball drop off", new InstantCommand());
+        NamedCommands.registerCommand("intake", new MoveToLevel(elevator, ElevatorLevel.Bottom)
+                .andThen(new Intake(endEffector)));
+
+        NamedCommands.registerCommand("eject l1", new MoveToLevel(elevator, ElevatorLevel.L1)
+                .andThen(new Eject(endEffector, MotorPower.L1), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+
+        NamedCommands.registerCommand("eject l2", new MoveToLevel(elevator, ElevatorLevel.L2)
+                .andThen(new Eject(endEffector, MotorPower.L2_3), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+
+        NamedCommands.registerCommand("eject l3", new MoveToLevel(elevator, ElevatorLevel.L3)
+                .andThen(new Eject(endEffector, MotorPower.L2_3), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+
+        NamedCommands.registerCommand("eject l4", new MoveToLevel(elevator, ElevatorLevel.L4)
+                .andThen(new Eject(endEffector, MotorPower.L4), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+
+        NamedCommands.registerCommand("ball drop l2", new BallDropLow(ballDropping));
+        NamedCommands.registerCommand("ball drop l3", new BallDropHigh(ballDropping));
+        NamedCommands.registerCommand("ball drop off", new BallDropOff(ballDropping));
+        NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
+
+        for (ReefLocation reef : ReefLocation.values()) {
+            NamedCommands.registerCommand("Home To Reef " + (reef.ordinal() + 1), new HomeToReef(driveBase, reef.getPose()));
+        }
     }
 
 
