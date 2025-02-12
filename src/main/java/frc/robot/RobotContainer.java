@@ -15,8 +15,10 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.commands.AutoCommands.HomeToReefAuto;
 import frc.robot.commands.BallDropping.BallDropOff;
 import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
@@ -85,8 +87,8 @@ public class RobotContainer {
         robotAuto = new RobotAuto(driveBase, elevator, endEffector);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        configChooser();
         configNamedCommands();
+        configChooser();
 
         configureDriveBindings();
         configureOperatorBinding();
@@ -234,6 +236,10 @@ public class RobotContainer {
                 new WaitCommand(0.5),
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
         ));
+
+
+        driveController.y().whileTrue(new HomeToReef(driveBase, ReefLocation.REEF_1));
+        //driveController.rightStick().onTrue(new HomeToReef(driveBase, ReefLocation.REEF_1.getPose()));
     }
 
     public static void configNamedCommands() {
@@ -258,8 +264,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         for (ReefLocation reef : ReefLocation.values()) {
-            NamedCommands.registerCommand("Home To Reef " + (reef.ordinal() + 1), new HomeToReef(driveBase, reef.getPose()));
+            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1), new HomeToReef(driveBase, reef));
         }
+
+        NamedCommands.registerCommand("Wait until GP", new WaitUntilCommand(endEffector::isGpLoaded));
     }
 
 

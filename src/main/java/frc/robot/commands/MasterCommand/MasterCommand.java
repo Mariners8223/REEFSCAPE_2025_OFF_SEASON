@@ -51,7 +51,7 @@ public class MasterCommand extends Command {
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1.getPose()); // setting the default target pose
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
-        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1.getPose());
+        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
         Command adjustmentPhase = new ParallelCommandGroup(
                 homeToReef,
@@ -130,7 +130,7 @@ public class MasterCommand extends Command {
         // setting the target pose for the path command
         pathCommand.setTargetPose(pathFinderTarget);
         //setting the target pose for the adjustment phase
-        homeToReef.setTargetPose(targetReef.getPose());
+        homeToReef.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);
         ejectCommand.setLevel(getMotorPower(level));

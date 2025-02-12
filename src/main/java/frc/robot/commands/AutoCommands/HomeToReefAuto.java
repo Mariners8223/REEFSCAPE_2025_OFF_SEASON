@@ -1,4 +1,4 @@
-package frc.robot.commands.MasterCommand;
+package frc.robot.commands.AutoCommands;
 
 import org.littletonrobotics.junction.Logger;
 
@@ -12,7 +12,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 
 
-public class HomeToReef extends Command {
+public class HomeToReefAuto extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
 
@@ -20,7 +20,7 @@ public class HomeToReef extends Command {
     private final PIDController YController;
     private final PIDController ThetaController;
 
-    public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
+    public HomeToReefAuto(DriveBase driveBase, ReefLocation targetReef) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
         // each subsystem used by the command must be passed into the
@@ -31,10 +31,6 @@ public class HomeToReef extends Command {
         XController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
-
-        XController.setIZone(Double.POSITIVE_INFINITY);
-        YController.setIZone(Double.POSITIVE_INFINITY);
-        ThetaController.setIZone(Double.POSITIVE_INFINITY);
 
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
