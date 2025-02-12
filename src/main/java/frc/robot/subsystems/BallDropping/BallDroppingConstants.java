@@ -18,7 +18,7 @@ public class BallDroppingConstants {
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final int ID = 24;
         public static final double GEAR_RATIO = 9;
-        public static final boolean IS_INVERTED = true;
+        public static final boolean IS_INVERTED = false;
 
         public static final double MOTOR_FEED_FORWARD = 0.2;
 

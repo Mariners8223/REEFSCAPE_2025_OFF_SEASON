@@ -129,11 +129,11 @@ public class RobotContainer {
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
 
         //climb
-        operatorController.povUpLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
+        operatorController.povDownLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
                 Timer.getMatchTime() >= 120 && endEffector.getFunnelPosition() < -0.4));
 
         //manual intake
-        operatorController.povUpLeft().onTrue(new Intake(endEffector).onlyIf(() ->
+        operatorController.povDownLeft().onTrue(new Intake(endEffector).onlyIf(() ->
                 endEffector.getFunnelPosition() > -0.4));
     }
 
