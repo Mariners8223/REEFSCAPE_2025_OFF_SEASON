@@ -159,13 +159,14 @@ public class DriveBase extends SubsystemBase {
                             DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
                 this);
 
-        new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
-                setModulesBrakeMode(true)
-                , () ->
-        {
-            if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
-        }
-        ).ignoringDisable(true));
+                setModulesBrakeMode(true);
+        // new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
+        //         setModulesBrakeMode(true)
+        //         , () ->
+        // {
+        //     if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
+        // }
+        // ).ignoringDisable(true));
 
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
                 this.setDefaultCommand(new DriveCommand(this, RobotContainer.driveController)),

@@ -29,13 +29,8 @@ public class DriveBaseConstants {
         public static final double PATH_ERROR_SPIKE_TOLERANCE = 1; //the max position spike before path planner replans the path in meters
 
 
-        public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
-                PATH_ERROR_TOLERANCE,
-                PATH_ERROR_SPIKE_TOLERANCE,
-                DISTANCE_BETWEEN_WHEELS,
-                CompBotConstants.DRIVE_MOTOR_MODEL,
-                DISTANCE_BETWEEN_WHEELS,
-                PIGEON_ID);
+        public static final ModuleConfig MODULE_CONFIG = Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ? 
+                DevBotConstants.MODULE_CONFIG : CompBotConstants.MODULE_CONFIG;
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
                 53.3,
@@ -44,15 +39,13 @@ public class DriveBaseConstants {
                 MODULE_TRANSLATIONS);
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
-                        DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY :
-                        CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY,
-                10, //TODO find a good value for this
+                2,
+                1, //TODO find a good value for this
                 10,
-                20); //the constraints for pathPlanner
+                50); //the constraints for pathPlanner
 
-        public static final PIDFGains THETA_PID = new PIDFGains(1.4574, 0, 0); //the pid gains for the PID Controller of the robot angle, units are radians per second
-        public static final PIDFGains XY_PID = new PIDFGains(5.5, 0.055, 0.05); //the pid gains for the pid controller of the robot's velocity, units are meters per second
+        public static final PIDFGains THETA_PID = new PIDFGains(1.7, 0.01, 0); //the pid gains for the PID Controller of the robot angle, units are radians per second
+        public static final PIDFGains XY_PID = new PIDFGains(5.5, 0, 0.05); //the pid gains for the pid controller of the robot's velocity, units are meters per second
     }
 
     public static final int PIGEON_ID = 2;
