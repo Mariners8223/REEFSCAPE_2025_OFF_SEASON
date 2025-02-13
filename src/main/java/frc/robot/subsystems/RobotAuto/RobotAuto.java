@@ -55,7 +55,9 @@ public class RobotAuto extends SubsystemBase {
     public void setSelectedLevel(ElevatorConstants.ElevatorLevel level) {
         String name;
 
-        SmartDashboard.putBoolean("Level " + selectedLevel.ordinal(), false);
+        if(selectedLevel != null){
+            SmartDashboard.putBoolean("Level " + selectedLevel.ordinal(), false);
+        }
         if(level != null){
             SmartDashboard.putBoolean("Level " + level.ordinal(), true);
             name = level.name();

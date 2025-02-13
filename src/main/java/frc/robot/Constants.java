@@ -74,10 +74,10 @@ public class Constants {
 
     public static enum FeederLocation {
         LEFT(6.6, false,
-                1.18, 7, -50),
+                1.18, 7.064, -54),
 
         RIGHT(1.5, true,
-                1.8, 1, 50);
+                1.1115, 0.962, 54);
 
         private double yLine;
         private static double xLine = 2;
@@ -120,10 +120,10 @@ public class Constants {
             Pose2d prevRightPose = RIGHT.robotPose;
 
             RIGHT.robotPose = new Pose2d(layout.getFieldLength() - prevLeftPose.getX(), prevLeftPose.getY(),
-                    Rotation2d.fromDegrees(prevLeftPose.getRotation().getDegrees() - 180));
+                    Rotation2d.fromDegrees(prevRightPose.getRotation().getDegrees() + 180));
 
             LEFT.robotPose = new Pose2d(layout.getFieldLength() - prevRightPose.getX(), prevRightPose.getY(),
-                    Rotation2d.fromDegrees(prevRightPose.getRotation().getDegrees() - 180));
+                    Rotation2d.fromDegrees(prevLeftPose.getRotation().getDegrees() + 180));
         }
 
         FeederLocation(double yLine, boolean yLineLarger, double robotPoseX, double robotPoseY, double robotPoseDeg) {
