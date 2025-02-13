@@ -85,7 +85,7 @@ public class RobotContainer {
         endEffector = new EndEffector();
         ballDropping = new BallDropping();
         climb = new Climb();
-        robotAuto = new RobotAuto(driveBase, elevator, endEffector);
+        robotAuto = new RobotAuto();
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         endEffector.setDefaultCommand(new Intake(endEffector));
