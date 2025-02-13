@@ -135,7 +135,7 @@ public class RobotContainer {
 
         //climb
         operatorController.povDownLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
-                Timer.getMatchTime() >= 120 && endEffector.getFunnelPosition() < -0.4));
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4));
 
         //manual intake
         operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, MotorPower.L2_3).onlyIf(() ->

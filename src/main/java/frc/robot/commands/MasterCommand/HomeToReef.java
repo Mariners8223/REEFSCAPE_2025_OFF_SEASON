@@ -32,9 +32,9 @@ public class HomeToReef extends Command {
         YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
 
-        XController.setIZone(Double.POSITIVE_INFINITY);
-        YController.setIZone(Double.POSITIVE_INFINITY);
-        ThetaController.setIZone(Double.POSITIVE_INFINITY);
+        XController.setIZone(0.3);
+        YController.setIZone(0.3);
+        ThetaController.setIZone(0.5);
 
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
