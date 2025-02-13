@@ -45,17 +45,17 @@ public class EndEffectorConstants {
         public static final boolean IS_INVERTED = true;
 
         public static final PIDFGains PID_GAINS = new PIDFGains(
-            6,
+            4,
+            8,
             0,
-            0.1,
-            0.1,
-            0.1,
-            0);
+            0,
+            0.0,
+            0.2);
         public static final double GEAR_RATIO = 9;
 
 
         public static final double COLLECT_POSITION = 0;
-        public static final double CLIMB_POSITION = -0.75;
+        public static final double CLIMB_POSITION = -0.816;
         public static final double TOLERANCE = 0.1;
     }
 }
