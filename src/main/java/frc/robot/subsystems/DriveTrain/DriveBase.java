@@ -140,7 +140,7 @@ public class DriveBase extends SubsystemBase {
 
         SmartDashboard.putData("Gyro", gyro);
 
-        RobotConfig config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
+        RobotConfig config;
         try {
             config = RobotConfig.fromGUISettings();
         } catch (IOException | ParseException e) {

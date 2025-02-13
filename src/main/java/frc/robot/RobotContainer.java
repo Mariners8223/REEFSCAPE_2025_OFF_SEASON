@@ -28,6 +28,7 @@ import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.commands.MasterCommand.HomeToReef;
@@ -87,6 +88,8 @@ public class RobotContainer {
         robotAuto = new RobotAuto(driveBase, elevator, endEffector);
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
+        endEffector.setDefaultCommand(new Intake(endEffector));
+
         configNamedCommands();
         configChooser();
 
@@ -135,7 +138,7 @@ public class RobotContainer {
                 Timer.getMatchTime() >= 120 && endEffector.getFunnelPosition() < -0.4));
 
         //manual intake
-        operatorController.povDownLeft().onTrue(new Intake(endEffector).onlyIf(() ->
+        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, MotorPower.L2_3).onlyIf(() ->
                 endEffector.getFunnelPosition() > -0.4));
     }
 
@@ -177,8 +180,8 @@ public class RobotContainer {
             robotAuto.setSelectedReef(null);
             robotAuto.setDropBallInCycle(false);
         });
-
-        Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
+        
+      Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
 
 
