@@ -32,6 +32,7 @@ public class MasterCommand extends Command {
     private final MoveToLevel moveElevatorCommand;
     private final Eject ejectCommand;
     private final HomeToReef homeToReef;
+    private final HomeToReefEndless homeToReefEndless;
 
     private boolean shouldDropBall = false;
     private Constants.ReefLocation targetReef = null;
@@ -63,8 +64,20 @@ public class MasterCommand extends Command {
         // eject phase (releasing the game piece)
         ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1);
 
+        homeToReefEndless = new HomeToReefEndless(driveBase, Constants.ReefLocation.REEF_1);
+
         // elevator to home phase (moving the elevator to the home position)
         Command elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
+
+        Command ejectPhase = new ParallelDeadlineGroup(
+                new ParallelCommandGroup(
+                        ejectCommand,
+                        elevatorToHome,
+                        createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
+                                checkBallDropTime(RobotAutoConstants.BallDropTime.AFTER)) // ball drop after reef
+                ),
+                homeToReefEndless
+        );
 
         // the main command
         coralCommand = new SequentialCommandGroup(
@@ -72,10 +85,7 @@ public class MasterCommand extends Command {
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.BEFORE)),// ball drop before the reef
                 adjustmentPhase,
-                ejectCommand,
-                elevatorToHome,
-                createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
-                        checkBallDropTime(RobotAutoConstants.BallDropTime.AFTER)) // ball drop after the reef
+                ejectPhase
         );
     }
 
@@ -131,6 +141,7 @@ public class MasterCommand extends Command {
         pathCommand.setTargetPose(pathFinderTarget);
         //setting the target pose for the adjustment phase
         homeToReef.setTargetPose(targetReef);
+        homeToReefEndless.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);
         ejectCommand.setLevel(getMotorPower(level));

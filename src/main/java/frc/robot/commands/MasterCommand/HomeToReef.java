@@ -32,8 +32,8 @@ public class HomeToReef extends Command {
         YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
 
-        XController.setIZone(0.3);
-        YController.setIZone(0.3);
+        XController.setIZone(0.5);
+        YController.setIZone(0.5);
         ThetaController.setIZone(0.5);
 
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -95,6 +95,8 @@ public class HomeToReef extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        driveBase.drive(new ChassisSpeeds());
+        if(interrupted) {
+            driveBase.drive(new ChassisSpeeds());
+        }
     }
 }

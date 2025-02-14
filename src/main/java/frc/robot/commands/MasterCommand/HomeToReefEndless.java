@@ -1,6 +1,4 @@
-package frc.robot.commands.AutoCommands;
-
-import org.littletonrobotics.junction.Logger;
+package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
@@ -10,9 +8,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
+import org.littletonrobotics.junction.Logger;
 
 
-public class HomeToReefAuto extends Command {
+public class HomeToReefEndless extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
 
@@ -20,7 +19,7 @@ public class HomeToReefAuto extends Command {
     private final PIDController YController;
     private final PIDController ThetaController;
 
-    public HomeToReefAuto(DriveBase driveBase, ReefLocation targetReef) {
+    public HomeToReefEndless(DriveBase driveBase, ReefLocation targetReef) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
         // each subsystem used by the command must be passed into the
@@ -32,8 +31,8 @@ public class HomeToReefAuto extends Command {
         YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
 
-        XController.setIZone(0.1);
-        YController.setIZone(0.1);
+        XController.setIZone(0.5);
+        YController.setIZone(0.5);
         ThetaController.setIZone(0.5);
 
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -79,18 +78,7 @@ public class HomeToReefAuto extends Command {
 
     @Override
     public boolean isFinished() {
-        double xError = Math.abs(XController.getError());
-        double yError = Math.abs(YController.getError());
-        double thetaError = Math.abs(ThetaController.getError());
-
-        Logger.recordOutput("home to reef/x error", xError);
-        Logger.recordOutput("home to reef/y error", yError);
-        Logger.recordOutput("home to reef/theta error", thetaError);
-
-        double xyTolerance = RobotAutoConstants.HomingConstants.XY_TOLERANCE;
-        double thetaTolerance = RobotAutoConstants.HomingConstants.THETA_TOLERANCE;
-
-        return xError <= xyTolerance && yError <= xyTolerance && thetaError <= thetaTolerance;
+        return false;
     }
 
     @Override
