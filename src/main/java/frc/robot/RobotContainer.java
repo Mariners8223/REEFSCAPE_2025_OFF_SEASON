@@ -11,6 +11,8 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -178,14 +180,23 @@ public class RobotContainer {
             robotAuto.setSelectedReef(null);
             robotAuto.setDropBallInCycle(false);
         });
-        
-      Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
+
+        Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
 
+        BooleanSupplier robotBelowCertinSpeed = () -> {
+            ChassisSpeeds chassisSpeeds = driveBase.getChassisSpeeds();
 
+            double speed = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+
+            // speed is below 1 m/s total and below 1 omega
+            return Math.abs(speed) < 1 && chassisSpeeds.omegaRadiansPerSecond < 1;
+        };
+
+        Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
         // main cycle
         driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
-        driveController.leftTrigger().onFalse(resetSelection.onlyIf(() -> !endEffector.isGpLoaded()));
+        driveController.leftTrigger().onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
 
         // feeder path finder
         driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
@@ -265,6 +276,10 @@ public class RobotContainer {
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
+    }
+
+    private static void configureCamera(){
+        CameraServer.startAutomaticCapture();
     }
 
 
