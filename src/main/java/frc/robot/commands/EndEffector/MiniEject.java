@@ -6,17 +6,14 @@ package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector.EndEffector;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MiniEject extends Command {
   private final EndEffector endEffector;
-  private final MotorPower motorPower;
   /** Creates a new MiniEject. */
-  public MiniEject(EndEffector endEffector, MotorPower motorPower) {
+  public MiniEject(EndEffector endEffector) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.endEffector = endEffector;
-    this.motorPower = motorPower;
 
     addRequirements(endEffector);
   }

@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
-import frc.robot.commands.AutoCommands.HomeToReefAuto;
 import frc.robot.commands.BallDropping.BallDropOff;
 import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
@@ -138,7 +137,7 @@ public class RobotContainer {
                 Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4));
 
         //manual intake
-        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, MotorPower.L2_3).onlyIf(() ->
+        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector).onlyIf(() ->
                 endEffector.getFunnelPosition() > -0.4));
     }
 
