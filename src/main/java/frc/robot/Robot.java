@@ -151,7 +151,6 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
-        Logger.recordOutput("Match Time", Timer.getMatchTime());
     }
     
     
@@ -167,12 +166,21 @@ public class Robot extends LoggedRobot
     @SuppressWarnings("RedundantMethodOverride")
     @Override
     public void disabledExit() {}
-    
+
+    private void resetEncoders(){
+        if(RobotContainer.elevator != null) RobotContainer.elevator.resetMotorEncoder();
+        if(RobotContainer.endEffector != null) RobotContainer.endEffector.resetFunnelEncoder();
+        if(RobotContainer.ballDropping != null) RobotContainer.ballDropping.resetAngleEncoder();
+    }
     
     @Override
     public void autonomousInit()
     {
-        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION) checkFlip();
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
+            checkFlip();
+            resetEncoders();
+            if(RobotContainer.endEffector != null) RobotContainer.endEffector.setLoadedValue(true);
+        }
 
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 

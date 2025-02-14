@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.EndEffector;
 
+import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -22,7 +23,7 @@ public class EndEffector extends SubsystemBase {
             io = new EndEffectorIOReal();
         }
 
-        setLoadedValue(EndEffectorConstants.STARTS_WITH_GP);
+        setLoadedValue(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION);
     }
 
     public void setRightMotorPower(double PowerToSet) {
@@ -48,6 +49,10 @@ public class EndEffector extends SubsystemBase {
 
     public void stopFunnelMotor() {
         io.stopFunnel();
+    }
+
+    public void resetFunnelEncoder() {
+        io.resetFunnelEncoder();
     }
 
     public void setLoadedValue(boolean value) {
