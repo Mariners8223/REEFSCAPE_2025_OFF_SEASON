@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
-import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -244,9 +243,6 @@ public class RobotContainer {
     }
 
     public static void configNamedCommands() {
-        NamedCommands.registerCommand("intake", new MoveToLevel(elevator, ElevatorLevel.Bottom)
-                .andThen(new Intake(endEffector)));
-
         NamedCommands.registerCommand("eject l1", new MoveToLevel(elevator, ElevatorLevel.L1)
                 .andThen(new Eject(endEffector, MotorPower.L1), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
 
@@ -268,7 +264,7 @@ public class RobotContainer {
             NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1), new HomeToReef(driveBase, reef));
         }
 
-        NamedCommands.registerCommand("Wait until GP", new WaitUntilCommand(endEffector::isGpLoaded));
+        NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
     }
 
 
