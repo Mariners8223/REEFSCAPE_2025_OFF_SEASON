@@ -318,8 +318,8 @@ public class RobotContainer {
         List<Pose2d> poses = new ArrayList<>();
 
         try {
-            boolean invert =
-                    DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+            // boolean invert =
+            //         DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
             PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
 //                path = invert ? path.flipPath() : path;
