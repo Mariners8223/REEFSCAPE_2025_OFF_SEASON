@@ -241,8 +241,7 @@ public class RobotContainer {
         ));
 
 
-        driveController.y().whileTrue(new HomeToReef(driveBase, ReefLocation.REEF_1));
-        //driveController.rightStick().onTrue(new HomeToReef(driveBase, ReefLocation.REEF_1.getPose()));
+        //driveController.y().whileTrue(new HomeToReef(driveBase, ReefLocation.REEF_1));
     }
 
     public static void configNamedCommands() {

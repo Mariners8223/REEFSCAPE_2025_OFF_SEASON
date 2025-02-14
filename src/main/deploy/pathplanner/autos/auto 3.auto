@@ -13,7 +13,7 @@
         {
           "type": "named",
           "data": {
-            "name": "home to reef 5"
+            "name": "home to reef 4"
           }
         },
         {
@@ -26,6 +26,30 @@
           "type": "path",
           "data": {
             "pathName": "path 3 part 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wait until GP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path 3 part 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "home to reef 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject l4"
           }
         }
       ]

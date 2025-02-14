@@ -20,6 +20,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.EndEffector.Intake.Intake;
+import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 

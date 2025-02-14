@@ -22,7 +22,7 @@ public class ReefFinderWrapper extends Command {
     this.driveBase = driveBase;
     this.targetPose = targetPose;
 
-    pathCommand = driveBase.findPath(targetPose);
+    pathCommand = driveBase.findPath(targetPose, 0.5);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 

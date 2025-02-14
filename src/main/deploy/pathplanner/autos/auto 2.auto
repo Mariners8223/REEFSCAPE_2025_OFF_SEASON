@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "path 2"
+            "pathName": "path 2 part 1"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "home to reef 6"
+            "name": "home to reef 7"
           }
         },
         {
@@ -23,9 +23,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "ball drop l2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "path 2 part 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ball drop l2"
+                }
+              }
+            ]
           }
         }
       ]

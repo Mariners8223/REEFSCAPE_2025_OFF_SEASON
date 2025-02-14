@@ -14,8 +14,10 @@ public class ElevatorConstants {
     public enum ElevatorLevel{
         Bottom(0.60),
         L1(0.61),
-        L2(0.85),
-        L3(1.20),
+        L2(0.885),
+        //L2(0.85),
+        //L3(1.20),
+        L3(1.26),
         L4(1.92);
 
         private final double height;
