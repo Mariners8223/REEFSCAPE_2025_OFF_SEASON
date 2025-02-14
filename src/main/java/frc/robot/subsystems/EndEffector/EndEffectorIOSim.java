@@ -26,7 +26,7 @@ public class EndEffectorIOSim implements EndEffectorIO{
             -Math.PI/6,
             (double) 3 /2 * Math.PI,
             true,
-            -Math.PI/6, 0);
+            -Math.PI/6);
         
         Pid = EndEffectorConstants.FunnelMotor.PID_GAINS.createPIDController();
 
