@@ -32,8 +32,8 @@ public class HomeToReef extends Command {
         YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
 
-        XController.setIZone(0.5);
-        YController.setIZone(0.5);
+        XController.setIZone(1);
+        YController.setIZone(1);
         ThetaController.setIZone(0.5);
 
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -72,10 +72,14 @@ public class HomeToReef extends Command {
         double XY_DEADBAND = RobotAutoConstants.HomingConstants.XY_DEADBAND;
         double THETA_DEADBAND = RobotAutoConstants.HomingConstants.THETA_DEADBAND;
 
+        Logger.recordOutput("home to reef/x output", xOutput);
+        Logger.recordOutput("home to reef/y output", yOutput);
+        Logger.recordOutput("home to reef/theta output", thetaOutput);
+
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(
-                xOutput >= 0.1 ? XY_DEADBAND : 0,
-                yOutput >= 0.1 ? XY_DEADBAND : 0,
-                thetaOutput >= 0.1 ? THETA_DEADBAND : 0);
+                xOutput >= XY_DEADBAND ? xOutput : 0,
+                yOutput >= XY_DEADBAND ? yOutput : 0,
+                thetaOutput >= THETA_DEADBAND ? thetaOutput : 0);
 
         ChassisSpeeds robotRelativeSpeeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getRotation2d());

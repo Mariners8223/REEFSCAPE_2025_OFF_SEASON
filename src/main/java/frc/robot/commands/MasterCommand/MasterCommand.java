@@ -70,7 +70,7 @@ public class MasterCommand extends Command {
         Command elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         Command ejectPhase = new ParallelDeadlineGroup(
-                new ParallelCommandGroup(
+                new SequentialCommandGroup(
                         ejectCommand,
                         elevatorToHome,
                         createBallDropCommand(ballDropping, endEffector).onlyIf(() ->

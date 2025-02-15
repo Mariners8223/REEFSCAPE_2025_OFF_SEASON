@@ -96,6 +96,8 @@ public class RobotContainer {
         configureDriveBindings();
         configureOperatorBinding();
 
+        configureCamera();
+
         //until we have real driver station
         // SmartDashboard.putNumber("target Reef", 1);
         // SmartDashboard.putNumber("target Level", 2);
@@ -214,7 +216,7 @@ public class RobotContainer {
                 }
                 ).andThen(
                         moveToLevel
-                ).onlyIf(isCycleReady)
+                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertinSpeed.getAsBoolean())
         );
 
         driveController.x().whileTrue(new RobotRelativeDrive(driveBase, driveController));
@@ -229,7 +231,7 @@ public class RobotContainer {
                 ejectCommand,
                 new MoveToLevel(elevator, ElevatorLevel.Bottom)
                 //resetSelection
-        ).onlyIf(isCycleReady);
+        ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertinSpeed.getAsBoolean());
 
         driveController.x().onFalse(ejectSequence);
 
