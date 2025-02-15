@@ -34,6 +34,7 @@ import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.commands.MasterCommand.HomeToReef;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.commands.MasterCommand.PathPlannerWrapper;
+import frc.robot.commands.MasterCommand.RobotToReef;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -203,6 +204,8 @@ public class RobotContainer {
         // feeder path finder
         driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
         driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
+
+        driveController.b().whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         //manual cycle
         // driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
