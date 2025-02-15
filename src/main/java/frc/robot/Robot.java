@@ -12,6 +12,7 @@ import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DataLogManager;
@@ -111,6 +112,8 @@ public class Robot extends LoggedRobot
 
         SmartDashboard.putData("Field", field);
         apriltagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+        Logger.recordOutput("Zero 3D", new Pose3d());
     }
 
     private static void checkFlip() {
