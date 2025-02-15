@@ -321,8 +321,7 @@ public class RobotContainer {
                         continue;
                     }
                     // Put a rectangle on the image
-                    Imgproc.rectangle(
-                        mat, new Point(100, 100), new Point(400, 400), new Scalar(255, 255, 255), 5);
+                    Imgproc.line(mat, new Point(VisionConstants.MIDLINE_X, 0), new Point(VisionConstants.MIDLINE_X, VisionConstants.Y_PIXELS), new Scalar(0, 0, 0), 10);
                     // Give the output stream a new image to display
                     outputStream.putFrame(mat);
                 }

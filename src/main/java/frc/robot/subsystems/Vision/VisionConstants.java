@@ -23,6 +23,7 @@ public class VisionConstants {
     public static final double maxSingleAmbiguity = 0.1;
 
 	public static final int X_PIXELS = 600;
+	public static final int MIDLINE_X = 300;
     public static final int Y_PIXELS = 400;
 
     public static double XYstdFactor = 0.06;
