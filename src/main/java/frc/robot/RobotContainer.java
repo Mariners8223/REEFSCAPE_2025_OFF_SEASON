@@ -25,7 +25,6 @@ import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
-import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.MiniEject;
@@ -141,7 +140,7 @@ public class RobotContainer {
                 Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4));
 
         //manual intake
-        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector).onlyIf(() ->
+        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, robotAuto::getSelectedLevel).onlyIf(() ->
                 endEffector.getFunnelPosition() > -0.4));
     }
 

@@ -5,15 +5,22 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.MasterCommand.MasterCommand;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
+
+import java.util.function.Supplier;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MiniEject extends Command {
   private final EndEffector endEffector;
+  private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
   /** Creates a new MiniEject. */
-  public MiniEject(EndEffector endEffector) {
+  public MiniEject(EndEffector endEffector, Supplier<ElevatorConstants.ElevatorLevel> levelSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.endEffector = endEffector;
+    this.levelSupplier = levelSupplier;
 
     addRequirements(endEffector);
   }
@@ -21,8 +28,20 @@ public class MiniEject extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.setRightMotorPower(0.8);
-    endEffector.setLeftMotorPower(0.8);
+    double rightValue = 0.8;
+    double leftValue = 0.8;
+
+    ElevatorConstants.ElevatorLevel level = levelSupplier.get();
+
+    if(level != null){
+      EndEffectorConstants.MotorPower motorPower = MasterCommand.getMotorPower(level);
+
+      rightValue = motorPower.rightMotorPower;
+      leftValue = motorPower.leftMotorPower;
+    }
+
+    endEffector.setRightMotorPower(rightValue);
+    endEffector.setLeftMotorPower(leftValue);
   }
 
   // Called once the command ends or is interrupted.
