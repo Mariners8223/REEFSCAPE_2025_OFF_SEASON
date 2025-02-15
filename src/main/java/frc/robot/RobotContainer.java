@@ -326,10 +326,10 @@ public class RobotContainer {
                     // Give the output stream a new image to display
                     outputStream.putFrame(mat);
                 }
-                });
-    m_visionThread.setDaemon(true);
-    m_visionThread.start();
-  }
+                }
+            );
+        m_visionThread.setDaemon(true);
+        m_visionThread.start();
     }
 
 
