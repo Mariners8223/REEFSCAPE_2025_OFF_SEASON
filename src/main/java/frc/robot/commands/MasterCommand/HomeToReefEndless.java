@@ -68,7 +68,13 @@ public class HomeToReefEndless extends Command {
         maxOutput = RobotAutoConstants.HomingConstants.MAX_HOME_SPEED_RADIANS_PER_SECOND;
         thetaOutput = MathUtil.clamp(thetaOutput, -maxOutput, maxOutput);
 
-        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(xOutput, yOutput, thetaOutput);
+        double XY_DEADBAND = RobotAutoConstants.HomingConstants.XY_DEADBAND;
+        double THETA_DEADBAND = RobotAutoConstants.HomingConstants.THETA_DEADBAND;
+
+        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(
+                xOutput >= 0.1 ? XY_DEADBAND : 0,
+                yOutput >= 0.1 ? XY_DEADBAND : 0,
+                thetaOutput >= 0.1 ? THETA_DEADBAND : 0);
 
         ChassisSpeeds robotRelativeSpeeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getRotation2d());
