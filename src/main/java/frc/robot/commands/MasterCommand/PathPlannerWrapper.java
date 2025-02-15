@@ -22,7 +22,7 @@ public class PathPlannerWrapper extends Command{
 
     @Override
     public void initialize() {
-        pathCommand = driveBase.findPath(targetPoseSupplier.get(), 0.0);
+        pathCommand = driveBase.findPath(targetPoseSupplier.get(), 2);
         pathCommand.initialize();
     }
 

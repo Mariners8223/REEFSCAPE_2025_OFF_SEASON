@@ -54,9 +54,12 @@ public class MasterCommand extends Command {
         // adjustment phase (minor adjustment to the reef and elevator raising)
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
-        Command adjustmentPhase = new ParallelCommandGroup(
+        Command adjustmentPhase = new ParallelDeadlineGroup(
+                new SequentialCommandGroup(
+                    moveElevatorCommand,
+                    new WaitCommand(1.8)
+                ),
                 homeToReef,
-                moveElevatorCommand,
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL))
         );

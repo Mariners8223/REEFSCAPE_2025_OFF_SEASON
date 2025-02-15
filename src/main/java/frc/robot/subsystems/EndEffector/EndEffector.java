@@ -7,6 +7,7 @@ package frc.robot.subsystems.EndEffector;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.subsystems.EndEffector.EndEffectorIO.EndEffectorInputs;
 import frc.robot.Robot;
@@ -57,6 +58,7 @@ public class EndEffector extends SubsystemBase {
 
     public void setLoadedValue(boolean value) {
         Logger.recordOutput("EndEffector/gp loaded", value);
+        SmartDashboard.putBoolean("Is Gp Loaded", value);
         isGpLoaded = value;
     }
 

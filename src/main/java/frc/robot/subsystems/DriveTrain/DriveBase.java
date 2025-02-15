@@ -260,6 +260,11 @@ public class DriveBase extends SubsystemBase {
         return -gyro.getYaw();
     }
 
+    public double getVelocity(){
+        ChassisSpeeds speed = getChassisSpeeds();
+        return Math.hypot(speed.vxMetersPerSecond, speed.vyMetersPerSecond);
+    }
+
     /**
      * gets the current chassisSpeeds of the robot
      *
