@@ -4,7 +4,10 @@
 
 package frc.robot.subsystems.Climb;
 
+import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Climb.ClimbIO.ClimbInputs;
 
 public class Climb extends SubsystemBase {
@@ -17,6 +20,12 @@ public class Climb extends SubsystemBase {
     public Climb() {
         io = new ClimbIOFalcon();
         io.resetPosition();
+
+        io.setBrakeMode(false);
+
+        new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(
+            () -> io.setBrakeMode(true),
+            () -> io.setBrakeMode(false)).ignoringDisable(true));
     }
 
     public void setMotorPower(double power) {

@@ -18,5 +18,7 @@ public interface ClimbIO {
     void resetPosition();
     double getPosition();
 
+    void setBrakeMode(boolean isBrake);
+
     void Update(ClimbInputs inputs);
 }

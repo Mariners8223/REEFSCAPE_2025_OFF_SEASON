@@ -30,4 +30,9 @@ public class ClimbIOSim implements ClimbIO{
     public void Update(ClimbInputs inputs){
         inputs.height = getPosition();
     }
+
+    @Override
+    public void setBrakeMode(boolean isBrake) {
+        System.out.println("orrr norrr");
+    }
 }

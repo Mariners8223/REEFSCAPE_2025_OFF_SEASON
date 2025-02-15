@@ -39,4 +39,9 @@ public class ClimbIOFalcon implements ClimbIO{
     public void Update(ClimbInputs inputs){
         inputs.height = getPosition();
     }
+
+    @Override
+    public void setBrakeMode(boolean isBrake) {
+        motor.setMotorIdleMode(false);
+    }
 }
