@@ -58,15 +58,18 @@ public class RobotAuto extends SubsystemBase {
         if(selectedLevel != null){
             SmartDashboard.putBoolean("Level " + selectedLevel.ordinal(), false);
         }
-        if(level != null){
+        if(level != null && level != selectedLevel){
             SmartDashboard.putBoolean("Level " + level.ordinal(), true);
             name = level.name();
+            selectedLevel = level;
+
         }
-        else name = "None";
+        else{
+            name = "None";
+            selectedLevel = null;
+        }
 
         Logger.recordOutput("Selection/Level", name);
-
-        selectedLevel = level;
     }
 
     public void setDropBallInCycle(boolean dropBall) {

@@ -187,7 +187,7 @@ public class RobotContainer {
         Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
         Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
 
-        BooleanSupplier robotBelowCertinSpeed = () -> {
+        BooleanSupplier robotBelowCertainSpeed = () -> {
             ChassisSpeeds chassisSpeeds = driveBase.getChassisSpeeds();
 
             double speed = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
@@ -219,7 +219,7 @@ public class RobotContainer {
                 }
                 ).andThen(
                         moveToLevel
-                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertinSpeed.getAsBoolean())
+                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
         //driveController.x().whileTrue(new RobotRelativeDrive(driveBase, driveController));
@@ -234,7 +234,7 @@ public class RobotContainer {
                 ejectCommand,
                 new MoveToLevel(elevator, ElevatorLevel.Bottom)
                 //resetSelection
-        ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertinSpeed.getAsBoolean());
+        ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean());
 
         driveController.x().onFalse(ejectSequence);
 
