@@ -303,7 +303,7 @@ public class RobotContainer {
                 // Get a CvSink. This will capture Mats from the camera
                 CvSink cvSink = CameraServer.getVideo();
                 // Setup a CvSource. This will send images back to the Dashboard
-                CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+                CvSource outputStream = CameraServer.putVideo("Midline", 640, 480);
 
                 // Mats are very memory expensive. Lets reuse this Mat.
                 Mat mat = new Mat();
@@ -321,7 +321,7 @@ public class RobotContainer {
                         continue;
                     }
                     // Put a rectangle on the image
-                    Imgproc.line(mat, new Point(VisionConstants.MIDLINE_X, 0), new Point(VisionConstants.MIDLINE_X, VisionConstants.Y_PIXELS), new Scalar(0, 0, 0), 10);
+                    Imgproc.line(mat, new Point(VisionConstants.MIDLINE_X, 0), new Point(VisionConstants.MIDLINE_X, VisionConstants.Y_PIXELS), new Scalar(256, 0, 0), 20);
                     // Give the output stream a new image to display
                     outputStream.putFrame(mat);
                 }
