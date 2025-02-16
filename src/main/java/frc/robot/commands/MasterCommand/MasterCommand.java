@@ -32,7 +32,7 @@ public class MasterCommand extends Command {
     private final MoveToLevel moveElevatorCommand;
     private final Eject ejectCommand;
     private final HomeToReef homeToReef;
-    private final HomeToReefEndless homeToReefEndless;
+    // private final HomeToReefEndless homeToReefEndless;
 
     private boolean shouldDropBall = false;
     private Constants.ReefLocation targetReef = null;
@@ -54,12 +54,15 @@ public class MasterCommand extends Command {
         // adjustment phase (minor adjustment to the reef and elevator raising)
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
-        Command adjustmentPhase = new ParallelDeadlineGroup(
-                new SequentialCommandGroup(
-                    moveElevatorCommand,
-                    new WaitCommand(1.8)
+        Command adjustmentPhase = new ParallelCommandGroup(
+                moveElevatorCommand,
+                new ParallelRaceGroup(
+                    new SequentialCommandGroup(
+                        new WaitUntilCommand(elevator::isAtDesiredLevel),
+                        new WaitCommand(1.8)
+                    ),
+                    homeToReef
                 ),
-                homeToReef,
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL))
         );
@@ -67,19 +70,17 @@ public class MasterCommand extends Command {
         // eject phase (releasing the game piece)
         ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1);
 
-        homeToReefEndless = new HomeToReefEndless(driveBase, Constants.ReefLocation.REEF_1);
+        // homeToReefEndless = new HomeToReefEndless(driveBase, Constants.ReefLocation.REEF_1);
 
         // elevator to home phase (moving the elevator to the home position)
         Command elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
-        Command ejectPhase = new ParallelDeadlineGroup(
+        Command ejectPhase = 
                 new SequentialCommandGroup(
                         ejectCommand,
                         elevatorToHome,
                         createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                                 checkBallDropTime(RobotAutoConstants.BallDropTime.AFTER)) // ball drop after reef
-                ),
-                homeToReefEndless
         );
 
         // the main command
@@ -144,7 +145,7 @@ public class MasterCommand extends Command {
         pathCommand.setTargetPose(pathFinderTarget);
         //setting the target pose for the adjustment phase
         homeToReef.setTargetPose(targetReef);
-        homeToReefEndless.setTargetPose(targetReef);
+        // homeToReefEndless.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);
         ejectCommand.setLevel(getMotorPower(level));

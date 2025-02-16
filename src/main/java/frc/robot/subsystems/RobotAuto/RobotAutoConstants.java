@@ -15,7 +15,7 @@ public class RobotAutoConstants {
         public static double XY_TOLERANCE = 0.0105;
         public static double THETA_TOLERANCE = Units.degreesToRadians(2);
 
-        public static PIDFGains XY_PID = new PIDFGains(8, 20, 0);
+        public static PIDFGains XY_PID = new PIDFGains(16, 30, 0);
         public static PIDFGains THETA_PID = new PIDFGains(12, 20, 0);
     }
 

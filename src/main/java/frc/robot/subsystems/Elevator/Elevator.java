@@ -14,6 +14,7 @@ public class Elevator extends SubsystemBase {
   private final ElevatorIO io;
   private final ElevatorInputsAutoLogged inputs = new ElevatorInputsAutoLogged();
   private ElevatorLevel currentLevel;
+  private ElevatorLevel desiredLevel;
 
   public Elevator() {
     io = new ElevatorIOVortex();
@@ -31,6 +32,7 @@ public class Elevator extends SubsystemBase {
   public void moveMotorByPosition(ElevatorLevel desiredLevel){
     if (desiredLevel == null) return;
     
+    this.desiredLevel = desiredLevel;
     //Logger.recordOutput("Elevator/Desired Level", desiredLevel.name());
     Logger.recordOutput("Elevator/Desired Height", desiredLevel.getHeight());
     io.moveMotorByPosition(desiredLevel.getHeight());
@@ -42,6 +44,10 @@ public class Elevator extends SubsystemBase {
 
   public double getCurrentHeight(){
     return inputs.elevatorHeight;
+  }
+
+  public boolean isAtDesiredLevel(){
+    return currentLevel == desiredLevel;
   }
 
   public void setVoltage(double voltage) { io.setVoltage(voltage); }

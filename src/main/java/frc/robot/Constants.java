@@ -76,6 +76,10 @@ public class Constants {
                         layout.getFieldLength() - r.pose.getX(),
                         layout.getFieldWidth() - r.pose.getY(),
                         Rotation2d.fromDegrees(r.pose.getRotation().getDegrees() - 180));
+
+                PathPlannerPath flipped = r.path.flipPath();
+
+                r.pose = getEndPose(flipped);
             }
         }
 
@@ -83,9 +87,12 @@ public class Constants {
             pose = new Pose2d(x, y, Rotation2d.fromDegrees(deg));
             try {
                 path = PathPlannerPath.fromPathFile("path to reef " + (this.ordinal() + 1));
+                // path.preventFlipping = true;
             } catch (IOException | ParseException e) {
                 throw new RuntimeException(e);
             }
+
+            pose = getEndPose(path);
         }
     }
 
@@ -172,5 +179,12 @@ public class Constants {
                 e.printStackTrace();
             }
         }
+    }
+
+    private static Pose2d getEndPose(PathPlannerPath path){
+        var poses = path.getAllPathPoints();
+        var endState = poses.get(poses.size() - 1);
+
+        return new Pose2d(endState.position, endState.rotationTarget.rotation());
     }
 }

@@ -105,8 +105,6 @@ public class HomeToReef extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        if(interrupted) {
-            driveBase.drive(new ChassisSpeeds());
-        }
+        driveBase.drive(new ChassisSpeeds());
     }
 }
