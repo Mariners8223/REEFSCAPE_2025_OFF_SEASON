@@ -206,21 +206,21 @@ public class RobotContainer {
 
         Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
         // main cycle
-        driveController.leftTrigger().whileTrue(masterCommand.onlyIf(isCycleReady));
-        driveController.leftTrigger().onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
+        driveController.b().whileTrue(masterCommand.onlyIf(isCycleReady));
+        driveController.b().onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
 
         // feeder path finder
         driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
         driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
 
-        driveController.b().whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
+        driveController.x().whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         //manual cycle
         // driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
         Eject ejectCommand = new Eject(endEffector, MotorPower.L1);
 
-        driveController.x().onTrue(
+        driveController.leftTrigger().onTrue(
                 new InstantCommand(() -> {
                     moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel());
                     ejectCommand.setLevel(MasterCommand.getMotorPower(robotAuto.getSelectedLevel()));
@@ -244,7 +244,7 @@ public class RobotContainer {
                 //resetSelection
         ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean());
 
-        driveController.x().onFalse(ejectSequence);
+        driveController.leftTrigger().onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
 
         //ball dropping manual control
