@@ -3,42 +3,35 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.94,
-        "y": 2.83
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 3.8580311875069992,
-        "y": 2.2113954133862626
-      },
-      "isLocked": false,
-      "linkedName": "reef 9"
-    },
-    {
-      "anchor": {
         "x": 1.1264135012568672,
         "y": 1.0969010209473264
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.644262295081967,
+        "y": 3.0120389344262293
+      },
+      "isLocked": false,
+      "linkedName": "feeder 1"
+    },
+    {
+      "anchor": {
+        "x": 3.65,
+        "y": 3.01
+      },
       "prevControl": {
-        "x": 0.9054732792754824,
-        "y": 0.979916328312707
+        "x": 1.1628073770491802,
+        "y": 1.058043032786885
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "feeder 1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "drop pipe",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 1.5,
@@ -49,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 52.437845294444145
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": 52.437845294444145
   },
   "useDefaultConstraints": true
 }
