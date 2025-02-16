@@ -1,5 +1,6 @@
 package frc.robot.commands.MasterCommand;
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.*;
@@ -49,7 +50,7 @@ public class MasterCommand extends Command {
         this.levelSupplier = levelSupplier;
 
         // pathfinder phase (finding the path to the selected reef)
-        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1.getPose()); // setting the default target pose
+        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1); // setting the default target pose
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
@@ -126,7 +127,7 @@ public class MasterCommand extends Command {
         targetReef = targetReefSupplier.get(); // getting the target reef
         shouldDropBall = shouldDropBallSupplier.get(); // getting the ball drop status
         level = levelSupplier.get(); // getting the target level
-        Pose2d pathFinderTarget = targetReef.getPose(); // setting the target pose for the path command
+        Constants.ReefLocation pathFinderTarget = targetReef; // setting the target pose for the path command
 
         if(checkBallDropTime(RobotAutoConstants.BallDropTime.NEVER)){
             alert.set(true);
@@ -137,7 +138,7 @@ public class MasterCommand extends Command {
 
 
         if (shouldDropBall && !targetReef.isBallDropInSamePose()) {
-            pathFinderTarget = Constants.ReefLocation.values()[(targetReef.ordinal() - 1)].getPose();
+            pathFinderTarget = Constants.ReefLocation.values()[(targetReef.ordinal() - 1)];
         }
 
         // setting the target pose for the path command

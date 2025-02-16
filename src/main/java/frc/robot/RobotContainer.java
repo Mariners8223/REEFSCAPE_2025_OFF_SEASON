@@ -12,11 +12,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.CvSink;
-import edu.wpi.first.cscore.CvSource;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -47,14 +43,9 @@ import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
-import frc.robot.subsystems.Vision.VisionConstants;
 
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
-import org.opencv.core.Mat;
-import org.opencv.core.Point;
-import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -108,8 +99,7 @@ public class RobotContainer {
 
 //        configureCamera();
         CameraServer.startAutomaticCapture();
-        CameraServer.getServer().getSource().setFPS(20);
-        CameraServer.getServer().getSource().setPixelFormat(PixelFormat.kGray);
+        CameraServer.getServer().getSource().setFPS(15);
 
         //until we have real driver station
         // SmartDashboard.putNumber("target Reef", 1);
@@ -293,46 +283,6 @@ public class RobotContainer {
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
-    }
-
-    private static void configureCamera(){
-        Thread m_visionThread =
-            new Thread(
-                () -> {
-                // Get the UsbCamera from CameraServer
-                UsbCamera camera = CameraServer.startAutomaticCapture();
-                // Set the resolution
-                camera.setResolution(640, 480);
-
-                // Get a CvSink. This will capture Mats from the camera
-                CvSink cvSink = CameraServer.getVideo();
-                // Setup a CvSource. This will send images back to the Dashboard
-                CvSource outputStream = CameraServer.putVideo("Midline", 640, 480);
-
-                // Mats are very memory expensive. Lets reuse this Mat.
-                Mat mat = new Mat();
-
-                // This cannot be 'true'. The program will never exit if it is. This
-                // lets the robot stop this thread when restarting robot code or
-                // deploying.
-                while (!Thread.interrupted()) {
-                    // Tell the CvSink to grab a frame from the camera and put it
-                    // in the source mat.  If there is an error notify the output.
-                    if (cvSink.grabFrame(mat) == 0) {
-                        // Send the output the error.
-                        outputStream.notifyError(cvSink.getError());
-                        // skip the rest of the current iteration
-                        continue;
-                    }
-                    // Put a rectangle on the image
-                    Imgproc.line(mat, new Point(VisionConstants.MIDLINE_X, 0), new Point(VisionConstants.MIDLINE_X, VisionConstants.Y_PIXELS), new Scalar(0, 0, 256), 20);
-                    // Give the output stream a new image to display
-                    outputStream.putFrame(mat);
-                }
-                }
-            );
-        m_visionThread.setDaemon(true);
-        m_visionThread.start();
     }
 
 

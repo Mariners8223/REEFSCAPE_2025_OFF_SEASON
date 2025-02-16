@@ -6,34 +6,34 @@ package frc.robot.commands.MasterCommand;
 
 import java.util.Set;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ReefFinderWrapper extends Command {
   private Command pathCommand;
-  private Pose2d targetPose;
+  private Constants.ReefLocation targetReef;
 
   private final DriveBase driveBase;
   /** Creates a new ReefFinderWrapper. */
-  public ReefFinderWrapper(DriveBase driveBase, Pose2d targetPose) {
+  public ReefFinderWrapper(DriveBase driveBase, Constants.ReefLocation targetReef) {
     this.driveBase = driveBase;
-    this.targetPose = targetPose;
+    this.targetReef = targetReef;
 
-    pathCommand = driveBase.findPath(targetPose);
+    pathCommand = driveBase.pathFindToPathAndFollow(targetReef.getPath());
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
-  public void setTargetPose(Pose2d targetPose) {
-    this.targetPose = targetPose;
+  public void setTargetPose(Constants.ReefLocation targetReef) {
+    this.targetReef = targetReef;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    pathCommand = driveBase.findPath(targetPose);
+    pathCommand = driveBase.pathFindToPathAndFollow(targetReef.getPath());
 
     pathCommand.initialize();
   }
