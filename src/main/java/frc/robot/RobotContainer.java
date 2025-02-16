@@ -16,6 +16,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.util.PixelFormat;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -105,7 +106,10 @@ public class RobotContainer {
         configureDriveBindings();
         configureOperatorBinding();
 
-        configureCamera();
+//        configureCamera();
+        CameraServer.startAutomaticCapture();
+        CameraServer.getServer().getSource().setFPS(20);
+        CameraServer.getServer().getSource().setPixelFormat(PixelFormat.kGray);
 
         //until we have real driver station
         // SmartDashboard.putNumber("target Reef", 1);
