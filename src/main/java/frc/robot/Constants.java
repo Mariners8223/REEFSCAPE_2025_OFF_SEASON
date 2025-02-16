@@ -4,10 +4,14 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
 
 /**
  * Add your docs here.
@@ -36,6 +40,12 @@ public class Constants {
         REEF_12(3.650, 3.010, 60);
 
         private Pose2d pose;
+
+        private final PathPlannerPath path;
+
+        public PathPlannerPath getPath() {
+            return path;
+        }
 
         public Pose2d getPose() {
             return pose;
@@ -69,6 +79,11 @@ public class Constants {
 
         ReefLocation(double x, double y, double deg) {
             pose = new Pose2d(x, y, Rotation2d.fromDegrees(deg));
+            try {
+                path = PathPlannerPath.fromPathFile("path to reef " + this.ordinal() + 1);
+            } catch (IOException | ParseException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

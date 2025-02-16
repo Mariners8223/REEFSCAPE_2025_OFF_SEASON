@@ -21,7 +21,7 @@ public class RobotToReef extends Command {
     public RobotToReef(DriveBase driveBase, Supplier<Constants.ReefLocation> targetReefSupplier){
         this.targetReefSupplier = targetReefSupplier;
 
-        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1.getPose());
+        pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1);
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
 
         sequence = new SequentialCommandGroup(
@@ -34,7 +34,7 @@ public class RobotToReef extends Command {
     public void initialize(){
         Constants.ReefLocation targetReef = targetReefSupplier.get();
 
-        pathCommand.setTargetPose(targetReef.getPose());
+        pathCommand.setTargetPose(targetReef);
         homeToReef.setTargetPose(targetReef);
 
         sequence.initialize();
