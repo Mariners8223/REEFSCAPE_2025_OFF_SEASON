@@ -62,6 +62,8 @@ public class Constants {
         }
 
         public static void checkAlliance(boolean isBlue) {
+            if(isBlue) return;
+
             for (ReefLocation r : ReefLocation.values()) {
 
                 PathPlannerPath flipped = r.path.flipPath();
