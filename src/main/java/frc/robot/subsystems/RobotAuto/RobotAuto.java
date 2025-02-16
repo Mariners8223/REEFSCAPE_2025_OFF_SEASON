@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 public class RobotAuto extends SubsystemBase {
-    private Constants.ReefLocation selectedReef = Constants.ReefLocation.REEF_1;
-    private ElevatorConstants.ElevatorLevel selectedLevel = ElevatorConstants.ElevatorLevel.L1;
+    private Constants.ReefLocation selectedReef = null;
+    private ElevatorConstants.ElevatorLevel selectedLevel = null;
     private boolean dropBallInCycle = false;
     
     public RobotAuto() {

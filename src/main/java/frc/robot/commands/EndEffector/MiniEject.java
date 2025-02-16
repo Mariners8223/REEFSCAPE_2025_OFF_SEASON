@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 public class MiniEject extends Command {
   private final EndEffector endEffector;
   private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
+  private ElevatorConstants.ElevatorLevel currentLevel;
   /** Creates a new MiniEject. */
   public MiniEject(EndEffector endEffector, Supplier<ElevatorConstants.ElevatorLevel> levelSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -31,10 +32,10 @@ public class MiniEject extends Command {
     double rightValue = 0.8;
     double leftValue = 0.8;
 
-    ElevatorConstants.ElevatorLevel level = levelSupplier.get();
+    currentLevel = levelSupplier.get();
 
-    if(level != null){
-      EndEffectorConstants.MotorPower motorPower = MasterCommand.getMotorPower(level);
+    if(currentLevel != null){
+      EndEffectorConstants.MotorPower motorPower = MasterCommand.getMotorPower(currentLevel);
 
       rightValue = motorPower.rightMotorPower;
       leftValue = motorPower.leftMotorPower;
@@ -48,6 +49,7 @@ public class MiniEject extends Command {
   @Override
   public void end(boolean interrupted) {
     endEffector.stopEndEffectorMotors();
+    if(currentLevel != null) endEffector.setLoadedValue(false);
   }
 
   // Returns true when the command should end.

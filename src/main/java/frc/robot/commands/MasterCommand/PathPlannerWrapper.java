@@ -1,28 +1,27 @@
 package frc.robot.commands.MasterCommand;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.FeederLocation;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 import java.util.Set;
-import java.util.function.Supplier;
 
 public class PathPlannerWrapper extends Command{
     private Command pathCommand = new InstantCommand();
 
     private final DriveBase driveBase;
-    private final Supplier<Pose2d> targetPoseSupplier;
+    private final FeederLocation targetFeeder;
 
-    public PathPlannerWrapper(DriveBase driveBase, Supplier<Pose2d> targetPoseSupplier) {
+    public PathPlannerWrapper(DriveBase driveBase, FeederLocation targetFeeder) {
         this.driveBase = driveBase;
-        this.targetPoseSupplier = targetPoseSupplier;
+        this.targetFeeder = targetFeeder;
     }
 
     @Override
     public void initialize() {
-        pathCommand = driveBase.findPath(targetPoseSupplier.get(), 2);
+        pathCommand = driveBase.pathFindToPathAndFollow(targetFeeder.getPath());
         pathCommand.initialize();
     }
 

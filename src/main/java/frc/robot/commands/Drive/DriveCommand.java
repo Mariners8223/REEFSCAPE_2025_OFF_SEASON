@@ -52,7 +52,8 @@ public class DriveCommand extends Command {
     public void execute() {
         //calculates a value from 1 to the max wheel speed based on the R2 axis
         // double R2Axis = (1 - (0.5 + controller.getR2Axis() / 2)) * (driveBase.MAX_FREE_WHEEL_SPEED - 1) + 1;
-        double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
+        // double R2Axis  = 1 - (0.5 + controller.getRightTriggerAxis() / 2);
+        double R2Axis  = 1 - controller.getRightTriggerAxis();
 
         if(R2Axis <= 0.1) {
             R2Axis = 0.1;

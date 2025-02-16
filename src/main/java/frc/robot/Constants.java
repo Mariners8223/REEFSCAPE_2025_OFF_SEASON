@@ -5,6 +5,8 @@
 package frc.robot;
 
 import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.FileVersionException;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -80,7 +82,7 @@ public class Constants {
         ReefLocation(double x, double y, double deg) {
             pose = new Pose2d(x, y, Rotation2d.fromDegrees(deg));
             try {
-                path = PathPlannerPath.fromPathFile("path to reef " + this.ordinal() + 1);
+                path = PathPlannerPath.fromPathFile("path to reef " + (this.ordinal() + 1));
             } catch (IOException | ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -101,6 +103,12 @@ public class Constants {
         private final boolean yLineLarger;
 
         private Pose2d robotPose;
+
+        private PathPlannerPath path;
+
+        public PathPlannerPath getPath(){
+            return path;
+        }
 
         public boolean withinFeeder(Pose2d currentPose) {
             boolean withinX =
@@ -139,6 +147,11 @@ public class Constants {
 
             LEFT.robotPose = new Pose2d(layout.getFieldLength() - prevRightPose.getX(), prevRightPose.getY(),
                     Rotation2d.fromDegrees(prevLeftPose.getRotation().getDegrees() + 180));
+
+
+            PathPlannerPath prevRight = RIGHT.getPath();
+            RIGHT.path = LEFT.getPath();
+            LEFT.path = prevRight;
         }
 
         FeederLocation(double yLine, boolean yLineLarger, double robotPoseX, double robotPoseY, double robotPoseDeg) {
@@ -146,6 +159,18 @@ public class Constants {
             this.yLineLarger = yLineLarger;
 
             robotPose = new Pose2d(robotPoseX, robotPoseY, Rotation2d.fromDegrees(robotPoseDeg));
+
+            String name = switch(this.ordinal()){
+                case 0 -> "2";
+                case 1 -> "1";
+                default -> "1";
+            };
+
+            try {
+                path = PathPlannerPath.fromPathFile("path to feeder " + name);
+            } catch (FileVersionException | IOException | ParseException e) {
+                e.printStackTrace();
+            }
         }
     }
 }

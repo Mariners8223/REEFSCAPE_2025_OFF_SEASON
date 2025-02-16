@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -18,6 +17,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
 import frc.robot.commands.BallDropping.BallDropOnForHigh;
@@ -186,9 +186,6 @@ public class RobotContainer {
             robotAuto.setDropBallInCycle(false);
         });
 
-        Supplier<Pose2d> rightFeeder = Constants.FeederLocation.RIGHT::getRobotPose;
-        Supplier<Pose2d> leftFeeder = Constants.FeederLocation.LEFT::getRobotPose;
-
         BooleanSupplier robotBelowCertainSpeed = () -> {
             ChassisSpeeds chassisSpeeds = driveBase.getChassisSpeeds();
 
@@ -204,8 +201,8 @@ public class RobotContainer {
         driveController.b().onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
 
         // feeder path finder
-        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, rightFeeder));
-        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, leftFeeder));
+        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
+        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
         driveController.x().whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
