@@ -7,6 +7,9 @@ package frc.robot.subsystems.EndEffector;
 import frc.robot.Constants;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import frc.robot.subsystems.EndEffector.EndEffectorIO.EndEffectorInputs;
@@ -91,8 +94,5 @@ public class EndEffector extends SubsystemBase {
         if(getCurrentCommand() != null) {
             currentCommandName = getCurrentCommand().getName();
         }
-
-        Logger.recordOutput("EndEffector/current command", currentCommandName);
-        
     }
 }

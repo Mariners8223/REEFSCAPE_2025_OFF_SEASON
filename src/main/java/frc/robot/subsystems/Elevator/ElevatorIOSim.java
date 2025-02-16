@@ -49,6 +49,6 @@ public class ElevatorIOSim implements ElevatorIO{
         elevator.update(0.02);
 
         inputs.elevatorHeight = elevator.getPositionMeters();
-        inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d());
+        inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, ElevatorConstants.Z_OFFSET + inputs.elevatorHeight, new Rotation3d());
     }
 }

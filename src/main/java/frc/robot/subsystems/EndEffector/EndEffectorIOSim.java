@@ -5,7 +5,10 @@
 package frc.robot.subsystems.EndEffector;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -80,6 +83,7 @@ public class EndEffectorIOSim implements EndEffectorIO{
         inputs.leftPower = leftMotorPower;
         inputs.rightPower = rightMotorPower;
         inputs.beamBreakValue = SmartDashboard.getBoolean("beam break value", false);
+        inputs.pose = new Pose3d(EndEffectorConstants.X_ON_ROBOT, EndEffectorConstants.Y_ON_ROBOT, EndEffectorConstants.Z_OFFSET, new Rotation3d(0, Units.radiansToDegrees(inputs.funnelPosition + Math.PI/2), 0));
     }
 
 }

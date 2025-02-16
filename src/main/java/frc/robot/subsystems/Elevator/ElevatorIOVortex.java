@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.Elevator;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
@@ -70,6 +72,6 @@ public class ElevatorIOVortex implements ElevatorIO {
 
     public void Update(ElevatorInputs inputs){
         inputs.elevatorHeight = motorLead.getPosition();
-        inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, inputs.elevatorHeight, new Rotation3d());
+        inputs.elevator3DPose = new Pose3d(ElevatorConstants.X_ON_ROBOT, ElevatorConstants.Y_ON_ROBOT, ElevatorConstants.Z_OFFSET + inputs.elevatorHeight, new Rotation3d());
     }
 }

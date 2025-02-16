@@ -37,4 +37,9 @@ public class BallDroppingConstants {
 
     public static double HIGH_BALL_DROP_TIME = 1;
     public static double LOW_BALL_DROP_TIME = 1;
+
+    
+    public static final double X_ON_ROBOT = 0.24;
+    public static final double Y_ON_ROBOT = 0.13;
+    public static final double Z_OFFSET = 0.87;
 }

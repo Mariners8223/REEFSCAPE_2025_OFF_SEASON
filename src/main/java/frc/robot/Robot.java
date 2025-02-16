@@ -94,6 +94,7 @@ public class Robot extends LoggedRobot
         DataLogManager.stop();
 
         Logger.start();
+        Logger.recordOutput("Zero 3D", new Pose3d());
 
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback((path) ->
