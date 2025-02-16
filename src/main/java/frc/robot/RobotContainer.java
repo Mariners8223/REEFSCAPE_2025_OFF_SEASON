@@ -96,26 +96,28 @@ public class RobotContainer {
         configChooser();
 
         configureDriveBindings();
-        // configureOperatorBinding();
+        configureOperatorBinding();
 
 //        configureCamera();
-        if(RobotBase.isReal()){
+        if (RobotBase.isReal()) {
             CameraServer.startAutomaticCapture();
             CameraServer.getServer().getSource().setFPS(15);
+        } else {
+            //until we have real driver station
+            SmartDashboard.putNumber("target Reef", 1);
+            SmartDashboard.putNumber("target Level", 2);
+            SmartDashboard.putBoolean("should drop ball", false);
+
+
+            driveController.y().onTrue(new InstantCommand(() -> {
+                RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+                RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+                RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+                System.out.println("set new targets");
+            }));
         }
 
-        //until we have real driver station
-        SmartDashboard.putNumber("target Reef", 1);
-        SmartDashboard.putNumber("target Level", 2);
-        SmartDashboard.putBoolean("should drop ball", false);
 
-
-        driveController.y().onTrue(new InstantCommand(() -> {
-            RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
-            RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
-            RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
-            System.out.println("set new targets");
-        }));
     }
 
     public static void configureOperatorBinding() {
@@ -199,54 +201,47 @@ public class RobotContainer {
         };
 
         Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
+
+        Trigger mainCycleTrigger = driveController.b();
+        Trigger leftFeeder = driveController.leftBumper();
+        Trigger rightFeeder = driveController.rightBumper();
+
+        Trigger moveElevator = driveController.leftTrigger();
+        Trigger onlyRobotToReef = driveController.x();
+
+        Trigger ballDropHigh = driveController.povUp();
+        Trigger ballDropLow = driveController.povDown();
+
         // main cycle
-        driveController.b().whileTrue(masterCommand.onlyIf(isCycleReady));
-        driveController.b().onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
+        mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady));
+        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
 
         // feeder path finder
-        driveController.rightBumper().whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
-        driveController.leftBumper().whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
+        rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
+        leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
-        driveController.x().whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
+        onlyRobotToReef.whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         //manual cycle
-        // driveController.x().onTrue(new ManualCycleCommand(endEffector, elevator, robotAuto::getSelectedLevel).onlyIf(isCycleReady));
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
-        Eject ejectCommand = new Eject(endEffector, MotorPower.L1);
-
-        driveController.leftTrigger().onTrue(
-                new InstantCommand(() -> {
-                    moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel());
-                    ejectCommand.setLevel(MasterCommand.getMotorPower(robotAuto.getSelectedLevel()));
-                }
+        moveElevator.onTrue(
+                new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())
                 ).andThen(
                         moveToLevel
                 ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
-        //driveController.x().whileTrue(new RobotRelativeDrive(driveBase, driveController));
+        moveElevator.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
-        resetSelection = new InstantCommand(() -> {
-            robotAuto.setSelectedLevel(null);
-            robotAuto.setSelectedReef(null);
-            robotAuto.setDropBallInCycle(false);
-        });
-
-        Command ejectSequence = new SequentialCommandGroup(
-                ejectCommand,
-                new MoveToLevel(elevator, ElevatorLevel.Bottom)
-                //resetSelection
-        ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean());
-
-        driveController.leftTrigger().onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+        //moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
 
 
         //ball dropping manual control
-        driveController.povUp().whileTrue(new BallDropOnForHigh(ballDropping));
-        driveController.povDown().whileTrue(new BallDropOnForLow(ballDropping));
+        ballDropHigh.whileTrue(new BallDropOnForHigh(ballDropping));
+        ballDropLow.whileTrue(new BallDropOnForLow(ballDropping));
 
-        driveController.povUp().onFalse(new BallDropOff(ballDropping));
-        driveController.povDown().onFalse(new BallDropOff(ballDropping));
+        ballDropHigh.onFalse(new BallDropOff(ballDropping));
+        ballDropLow.onFalse(new BallDropOff(ballDropping));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 
