@@ -13,6 +13,7 @@ import java.util.function.BooleanSupplier;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -95,24 +96,26 @@ public class RobotContainer {
         configChooser();
 
         configureDriveBindings();
-        configureOperatorBinding();
+        // configureOperatorBinding();
 
 //        configureCamera();
-        CameraServer.startAutomaticCapture();
-        CameraServer.getServer().getSource().setFPS(15);
+        if(RobotBase.isReal()){
+            CameraServer.startAutomaticCapture();
+            CameraServer.getServer().getSource().setFPS(15);
+        }
 
         //until we have real driver station
-        // SmartDashboard.putNumber("target Reef", 1);
-        // SmartDashboard.putNumber("target Level", 2);
-        // SmartDashboard.putBoolean("should drop ball", false);
+        SmartDashboard.putNumber("target Reef", 1);
+        SmartDashboard.putNumber("target Level", 2);
+        SmartDashboard.putBoolean("should drop ball", false);
 
 
-        // driveController.b().onTrue(new InstantCommand(() -> {
-        //     RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
-        //     RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
-        //     RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
-        //     System.out.println("set new targets");
-        // }));
+        driveController.y().onTrue(new InstantCommand(() -> {
+            RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+            RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+            RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+            System.out.println("set new targets");
+        }));
     }
 
     public static void configureOperatorBinding() {

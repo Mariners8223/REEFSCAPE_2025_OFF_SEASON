@@ -119,7 +119,7 @@ public class Robot extends LoggedRobot
     private static void checkFlip() {
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
-        Constants.FeederLocation.checkAlliance(!isRedAlliance);
+        // Constants.FeederLocation.checkAlliance(!isRedAlliance);
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
     }
 
