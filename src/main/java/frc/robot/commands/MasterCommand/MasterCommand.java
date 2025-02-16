@@ -56,13 +56,14 @@ public class MasterCommand extends Command {
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
         Command adjustmentPhase = new ParallelCommandGroup(
                 moveElevatorCommand,
-                new ParallelRaceGroup(
-                    new SequentialCommandGroup(
-                        new WaitUntilCommand(elevator::isAtDesiredLevel),
-                        new WaitCommand(1.8)
-                    ),
-                    homeToReef
-                ),
+                // new ParallelRaceGroup(
+                //     new SequentialCommandGroup(
+                //         new WaitUntilCommand(elevator::isAtDesiredLevel),
+                //         new WaitCommand(1.8)
+                //     ),
+                //     homeToReef
+                // ),
+                homeToReef,
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL))
         );
@@ -89,6 +90,7 @@ public class MasterCommand extends Command {
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.BEFORE)),// ball drop before the reef
                 adjustmentPhase,
+                new WaitCommand(0.2),
                 ejectPhase
         );
     }

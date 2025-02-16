@@ -76,10 +76,14 @@ public class HomeToReef extends Command {
         Logger.recordOutput("home to reef/y output", yOutput);
         Logger.recordOutput("home to reef/theta output", thetaOutput);
 
+        if(Math.abs(xOutput) <= XY_DEADBAND) xOutput = 0;
+        if(Math.abs(yOutput) <= XY_DEADBAND) yOutput = 0;
+        if(Math.abs(thetaOutput) <= THETA_DEADBAND) thetaOutput = 0;
+
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(
-                xOutput >= XY_DEADBAND ? xOutput : 0,
-                yOutput >= XY_DEADBAND ? yOutput : 0,
-                thetaOutput >= THETA_DEADBAND ? thetaOutput : 0);
+                xOutput,
+                yOutput,
+                thetaOutput);
 
         ChassisSpeeds robotRelativeSpeeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getRotation2d());
