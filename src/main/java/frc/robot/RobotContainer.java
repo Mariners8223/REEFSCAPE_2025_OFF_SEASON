@@ -202,12 +202,12 @@ public class RobotContainer {
 
         Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
 
-        Trigger mainCycleTrigger = driveController.b();
+        Trigger mainCycleTrigger = driveController.leftTrigger();
         Trigger leftFeeder = driveController.leftBumper();
         Trigger rightFeeder = driveController.rightBumper();
 
-        Trigger moveElevator = driveController.leftTrigger();
-        Trigger onlyRobotToReef = driveController.x();
+        Trigger moveElevator = driveController.x();
+        Trigger onlyRobotToReef = driveController.b();
 
         Trigger ballDropHigh = driveController.povUp();
         Trigger ballDropLow = driveController.povDown();
