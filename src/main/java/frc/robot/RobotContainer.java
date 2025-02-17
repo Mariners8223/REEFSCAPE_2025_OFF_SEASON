@@ -26,6 +26,7 @@ import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.MiniEject;
@@ -233,7 +234,7 @@ public class RobotContainer {
 
         moveElevator.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
-        //moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
+        moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
 
 
         //ball dropping manual control
