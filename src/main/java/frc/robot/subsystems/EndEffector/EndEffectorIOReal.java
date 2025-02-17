@@ -93,6 +93,5 @@ public class EndEffectorIOReal implements EndEffectorIO {
         inputs.leftPower = LeftMotor.getMotorOutputPercent();
         inputs.funnelPosition = FunnelMotor.getPosition();
         inputs.beamBreakValue = EndEffectorConstants.BEAM_BREAK_INVERTED != beamBreak.get();
-        inputs.pose = new Pose3d(EndEffectorConstants.X_ON_ROBOT, EndEffectorConstants.Y_ON_ROBOT, EndEffectorConstants.Z_OFFSET, new Rotation3d(0, Units.radiansToDegrees(inputs.funnelPosition), 0));
     }
 }
