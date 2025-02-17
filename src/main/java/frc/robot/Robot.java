@@ -72,8 +72,6 @@ public class Robot extends LoggedRobot
         if(isReal()){
             Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
             new PowerDistribution(1, ModuleType.kRev);
-            
-            PathfindingCommand.warmupCommand().schedule();
         }
         else{
             if(Constants.ROBOT_TYPE == Constants.RobotType.REPLAY){
@@ -101,6 +99,8 @@ public class Robot extends LoggedRobot
 
         PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
                 Logger.recordOutput("PathPlanner/TargetPose", targetPose));
+
+        PathfindingCommand.warmupCommand().schedule();
 
 
         ControllerMaster.getInstance();
