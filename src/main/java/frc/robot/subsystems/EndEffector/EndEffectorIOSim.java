@@ -4,11 +4,10 @@
 
 package frc.robot.subsystems.EndEffector;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,10 +25,10 @@ public class EndEffectorIOSim implements EndEffectorIO{
             EndEffectorConstants.FunnelMotor.GEAR_RATIO,
             1,
             0.5,
-            -Math.PI/6,
+            -Math.PI/12,
             (double) 3 /2 * Math.PI,
             true,
-            -Math.PI/6);
+            -Math.PI/12);
         
         Pid = EndEffectorConstants.FunnelMotor.PID_GAINS.createPIDController();
 
@@ -53,6 +52,8 @@ public class EndEffectorIOSim implements EndEffectorIO{
 
     @Override
     public void moveFunnel(double target){
+        Logger.recordOutput("End Effector/PID Target", target);
+        Logger.recordOutput("End Effector/PID", Pid.toString());
         Pid.setSetpoint(target);
     }
 

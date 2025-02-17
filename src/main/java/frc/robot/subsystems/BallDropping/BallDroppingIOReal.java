@@ -77,7 +77,7 @@ public class BallDroppingIOReal implements BallDroppingIO{
     public void Update(BallDroppingInputs inputs){
         inputs.angle = angleMotor.getPosition();
         inputs.dropperPower = dropperMotor.getMotorOutputPercent();
-        inputs.pose = new Pose3d(BallDroppingConstants.X_ON_ROBOT, BallDroppingConstants.Y_ON_ROBOT, BallDroppingConstants.Z_OFFSET, new Rotation3d(0, Units.radiansToDegrees(inputs.angle), 0));
+        inputs.pose = new Pose3d(BallDroppingConstants.X_ON_ROBOT, BallDroppingConstants.Y_ON_ROBOT, BallDroppingConstants.Z_OFFSET, new Rotation3d(0, inputs.angle, 0));
     }
 
     @Override

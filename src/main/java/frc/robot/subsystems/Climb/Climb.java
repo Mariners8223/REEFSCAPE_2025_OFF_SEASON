@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Robot;
 
 public class Climb extends SubsystemBase {
     private final ClimbIO io;
@@ -19,7 +20,7 @@ public class Climb extends SubsystemBase {
      * Creates a new Climb.
      */
     public Climb() {
-        io = new ClimbIOFalcon();
+        io = Robot.isReal() ? new ClimbIOFalcon() : new ClimbIOSim();
         io.resetPosition();
 
         io.setBrakeMode(false);
