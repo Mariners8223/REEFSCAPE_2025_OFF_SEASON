@@ -102,7 +102,7 @@ public class RobotContainer {
 //        configureCamera();
         if (RobotBase.isReal()) {
             CameraServer.startAutomaticCapture();
-            CameraServer.getServer().getSource().setFPS(15);
+            CameraServer.getServer().getSource().setFPS(30);
         } else {
             //until we have real driver station
             SmartDashboard.putNumber("target Reef", 1);

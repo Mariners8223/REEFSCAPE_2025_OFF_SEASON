@@ -47,6 +47,7 @@ public class RobotAuto extends SubsystemBase {
             name = "None";
         }
 
+        SmartDashboard.putString("selected Reef", name);
         Logger.recordOutput("Selection/Reef", name);
 
         selectedReef = reef;
