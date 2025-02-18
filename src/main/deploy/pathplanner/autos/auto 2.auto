@@ -21,25 +21,6 @@
           "data": {
             "name": "eject l4"
           }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "path 2 part 2"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "ball drop l2"
-                }
-              }
-            ]
-          }
         }
       ]
     }

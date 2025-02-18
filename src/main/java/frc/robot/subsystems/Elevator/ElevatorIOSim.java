@@ -28,7 +28,7 @@ public class ElevatorIOSim implements ElevatorIO{
             ElevatorLevel.L4.getHeight(),
             true,
             ElevatorLevel.Bottom.getHeight(),
-            0.05, 0.05);
+            0.0001, 0.0001);
 
         pidController = new PIDController(ElevatorConstants.PID_GAINS.getP(), ElevatorConstants.PID_GAINS.getI(), ElevatorConstants.PID_GAINS.getD());
     }

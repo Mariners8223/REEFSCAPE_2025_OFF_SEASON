@@ -102,7 +102,7 @@ public class RobotContainer {
 //        configureCamera();
         if (RobotBase.isReal()) {
             CameraServer.startAutomaticCapture();
-            CameraServer.getServer().getSource().setFPS(30);
+            CameraServer.getServer().getSource().setFPS(15);
         } else {
             //until we have real driver station
             SmartDashboard.putNumber("target Reef", 1);
@@ -145,9 +145,9 @@ public class RobotContainer {
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
 
         //climb
-        // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
-                // Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4));
-        operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
+        operatorController.povDownLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4));
+        // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
         operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, robotAuto::getSelectedLevel).onlyIf(() ->
