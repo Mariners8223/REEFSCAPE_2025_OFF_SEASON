@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.Climb;
 
+import org.littletonrobotics.junction.Logger;
+
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
@@ -38,6 +42,7 @@ public class ClimbIOFalcon implements ClimbIO{
 
     public void Update(ClimbInputs inputs){
         inputs.height = getPosition();
+        inputs.pose = new Pose3d(0, 0, 0.2 + inputs.height, new Rotation3d());
     }
 
     @Override

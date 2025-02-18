@@ -6,11 +6,14 @@ package frc.robot.subsystems.Climb;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Pose3d;
+
 /** Add your docs here. */
 public interface ClimbIO {
     @AutoLog
     class ClimbInputs{
         double height;
+        Pose3d pose;
     }
 
     void setPower(double power);

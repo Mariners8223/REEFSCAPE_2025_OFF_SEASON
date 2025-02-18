@@ -8,6 +8,10 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
@@ -90,5 +94,4 @@ public class EndEffectorIOReal implements EndEffectorIO {
         inputs.funnelPosition = FunnelMotor.getPosition();
         inputs.beamBreakValue = EndEffectorConstants.BEAM_BREAK_INVERTED != beamBreak.get();
     }
-
 }

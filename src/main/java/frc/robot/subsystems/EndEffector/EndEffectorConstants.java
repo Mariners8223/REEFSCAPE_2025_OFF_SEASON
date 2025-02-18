@@ -21,6 +21,10 @@ public class EndEffectorConstants {
 
     public static final boolean STARTS_WITH_GP = false;
 
+    public static final double X_ON_ROBOT = -0.34;
+    public static final double Y_ON_ROBOT = -0.33;
+    public static final double Z_OFFSET = 0.735;
+
     public enum MotorPower{
         INTAKE(0.3, 0.3, 1),
         L1(-0.1, 0.7, 1),
