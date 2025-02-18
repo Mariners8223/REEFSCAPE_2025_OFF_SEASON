@@ -4,10 +4,15 @@
 
 package frc.robot.subsystems.BallDropping;
 
+import org.littletonrobotics.junction.Logger;
+
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.util.Units;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersController.ControlMode;
@@ -71,7 +76,8 @@ public class BallDroppingIOReal implements BallDroppingIO{
 
     public void Update(BallDroppingInputs inputs){
         inputs.angle = angleMotor.getPosition();
-        inputs.dropperPower = dropperMotor.getMotorOutputPercent();        
+        inputs.dropperPower = dropperMotor.getMotorOutputPercent();
+        inputs.pose = new Pose3d(BallDroppingConstants.X_ON_ROBOT, BallDroppingConstants.Y_ON_ROBOT, BallDroppingConstants.Z_OFFSET, new Rotation3d(0, inputs.angle, 0));
     }
 
     @Override

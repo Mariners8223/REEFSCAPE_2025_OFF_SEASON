@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.Climb;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.util.MarinersController.MarinersSimMotor;
 
@@ -29,6 +31,7 @@ public class ClimbIOSim implements ClimbIO{
 
     public void Update(ClimbInputs inputs){
         inputs.height = getPosition();
+        inputs.pose = new Pose3d(0, 0, 0.2 + inputs.height, new Rotation3d());
     }
 
     @Override

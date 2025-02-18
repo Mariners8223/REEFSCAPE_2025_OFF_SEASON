@@ -60,6 +60,7 @@ public class ElevatorConstants {
 
     public static final double X_ON_ROBOT = 0;
     public static final double Y_ON_ROBOT = 0;
+    public static final double Z_OFFSET = -0.6;
 
     public static final double kV = 1.6819;
     public static final double kA = 0.24043;

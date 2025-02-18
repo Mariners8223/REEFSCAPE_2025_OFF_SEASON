@@ -6,6 +6,8 @@ package frc.robot.subsystems.EndEffector;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Pose3d;
+
 /** Add your docs here. */
 public interface EndEffectorIO {
     @AutoLog
@@ -14,6 +16,7 @@ public interface EndEffectorIO {
         double leftPower;
         double funnelPosition;
         boolean beamBreakValue;
+        Pose3d pose;
     }
 
     void setRightMotorPower(double powerToSet);

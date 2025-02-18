@@ -6,6 +6,7 @@ package frc.robot.subsystems.Elevator;
 
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 
@@ -17,7 +18,7 @@ public class Elevator extends SubsystemBase {
   private ElevatorLevel desiredLevel;
 
   public Elevator() {
-    io = new ElevatorIOVortex();
+    io = RobotBase.isReal() ? new ElevatorIOVortex() : new ElevatorIOSim();
 
     currentLevel = null;
 

@@ -4,21 +4,23 @@
 
 package frc.robot.subsystems.Climb;
 
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.Climb.ClimbIO.ClimbInputs;
+import frc.robot.Robot;
 
 public class Climb extends SubsystemBase {
     private final ClimbIO io;
-    private final ClimbInputs inputs = new ClimbInputs();
+    private final ClimbInputsAutoLogged inputs = new ClimbInputsAutoLogged();
 
     /**
      * Creates a new Climb.
      */
     public Climb() {
-        io = new ClimbIOFalcon();
+        io = Robot.isReal() ? new ClimbIOFalcon() : new ClimbIOSim();
         io.resetPosition();
 
         io.setBrakeMode(false);
@@ -40,5 +42,6 @@ public class Climb extends SubsystemBase {
     public void periodic() {
         // This method will be called once per scheduler run
         io.Update(inputs);
+        Logger.processInputs(getName(), inputs);
     }
 }

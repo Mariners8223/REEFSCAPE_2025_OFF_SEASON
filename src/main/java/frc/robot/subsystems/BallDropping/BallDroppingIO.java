@@ -6,11 +6,14 @@ package frc.robot.subsystems.BallDropping;
 
 import org.littletonrobotics.junction.AutoLog;
 
+import edu.wpi.first.math.geometry.Pose3d;
+
 public interface BallDroppingIO {
     @AutoLog
     class BallDroppingInputs {
         double dropperPower;
         double angle;
+        Pose3d pose;
     }
 
     //angle motor io
