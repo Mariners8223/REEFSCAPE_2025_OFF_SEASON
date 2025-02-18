@@ -11,8 +11,8 @@ public class BallDroppingConstants {
     public static class AngleMotor{
         //TODO: Find all constants!!!
 
-        public static final double ANGLE_TO_REACH_TOP = 0.38;
-        public static final double ANGLE_TO_REACH_BOTTOM = 0.22;
+        public static final double ANGLE_TO_REACH_TOP = 0.4;
+        public static final double ANGLE_TO_REACH_BOTTOM = 0.16;
         public static final double ANGLE_TO_RESET = 0;
 
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
@@ -22,9 +22,9 @@ public class BallDroppingConstants {
 
         public static final double MOTOR_FEED_FORWARD = 0.2;
 
-        public static final double ANGLE_TOLERANCE = 0.01;
+        public static final double ANGLE_TOLERANCE = 0.03;
 
-        public static final PIDFGains ANGLE_PID = new PIDFGains(0.7,0,0);
+        public static final PIDFGains ANGLE_PID = new PIDFGains(1,0,0);
     }
 
 

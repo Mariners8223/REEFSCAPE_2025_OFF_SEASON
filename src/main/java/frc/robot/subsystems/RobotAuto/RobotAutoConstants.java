@@ -6,7 +6,7 @@ import frc.util.PIDFGains;
 public class RobotAutoConstants {
 
     public static class HomingConstants{
-        public static double MAX_HOME_SPEED_METERS_PER_SECOND = 2;
+        public static double MAX_HOME_SPEED_METERS_PER_SECOND = 0.8;
         public static double MAX_HOME_SPEED_RADIANS_PER_SECOND = 2.5;
 
         public static double XY_DEADBAND = 0.01;
@@ -15,7 +15,7 @@ public class RobotAutoConstants {
         public static double XY_TOLERANCE = 0.0105;
         public static double THETA_TOLERANCE = Units.degreesToRadians(2);
 
-        public static PIDFGains XY_PID = new PIDFGains(16, 30, 0);
+        public static PIDFGains XY_PID = new PIDFGains(9, 6, 0);
         public static PIDFGains THETA_PID = new PIDFGains(12, 20, 0);
     }
 

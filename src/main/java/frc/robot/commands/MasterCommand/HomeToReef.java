@@ -20,6 +20,8 @@ public class HomeToReef extends Command {
     private final PIDController YController;
     private final PIDController ThetaController;
 
+    private int timer = 0;
+
     public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
@@ -32,8 +34,8 @@ public class HomeToReef extends Command {
         YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
         ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
 
-        XController.setIZone(1);
-        YController.setIZone(1);
+        XController.setIZone(0.1);
+        YController.setIZone(0.1);
         ThetaController.setIZone(0.5);
 
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -50,6 +52,8 @@ public class HomeToReef extends Command {
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
+
+        timer = 0;
     }
 
     @Override
@@ -104,7 +108,14 @@ public class HomeToReef extends Command {
         double xyTolerance = RobotAutoConstants.HomingConstants.XY_TOLERANCE;
         double thetaTolerance = RobotAutoConstants.HomingConstants.THETA_TOLERANCE;
 
-        return xError <= xyTolerance && yError <= xyTolerance && thetaError <= thetaTolerance;
+        if(xError <= xyTolerance && yError <= xyTolerance && thetaError <= thetaTolerance){
+            timer ++;
+        }
+        else{
+            timer = 0;
+        }
+
+        return timer >= 10;
     }
 
     @Override

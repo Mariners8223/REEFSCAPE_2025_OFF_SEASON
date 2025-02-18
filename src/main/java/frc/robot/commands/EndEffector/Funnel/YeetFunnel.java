@@ -1,8 +1,8 @@
 
 package frc.robot.commands.EndEffector.Funnel;
 
-import edu.wpi.first.units.Units;
-import edu.wpi.first.wpilibj.RobotController;
+
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector.EndEffector;
 
@@ -21,13 +21,13 @@ public class YeetFunnel extends Command {
 
     @Override
     public void initialize() {
-      startTime = RobotController.getMeasureTime().in(Units.Seconds);
+      startTime = Timer.getFPGATimestamp();
         endEffector.setFunnelVoltage(-3);
     }
 
     @Override
     public boolean isFinished() {
-        return RobotController.getMeasureTime().in(Units.Seconds) - startTime > 0.25;
+        return Timer.getFPGATimestamp() - startTime > 0.25;
     }
 
     @Override

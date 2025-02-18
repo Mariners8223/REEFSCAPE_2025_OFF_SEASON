@@ -4,10 +4,12 @@ package frc.robot.commands.MasterCommand;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
+import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Funnel.YeetFunnel;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -16,6 +18,7 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
+import frc.robot.subsystems.RobotAuto.RobotAutoConstants.BallDropTime;
 
 import java.util.Set;
 import java.util.function.Supplier;
@@ -29,9 +32,11 @@ public class MasterCommand extends Command {
     private final Command coralCommand;
 
     private final ReefFinderWrapper pathCommand;
+    private final ReefFinderWrapper finalReefCommand;
     private final MoveToLevel moveElevatorCommand;
     private final Eject ejectCommand;
     private final HomeToReef homeToReef;
+    private final HomeToReef homeToBallReef;
     // private final HomeToReefEndless homeToReefEndless;
 
     private boolean shouldDropBall = false;
@@ -51,18 +56,14 @@ public class MasterCommand extends Command {
         // pathfinder phase (finding the path to the selected reef)
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1); // setting the default target pose
 
+        finalReefCommand = new ReefFinderWrapper(driveBase, ReefLocation.REEF_1);
+
         // adjustment phase (minor adjustment to the reef and elevator raising)
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
+        homeToBallReef = new HomeToReef(driveBase, ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
         Command adjustmentPhase = new ParallelCommandGroup(
                 moveElevatorCommand,
-                // new ParallelRaceGroup(
-                //     new SequentialCommandGroup(
-                //         new WaitUntilCommand(elevator::isAtDesiredLevel),
-                //         new WaitCommand(1.8)
-                //     ),
-                //     homeToReef
-                // ),
                 homeToReef,
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL))
@@ -87,8 +88,11 @@ public class MasterCommand extends Command {
         // the main command
         coralCommand = new SequentialCommandGroup(
                 pathCommand,
-                createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
-                        checkBallDropTime(RobotAutoConstants.BallDropTime.BEFORE)),// ball drop before the reef
+                new SequentialCommandGroup(
+                    homeToBallReef,
+                    createBallDropCommand(ballDropping, endEffector)// ball drop before the reef
+                ).onlyIf(() -> checkBallDropTime(RobotAutoConstants.BallDropTime.BEFORE)),
+                finalReefCommand.onlyIf(() -> !targetReef.isBallDropInSamePose() && shouldDropBall),
                 adjustmentPhase,
                 new WaitCommand(0.2),
                 ejectPhase
@@ -101,26 +105,26 @@ public class MasterCommand extends Command {
     }
 
     private RobotAutoConstants.BallDropTime getBallDropTime(ElevatorConstants.ElevatorLevel level, boolean samePosition, boolean ballDropUp) {
+        if(!ballDropUp) return BallDropTime.NEVER;
+
         if (!samePosition) return RobotAutoConstants.BallDropTime.BEFORE;
 
-        if (level == ElevatorConstants.ElevatorLevel.L4 || level == ElevatorConstants.ElevatorLevel.L1)
-            return RobotAutoConstants.BallDropTime.PARALLEL;
+        switch (level) {
+            case L1, L2: return BallDropTime.PARALLEL;
 
-        if (level == ElevatorConstants.ElevatorLevel.L3) return RobotAutoConstants.BallDropTime.AFTER;
+            case L3: return BallDropTime.BEFORE;
 
-        if (ballDropUp) return RobotAutoConstants.BallDropTime.PARALLEL;
+            case L4: return BallDropTime.AFTER;
 
-        else return RobotAutoConstants.BallDropTime.NEVER;
-
+            default: return BallDropTime.AFTER;
+        }
     }
 
     private Command createBallDropCommand(BallDropping ballDropping, EndEffector endEffector) {
         return new SequentialCommandGroup(
-                new BallDropLow(ballDropping).onlyIf(() -> !targetReef.isBallInUpPosition()),
-                new SequentialCommandGroup(
-                        new BallDropHigh(ballDropping),
-                        new YeetFunnel(endEffector)
-                ).onlyIf(() -> targetReef.isBallInUpPosition())
+            new BallDropHigh(ballDropping),
+            new ToggleFunnel(endEffector),
+            new ToggleFunnel(endEffector)
         );
     }
 
@@ -131,22 +135,16 @@ public class MasterCommand extends Command {
         level = levelSupplier.get(); // getting the target level
         Constants.ReefLocation pathFinderTarget = targetReef; // setting the target pose for the path command
 
-        if(checkBallDropTime(RobotAutoConstants.BallDropTime.NEVER)){
-            alert.set(true);
-
-            cancel();
-            return;
-        }
-
-
         if (shouldDropBall && !targetReef.isBallDropInSamePose()) {
             pathFinderTarget = Constants.ReefLocation.values()[(targetReef.ordinal() - 1)];
         }
 
         // setting the target pose for the path command
         pathCommand.setTargetPose(pathFinderTarget);
+        homeToBallReef.setTargetPose(pathFinderTarget);
         //setting the target pose for the adjustment phase
         homeToReef.setTargetPose(targetReef);
+        finalReefCommand.setTargetPose(targetReef);
         // homeToReefEndless.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);
