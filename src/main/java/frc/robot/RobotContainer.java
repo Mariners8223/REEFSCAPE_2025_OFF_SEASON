@@ -150,7 +150,7 @@ public class RobotContainer {
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
-        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, robotAuto::getSelectedLevel).onlyIf(() ->
+        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel).onlyIf(() ->
                 endEffector.getFunnelPosition() > -0.4));
     }
 
