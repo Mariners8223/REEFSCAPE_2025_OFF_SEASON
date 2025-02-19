@@ -6,29 +6,29 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import frc.util.PIDFGains;
 
 public enum CompBotConstants {
-    FRONT_LEFT(3, 4, 5,
-            true, true, 0,
-            new PIDFGains(3, 0, 0, 1.8749), //Drive motor PID
-            new PIDFGains(15, 10, 2, 0, 0.01, 0), //Steer motor PID
-            0.20083, 1.8749, 0.11683, 0, 1, 1),
+    FRONT_LEFT(6, 10, 14,
+            false, false, -0.361328125,
+            new PIDFGains(3, 0, 0, 1.8749), //Drive mtor PID
+            new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.15113, 1.9058, 0.14576, 0.35464, 1.7245, 0.23146),
 
-    FRONT_RIGHT(6, 7, 8,
-            true, true, 0,
+    FRONT_RIGHT(12, 4, 5,
+            false, false, 0.09130859375,
             new PIDFGains(3, 0, 0, 1.8552), //Drive motor PID
-            new PIDFGains(15, 10, 2, 0, 0.01, 0), //Steer motor PID
-            0.063408, 1.8552, 0.10686, 0, 1, 1),
+            new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.15113, 1.9058, 0.14576, 0.28713, 1.6793, 0.17791),
 
-    BACK_LEFT(9, 10, 11,
-            true, true, 0,
+    BACK_LEFT(9, 7, 11,
+            false, false, -0.00244140625,
             new PIDFGains(3, 0, 0, 1.9608), //Drive motor PID
-            new PIDFGains(15, 10, 2, 0, 0.01, 0), //Steer motor PID
-            0.15526, 1.9608, 0.13495, 0, 1, 1),
+            new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.10073, 1.8816, 0.12503, 0.22659, 1.7941, 0.39017),
 
-    BACK_RIGHT(12, 13, 14,
-            true, true, 0,
+    BACK_RIGHT(3, 13, 8,
+            false, false, -0.3974609375,
             new PIDFGains(3, 0, 0, 1.8443), //Drive motor PID
-            new PIDFGains(15, 10, 2, 0, 0.01, 0), //Steer motor PID
-            0.090777, 1.8443, 0.083782, 0, 1, 1);
+            new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
+            0.16066, 1.6962, 0.62667, 0.43868, 1.8036, 0.35004);
 
     public static final double DRIVE_GEAR_RATIO = 5.14;
     public static final double STEER_GEAR_RATIO = 12.8;
@@ -36,15 +36,15 @@ public enum CompBotConstants {
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
     public static final double MAX_WHEEL_LINEAR_VELOCITY = 4.5;
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 50;
-    public static final int DRIVE_MOTOR_CURRENT_THERSHOLD = 80;
+    public static final int DRIVE_MOTOR_CURRENT_THRESHOLD = 80;
 
     public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
-        WHEEL_RADIUS_METERS,
-        MAX_WHEEL_LINEAR_VELOCITY,
-        1, //TODO find real mew
-        DCMotor.getKrakenX60(1),
-        DRIVE_MOTOR_CURRENT_LIMIT,
-        1);
+            WHEEL_RADIUS_METERS,
+            MAX_WHEEL_LINEAR_VELOCITY,
+            0.9,
+            DCMotor.getKrakenX60(1),
+            DRIVE_MOTOR_CURRENT_LIMIT,
+            1);
 
     /**
      * the motor id for the drive motor
