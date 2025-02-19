@@ -11,15 +11,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "home to reef 7"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "home to reef 7"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "move l4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "eject l4"
+            "name": "eject"
           }
         }
       ]

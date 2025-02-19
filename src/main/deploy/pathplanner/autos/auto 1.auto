@@ -11,15 +11,28 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "home to reef 11"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "home to reef 11"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "move l4"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "eject l4"
+            "name": "eject"
           }
         },
         {
@@ -29,9 +42,9 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "Wait until GP"
           }
         },
         {
@@ -41,9 +54,28 @@
           }
         },
         {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "home to reef 12"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "move l4"
+                }
+              }
+            ]
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "home to reef 12"
+            "name": "eject"
           }
         }
       ]

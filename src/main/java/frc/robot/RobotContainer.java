@@ -258,17 +258,20 @@ public class RobotContainer {
     }
 
     public static void configNamedCommands() {
-        NamedCommands.registerCommand("eject l1", new MoveToLevel(elevator, ElevatorLevel.L1)
-                .andThen(new Eject(endEffector, MotorPower.L1), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+        NamedCommands.registerCommand("move l1", new MoveToLevel(elevator, ElevatorLevel.L1));
 
-        NamedCommands.registerCommand("eject l2", new MoveToLevel(elevator, ElevatorLevel.L2)
-                .andThen(new Eject(endEffector, MotorPower.L2_3), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+        NamedCommands.registerCommand("move l2", new MoveToLevel(elevator, ElevatorLevel.L2));
 
-        NamedCommands.registerCommand("eject l3", new MoveToLevel(elevator, ElevatorLevel.L3)
-                .andThen(new Eject(endEffector, MotorPower.L2_3), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+        NamedCommands.registerCommand("move l3", new MoveToLevel(elevator, ElevatorLevel.L3));
 
-        NamedCommands.registerCommand("eject l4", new MoveToLevel(elevator, ElevatorLevel.L4)
-                .andThen(new Eject(endEffector, MotorPower.L4), (new MoveToLevel(elevator, ElevatorLevel.Bottom))));
+        NamedCommands.registerCommand("move l4", new MoveToLevel(elevator, ElevatorLevel.L4));
+
+        Eject eject = new Eject(endEffector, MotorPower.L1);
+        NamedCommands.registerCommand("eject", new SequentialCommandGroup(
+                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel()))),
+                eject,
+                new MoveToLevel(elevator, ElevatorLevel.Bottom)
+        ));
 
         NamedCommands.registerCommand("ball drop l2", new BallDropLow(ballDropping));
         NamedCommands.registerCommand("ball drop l3", new BallDropHigh(ballDropping));
