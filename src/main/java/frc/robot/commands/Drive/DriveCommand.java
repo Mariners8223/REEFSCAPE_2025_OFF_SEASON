@@ -8,7 +8,6 @@ import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
-import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 
 import static frc.robot.subsystems.DriveTrain.DriveBaseConstants.DISTANCE_BETWEEN_WHEELS;
@@ -27,11 +26,7 @@ public class DriveCommand extends Command {
         addRequirements(this.driveBase);
         setName("DriveCommand");
 
-        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION) {
-            MAX_FREE_WHEEL_SPEED = CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
-        } else {
-            MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
-        }
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
         double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
 

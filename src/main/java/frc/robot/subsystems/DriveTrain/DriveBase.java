@@ -9,7 +9,6 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.*;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
@@ -18,7 +17,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Robot;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.SwerveModule;
 import frc.util.FastGyros.GyroIO;
@@ -89,9 +87,7 @@ public class DriveBase extends SubsystemBase {
     /**
      * the max speed the wheels can spin (drive motor at max speed)
      */
-    public final double MAX_FREE_WHEEL_SPEED = Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT ?
-            DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY :
-            CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY; //the max speed the wheels can spin when the robot is not moving
+    public final double MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
     /**
      * the target states of the modules (the states the modules should be in)

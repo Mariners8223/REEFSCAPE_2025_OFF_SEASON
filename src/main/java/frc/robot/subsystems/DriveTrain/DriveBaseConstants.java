@@ -7,7 +7,6 @@ import com.pathplanner.lib.path.PathConstraints;
 import edu.wpi.first.math.geometry.Translation2d;
 import frc.robot.Constants;
 import frc.robot.Constants.RobotType;
-import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.util.PIDFGains;
 
@@ -25,9 +24,7 @@ public class DriveBaseConstants {
     public static final double THETA_KA = 0.09286;
 
     public static final class PathPlanner {
-        public static final ModuleConfig MODULE_CONFIG = Constants.ROBOT_TYPE == RobotType.DEVELOPMENT ?
-                DevBotConstants.MODULE_CONFIG :
-                CompBotConstants.MODULE_CONFIG;
+        public static final ModuleConfig MODULE_CONFIG = DevBotConstants.MODULE_CONFIG;
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
                 53.3,

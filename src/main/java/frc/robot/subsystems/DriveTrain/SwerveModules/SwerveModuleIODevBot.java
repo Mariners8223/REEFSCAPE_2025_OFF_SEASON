@@ -30,6 +30,8 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
         driveMotor.setMotorDeadBandVoltage(constants.DRIVE_KS);
 
+        driveMotor.setProfile(DevBotConstants.DRIVE_CONSTRAINTS);
+
         steerMotor = new MarinersSparkBase(
                 name.name() + " Steer Motor",
                 MarinersController.ControllerLocation.RIO,
@@ -44,7 +46,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
         steerMotor.enablePositionWrapping(-0.5, 0.5);
 
-        steerMotor.setProfile(20, 25);
+        steerMotor.setProfile(DevBotConstants.STEER_CONSTRAINTS);
 
         steerMotor.setCurrentLimits(30, 40);
 

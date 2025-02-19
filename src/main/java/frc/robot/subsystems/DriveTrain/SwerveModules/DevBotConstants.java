@@ -3,12 +3,13 @@ package frc.robot.subsystems.DriveTrain.SwerveModules;
 import com.pathplanner.lib.config.ModuleConfig;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.util.PIDFGains;
 
 public enum DevBotConstants {
     FRONT_LEFT(6, 10, 14,
             false, false, -0.361328125,
-            new PIDFGains(3, 0, 0, 1.8749), //Drive mtor PID
+            new PIDFGains(3, 0, 0, 1.8749), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.15113, 1.9058, 0.14576, 0.35464, 1.7245, 0.23146),
 
@@ -37,6 +38,12 @@ public enum DevBotConstants {
     public static final double MAX_WHEEL_LINEAR_VELOCITY = 4.5;
     public static final int DRIVE_MOTOR_CURRENT_LIMIT = 50;
     public static final int DRIVE_MOTOR_CURRENT_THRESHOLD = 80;
+
+    //acceleration and jerk constraints for the drive motor
+    public static final TrapezoidProfile.Constraints DRIVE_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
+
+    //velocity and acceleration constraints for the steer motor
+    public static final TrapezoidProfile.Constraints STEER_CONSTRAINTS = new TrapezoidProfile.Constraints(20, 25);
 
     public static final ModuleConfig MODULE_CONFIG = new ModuleConfig(
         WHEEL_RADIUS_METERS,
