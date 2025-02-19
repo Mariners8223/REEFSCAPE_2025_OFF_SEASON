@@ -1,5 +1,6 @@
 package frc.robot.commands.MasterCommand;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,9 +17,9 @@ public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
 
-    private final PIDController XController;
-    private final PIDController YController;
-    private final PIDController ThetaController;
+    private static final PIDController XController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
+    private static final PIDController YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
+    private static final PIDController ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
 
     private int timer = 0;
 
@@ -29,15 +30,6 @@ public class HomeToReef extends Command {
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(driveBase);
 
-
-        XController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
-        YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
-        ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
-
-        XController.setIZone(0.03);
-        YController.setIZone(0.03);
-        ThetaController.setIZone(0.5);
-
         ThetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
@@ -47,11 +39,21 @@ public class HomeToReef extends Command {
         Logger.recordOutput("home to reef/target Pose", targetPose);
     }
 
+    public static void pidTune(){
+        SmartDashboard.putData(XController);
+        SmartDashboard.putData(YController);
+        SmartDashboard.putData(ThetaController);
+    }
+
     @Override
     public void initialize() {
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
+
+        Logger.recordOutput("home to reef/target X", XController.getSetpoint());
+        Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
+        Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
 
         timer = 0;
     }
@@ -97,18 +99,15 @@ public class HomeToReef extends Command {
 
     @Override
     public boolean isFinished() {
-        double xError = Math.abs(XController.getError());
-        double yError = Math.abs(YController.getError());
-        double thetaError = Math.abs(ThetaController.getError());
+        double xError = XController.getError();
+        double yError = YController.getError();
+        double thetaError = ThetaController.getError();
 
         Logger.recordOutput("home to reef/x error", xError);
         Logger.recordOutput("home to reef/y error", yError);
         Logger.recordOutput("home to reef/theta error", thetaError);
 
-        double xyTolerance = RobotAutoConstants.HomingConstants.XY_TOLERANCE;
-        double thetaTolerance = RobotAutoConstants.HomingConstants.THETA_TOLERANCE;
-
-        if(xError <= xyTolerance && yError <= xyTolerance && thetaError <= thetaTolerance){
+        if(XController.atSetpoint() && YController.atSetpoint() && ThetaController.atSetpoint()){
             timer ++;
         }
         else{
