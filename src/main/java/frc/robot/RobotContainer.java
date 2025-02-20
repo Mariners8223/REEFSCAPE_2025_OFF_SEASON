@@ -222,6 +222,8 @@ public class RobotContainer {
         Trigger ballDropHigh = driveController.povUp();
         Trigger ballDropLow = driveController.povDown();
 
+        Trigger semiAuto = driveController.a();
+
         // main cycle
         mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
         mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
@@ -263,6 +265,10 @@ public class RobotContainer {
 
 
         //driveController.y().whileTrue(new HomeToReef(driveBase, ReefLocation.REEF_1));
+
+        // semiAuto.onTrue(new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
+        // semiAuto.and(isCycleReady).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef).andThen(moveToLevel));
+        // semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
     }
 
     public static void configNamedCommands() {
