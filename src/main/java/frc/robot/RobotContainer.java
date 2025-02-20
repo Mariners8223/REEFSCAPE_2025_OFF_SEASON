@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
+import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -285,7 +286,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
 
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
-        NamedCommands.registerCommand("move to selected level",
+//        NamedCommands.registerCommand("move to selected level",
+//                new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())).andThen(moveToLevel));
+
+        new EventTrigger("move to selected level").onTrue(
                 new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())).andThen(moveToLevel));
     }
 
