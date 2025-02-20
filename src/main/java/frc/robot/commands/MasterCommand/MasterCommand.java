@@ -43,8 +43,6 @@ public class MasterCommand extends Command {
     private Constants.ReefLocation targetReef = null;
     private ElevatorConstants.ElevatorLevel level = null;
 
-    private final Alert alert = new Alert("illegal ball drop", Alert.AlertType.kWarning);
-
     public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, BallDropping ballDropping,
                          Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier,
                          Supplier<Boolean> dropBall) {
@@ -63,7 +61,7 @@ public class MasterCommand extends Command {
         homeToBallReef = new HomeToReef(driveBase, ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
         Command adjustmentPhase = new ParallelCommandGroup(
-                moveElevatorCommand,
+//                moveElevatorCommand,
                 homeToReef,
                 createBallDropCommand(ballDropping, endEffector).onlyIf(() ->
                         checkBallDropTime(RobotAutoConstants.BallDropTime.PARALLEL))
