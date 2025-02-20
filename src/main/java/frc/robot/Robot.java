@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -45,11 +47,11 @@ public class Robot extends LoggedRobot
     private static final Field2d field = new Field2d();
     public static boolean isRedAlliance = false;
     private static AprilTagFieldLayout apriltagField;
+
+    private final Command moveToBottom;
     
     @SuppressWarnings("resource")
     public Robot() {
-        new RobotContainer();
-
         Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
 
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -115,6 +117,10 @@ public class Robot extends LoggedRobot
         apriltagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
         Logger.recordOutput("Zero 3D", new Pose3d());
+
+        new RobotContainer();
+
+        moveToBottom = new MoveToLevel(RobotContainer.elevator, ElevatorConstants.ElevatorLevel.Bottom);
     }
 
     private static void checkFlip() {
@@ -214,6 +220,7 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.cancel();
         }
+        moveToBottom.schedule();
     }
     
     
