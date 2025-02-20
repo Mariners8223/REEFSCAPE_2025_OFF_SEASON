@@ -29,6 +29,7 @@ import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.commands.Elevator.MoveToLevelNoReq;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
@@ -60,6 +61,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
@@ -188,6 +190,11 @@ public class RobotContainer {
                 driveBase, elevator, endEffector, ballDropping,
                 robotAuto::getSelectedLevel, robotAuto::getSelectedReef, robotAuto::shouldDropBallInCycle);
 
+                
+        MoveToLevelNoReq moveToLevelNoReq = new MoveToLevelNoReq(elevator, ElevatorLevel.L1);
+
+        new EventTrigger("move to selected level").and(masterCommand::isScheduled).onTrue(moveToLevelNoReq.beforeStarting(() -> moveToLevelNoReq.changeDesiredlevel(robotAuto.getSelectedLevel())));
+
         Command resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
             robotAuto.setSelectedReef(null);
@@ -216,14 +223,14 @@ public class RobotContainer {
         Trigger ballDropLow = driveController.povDown();
 
         // main cycle
-        mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady));
+        mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
         mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
 
         // feeder path finder
         rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
         leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
-        onlyRobotToReef.whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef).onlyIf(() -> robotAuto.getSelectedReef() != null));
+        onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         //manual cycle
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
@@ -284,14 +291,8 @@ public class RobotContainer {
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
-
-        MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
-//        NamedCommands.registerCommand("move to selected level",
-//                new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())).andThen(moveToLevel));
-
-        new EventTrigger("move to selected level").onTrue(
-                new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())).andThen(moveToLevel));
     }
+    
 
 
     public static Command getAutoCommand() {

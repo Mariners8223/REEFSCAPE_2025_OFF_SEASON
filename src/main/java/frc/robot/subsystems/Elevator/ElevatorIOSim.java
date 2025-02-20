@@ -26,7 +26,7 @@ public class ElevatorIOSim implements ElevatorIO{
             ElevatorConstants.PULLEY_RADIUS, 
             ElevatorLevel.Bottom.getHeight(),
             ElevatorLevel.L4.getHeight(),
-            true,
+            false,
             ElevatorLevel.Bottom.getHeight(),
             0.0001, 0.0001);
 
@@ -45,7 +45,7 @@ public class ElevatorIOSim implements ElevatorIO{
     public void setVoltage(double voltage){ elevator.setInputVoltage(voltage); }
 
     public void Update(ElevatorInputs inputs){
-        // elevator.setInput(pidController.calculate(elevator.getPositionMeters()));
+        elevator.setInput(pidController.calculate(elevator.getPositionMeters()));
         elevator.update(0.02);
 
         inputs.elevatorHeight = elevator.getPositionMeters();
