@@ -223,7 +223,7 @@ public class RobotContainer {
         rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
         leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
-        onlyRobotToReef.whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
+        onlyRobotToReef.whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef).onlyIf(() -> robotAuto.getSelectedReef() != null));
 
         //manual cycle
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
