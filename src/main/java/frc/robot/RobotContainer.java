@@ -283,6 +283,10 @@ public class RobotContainer {
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
+
+        MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
+        NamedCommands.registerCommand("move to selected level",
+                new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())).andThen(moveToLevel));
     }
 
 
