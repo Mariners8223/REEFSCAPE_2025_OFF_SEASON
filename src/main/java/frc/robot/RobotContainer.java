@@ -148,13 +148,13 @@ public class RobotContainer {
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
 
         //climb
-        operatorController.povDownLeft().whileTrue(new ClimbCommand(climb).onlyIf(() ->
-                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4));
+        operatorController.povDownLeft().and(() ->
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4).whileTrue(new ClimbCommand(climb));
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
-        operatorController.povDownLeft().whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel).onlyIf(() ->
-                endEffector.getFunnelPosition() > -0.4));
+        operatorController.povDownLeft().and(() ->
+                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
     }
 
     public static ReefLocation configureTargetReefSupplier() {
@@ -236,16 +236,22 @@ public class RobotContainer {
 
         //manual cycle
         MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
-        moveElevator.onTrue(
-                new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())
-                ).andThen(
-                        moveToLevel
-                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
-        );
+        moveElevator.and(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
+                .onTrue(moveToLevel.beforeStarting(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
 
         moveElevator.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
+
+        RobotToReef robotToReef = new RobotToReef(driveBase, robotAuto::getSelectedReef);
+        semiAuto.and(isCycleReady).whileTrue(robotToReef.andThen(new RobotRelativeDrive(driveBase, driveController)));
+
+        Eject eject = new Eject(endEffector, MotorPower.L1);
+
+        semiAuto.onFalse(
+                eject.beforeStarting(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel())))
+                .andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom))
+                        .onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
 
 
         //ball dropping manual control
