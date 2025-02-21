@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
-import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
@@ -140,8 +139,10 @@ public class RobotContainer {
             operatorController.pov(i * 90).onTrue(new InstantCommand(() -> robotAuto.setSelectedLevel(level)));
         }
 
-        operatorController.button(13).onTrue(new InstantCommand(() ->
-                robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+        // operatorController.button(13).onTrue(new InstantCommand(() ->
+        //         robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+        operatorController.button(13).whileTrue(new BallDropOnForLow(ballDropping));
+        operatorController.button(13).onFalse(new BallDropOff(ballDropping));
 
         //funnel flipping
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
@@ -220,8 +221,8 @@ public class RobotContainer {
         Trigger moveElevator = driveController.x();
         Trigger onlyRobotToReef = driveController.b();
 
-        Trigger ballDropHigh = driveController.povUp();
-        Trigger ballDropLow = driveController.povDown();
+        // Trigger ballDropHigh = driveController.povUp();
+        // Trigger ballDropLow = driveController.povDown();
 
         Trigger semiAuto = driveController.a();
 
@@ -256,12 +257,12 @@ public class RobotContainer {
                         .onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
 
 
-        //ball dropping manual control
-        ballDropHigh.whileTrue(new BallDropOnForHigh(ballDropping));
-        ballDropLow.whileTrue(new BallDropOnForLow(ballDropping));
+        // //ball dropping manual control
+        // ballDropHigh.whileTrue(new BallDropOnForHigh(ballDropping));
+        // ballDropLow.whileTrue(new BallDropOnForLow(ballDropping));
 
-        ballDropHigh.onFalse(new BallDropOff(ballDropping));
-        ballDropLow.onFalse(new BallDropOff(ballDropping));
+        // ballDropHigh.onFalse(new BallDropOff(ballDropping));
+        // ballDropLow.onFalse(new BallDropOff(ballDropping));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 
