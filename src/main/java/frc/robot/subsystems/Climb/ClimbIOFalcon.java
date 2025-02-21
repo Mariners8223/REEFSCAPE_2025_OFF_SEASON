@@ -4,8 +4,6 @@
 
 package frc.robot.subsystems.Climb;
 
-import org.littletonrobotics.junction.Logger;
-
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import frc.util.MarinersController.MarinersTalonFX;

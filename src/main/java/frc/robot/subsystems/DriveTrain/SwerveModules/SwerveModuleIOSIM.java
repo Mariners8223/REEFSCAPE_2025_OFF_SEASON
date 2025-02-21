@@ -3,7 +3,6 @@ package frc.robot.subsystems.DriveTrain.SwerveModules;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Constants;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSimMotor;
 import frc.util.PIDFGains;

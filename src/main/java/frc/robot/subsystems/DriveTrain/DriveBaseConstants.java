@@ -5,8 +5,6 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.path.PathConstraints;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import frc.robot.Constants;
-import frc.robot.Constants.RobotType;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.util.PIDFGains;
 

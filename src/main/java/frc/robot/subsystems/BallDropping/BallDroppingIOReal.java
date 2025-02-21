@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.BallDropping;
 
-import org.littletonrobotics.junction.Logger;
 
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
@@ -12,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.util.Units;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersController.ControlMode;

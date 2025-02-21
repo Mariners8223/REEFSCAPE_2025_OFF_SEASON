@@ -1,16 +1,13 @@
 package frc.robot.commands.MasterCommand;
 
 
-import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
-import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
-import frc.robot.commands.EndEffector.Funnel.YeetFunnel;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
