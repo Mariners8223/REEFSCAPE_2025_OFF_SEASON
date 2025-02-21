@@ -59,7 +59,7 @@ public class EndEffectorConstants {
 
 
         public static final double COLLECT_POSITION = 0;
-        public static final double CLIMB_POSITION = -0.816;
+        public static final double CLIMB_POSITION = -0.78;
         public static final double TOLERANCE = 0.1;
     }
 }

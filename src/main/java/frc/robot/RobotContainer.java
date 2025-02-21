@@ -190,10 +190,12 @@ public class RobotContainer {
                 driveBase, elevator, endEffector, ballDropping,
                 robotAuto::getSelectedLevel, robotAuto::getSelectedReef, robotAuto::shouldDropBallInCycle);
 
+        Command semiAutoCommand = new RobotToReef(driveBase, robotAuto::getSelectedReef)
+                .andThen(new RobotRelativeDrive(driveBase, driveController));
                 
         MoveToLevelNoReq moveToLevelNoReq = new MoveToLevelNoReq(elevator, ElevatorLevel.L1);
 
-        new EventTrigger("move to selected level").and(masterCommand::isScheduled).onTrue(moveToLevelNoReq.beforeStarting(() -> moveToLevelNoReq.changeDesiredlevel(robotAuto.getSelectedLevel())));
+        new EventTrigger("move to selected level").and(() -> masterCommand.isScheduled() || semiAutoCommand.isScheduled()).onTrue(moveToLevelNoReq.beforeStarting(() -> moveToLevelNoReq.changeDesiredlevel(robotAuto.getSelectedLevel())));
 
         Command resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
@@ -243,8 +245,9 @@ public class RobotContainer {
 
         moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
 
-        RobotToReef robotToReef = new RobotToReef(driveBase, robotAuto::getSelectedReef);
-        semiAuto.and(isCycleReady).whileTrue(robotToReef.andThen(new RobotRelativeDrive(driveBase, driveController)));
+        //RobotToReef robotToReef = new RobotToReef(driveBase, robotAuto::getSelectedReef);
+        //semiAuto.and(isCycleReady).whileTrue(robotToReef.andThen(new RobotRelativeDrive(driveBase, driveController)));
+        semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
 
         Eject eject = new Eject(endEffector, MotorPower.L1);
 
