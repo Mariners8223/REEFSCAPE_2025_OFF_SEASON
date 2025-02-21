@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
+import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -197,6 +198,8 @@ public class Robot extends LoggedRobot
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
         autonomousCommand = RobotContainer.getAutoCommand();
+
+        Elastic.selectTab(1);
         
         if (autonomousCommand != null)
         {
@@ -216,6 +219,8 @@ public class Robot extends LoggedRobot
     @Override
     public void teleopInit()
     {
+        Elastic.selectTab(0);
+
         if (autonomousCommand != null)
         {
             autonomousCommand.cancel();
