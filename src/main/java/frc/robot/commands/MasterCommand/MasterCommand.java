@@ -181,6 +181,6 @@ public class MasterCommand extends Command {
     }
 
     public Command.InterruptionBehavior getInterruptionBehavior() {
-        return this.coralCommand.getInterruptionBehavior();
+        return InterruptionBehavior.kCancelSelf;
     }
 }
