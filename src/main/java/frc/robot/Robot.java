@@ -73,7 +73,16 @@ public class Robot extends LoggedRobot
         }
 
         if(isReal()){
-            Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+            switch (Constants.ROBOT_TYPE){
+                case COMPETITION -> {
+                    Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+                    Logger.addDataReceiver(new NT4Publisher());
+                }
+
+                case DEVELOPMENT -> {
+                    Logger.addDataReceiver(new WPILOGWriter("/U"));
+                }
+            }
             new PowerDistribution(1, ModuleType.kRev);
         }
         else{
@@ -86,9 +95,9 @@ public class Robot extends LoggedRobot
 
                 setUseTiming(false);
             }
+            Logger.addDataReceiver(new NT4Publisher());
         }
 
-        Logger.addDataReceiver(new NT4Publisher());
 
 
         SignalLogger.enableAutoLogging(false);
