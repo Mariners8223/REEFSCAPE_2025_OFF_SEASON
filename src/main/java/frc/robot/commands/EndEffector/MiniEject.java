@@ -7,6 +7,7 @@ package frc.robot.commands.EndEffector;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
@@ -34,7 +35,7 @@ public class MiniEject extends Command {
 
     currentLevel = levelSupplier.get();
 
-    if(currentLevel != null){
+    if(currentLevel != null && currentLevel != ElevatorLevel.Bottom){
       EndEffectorConstants.MotorPower motorPower = MasterCommand.getMotorPower(currentLevel);
 
       rightValue = motorPower.rightMotorPower;

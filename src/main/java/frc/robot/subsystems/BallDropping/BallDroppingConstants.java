@@ -12,7 +12,7 @@ public class BallDroppingConstants {
         //TODO: Find all constants!!!
 
         public static final double ANGLE_TO_REACH_TOP = 0.4;
-        public static final double ANGLE_TO_REACH_BOTTOM = 0.16;
+        public static final double ANGLE_TO_REACH_BOTTOM = 0.25;
         public static final double ANGLE_TO_RESET = 0;
 
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;

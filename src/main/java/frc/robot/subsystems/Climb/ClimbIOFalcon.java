@@ -45,6 +45,6 @@ public class ClimbIOFalcon implements ClimbIO{
 
     @Override
     public void setBrakeMode(boolean isBrake) {
-        motor.setMotorIdleMode(false);
+        motor.setMotorIdleMode(isBrake);
     }
 }
