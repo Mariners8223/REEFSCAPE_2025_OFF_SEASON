@@ -125,8 +125,7 @@ public class DriveBase extends SubsystemBase {
 
         if (RobotBase.isReal()) {
             gyro = switch (Constants.ROBOT_TYPE) {
-                case DEVELOPMENT -> new PigeonIO(DriveBaseConstants.PIGEON_ID);
-                case COMPETITION -> new NavxIO();
+                case DEVELOPMENT, COMPETITION -> new PigeonIO(DriveBaseConstants.PIGEON_ID);
                 case REPLAY -> throw new IllegalArgumentException("Robot cannot be replay if it's real");
             };
             gyro.reset(new Rotation2d());
