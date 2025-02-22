@@ -26,7 +26,7 @@ public class EndEffectorConstants {
     public static final double Z_OFFSET = 0.735;
 
     public enum MotorPower{
-        INTAKE(0.3, 0.3, 1),
+        INTAKE(0.26, 0.26, 1),
         L1(-0.1, 0.7, 1),
         L2_3(0.4, 0.4, 0.5),
         L4(0.6, 0.6, 0.5);
