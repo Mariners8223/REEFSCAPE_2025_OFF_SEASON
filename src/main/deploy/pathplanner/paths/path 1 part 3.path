@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.6112208521684472,
-        "y": 2.991926171358339
+        "x": 3.12975,
+        "y": 1.8019999999999994
       },
       "isLocked": false,
       "linkedName": "feeder 2"
@@ -20,8 +20,8 @@
         "y": 2.7326439795556006
       },
       "prevControl": {
-        "x": 0.9369774225481331,
-        "y": 0.7138199033450112
+        "x": 3.2857500000000006,
+        "y": 2.4259999999999993
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
+    "velocity": 0.1,
     "rotation": 59.99999999999999
   },
   "reversed": false,
