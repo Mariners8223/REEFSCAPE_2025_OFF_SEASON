@@ -12,6 +12,8 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -48,6 +50,13 @@ public class VisionIOPhoton implements VisionIO {
 
         for(int i = 0; i < results.size(); i++){
             inputs.visionFrames[i] = generateFrame(results.get(i));
+            ArrayList<Integer> targetIDs = new ArrayList<>();
+
+            for(PhotonTrackedTarget target : results.get(i).getTargets()){
+                targetIDs.add(target.getFiducialId());
+            }
+
+            inputs.targetIDs = targetIDs.stream().mapToInt(Integer::intValue).toArray();
         }
 
     }

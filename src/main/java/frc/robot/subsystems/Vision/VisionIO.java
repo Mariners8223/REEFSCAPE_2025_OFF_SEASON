@@ -23,8 +23,7 @@ public interface VisionIO {
 
     enum EstimationType{
         SINGLE_TARGET(VisionConstants.maxSingleAmbiguity),
-        MULTIPLE_TARGETS(VisionConstants.maxMultiAmbiguity),
-        ;
+        MULTIPLE_TARGETS(VisionConstants.maxMultiAmbiguity);
 
         EstimationType(double maxAmbiguity) {
             this.maxAmbiguity = maxAmbiguity;
@@ -41,6 +40,7 @@ public interface VisionIO {
     class VisionInputs{
         boolean isConnected;
         VisionFrame[] visionFrames = new VisionFrame[0];
+        int[] targetIDs = new int[0];
     }
 
 }

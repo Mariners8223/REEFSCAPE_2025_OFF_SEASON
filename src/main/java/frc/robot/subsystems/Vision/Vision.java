@@ -5,10 +5,12 @@
 package frc.robot.subsystems.Vision;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import org.littletonrobotics.junction.Logger;
@@ -56,9 +58,20 @@ public class Vision extends SubsystemBase {
             // For logging purposes
             ArrayList<Pose3d> acceptedPoses = new ArrayList<>();
             ArrayList<Pose3d> rejectedPoses = new ArrayList<>();
+            ArrayList<Translation3d> targetLocations = new ArrayList<>();
+
+            for(int i = 0; i < camera.inputs.targetIDs.length; i++){
+                Optional<Pose3d> targetPose = VisionConstants.FIELD_LAYOUT.getTagPose(camera.inputs.targetIDs[i]);
+
+                targetPose.ifPresent(pose3d -> targetLocations.add(pose3d.getTranslation()));
+            }
+
+            Logger.recordOutput("Vision/" + camera.cameraName + "/Target Locations", targetLocations.toArray(new Translation3d[0]));
 
             for (VisionIO.VisionFrame frame : camera.inputs.visionFrames) {
                 if (!frame.hasTarget()) continue;
+
+
 
                 if (!checkPoseLocation(frame.robotPose())) {
                     rejectedPoses.add(frame.robotPose());
