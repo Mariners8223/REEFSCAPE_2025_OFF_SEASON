@@ -73,8 +73,14 @@ public class Robot extends LoggedRobot
         }
 
         if(isReal()){
-            Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
             new PowerDistribution(1, ModuleType.kRev);
+            if(Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT){
+                Logger.addDataReceiver(new NT4Publisher());
+                Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+            } 
+            else{
+                Logger.addDataReceiver(new WPILOGWriter("/U"));
+            }
         }
         else{
             if(Constants.ROBOT_TYPE == Constants.RobotType.REPLAY){
@@ -86,9 +92,9 @@ public class Robot extends LoggedRobot
 
                 setUseTiming(false);
             }
-        }
 
-        Logger.addDataReceiver(new NT4Publisher());
+            Logger.addDataReceiver(new NT4Publisher());
+        }
 
 
         SignalLogger.enableAutoLogging(false);
