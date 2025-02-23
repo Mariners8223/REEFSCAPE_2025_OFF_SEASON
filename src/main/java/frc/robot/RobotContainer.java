@@ -46,8 +46,10 @@ import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
+import frc.util.Elastic;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -56,7 +58,11 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.event.BooleanEvent;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -93,6 +99,12 @@ public class RobotContainer {
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
         endEffector.setDefaultCommand(new Intake(endEffector));
+
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
+            new Trigger(DriverStation::isDSAttached).onTrue(
+                new InstantCommand(() -> Elastic.selectTab(1))
+            );
+        }
 
         configNamedCommands();
         configChooser();
@@ -344,7 +356,8 @@ public class RobotContainer {
 
         autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
-        autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
+        Pose2d resetPose = new Pose2d(driveBase.getPose().getTranslation(), (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) ? new Rotation2d() : new Rotation2d(Math.PI));
+        autoChooser.addDefaultOption("Do Nothing", new InstantCommand(() -> driveBase.reset(resetPose)));
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
