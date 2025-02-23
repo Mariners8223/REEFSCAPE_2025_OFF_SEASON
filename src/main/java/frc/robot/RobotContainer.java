@@ -102,7 +102,7 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             new Trigger(DriverStation::isDSAttached).onTrue(
-                new InstantCommand(() -> Elastic.selectTab(1))
+                new InstantCommand(() -> Elastic.selectTab(1)).ignoringDisable(true)
             );
         }
 
