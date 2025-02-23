@@ -82,6 +82,8 @@ public class Robot extends LoggedRobot
                 case DEVELOPMENT -> {
                     Logger.addDataReceiver(new WPILOGWriter("/U"));
                 }
+
+                case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
             }
             new PowerDistribution(1, ModuleType.kRev);
             if(Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT){
@@ -110,7 +112,7 @@ public class Robot extends LoggedRobot
         DataLogManager.stop();
 
         Logger.start();
-        Logger.recordOutput("Zero 3D", new Pose3d());
+        Logger.recordOutput("Bumper Pose", new Pose3d());
 
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback((path) ->

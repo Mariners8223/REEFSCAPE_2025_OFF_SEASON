@@ -49,7 +49,6 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.util.Elastic;
 
 import org.json.simple.parser.ParseException;
-import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -61,8 +60,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.event.BooleanEvent;
-import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -112,7 +109,7 @@ public class RobotContainer {
         configureDriveBindings();
         configureOperatorBinding();
 
-//        configureCamera();
+        //  configureCamera();
         if (RobotBase.isReal()) {
             CameraServer.startAutomaticCapture();
             CameraServer.getServer().getSource().setFPS(15);
