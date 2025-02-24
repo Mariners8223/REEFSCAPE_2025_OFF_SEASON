@@ -120,12 +120,12 @@ public class RobotContainer {
             SmartDashboard.putBoolean("should drop ball", false);
 
 
-            driveController.y().onTrue(new InstantCommand(() -> {
-                RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
-                RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
-                RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
-                System.out.println("set new targets");
-            }));
+            // driveController.y().onTrue(new InstantCommand(() -> {
+            //     RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+            //     RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+            //     RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+            //     System.out.println("set new targets");
+            // }));
         }
 
         HomeToReef.pidTune();
@@ -234,6 +234,7 @@ public class RobotContainer {
         // Trigger ballDropLow = driveController.povDown();
 
         Trigger semiAuto = driveController.a();
+        Trigger forceEject = driveController.y();
 
         // main cycle
         mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
@@ -287,6 +288,8 @@ public class RobotContainer {
         // semiAuto.onTrue(new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
         // semiAuto.and(isCycleReady).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef).andThen(moveToLevel));
         // semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+
+        forceEject.whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
     }
 
     public static void configNamedCommands() {

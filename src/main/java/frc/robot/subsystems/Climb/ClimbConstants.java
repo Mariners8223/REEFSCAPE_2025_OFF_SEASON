@@ -11,7 +11,7 @@ public class ClimbConstants {
     public static final double ROTATIONS_TO_METERS = 0.024 * 2 * Math.PI;
     
     public static final double CLIMB_POWER = -0.45;
-    public static final double SOFT_MINIMUM = -9;
+    public static final double SOFT_MINIMUM = -9 * 0.78;
     public static final double SOFT_MAXIMUM = 0;
     public static final boolean IS_INVERTED = true;
     public static final double START_POSITION = 0.125;

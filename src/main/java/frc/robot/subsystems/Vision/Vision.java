@@ -13,6 +13,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -54,6 +56,8 @@ public class Vision extends SubsystemBase {
         for (VisionCamera camera : cameras) {
             camera.update();
             camera.log();
+
+            SmartDashboard.putBoolean(camera.cameraName + " is connected", camera.inputs.isConnected);
 
             // For logging purposes
             ArrayList<Pose3d> acceptedPoses = new ArrayList<>();

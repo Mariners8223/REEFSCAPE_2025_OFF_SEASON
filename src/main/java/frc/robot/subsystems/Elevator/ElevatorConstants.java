@@ -18,7 +18,7 @@ public class ElevatorConstants {
         L2(0.85),
         // L3(1.20),
         L3(1.3),
-        L4(1.885);
+        L4(1.87);
 
         private final double height;
 

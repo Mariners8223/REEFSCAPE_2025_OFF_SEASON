@@ -5,6 +5,7 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.RobotContainer;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
@@ -41,6 +42,9 @@ public class MiniEject extends Command {
       rightValue = motorPower.rightMotorPower;
       leftValue = motorPower.leftMotorPower;
     }
+    else{
+      RobotContainer.endEffector.setLoadedValue(true);
+    }
 
     endEffector.setRightMotorPower(rightValue);
     endEffector.setLeftMotorPower(leftValue);
@@ -50,7 +54,7 @@ public class MiniEject extends Command {
   @Override
   public void end(boolean interrupted) {
     endEffector.stopEndEffectorMotors();
-    if(currentLevel != null) endEffector.setLoadedValue(false);
+    if(currentLevel != null && currentLevel != ElevatorLevel.Bottom) endEffector.setLoadedValue(false);
   }
 
   // Returns true when the command should end.
