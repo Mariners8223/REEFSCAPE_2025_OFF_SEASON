@@ -50,6 +50,8 @@ public class Robot extends LoggedRobot
     private static AprilTagFieldLayout apriltagField;
 
     private final Command moveToBottom;
+
+    private int driverStationCheckTimer = 0;
     
     @SuppressWarnings("resource")
     public Robot() {
@@ -191,6 +193,15 @@ public class Robot extends LoggedRobot
     
     @Override
     public void disabledPeriodic() {
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION ){
+            driverStationCheckTimer++;
+            
+            if(driverStationCheckTimer >= 50){
+                driverStationCheckTimer = 0;
+
+                isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+            }
+        }
     }
     
     @SuppressWarnings("RedundantMethodOverride")
