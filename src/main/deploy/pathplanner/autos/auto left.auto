@@ -11,22 +11,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "home to reef 4"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "move l4"
-                }
-              }
-            ]
+            "name": "move l4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path to reef 4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "home to reef 4"
           }
         },
         {
@@ -54,22 +53,21 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "home to reef 3"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "move l4"
-                }
-              }
-            ]
+            "name": "move l4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path to reef 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "home to reef 3"
           }
         },
         {
