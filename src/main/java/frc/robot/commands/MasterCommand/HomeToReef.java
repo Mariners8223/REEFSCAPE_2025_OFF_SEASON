@@ -92,7 +92,7 @@ public class HomeToReef extends Command {
                 thetaOutput);
 
         ChassisSpeeds robotRelativeSpeeds =
-                ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getRotation2d());
+                ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
 
         driveBase.drive(robotRelativeSpeeds);
     }
