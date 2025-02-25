@@ -35,15 +35,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "path 3 part 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Wait until GP"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "path 3 part 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wait until GP"
+                }
+              }
+            ]
           }
         },
         {

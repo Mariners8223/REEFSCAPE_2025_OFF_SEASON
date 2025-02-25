@@ -1,6 +1,8 @@
 package frc.robot.commands.MasterCommand;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
@@ -25,7 +27,8 @@ public class RobotToReef extends Command {
 
         sequence = new SequentialCommandGroup(
             pathCommand,
-            homeToReef
+            homeToReef,
+            new InstantCommand(() -> driveBase.drive(new ChassisSpeeds()))
         );
     }
 

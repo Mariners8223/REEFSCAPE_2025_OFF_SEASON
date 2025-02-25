@@ -26,7 +26,9 @@ import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.RobotRelativeDrive;
+import frc.robot.commands.Drive.MinorAdjust.Direcation;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.MoveToLevelNoReq;
 import frc.robot.commands.EndEffector.Eject;
@@ -262,9 +264,7 @@ public class RobotContainer {
         Eject eject = new Eject(endEffector, MotorPower.L1);
 
         semiAuto.onFalse(
-                eject.beforeStarting(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel())))
-                .andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom))
-                        .onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
+                new MoveToLevel(elevator, ElevatorLevel.Bottom).onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
 
 
         // //ball dropping manual control
@@ -290,6 +290,11 @@ public class RobotContainer {
         // semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         forceEject.whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
+
+        driveController.povRight().whileTrue(new MinorAdjust(driveBase, Direcation.RIGHT));
+        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
+        driveController.povUp().whileTrue(new MinorAdjust(driveBase, Direcation.FORWARD));
+        driveController.povDown().whileTrue(new MinorAdjust(driveBase, Direcation.BACKWARDS));
     }
 
     public static void configNamedCommands() {
