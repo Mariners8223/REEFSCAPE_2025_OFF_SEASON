@@ -356,8 +356,7 @@ public class RobotContainer {
 
         autosOfAutos.forEach(auto -> autoChooser.addOption(auto.getName(), auto));
 
-        Pose2d resetPose = new Pose2d(driveBase.getPose().getTranslation(), (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red) ? new Rotation2d() : new Rotation2d(Math.PI));
-        autoChooser.addDefaultOption("Do Nothing", new InstantCommand(() -> driveBase.reset(resetPose)));
+        autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
