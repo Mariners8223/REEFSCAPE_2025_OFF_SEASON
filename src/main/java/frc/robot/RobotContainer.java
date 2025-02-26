@@ -35,10 +35,7 @@ import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
-import frc.robot.commands.MasterCommand.HomeToReef;
-import frc.robot.commands.MasterCommand.MasterCommand;
-import frc.robot.commands.MasterCommand.PathPlannerWrapper;
-import frc.robot.commands.MasterCommand.RobotToReef;
+import frc.robot.commands.MasterCommand.*;
 import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
@@ -197,12 +194,15 @@ public class RobotContainer {
         BooleanSupplier isCycleReady = () ->
                 robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded();
 
+        EventTrigger moveElevatorMarker = new EventTrigger("move to selected level");
+
         Command masterCommand = new MasterCommand(
-                driveBase, elevator, endEffector, robotAuto::getSelectedLevel, robotAuto::getSelectedReef);
+                driveBase, elevator, endEffector, moveElevatorMarker, robotAuto::getSelectedLevel, robotAuto::getSelectedReef);
 
-        Command semiAutoCommand = new RobotToReef(driveBase, robotAuto::getSelectedReef)
-                .andThen(new RobotRelativeDrive(driveBase, driveController));
+        Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
+                robotAuto::getSelectedLevel, moveElevatorMarker, driveController);
 
+        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
 
         Command resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
@@ -250,15 +250,9 @@ public class RobotContainer {
 
         moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
 
-        //RobotToReef robotToReef = new RobotToReef(driveBase, robotAuto::getSelectedReef);
-        //semiAuto.and(isCycleReady).whileTrue(robotToReef.andThen(new RobotRelativeDrive(driveBase, driveController)));
+
         semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
-
-        Eject eject = new Eject(endEffector, MotorPower.L1);
-
-        semiAuto.onFalse(
-                new MoveToLevel(elevator, ElevatorLevel.Bottom).onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
-
+        semiAuto.onFalse(moveElevatorToBottom);
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 
