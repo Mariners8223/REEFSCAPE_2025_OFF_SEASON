@@ -16,8 +16,7 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
@@ -30,7 +29,6 @@ import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Drive.MinorAdjust.Direcation;
 import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.commands.Elevator.MoveToLevelNoReq;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
@@ -56,13 +54,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
@@ -249,6 +243,17 @@ public class RobotContainer {
         moveElevator.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
+
+        MoveToLevel moveToLevelManual = new MoveToLevel(elevator, ElevatorLevel.L1);
+
+        moveElevator.whileTrue(
+                new ParallelCommandGroup(
+                        new RobotRelativeDrive(driveBase, driveController),
+                        moveToLevelManual.beforeStarting(
+                                () -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel()
+                        )
+                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean()))
+        );
 
 
         semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
