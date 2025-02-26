@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.commands.Elevator.MoveToLevelActive;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -35,6 +36,8 @@ public class SemiAuto extends Command {
 
        moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
+       MoveToLevelActive moveElevatorCommandActive = new MoveToLevelActive(elevator, elevatorLevelSupplier);
+
        sequence = new SequentialCommandGroup(
                new ParallelCommandGroup(
                        robotToReef,
@@ -43,7 +46,10 @@ public class SemiAuto extends Command {
                                  moveElevatorCommand
                           )
                ),
-               robotRelativeDrive
+               new ParallelCommandGroup(
+                       robotRelativeDrive,
+                       moveElevatorCommandActive
+               )
        );
     }
 

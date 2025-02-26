@@ -29,6 +29,7 @@ import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Drive.MinorAdjust.Direcation;
 import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.commands.Elevator.MoveToLevelActive;
 import frc.robot.commands.EndEffector.Eject;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
@@ -223,36 +224,23 @@ public class RobotContainer {
         Trigger onlyRobotToReef = driveController.b();
 
         Trigger semiAuto = driveController.a();
-        Trigger forceEject = driveController.y();
 
         // main cycle
         mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
-        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
+        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(moveElevatorToBottom));
 
         // feeder path finder
         rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
         leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
-        onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
-
-        //manual cycle
-        MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
-        moveElevator.and(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
-                .onTrue(moveToLevel.beforeStarting(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
-
-        moveElevator.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
-
-        moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
-
-        MoveToLevel moveToLevelManual = new MoveToLevel(elevator, ElevatorLevel.L1);
+        onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null)
+                .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         moveElevator.whileTrue(
                 new ParallelCommandGroup(
                         new RobotRelativeDrive(driveBase, driveController),
-                        moveToLevelManual.beforeStarting(
-                                () -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel()
-                        )
-                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean()))
+                        new MoveToLevelActive(elevator, robotAuto::getSelectedLevel)
+                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
 
@@ -266,15 +254,6 @@ public class RobotContainer {
                 new WaitCommand(0.5),
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
         ));
-
-
-        //driveController.y().whileTrue(new HomeToReef(driveBase, ReefLocation.REEF_1));
-
-        // semiAuto.onTrue(new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
-        // semiAuto.and(isCycleReady).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef).andThen(moveToLevel));
-        // semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
-
-        forceEject.whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, Direcation.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
