@@ -129,8 +129,6 @@ public class RobotContainer {
             //     System.out.println("set new targets");
             // }));
         }
-
-        HomeToReef.pidTune();
     }
 
     public static void configureOperatorBinding() {
