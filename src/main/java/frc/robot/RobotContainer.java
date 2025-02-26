@@ -191,7 +191,7 @@ public class RobotContainer {
         Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
                 robotAuto::getSelectedLevel, moveElevatorMarker, driveController);
 
-        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
+//        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
 
         Command resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
@@ -216,7 +216,7 @@ public class RobotContainer {
 
         // main cycle
         mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
-        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(moveElevatorToBottom));
+        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
 
         // feeder path finder
         rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
@@ -234,7 +234,7 @@ public class RobotContainer {
 
 
         semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
-        semiAuto.onFalse(moveElevatorToBottom);
+        semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 

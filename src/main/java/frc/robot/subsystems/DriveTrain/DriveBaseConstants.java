@@ -31,8 +31,8 @@ public class DriveBaseConstants {
                 MODULE_TRANSLATIONS);
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                3,
-                2, //TODO find a good value for this
+                3.5,
+                6, //TODO find a good value for this
                 5,
                 25); //the constraints for pathPlanner
 

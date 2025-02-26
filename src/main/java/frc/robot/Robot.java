@@ -89,7 +89,7 @@ public class Robot extends LoggedRobot
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
             }
-            new PowerDistribution(1, ModuleType.kRev);
+//            new PowerDistribution(1, ModuleType.kRev);
             if(Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT){
                 Logger.addDataReceiver(new NT4Publisher());
                 Logger.addDataReceiver(new WPILOGWriter("/media/logs"));

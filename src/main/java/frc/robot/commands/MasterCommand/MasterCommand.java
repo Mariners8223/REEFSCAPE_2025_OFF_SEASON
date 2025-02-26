@@ -52,13 +52,15 @@ public class MasterCommand extends Command {
         // the main command
         coralCommand = new SequentialCommandGroup(
                 new ParallelCommandGroup(
-                        pathCommand,
+                        new SequentialCommandGroup(
+                                pathCommand,
+                                homeToReef
+                        ),
                         new SequentialCommandGroup(
                                 waitUntilMarker,
                                 moveElevatorCommand
                         )
                 ),
-                homeToReef,
                 ejectCommand,
                 elevatorToHome
         );
