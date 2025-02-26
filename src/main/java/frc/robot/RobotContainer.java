@@ -12,7 +12,6 @@ import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
@@ -180,11 +179,6 @@ public class RobotContainer {
         return ElevatorLevel.values()[level];
     }
 
-
-    public static Boolean configureBallDropSupplier() {
-        return SmartDashboard.getBoolean("should drop ball", false);
-    }
-
     public static void configureDriveBindings() {
         BooleanSupplier isCycleReady = () ->
                 robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded();
@@ -202,16 +196,11 @@ public class RobotContainer {
         Command resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
             robotAuto.setSelectedReef(null);
-            robotAuto.setDropBallInCycle(false);
         });
 
         BooleanSupplier robotBelowCertainSpeed = () -> {
-            ChassisSpeeds chassisSpeeds = driveBase.getChassisSpeeds();
-
-            double speed = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
-
             // speed is below 1 m/s total and below 1 omega
-            return Math.abs(speed) < 1 && chassisSpeeds.omegaRadiansPerSecond < 1;
+            return driveBase.getVelocity() < 1;
         };
 
         Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
