@@ -1,0 +1,92 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path 1 part 1"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "move l4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path to reef 11"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "home to reef 11"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "path 1 part 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wait until GP"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path 1 part 3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "move l4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "path to reef 12"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "home to reef 12"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

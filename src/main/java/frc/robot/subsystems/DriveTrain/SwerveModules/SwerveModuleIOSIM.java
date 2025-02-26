@@ -3,7 +3,6 @@ package frc.robot.subsystems.DriveTrain.SwerveModules;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.DriverStation;
-import frc.robot.Constants;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSimMotor;
 import frc.util.PIDFGains;
@@ -22,48 +21,26 @@ public class SwerveModuleIOSIM extends SwerveModuleIO {
 
         double DRIVE_KS, DRIVE_KV, STEER_KV, STEER_KA, DRIVE_GEAR_RATIO, STEER_GEAR_RATIO, WHEEL_RADIUS_METERS, WHEEL_CIRCUMFERENCE_METERS;
 
-        if (Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT) {
-            DRIVE_GEAR_RATIO = DevBotConstants.DRIVE_GEAR_RATIO;
-            STEER_GEAR_RATIO = DevBotConstants.STEER_GEAR_RATIO;
-            WHEEL_CIRCUMFERENCE_METERS = DevBotConstants.WHEEL_CIRCUMFERENCE_METERS;
-            WHEEL_RADIUS_METERS = DevBotConstants.WHEEL_RADIUS_METERS;
 
-            DevBotConstants constants = DevBotConstants.values()[name.ordinal()];
+        DRIVE_GEAR_RATIO = DevBotConstants.DRIVE_GEAR_RATIO;
+        STEER_GEAR_RATIO = DevBotConstants.STEER_GEAR_RATIO;
+        WHEEL_CIRCUMFERENCE_METERS = DevBotConstants.WHEEL_CIRCUMFERENCE_METERS;
+        WHEEL_RADIUS_METERS = DevBotConstants.WHEEL_RADIUS_METERS;
 
-            driveMotorPIDController = constants.DRIVE_MOTOR_PID;
-            steerMotorPIDController = constants.STEER_MOTOR_PID;
+        DevBotConstants constants = DevBotConstants.values()[name.ordinal()];
 
-            driveMotorModel = DCMotor.getKrakenX60(1);
-            steerMotorModel = DCMotor.getNEO(1);
+        driveMotorPIDController = constants.DRIVE_MOTOR_PID;
+        steerMotorPIDController = constants.STEER_MOTOR_PID;
 
-            DRIVE_KS = constants.DRIVE_KS;
-            DRIVE_KV = constants.DRIVE_KV;
-            DRIVE_KA = constants.DRIVE_KA;
+        driveMotorModel = DCMotor.getKrakenX60(1);
+        steerMotorModel = DCMotor.getNEO(1);
 
-            STEER_KV = constants.STEER_KV;
-            STEER_KA = constants.STEER_KA;
-        }
-        else {
-            DRIVE_GEAR_RATIO = CompBotConstants.DRIVE_GEAR_RATIO;
-            STEER_GEAR_RATIO = CompBotConstants.STEER_GEAR_RATIO;
-            WHEEL_CIRCUMFERENCE_METERS = CompBotConstants.WHEEL_CIRCUMFERENCE_METERS;
-            WHEEL_RADIUS_METERS = CompBotConstants.WHEEL_RADIUS_METERS;
+        DRIVE_KS = constants.DRIVE_KS;
+        DRIVE_KV = constants.DRIVE_KV;
+        DRIVE_KA = constants.DRIVE_KA;
 
-            CompBotConstants constants = CompBotConstants.values()[name.ordinal()];
-
-            driveMotorPIDController = constants.DRIVE_MOTOR_PID;
-            steerMotorPIDController = constants.STEER_MOTOR_PID;
-
-            driveMotorModel = DCMotor.getFalcon500(1);
-            steerMotorModel = DCMotor.getNEO(1);
-
-            DRIVE_KS = constants.DRIVE_KS;
-            DRIVE_KV = constants.DRIVE_KV;
-            DRIVE_KA = constants.DRIVE_KA;
-
-            STEER_KV = constants.STEER_KV;
-            STEER_KA = constants.STEER_KA;
-        }
+        STEER_KV = constants.STEER_KV;
+        STEER_KA = constants.STEER_KA;
 
         driveMotor = new MarinersSimMotor(name.name() + " Drive Motor", driveMotorModel,
                 DRIVE_KV * WHEEL_RADIUS_METERS, DRIVE_KA * WHEEL_RADIUS_METERS,
@@ -75,8 +52,8 @@ public class SwerveModuleIOSIM extends SwerveModuleIO {
 
         driveMotor.setFeedForward(DRIVE_KV);
 
-       steerMotor = new MarinersSimMotor(name.name() + " Steer Motor", steerMotorModel,
-               STEER_KV / (Math.PI * 2), STEER_KA / (Math.PI * 2), STEER_GEAR_RATIO, 1);
+        steerMotor = new MarinersSimMotor(name.name() + " Steer Motor", steerMotorModel,
+                STEER_KV / (Math.PI * 2), STEER_KA / (Math.PI * 2), STEER_GEAR_RATIO, 1);
 
         steerMotor.setPIDF(steerMotorPIDController);
 

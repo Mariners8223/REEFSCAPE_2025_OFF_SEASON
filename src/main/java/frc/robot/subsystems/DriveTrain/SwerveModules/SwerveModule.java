@@ -23,8 +23,6 @@ public class SwerveModule {
         Back_Right
     }
 
-    public static final double MODULE_THREAD_HZ = 50;
-
     private final String moduleName;
     private final SwerveModuleIO io;
     private final SwerveModuleIOInputsAutoLogged inputs = new SwerveModuleIOInputsAutoLogged();
@@ -33,11 +31,7 @@ public class SwerveModule {
         this.moduleName = name.toString();
 
         if (RobotBase.isReal()) {
-            io = switch (ROBOT_TYPE) {
-                case DEVELOPMENT -> new SwerveModuleIODevBot(name);
-                case COMPETITION -> new SwerveModuleIOCompBot(name);
-                case REPLAY -> throw new IllegalArgumentException("Robot cannot be replay if it's real");
-            };
+            io = new SwerveModuleIODevBot(name);
         } else {
             io = ROBOT_TYPE == Constants.RobotType.REPLAY ? new SwerveModuleIOSIM.SwerveModuleIOReplay() : new SwerveModuleIOSIM(name);
 

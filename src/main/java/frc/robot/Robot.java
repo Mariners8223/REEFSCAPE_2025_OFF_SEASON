@@ -9,10 +9,23 @@ import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
+import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -21,20 +34,29 @@ import org.littletonrobotics.junction.LoggedRobot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter.AdvantageScopeOpenBehavior;
 
+import java.util.List;
+
 public class Robot extends LoggedRobot
 {
-    private Command autonomousCommand;    
+    private Command autonomousCommand;
+    private static final Field2d field = new Field2d();
+    public static boolean isRedAlliance = false;
+    private static AprilTagFieldLayout apriltagField;
+
+    private final Command moveToBottom;
+
+    private int driverStationCheckTimer = 0;
     
     @SuppressWarnings("resource")
     public Robot() {
-        new RobotContainer();
-
         Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
 
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -55,10 +77,26 @@ public class Robot extends LoggedRobot
         }
 
         if(isReal()){
-            Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+            switch (Constants.ROBOT_TYPE){
+                case COMPETITION -> {
+                    Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+                    Logger.addDataReceiver(new NT4Publisher());
+                }
+
+                case DEVELOPMENT -> {
+                    Logger.addDataReceiver(new WPILOGWriter("/U"));
+                }
+
+                case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
+            }
             new PowerDistribution(1, ModuleType.kRev);
-            
-            PathfindingCommand.warmupCommand().schedule();
+            if(Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT){
+                Logger.addDataReceiver(new NT4Publisher());
+                Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+            } 
+            else{
+                Logger.addDataReceiver(new WPILOGWriter("/U"));
+            }
         }
         else{
             if(Constants.ROBOT_TYPE == Constants.RobotType.REPLAY){
@@ -70,15 +108,15 @@ public class Robot extends LoggedRobot
 
                 setUseTiming(false);
             }
+            Logger.addDataReceiver(new NT4Publisher());
         }
-
-        Logger.addDataReceiver(new NT4Publisher());
 
 
         SignalLogger.enableAutoLogging(false);
         DataLogManager.stop();
 
         Logger.start();
+        Logger.recordOutput("Bumper Pose", new Pose3d());
 
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback((path) ->
@@ -87,15 +125,66 @@ public class Robot extends LoggedRobot
         PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
                 Logger.recordOutput("PathPlanner/TargetPose", targetPose));
 
+        PathfindingCommand.warmupCommand().schedule();
+
 
         ControllerMaster.getInstance();
+
+        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
+            checkFlip();
+            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        }
+
+        SmartDashboard.putData("Field", field);
+        apriltagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
+        Logger.recordOutput("Zero 3D", new Pose3d());
+
+        new RobotContainer();
+
+        moveToBottom = new MoveToLevel(RobotContainer.elevator, ElevatorConstants.ElevatorLevel.Bottom);
     }
-    
+
+    private static void checkFlip() {
+        boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+
+        // Constants.FeederLocation.checkAlliance(!isRedAlliance);
+        Constants.ReefLocation.checkAlliance(!isRedAlliance);
+    }
+
+    public static void setRobotPoseField(Pose2d pose) {
+        if(isRedAlliance){
+            pose = new Pose2d(apriltagField.getFieldLength() - pose.getX(),
+                    apriltagField.getFieldWidth() - pose.getY(),
+                    pose.getRotation().plus(Rotation2d.k180deg));
+        }
+        field.setRobotPose(pose);
+    }
+
+    public static void setObjectPoseFiled(String name, Pose2d pose) {
+        if(isRedAlliance){
+            pose = new Pose2d(apriltagField.getFieldLength() - pose.getX(),
+                    apriltagField.getFieldWidth() - pose.getY(),
+                    pose.getRotation().plus(Rotation2d.k180deg));
+        }
+        field.getObject(name).setPose(pose);
+    }
+
+    public static void clearObjectPoseField(String name) {
+        field.getObject(name).setPoses();
+    }
+
+    public static void setTrajectoryField(String name, List<Pose2d> poses) {
+        field.getObject(name).setPoses(poses);
+    }
     
     @Override
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
     }
     
     
@@ -106,17 +195,44 @@ public class Robot extends LoggedRobot
     
     @Override
     public void disabledPeriodic() {
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION ){
+            driverStationCheckTimer++;
+            
+            if(driverStationCheckTimer >= 50){
+                driverStationCheckTimer = 0;
+
+                isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+            }
+        }
     }
     
     @SuppressWarnings("RedundantMethodOverride")
     @Override
     public void disabledExit() {}
-    
+
+    private void resetEncoders(){
+        if(RobotContainer.elevator != null) RobotContainer.elevator.resetMotorEncoder();
+        if(RobotContainer.endEffector != null) RobotContainer.endEffector.resetFunnelEncoder();
+        if(RobotContainer.ballDropping != null) RobotContainer.ballDropping.resetAngleEncoder();
+    }
     
     @Override
     public void autonomousInit()
     {
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
+            checkFlip();
+            resetEncoders();
+            if(RobotContainer.endEffector != null) RobotContainer.endEffector.setLoadedValue(true);
+        }
+
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+
+        Pose2d resetPose = new Pose2d(RobotContainer.driveBase.getPose().getTranslation(), isRedAlliance ? new Rotation2d() : new Rotation2d(Math.PI));
+        RobotContainer.driveBase.reset(resetPose);
+
         autonomousCommand = RobotContainer.getAutoCommand();
+
+        Elastic.selectTab(1);
         
         if (autonomousCommand != null)
         {
@@ -136,10 +252,13 @@ public class Robot extends LoggedRobot
     @Override
     public void teleopInit()
     {
+        Elastic.selectTab(0);
+
         if (autonomousCommand != null)
         {
             autonomousCommand.cancel();
         }
+        moveToBottom.schedule();
     }
     
     
@@ -155,6 +274,7 @@ public class Robot extends LoggedRobot
     public void testInit()
     {
         CommandScheduler.getInstance().cancelAll();
+        // new InstantCommand(() -> RobotContainer.elevator.resetMotorEncoder()).schedule();
     }
     
     

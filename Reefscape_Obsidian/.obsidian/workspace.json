@@ -16,7 +16,9 @@
                 "file": "Elevator/Elevator Requirements.md",
                 "mode": "source",
                 "source": false
-              }
+              },
+              "icon": "lucide-file",
+              "title": "Elevator Requirements"
             }
           },
           {
@@ -26,11 +28,39 @@
               "type": "excalidraw",
               "state": {
                 "file": "Elevator/Elevator Flowchart.md"
-              }
+              },
+              "icon": "excalidraw-icon",
+              "title": "Elevator Flowchart"
+            }
+          },
+          {
+            "id": "0159ffa98736b4d7",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Elevator/Elevator Requirements.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Elevator Requirements"
+            }
+          },
+          {
+            "id": "dcd6dc968b2f4723",
+            "type": "leaf",
+            "state": {
+              "type": "excalidraw",
+              "state": {
+                "file": "Elevator/Elevator Flowchart.md"
+              },
+              "icon": "excalidraw-icon",
+              "title": "Elevator Flowchart"
             }
           }
         ],
-        "currentTab": 1
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -50,7 +80,9 @@
               "type": "file-explorer",
               "state": {
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
             }
           },
           {
@@ -65,7 +97,9 @@
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical"
-              }
+              },
+              "icon": "lucide-search",
+              "title": "Search"
             }
           },
           {
@@ -73,7 +107,9 @@
             "type": "leaf",
             "state": {
               "type": "bookmarks",
-              "state": {}
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
             }
           }
         ]
@@ -104,7 +140,9 @@
                 "searchQuery": "",
                 "backlinkCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Elevator Flowchart"
             }
           },
           {
@@ -116,7 +154,9 @@
                 "file": "Elevator/Elevator Flowchart.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
-              }
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Elevator Flowchart"
             }
           },
           {
@@ -127,7 +167,9 @@
               "state": {
                 "sortOrder": "frequency",
                 "useHierarchy": true
-              }
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
             }
           },
           {
@@ -137,7 +179,9 @@
               "type": "outline",
               "state": {
                 "file": "Elevator/Elevator Flowchart.md"
-              }
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Elevator Flowchart"
             }
           }
         ]
@@ -158,10 +202,11 @@
       "obsidian-excalidraw-plugin:Create new drawing": false
     }
   },
-  "active": "0d97c8550cea89c3",
+  "active": "dcd6dc968b2f4723",
   "lastOpenFiles": [
-    "Elevator/Elevator Flowchart.md",
+    "Elevator/Elevator Data Visibility.md",
     "Elevator/Elevator Requirements.md",
+    "Elevator/Elevator Flowchart.md",
     "Welcome.md",
     "Excalidraw",
     "Elevator"

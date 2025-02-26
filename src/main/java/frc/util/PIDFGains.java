@@ -38,7 +38,7 @@ public class PIDFGains {
       this._kI = kI;
       this._kD = kD;
       this._kF = 0;
-      this._tolerance = 0;
+      this._tolerance = Double.POSITIVE_INFINITY;
       this._iZone = 0;
       this._maxAcceleration = 0;
       this._maxVelocity = 0;
@@ -125,10 +125,6 @@ public class PIDFGains {
       return this._tolerance;
     }
 
-    public boolean isEqual(PIDFGains gains) {
-      return this._kP == gains.getP() && this._kI == gains.getI() && this._kD == gains.getD();
-    }
-
     public static PIDFGains fromController(PIDController controller) {
       return new PIDFGains(controller.getP(), controller.getI(), controller.getD());
     }
@@ -149,5 +145,18 @@ public class PIDFGains {
       controller.setTolerance(_tolerance);
       controller.setIZone(_iZone);
       return controller;
+    }
+
+    @Override
+    public boolean equals(Object gains){
+      assert gains instanceof PIDFGains;
+
+      PIDFGains pidGains = (PIDFGains)gains;
+
+      return pidGains._kF == this._kF &&
+        pidGains._kI == this._kI &&
+        pidGains._kD == pidGains._kD &&
+        pidGains._kF == this._kF &&
+        pidGains._tolerance == this._tolerance;
     }
   }

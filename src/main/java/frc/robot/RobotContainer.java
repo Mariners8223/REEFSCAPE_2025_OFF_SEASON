@@ -2,7 +2,6 @@
 
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
-
 package frc.robot;
 
 import java.io.IOException;
@@ -11,75 +10,326 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
-import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
+import com.pathplanner.lib.events.EventTrigger;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.Constants.FeederLocation;
+import frc.robot.Constants.ReefLocation;
+import frc.robot.commands.BallDropping.BallDropOff;
+import frc.robot.commands.BallDropping.BallDropOnForLow;
+import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
+import frc.robot.commands.BallDropping.Sequence.BallDropLow;
+import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.commands.Drive.MinorAdjust;
+import frc.robot.commands.Drive.RobotRelativeDrive;
+import frc.robot.commands.Drive.MinorAdjust.Direcation;
+import frc.robot.commands.Elevator.MoveToLevel;
+import frc.robot.commands.Elevator.MoveToLevelNoReq;
+import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.MiniEject;
+import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
+import frc.robot.commands.EndEffector.Intake.Intake;
+import frc.robot.commands.MasterCommand.HomeToReef;
+import frc.robot.commands.MasterCommand.MasterCommand;
+import frc.robot.commands.MasterCommand.PathPlannerWrapper;
+import frc.robot.commands.MasterCommand.RobotToReef;
+import frc.robot.subsystems.BallDropping.BallDropping;
+import frc.robot.subsystems.Climb.Climb;
+import frc.robot.subsystems.Elevator.Elevator;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
+import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
+import frc.robot.subsystems.RobotAuto.RobotAuto;
+
+import frc.robot.subsystems.Vision.Vision;
+import frc.util.Elastic;
 
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
+
 public class RobotContainer {
     public static DriveBase driveBase;
-    public static CommandPS5Controller driveController;
+    public static Elevator elevator;
+    public static EndEffector endEffector;
+    public static BallDropping ballDropping;
+    public static RobotAuto robotAuto;
+    public static Vision vision;
+    public static Climb climb;
+
+    public static LoggedDashboardChooser<Command> autoChooser;
     public static DriveBaseSYSID driveBaseSYSID;
 
-    public static Field2d field;
-    public static LoggedDashboardChooser<Command> autoChooser;
+    public static CommandXboxController driveController;
+    public static CommandGenericHID operatorController;
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(0);
+        driveController = new CommandXboxController(0);
+        operatorController = new CommandGenericHID(1);
+
         driveBase = new DriveBase();
+        elevator = new Elevator();
+        endEffector = new EndEffector();
+        ballDropping = new BallDropping();
+        climb = new Climb();
+        robotAuto = new RobotAuto();
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
-        driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+        endEffector.setDefaultCommand(new Intake(endEffector));
 
-        configureBindings();
+        if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
+            new Trigger(DriverStation::isDSAttached).onTrue(
+                new InstantCommand(() -> Elastic.selectTab(1)).ignoringDisable(true)
+            );
+        }
 
-        field = new Field2d();
-
-        SmartDashboard.putData(field);
-
+        configNamedCommands();
         configChooser();
+
+        configureDriveBindings();
+        configureOperatorBinding();
+
+        //  configureCamera();
+        if (RobotBase.isReal()) {
+            CameraServer.startAutomaticCapture();
+            CameraServer.getServer().getSource().setFPS(15);
+        } else {
+            //until we have real driver station
+            SmartDashboard.putNumber("target Reef", 1);
+            SmartDashboard.putNumber("target Level", 2);
+            SmartDashboard.putBoolean("should drop ball", false);
+
+
+            // driveController.y().onTrue(new InstantCommand(() -> {
+            //     RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+            //     RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+            //     RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
+            //     System.out.println("set new targets");
+            // }));
+        }
+
+        HomeToReef.pidTune();
+    }
+
+    public static void configureOperatorBinding() {
+        //port 2-12 + A0 are reefs in order (2 to A0) (2 is 1, 3 is 2 and so on) (A0 is 12)
+        //port A1 is for ball dropping
+        //ports A2-A5 are elevator levels (A2 is L1, A3 is L2, A4 is L3, A5 is L4)
+
+        for (int i = 0; i < 12; i++) {
+            ReefLocation location = ReefLocation.values()[i];
+
+            operatorController.button(i + 1).onTrue(new InstantCommand(() -> robotAuto.setSelectedReef(location)));
+        }
+
+        for (int i = 0; i < 4; i++) {
+            ElevatorLevel level = ElevatorLevel.values()[i + 1];
+
+            operatorController.pov(i * 90).onTrue(new InstantCommand(() -> robotAuto.setSelectedLevel(level)));
+        }
+
+        // operatorController.button(13).onTrue(new InstantCommand(() ->
+        //         robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+        operatorController.button(13).whileTrue(new BallDropOnForLow(ballDropping));
+        operatorController.button(13).onFalse(new BallDropOff(ballDropping));
+
+        //funnel flipping
+        operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
+
+        //climb
+        operatorController.povDownLeft().and(() ->
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4).whileTrue(new ClimbCommand(climb));
+        // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
+
+        //manual intake
+        operatorController.povDownLeft().and(() ->
+                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
+    }
+
+    public static ReefLocation configureTargetReefSupplier() {
+        int reef = (int) SmartDashboard.getNumber("target Reef", 1);
+
+        reef = MathUtil.clamp(reef, 1, 12);
+
+        return ReefLocation.values()[reef - 1];
+    }
+
+    public static ElevatorLevel configureLevelSupplier() {
+        double shit = SmartDashboard.getNumber("target Level", 1);
+        System.out.println("woop woop " + shit);
+        int level = (int) shit;
+
+        level = MathUtil.clamp(level, 1, 4);
+
+        System.out.println("new selcted level: " + level);
+
+        return ElevatorLevel.values()[level];
     }
 
 
-    private void configureBindings() {
-        driveController.options().onTrue(driveBase.resetOnlyDirection());
-
-        // driveController.cross().onTrue(driveBase.startModuleSteerCalibration());
-        // driveController.square().onTrue(driveBase.stopModuleSteerCalibration());
-
-        
-
-        driveController.cross().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kForward));
-        driveController.triangle().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kReverse));
-
-        driveController.square().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kForward));
-        driveController.circle().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kReverse));
+    public static Boolean configureBallDropSupplier() {
+        return SmartDashboard.getBoolean("should drop ball", false);
     }
+
+    public static void configureDriveBindings() {
+        BooleanSupplier isCycleReady = () ->
+                robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded();
+
+        Command masterCommand = new MasterCommand(
+                driveBase, elevator, endEffector, ballDropping,
+                robotAuto::getSelectedLevel, robotAuto::getSelectedReef, robotAuto::shouldDropBallInCycle);
+
+        Command semiAutoCommand = new RobotToReef(driveBase, robotAuto::getSelectedReef)
+                .andThen(new RobotRelativeDrive(driveBase, driveController));
+                
+        MoveToLevelNoReq moveToLevelNoReq = new MoveToLevelNoReq(elevator, ElevatorLevel.L1);
+
+        new EventTrigger("move to selected level").and(() -> masterCommand.isScheduled() || semiAutoCommand.isScheduled()).onTrue(moveToLevelNoReq.beforeStarting(() -> moveToLevelNoReq.changeDesiredlevel(robotAuto.getSelectedLevel())));
+
+        Command resetSelection = new InstantCommand(() -> {
+            robotAuto.setSelectedLevel(null);
+            robotAuto.setSelectedReef(null);
+            robotAuto.setDropBallInCycle(false);
+        });
+
+        BooleanSupplier robotBelowCertainSpeed = () -> {
+            ChassisSpeeds chassisSpeeds = driveBase.getChassisSpeeds();
+
+            double speed = Math.hypot(chassisSpeeds.vxMetersPerSecond, chassisSpeeds.vyMetersPerSecond);
+
+            // speed is below 1 m/s total and below 1 omega
+            return Math.abs(speed) < 1 && chassisSpeeds.omegaRadiansPerSecond < 1;
+        };
+
+        Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
+
+        Trigger mainCycleTrigger = driveController.leftTrigger();
+        Trigger leftFeeder = driveController.leftBumper();
+        Trigger rightFeeder = driveController.rightBumper();
+
+        Trigger moveElevator = driveController.x();
+        Trigger onlyRobotToReef = driveController.b();
+
+        // Trigger ballDropHigh = driveController.povUp();
+        // Trigger ballDropLow = driveController.povDown();
+
+        Trigger semiAuto = driveController.a();
+        Trigger forceEject = driveController.y();
+
+        // main cycle
+        mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
+        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
+
+        // feeder path finder
+        rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
+        leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
+
+        onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
+
+        //manual cycle
+        MoveToLevel moveToLevel = new MoveToLevel(elevator, ElevatorLevel.L1);
+        moveElevator.and(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
+                .onTrue(moveToLevel.beforeStarting(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
+
+        moveElevator.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+
+        moveElevator.whileTrue(new RobotRelativeDrive(driveBase, driveController));
+
+        //RobotToReef robotToReef = new RobotToReef(driveBase, robotAuto::getSelectedReef);
+        //semiAuto.and(isCycleReady).whileTrue(robotToReef.andThen(new RobotRelativeDrive(driveBase, driveController)));
+        semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
+
+        Eject eject = new Eject(endEffector, MotorPower.L1);
+
+        semiAuto.onFalse(
+                new MoveToLevel(elevator, ElevatorLevel.Bottom).onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
+
+
+        // //ball dropping manual control
+        // ballDropHigh.whileTrue(new BallDropOnForHigh(ballDropping));
+        // ballDropLow.whileTrue(new BallDropOnForLow(ballDropping));
+
+        // ballDropHigh.onFalse(new BallDropOff(ballDropping));
+        // ballDropLow.onFalse(new BallDropOff(ballDropping));
+
+        driveController.start().onTrue(driveBase.resetOnlyDirection());
+
+        new Trigger(isCycleReady).onTrue(new SequentialCommandGroup(
+                new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
+                new WaitCommand(0.5),
+                new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
+        ));
+
+
+        //driveController.y().whileTrue(new HomeToReef(driveBase, ReefLocation.REEF_1));
+
+        // semiAuto.onTrue(new InstantCommand(() -> moveToLevel.changeDesiredlevel(robotAuto.getSelectedLevel())));
+        // semiAuto.and(isCycleReady).whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef).andThen(moveToLevel));
+        // semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+
+        forceEject.whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
+
+        driveController.povRight().whileTrue(new MinorAdjust(driveBase, Direcation.RIGHT));
+        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
+        driveController.povUp().whileTrue(new MinorAdjust(driveBase, Direcation.FORWARD));
+        driveController.povDown().whileTrue(new MinorAdjust(driveBase, Direcation.BACKWARDS));
+    }
+
+    public static void configNamedCommands() {
+        NamedCommands.registerCommand("move l1", new MoveToLevel(elevator, ElevatorLevel.L1));
+
+        NamedCommands.registerCommand("move l2", new MoveToLevel(elevator, ElevatorLevel.L2));
+
+        NamedCommands.registerCommand("move l3", new MoveToLevel(elevator, ElevatorLevel.L3));
+
+        NamedCommands.registerCommand("move l4", new MoveToLevel(elevator, ElevatorLevel.L4));
+
+        Eject eject = new Eject(endEffector, MotorPower.L1);
+        NamedCommands.registerCommand("eject", new SequentialCommandGroup(
+                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel()))),
+                eject,
+                new MoveToLevel(elevator, ElevatorLevel.Bottom)
+        ));
+
+        NamedCommands.registerCommand("ball drop l2", new BallDropLow(ballDropping));
+        NamedCommands.registerCommand("ball drop l3", new BallDropHigh(ballDropping));
+        NamedCommands.registerCommand("ball drop off", new BallDropOff(ballDropping));
+        NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
+
+        for (ReefLocation reef : ReefLocation.values()) {
+            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1), new HomeToReef(driveBase, reef));
+        }
+
+        NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
+    }
+    
 
 
     public static Command getAutoCommand() {
         return autoChooser.get();
     }
-
-
-
-
-
-
 
     private static final BooleanSupplier checkForPathChoiceUpdate = new BooleanSupplier() {
         private String lastAutoName = "InstantCommand";
@@ -114,7 +364,7 @@ public class RobotContainer {
         autoChooser.addDefaultOption("Do Nothing", new InstantCommand());
         SmartDashboard.putData("chooser", autoChooser.getSendableChooser());
 
-        new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> field.getObject("AutoPath").setPoses()).ignoringDisable(true));
+        new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
     }
 
@@ -122,11 +372,12 @@ public class RobotContainer {
         List<Pose2d> poses = new ArrayList<>();
 
         try {
-            boolean invert =
-                    DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+            // boolean invert =
+            //         DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
             PathPlannerAuto.getPathGroupFromAutoFile(autoName).forEach(path -> {
-                path = invert ? path.flipPath() : path;
+//                path = invert ? path.flipPath() : path;
+                //no need cause the field inverts the path
 
                 poses.addAll(path.getPathPoses());
             });
@@ -134,6 +385,6 @@ public class RobotContainer {
             DriverStation.reportError("Error loading auto path", e.getStackTrace());
         }
 
-        field.getObject("AutoPath").setPoses(poses);
+        Robot.setTrajectoryField("AutoPath", poses);
     }
 }

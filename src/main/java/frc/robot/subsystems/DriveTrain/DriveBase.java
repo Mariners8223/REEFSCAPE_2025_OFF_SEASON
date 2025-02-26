@@ -8,12 +8,15 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.util.DriveFeedforwards;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.kinematics.*;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Robot;
 import frc.robot.commands.Drive.DriveCommand;
-import frc.robot.subsystems.DriveTrain.SwerveModules.CompBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.DevBotConstants;
 import frc.robot.subsystems.DriveTrain.SwerveModules.SwerveModule;
 import frc.util.FastGyros.GyroIO;
@@ -84,9 +87,7 @@ public class DriveBase extends SubsystemBase {
     /**
      * the max speed the wheels can spin (drive motor at max speed)
      */
-    public final double MAX_FREE_WHEEL_SPEED = Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT ?
-            DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY :
-            CompBotConstants.MAX_WHEEL_LINEAR_VELOCITY; //the max speed the wheels can spin when the robot is not moving
+    public final double MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
 
     /**
      * the target states of the modules (the states the modules should be in)
@@ -124,8 +125,7 @@ public class DriveBase extends SubsystemBase {
 
         if (RobotBase.isReal()) {
             gyro = switch (Constants.ROBOT_TYPE) {
-                case DEVELOPMENT -> new PigeonIO(DriveBaseConstants.PIGEON_ID);
-                case COMPETITION -> new NavxIO();
+                case DEVELOPMENT, COMPETITION -> new PigeonIO(DriveBaseConstants.PIGEON_ID);
                 case REPLAY -> throw new IllegalArgumentException("Robot cannot be replay if it's real");
             };
             gyro.reset(new Rotation2d());
@@ -159,13 +159,15 @@ public class DriveBase extends SubsystemBase {
                             DriverStation.getAlliance().get() == DriverStation.Alliance.Red,
                 this);
 
-        new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
-                setModulesBrakeMode(true)
-                , () ->
-        {
-            if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
-        }
-        ).ignoringDisable(true));
+                setModulesBrakeMode(true);
+
+        // new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
+        //         setModulesBrakeMode(true)
+        //         , () ->
+        // {
+        //     if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
+        // }
+        // ).ignoringDisable(true));
 
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
                 this.setDefaultCommand(new DriveCommand(this, RobotContainer.driveController)),
@@ -188,9 +190,10 @@ public class DriveBase extends SubsystemBase {
             SwerveModulePosition[] positions = new SwerveModulePosition[4];
             for (int i = 0; i < 4; i++) positions[i] = modules[i].modulePeriodic();
 
+            gyro.reset(currentPose.getRotation());
+
             poseEstimator.resetPosition(currentPose.getRotation(), positions, currentPose);
 
-            gyro.reset(currentPose.getRotation());
         }).withName("Reset Only Direction").ignoringDisable(true);
     }
 
@@ -252,6 +255,11 @@ public class DriveBase extends SubsystemBase {
         return -gyro.getYaw();
     }
 
+    public double getVelocity(){
+        ChassisSpeeds speed = getChassisSpeeds();
+        return Math.hypot(speed.vxMetersPerSecond, speed.vyMetersPerSecond);
+    }
+
     /**
      * gets the current chassisSpeeds of the robot
      *
@@ -292,7 +300,18 @@ public class DriveBase extends SubsystemBase {
     }
 
     /**
-     * drives the robot
+     * updates pose Estimator with vision measurements
+     *
+     * @param visionPose the pose of the robot from vision
+     * @param timeStamp  the time stamp of the vision measurement
+     * @param stdDevs    the standard deviations of the vision measurements
+     */
+    public void addVisionMeasurement(Pose2d visionPose, double timeStamp, Matrix<N3, N1> stdDevs) {
+        poseEstimator.addVisionMeasurement(visionPose, timeStamp, stdDevs);
+    }
+
+    /**
+     * drives the robot relative to itself
      * @param chassisSpeeds the target chassis speeds of the robot
      */
     public void drive(ChassisSpeeds chassisSpeeds) {
@@ -517,14 +536,14 @@ public class DriveBase extends SubsystemBase {
         }
 
         gyro.update();
-        poseEstimator.updateWithTime(Logger.getTimestamp(), gyro.getRotation2d(), positions);
+        poseEstimator.update(gyro.getRotation2d(), positions);
         currentPose = poseEstimator.getEstimatedPosition();
 
         Logger.recordOutput("DriveBase/estimatedPose", currentPose);
         Logger.recordOutput("DriveBase/ChassisSpeeds", getChassisSpeeds());
         Logger.recordOutput("DriveBase/targetStates", targetStates);
 
-        RobotContainer.field.setRobotPose(currentPose);
+        Robot.setRobotPoseField(currentPose);
 
         inputs.activeCommand = this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "None";
 
