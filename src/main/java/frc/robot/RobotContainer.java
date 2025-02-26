@@ -196,15 +196,11 @@ public class RobotContainer {
                 robotAuto.getSelectedReef() != null && robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded();
 
         Command masterCommand = new MasterCommand(
-                driveBase, elevator, endEffector, ballDropping,
-                robotAuto::getSelectedLevel, robotAuto::getSelectedReef, robotAuto::shouldDropBallInCycle);
+                driveBase, elevator, endEffector, robotAuto::getSelectedLevel, robotAuto::getSelectedReef);
 
         Command semiAutoCommand = new RobotToReef(driveBase, robotAuto::getSelectedReef)
                 .andThen(new RobotRelativeDrive(driveBase, driveController));
-                
-        MoveToLevelNoReq moveToLevelNoReq = new MoveToLevelNoReq(elevator, ElevatorLevel.L1);
 
-        new EventTrigger("move to selected level").and(() -> masterCommand.isScheduled() || semiAutoCommand.isScheduled()).onTrue(moveToLevelNoReq.beforeStarting(() -> moveToLevelNoReq.changeDesiredlevel(robotAuto.getSelectedLevel())));
 
         Command resetSelection = new InstantCommand(() -> {
             robotAuto.setSelectedLevel(null);
@@ -229,9 +225,6 @@ public class RobotContainer {
 
         Trigger moveElevator = driveController.x();
         Trigger onlyRobotToReef = driveController.b();
-
-        // Trigger ballDropHigh = driveController.povUp();
-        // Trigger ballDropLow = driveController.povDown();
 
         Trigger semiAuto = driveController.a();
         Trigger forceEject = driveController.y();
@@ -264,13 +257,6 @@ public class RobotContainer {
         semiAuto.onFalse(
                 new MoveToLevel(elevator, ElevatorLevel.Bottom).onlyIf(() -> elevator.getCurrentLevel() != ElevatorLevel.Bottom && elevator.getCurrentLevel() != null));
 
-
-        // //ball dropping manual control
-        // ballDropHigh.whileTrue(new BallDropOnForHigh(ballDropping));
-        // ballDropLow.whileTrue(new BallDropOnForLow(ballDropping));
-
-        // ballDropHigh.onFalse(new BallDropOff(ballDropping));
-        // ballDropLow.onFalse(new BallDropOff(ballDropping));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 

@@ -7,7 +7,6 @@ import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.Eject;
-import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -29,7 +28,7 @@ public class MasterCommand extends Command {
     private Command coralCommand;
     private final EventTrigger waitUntilMarker;
 
-    public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, BallDropping ballDropping,
+    public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector,
                          Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier) {
 
         this.targetReefSupplier = targetReefSupplier;
