@@ -47,6 +47,10 @@ public class Elevator extends SubsystemBase {
     return inputs.elevatorHeight;
   }
 
+  public ElevatorLevel getDesiredLevel(){
+    return this.desiredLevel;
+  }
+
   public boolean isAtDesiredLevel(){
     return currentLevel == desiredLevel;
   }
