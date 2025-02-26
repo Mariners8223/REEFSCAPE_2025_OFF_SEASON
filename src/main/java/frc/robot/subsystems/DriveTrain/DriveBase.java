@@ -260,7 +260,8 @@ public class DriveBase extends SubsystemBase {
 
         double totalSpeed = Math.hypot(speed.vxMetersPerSecond, speed.vyMetersPerSecond);
 
-        Logger.recordOutput("DriveBase/TotalVelocity", totalSpeed);
+        Logger.recordOutput("DriveBase/velocity", totalSpeed);
+
         return totalSpeed;
     }
 
