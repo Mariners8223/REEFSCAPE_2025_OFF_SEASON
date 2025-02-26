@@ -257,7 +257,11 @@ public class DriveBase extends SubsystemBase {
 
     public double getVelocity(){
         ChassisSpeeds speed = getChassisSpeeds();
-        return Math.hypot(speed.vxMetersPerSecond, speed.vyMetersPerSecond);
+
+        double totalSpeed = Math.hypot(speed.vxMetersPerSecond, speed.vyMetersPerSecond);
+
+        Logger.recordOutput("DriveBase/TotalVelocity", totalSpeed);
+        return totalSpeed;
     }
 
     /**
