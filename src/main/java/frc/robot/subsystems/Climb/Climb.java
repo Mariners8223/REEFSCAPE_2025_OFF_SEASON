@@ -43,5 +43,8 @@ public class Climb extends SubsystemBase {
         // This method will be called once per scheduler run
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
+
+        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().toString();
+        Logger.recordOutput("Climb/Current Command", currentCommandName);
     }
 }
