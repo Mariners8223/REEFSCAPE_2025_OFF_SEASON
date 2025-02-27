@@ -2,6 +2,9 @@ package frc.robot.commands.MasterCommand;
 
 
 import com.pathplanner.lib.events.EventTrigger;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
@@ -14,6 +17,7 @@ import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 
@@ -49,15 +53,23 @@ public class MasterCommand extends Command {
 
         WaitUntilCommand waitUntilMarker = new WaitUntilCommand(moveElevatorMarker);
 
+        BooleanSupplier isRobotFarFromTarget = () -> {
+            Translation2d currentTranslation = driveBase.getPose().getTranslation();
+
+            Translation2d targetTranslation = targetReefSupplier.get().getPose().getTranslation();
+
+            return currentTranslation.getDistance(targetTranslation) > 1;
+        };
+
         // the main command
         coralCommand = new SequentialCommandGroup(
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
-                                pathCommand,
+                                pathCommand.onlyIf(isRobotFarFromTarget),
                                 homeToReef
                         ),
                         new SequentialCommandGroup(
-                                waitUntilMarker,
+                                waitUntilMarker.onlyIf(isRobotFarFromTarget),
                                 moveElevatorCommand
                         )
                 ),
