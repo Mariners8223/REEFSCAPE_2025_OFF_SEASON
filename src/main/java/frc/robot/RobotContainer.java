@@ -149,7 +149,7 @@ public class RobotContainer {
         operatorController.button(13).onFalse(new BallDropOff(ballDropping));
 
         //funnel flipping
-        operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
+        operatorController.axisLessThan(0, -0.5).and(() -> !endEffector.isGpLoaded()).onTrue(new ToggleFunnel(endEffector));
 
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->
@@ -157,7 +157,7 @@ public class RobotContainer {
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
-        operatorController.axisLessThan(0, -0.5).and(() ->
+        operatorController.axisLessThan(2, -0.5).and(() ->
                 endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
 
         new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded())
@@ -237,10 +237,8 @@ public class RobotContainer {
                 .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         moveElevator.whileTrue(
-                new ParallelCommandGroup(
-                        new RobotRelativeDrive(driveBase, driveController),
                         new MoveToLevelActive(elevator, robotAuto::getSelectedLevel)
-                ).onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
+                .onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
 

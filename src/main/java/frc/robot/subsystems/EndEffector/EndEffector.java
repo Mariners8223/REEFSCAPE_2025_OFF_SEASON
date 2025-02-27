@@ -94,6 +94,6 @@ public class EndEffector extends SubsystemBase {
             currentCommandName = getCurrentCommand().getName();
         }
 
-        Logger.recordOutput("Current Command", currentCommandName);
+        Logger.recordOutput("EndEffector/Current Command", currentCommandName);
     }
 }

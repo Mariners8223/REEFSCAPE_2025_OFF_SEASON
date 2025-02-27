@@ -32,7 +32,7 @@ public class ElevatorIOVortex implements ElevatorIO {
 
         motor.enableSoftLimits(ElevatorConstants.SOFT_MINIMUM, ElevatorConstants.SOFT_MAXIMUM);
 
-        motor.setMaxMinOutput(6, 6);
+        motor.setMaxMinOutput(7, 7);
 
         motor.setProfile(ElevatorConstants.PROFILE);
 
@@ -57,7 +57,7 @@ public class ElevatorIOVortex implements ElevatorIO {
     }
 
     public void resetMotorEncoder(){
-        motorLead.setMotorEncoderPosition(ElevatorLevel.Bottom.getHeight());
+        motorLead.setMotorEncoderPosition(ElevatorLevel.Bottom.getHeight() - 0.04);
     }
 
     public void moveMotorByPosition(double position){
