@@ -5,6 +5,8 @@
 package frc.robot.subsystems.LED;
 
 import static edu.wpi.first.units.Units.Hertz;
+import static edu.wpi.first.units.Units.Percent;
+import static edu.wpi.first.units.Units.Second;
 
 import edu.wpi.first.units.FrequencyUnit;
 import edu.wpi.first.units.measure.Frequency;
@@ -14,15 +16,20 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Robot;
 
 public class LED extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer buffer;
+  LEDPattern pattern;
   /** Creates a new LED. */
   public LED() {
     led = new AddressableLED(LEDConstants.LED_PORT);
     led.setLength(LEDConstants.LED_LENGTH);
     buffer = new AddressableLEDBuffer(LEDConstants.LED_LENGTH);
+
+    pattern = LEDPattern.solid(Robot.isRedAlliance ? Color.kRed : Color.kBlue);
+    pattern.applyTo(buffer);
 
     led.setData(buffer);
     led.start();
@@ -33,18 +40,23 @@ public class LED extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    pattern.applyTo(buffer);
     led.setData(buffer);
   }
 
   public void setSolidColour(Color colour){
-    LEDPattern.solid(colour).applyTo(buffer);
+    pattern = LEDPattern.solid(colour);
   }
 
   public void setGradient(Color... colours){
-    LEDPattern.gradient(GradientType.kDiscontinuous, colours);
+    pattern = LEDPattern.gradient(GradientType.kDiscontinuous, colours);
   }
 
   public void setRainbow(){
-    LEDPattern.rainbow(255, 255);
+    pattern = LEDPattern.rainbow(255, 255);
+  }
+
+  public void setMovingRainbow(){
+    pattern = LEDPattern.rainbow(256, 256).scrollAtRelativeSpeed(Percent.per(Second).of(20));
   }
 }
