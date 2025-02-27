@@ -45,6 +45,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
+import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
@@ -64,6 +65,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -78,6 +80,7 @@ public class RobotContainer {
     public static RobotAuto robotAuto;
     public static Vision vision;
     public static Climb climb;
+    public static LED led;
 
     public static LoggedDashboardChooser<Command> autoChooser;
     public static DriveBaseSYSID driveBaseSYSID;
@@ -94,6 +97,7 @@ public class RobotContainer {
         endEffector = new EndEffector();
         ballDropping = new BallDropping();
         climb = new Climb();
+        led = new LED();
         robotAuto = new RobotAuto();
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
@@ -107,6 +111,7 @@ public class RobotContainer {
 
         configNamedCommands();
         configChooser();
+        startLEDs();
 
         configureDriveBindings();
         configureOperatorBinding();
@@ -366,6 +371,10 @@ public class RobotContainer {
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
+    }
+
+    private static void startLEDs(){
+        led.setSolidColour(Robot.isRedAlliance ? Color.kRed : Color.kBlue);
     }
 
     private static void updateFieldFromAuto(String autoName) {
