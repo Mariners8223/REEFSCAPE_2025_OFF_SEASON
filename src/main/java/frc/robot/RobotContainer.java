@@ -30,6 +30,7 @@ import frc.robot.commands.Drive.MinorAdjust.Direcation;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.MoveToLevelActive;
 import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.Funnel.MoveFunnel;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
@@ -39,6 +40,7 @@ import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
@@ -150,13 +152,22 @@ public class RobotContainer {
         operatorController.povUpRight().onTrue(new ToggleFunnel(endEffector));
 
         //climb
-        operatorController.povDownLeft().and(() ->
+        operatorController.axisLessThan(2, -0.5).and(() ->
                 Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4).whileTrue(new ClimbCommand(climb));
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
-        operatorController.povDownLeft().and(() ->
+        operatorController.axisLessThan(0, -0.5).and(() ->
                 endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
+
+        new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded())
+                .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
+    }
+
+    private static boolean isRobotInClimbArea(){
+        Pose2d pose = driveBase.getPose();
+
+        return pose.getX() > 7.5 && pose.getX() < 8.5;
     }
 
     public static ReefLocation configureTargetReefSupplier() {
