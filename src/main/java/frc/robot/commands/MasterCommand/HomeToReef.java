@@ -1,6 +1,7 @@
 package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,27 +17,37 @@ import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
+    private ElevatorConstants.ElevatorLevel desiredLevel;
 
-    private static final PIDController XController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
-    private static final PIDController YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
-    private static final PIDController ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
+    private static PIDController XController;
+    private static PIDController YController;
+    private static PIDController ThetaController;
 
     private int timer = 0;
 
-    public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
+    public HomeToReef(DriveBase driveBase, ReefLocation targetReef, ElevatorConstants.ElevatorLevel desiredLevel) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
+        this.desiredLevel = desiredLevel;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(driveBase);
-
-        ThetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
-    public void setTargetPose(ReefLocation targetPose) {
+    public void setTargetPose(ReefLocation targetPose){
         this.targetReef = targetPose;
+        this.desiredLevel = ElevatorConstants.ElevatorLevel.Bottom;
 
         Logger.recordOutput("home to reef/target Pose", targetPose);
+        Logger.recordOutput("home to reef/target Level", desiredLevel);
+    }
+
+    public void setTargetPose(ReefLocation targetPose, ElevatorConstants.ElevatorLevel targetLevel){
+        this.targetReef = targetPose;
+        this.desiredLevel = targetLevel;
+
+        Logger.recordOutput("home to reef/target Pose", targetPose);
+        Logger.recordOutput("home to reef/target Level", targetLevel);
     }
 
     public static void pidTune(){
@@ -47,6 +58,12 @@ public class HomeToReef extends Command {
 
     @Override
     public void initialize() {
+        XController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).createPIDController();
+        YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).createPIDController();
+        ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).createPIDController();
+
+        ThetaController.enableContinuousInput(-Math.PI, Math.PI);
+
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
@@ -68,11 +85,11 @@ public class HomeToReef extends Command {
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
 
-        double upperLimitXY = RobotAutoConstants.HomingConstants.UPPER_SPEED_LIMIT_XY;
-        double lowerLimitXY = RobotAutoConstants.HomingConstants.LOWER_SPEED_LIMIT_XY;
+        double upperLimitXY = RobotAutoConstants.UPPER_SPEED_LIMIT_XY;
+        double lowerLimitXY = RobotAutoConstants.LOWER_SPEED_LIMIT_XY;
 
-        double upperLimitTheta = RobotAutoConstants.HomingConstants.UPPER_SPEED_LIMIT_THETA;
-        double lowerLimitTheta = RobotAutoConstants.HomingConstants.LOWER_SPEED_LIMIT_THETA;
+        double upperLimitTheta = RobotAutoConstants.UPPER_SPEED_LIMIT_THETA;
+        double lowerLimitTheta = RobotAutoConstants.LOWER_SPEED_LIMIT_THETA;
 
         double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
         double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
@@ -84,8 +101,8 @@ public class HomeToReef extends Command {
 
         thetaOutput = MathUtil.clamp(thetaOutput, -maxThetaOutput, maxThetaOutput);
 
-        double XY_DEADBAND = RobotAutoConstants.HomingConstants.XY_DEADBAND;
-        double THETA_DEADBAND = RobotAutoConstants.HomingConstants.THETA_DEADBAND;
+        double XY_DEADBAND = RobotAutoConstants.XY_DEADBAND;
+        double THETA_DEADBAND = RobotAutoConstants.THETA_DEADBAND;
 
         Logger.recordOutput("home to reef/x output", xOutput);
         Logger.recordOutput("home to reef/y output", yOutput);

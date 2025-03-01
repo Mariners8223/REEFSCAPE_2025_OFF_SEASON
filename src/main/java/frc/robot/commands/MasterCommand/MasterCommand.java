@@ -3,7 +3,6 @@ package frc.robot.commands.MasterCommand;
 
 import com.pathplanner.lib.events.EventTrigger;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
@@ -43,7 +42,7 @@ public class MasterCommand extends Command {
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1); // setting the default target pose
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
-        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
+        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1, ElevatorConstants.ElevatorLevel.Bottom);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         // eject phase (releasing the game piece)
@@ -59,7 +58,7 @@ public class MasterCommand extends Command {
 
             Translation2d targetTranslation = targetReefSupplier.get().getPose().getTranslation();
 
-            return currentTranslation.getDistance(targetTranslation) > RobotAutoConstants.HomingConstants.FAR_FROM_TARGET_DISTANCE;
+            return currentTranslation.getDistance(targetTranslation) > RobotAutoConstants.FAR_FROM_TARGET_DISTANCE;
         };
 
         // the main command
@@ -87,7 +86,7 @@ public class MasterCommand extends Command {
         // setting the target pose for the path command
         pathCommand.setTargetPose(targetReef);
         //setting the target pose for the adjustment phase
-        homeToReef.setTargetPose(targetReef);
+        homeToReef.setTargetPose(targetReef, level);
         // homeToReefEndless.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);

@@ -1,13 +1,13 @@
 package frc.robot.subsystems.RobotAuto;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.util.PIDFGains;
 
-public class RobotAutoConstants {
+import java.util.Map;
 
-    public static class HomingConstants{
-        public static double MAX_HOME_SPEED_METERS_PER_SECOND = 0.8;
-        public static double MAX_HOME_SPEED_RADIANS_PER_SECOND = 2.5;
+public class RobotAutoConstants {
 
         public static double LOWER_SPEED_LIMIT_XY = 0.8;
         public static double UPPER_SPEED_LIMIT_XY = 2;
@@ -26,12 +26,22 @@ public class RobotAutoConstants {
         public static PIDFGains THETA_PID = new PIDFGains(14, 20, 0, 0, THETA_TOLERANCE, 0.5);
 
         public static double FAR_FROM_TARGET_DISTANCE = 1;
-    }
 
-    public enum BallDropTime{
-        BEFORE,
-        PARALLEL,
-        AFTER,
-        NEVER
-    }
+        public static final Map<ElevatorConstants.ElevatorLevel, PIDFGains> XY_PID_CONSTANTS =
+                Map.of(
+                        ElevatorConstants.ElevatorLevel.Bottom, new PIDFGains(10, 12, 1, 0, XY_TOLERANCE, 0.03),
+                        ElevatorConstants.ElevatorLevel.L1, new PIDFGains(10, 12, 1, 0, XY_TOLERANCE, 0.03),
+                        ElevatorConstants.ElevatorLevel.L2, new PIDFGains(10, 12, 1, 0, XY_TOLERANCE, 0.03),
+                        ElevatorConstants.ElevatorLevel.L3, new PIDFGains(10, 12, 1, 0, XY_TOLERANCE, 0.03),
+                        ElevatorConstants.ElevatorLevel.L4, new PIDFGains(10, 12, 1, 0, XY_TOLERANCE, 0.03)
+                );
+
+        public static Map<ElevatorConstants.ElevatorLevel, PIDFGains> THETA_PID_CONSTANTS =
+                Map.of(
+                        ElevatorConstants.ElevatorLevel.Bottom, new PIDFGains(14, 20, 0, 0, THETA_TOLERANCE, 00.5),
+                        ElevatorConstants.ElevatorLevel.L1, new PIDFGains(14, 20, 0, 0, THETA_TOLERANCE, 0.5),
+                        ElevatorConstants.ElevatorLevel.L2, new PIDFGains(14, 20, 0, 0, THETA_TOLERANCE, 0.5),
+                        ElevatorConstants.ElevatorLevel.L3, new PIDFGains(14, 20, 0, 0, THETA_TOLERANCE, 0.5),
+                        ElevatorConstants.ElevatorLevel.L4, new PIDFGains(14, 20, 0, 0, THETA_TOLERANCE, 0.5)
+                );
 }

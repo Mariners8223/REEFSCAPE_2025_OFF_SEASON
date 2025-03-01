@@ -25,7 +25,6 @@ import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
 import frc.robot.commands.Drive.MinorAdjust;
-import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Drive.MinorAdjust.Direcation;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.MoveToLevelActive;
@@ -281,7 +280,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         for (ReefLocation reef : ReefLocation.values()) {
-            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1), new HomeToReef(driveBase, reef));
+            HomeToReef homeToReef = new HomeToReef(driveBase, reef, ElevatorLevel.Bottom);
+
+            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1),
+                    homeToReef.beforeStarting(() -> homeToReef.setTargetPose(reef, elevator.getDesiredLevel())));
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
