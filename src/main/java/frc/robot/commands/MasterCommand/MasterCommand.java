@@ -15,6 +15,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
+import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 
 import java.util.Set;
 import java.util.function.BooleanSupplier;
@@ -58,7 +59,7 @@ public class MasterCommand extends Command {
 
             Translation2d targetTranslation = targetReefSupplier.get().getPose().getTranslation();
 
-            return currentTranslation.getDistance(targetTranslation) > 1;
+            return currentTranslation.getDistance(targetTranslation) > RobotAutoConstants.HomingConstants.FAR_FROM_TARGET_DISTANCE;
         };
 
         // the main command

@@ -68,12 +68,21 @@ public class HomeToReef extends Command {
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
 
-        double maxOutput = RobotAutoConstants.HomingConstants.MAX_HOME_SPEED_METERS_PER_SECOND;
-        xOutput = MathUtil.clamp(xOutput, -maxOutput, maxOutput);
-        yOutput = MathUtil.clamp(yOutput, -maxOutput, maxOutput);
+        double upperLimitXY = RobotAutoConstants.HomingConstants.UPPER_SPEED_LIMIT_XY;
+        double lowerLimitXY = RobotAutoConstants.HomingConstants.LOWER_SPEED_LIMIT_XY;
 
-        maxOutput = RobotAutoConstants.HomingConstants.MAX_HOME_SPEED_RADIANS_PER_SECOND;
-        thetaOutput = MathUtil.clamp(thetaOutput, -maxOutput, maxOutput);
+        double upperLimitTheta = RobotAutoConstants.HomingConstants.UPPER_SPEED_LIMIT_THETA;
+        double lowerLimitTheta = RobotAutoConstants.HomingConstants.LOWER_SPEED_LIMIT_THETA;
+
+        double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
+        double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
+
+        double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
+
+        xOutput = MathUtil.clamp(xOutput, -maxXOutput, maxXOutput);
+        yOutput = MathUtil.clamp(yOutput, -maxYOutput, maxYOutput);
+
+        thetaOutput = MathUtil.clamp(thetaOutput, -maxThetaOutput, maxThetaOutput);
 
         double XY_DEADBAND = RobotAutoConstants.HomingConstants.XY_DEADBAND;
         double THETA_DEADBAND = RobotAutoConstants.HomingConstants.THETA_DEADBAND;
@@ -95,6 +104,12 @@ public class HomeToReef extends Command {
                 ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
 
         driveBase.drive(robotRelativeSpeeds);
+    }
+
+    private double getClampValue(double error, double upperLimit, double lowerLimit){
+        double value = Math.abs(error) * upperLimit;
+
+        return Math.max(value, lowerLimit);
     }
 
     @Override
