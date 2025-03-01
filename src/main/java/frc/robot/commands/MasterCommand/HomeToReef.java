@@ -19,9 +19,9 @@ public class HomeToReef extends Command {
     private ReefLocation targetReef;
     private ElevatorConstants.ElevatorLevel desiredLevel;
 
-    private static PIDController XController;
-    private static PIDController YController;
-    private static PIDController ThetaController;
+    private PIDController XController;
+    private PIDController YController;
+    private PIDController ThetaController;
 
     private int timer = 0;
 
@@ -51,18 +51,22 @@ public class HomeToReef extends Command {
     }
 
     public static void pidTune(){
-        SmartDashboard.putData(XController);
-        SmartDashboard.putData(YController);
-        SmartDashboard.putData(ThetaController);
+        for(ElevatorConstants.ElevatorLevel level : ElevatorConstants.ElevatorLevel.values()){
+            PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getXController();
+            PIDController YController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getYController();
+            PIDController ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(level).getThetaController();
+
+            SmartDashboard.putData("X PID " + level, XController);
+            SmartDashboard.putData("Y PID " + level, YController);
+            SmartDashboard.putData("Theta PID " + level, ThetaController);
+        }
     }
 
     @Override
     public void initialize() {
-        XController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).createPIDController();
-        YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).createPIDController();
-        ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).createPIDController();
-
-        ThetaController.enableContinuousInput(-Math.PI, Math.PI);
+        XController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getXController();
+        YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getYController();
+        ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).getThetaController();
 
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
