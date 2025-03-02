@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
+import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
@@ -143,7 +144,8 @@ public class RobotContainer {
 
         // operatorController.button(13).onTrue(new InstantCommand(() ->
         //         robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
-        operatorController.button(13).whileTrue(new BallDropOnForLow(ballDropping));
+        operatorController.button(13).whileTrue(new BallDropOnForLow(ballDropping)).and(() -> !robotAuto.getSelectedReef().isBallInUpPosition()).or(() -> robotAuto.getSelectedReef() == null);
+        operatorController.button(13).whileTrue(new BallDropOnForHigh(ballDropping)).and(() -> robotAuto.getSelectedReef().isBallInUpPosition());
         operatorController.button(13).onFalse(new BallDropOff(ballDropping));
 
         //funnel flipping
