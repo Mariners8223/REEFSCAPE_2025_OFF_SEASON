@@ -10,6 +10,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
 public class RobotToReef extends Command {
@@ -26,8 +27,10 @@ public class RobotToReef extends Command {
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1);
         homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1, ElevatorConstants.ElevatorLevel.Bottom);
 
+        BooleanSupplier isRobotFarFromTarget = () -> MasterCommand.isRobotFarFromTarget(driveBase.getPose(), targetReefSupplier.get().getPose());
+
         sequence = new SequentialCommandGroup(
-            pathCommand,
+            pathCommand.onlyIf(isRobotFarFromTarget),
             homeToReef,
             new InstantCommand(() -> driveBase.drive(new ChassisSpeeds()))
         );

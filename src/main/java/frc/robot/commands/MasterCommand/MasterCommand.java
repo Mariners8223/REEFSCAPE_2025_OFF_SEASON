@@ -3,6 +3,7 @@ package frc.robot.commands.MasterCommand;
 
 import com.pathplanner.lib.events.EventTrigger;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
@@ -53,13 +54,7 @@ public class MasterCommand extends Command {
 
         WaitUntilCommand waitUntilMarker = new WaitUntilCommand(moveElevatorMarker);
 
-        BooleanSupplier isRobotFarFromTarget = () -> {
-            Translation2d currentTranslation = driveBase.getPose().getTranslation();
-
-            Translation2d targetTranslation = targetReefSupplier.get().getPose().getTranslation();
-
-            return currentTranslation.getDistance(targetTranslation) > RobotAutoConstants.FAR_FROM_TARGET_DISTANCE;
-        };
+        BooleanSupplier isRobotFarFromTarget = () -> isRobotFarFromTarget(driveBase.getPose(), targetReefSupplier.get().getPose());
 
         // the main command
         coralCommand = new SequentialCommandGroup(
@@ -101,6 +96,13 @@ public class MasterCommand extends Command {
             case L4 -> EndEffectorConstants.MotorPower.L4;
             default -> EndEffectorConstants.MotorPower.L1;
         };
+    }
+
+    public static boolean isRobotFarFromTarget(Pose2d currentPose, Pose2d targetPose) {
+        Translation2d currentTranslation = currentPose.getTranslation();
+        Translation2d targetTranslation = targetPose.getTranslation();
+
+        return currentTranslation.getDistance(targetTranslation) > RobotAutoConstants.FAR_FROM_TARGET_DISTANCE;
     }
 
 

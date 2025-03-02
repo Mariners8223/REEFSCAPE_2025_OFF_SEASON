@@ -114,12 +114,11 @@ public class RobotContainer {
             SmartDashboard.putBoolean("should drop ball", false);
 
 
-            // driveController.y().onTrue(new InstantCommand(() -> {
-            //     RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
-            //     RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
-            //     RobotContainer.robotAuto.setDropBallInCycle(RobotContainer.configureBallDropSupplier());
-            //     System.out.println("set new targets");
-            // }));
+            driveController.y().onTrue(new InstantCommand(() -> {
+                RobotContainer.robotAuto.setSelectedReef(RobotContainer.configureTargetReefSupplier());
+                RobotContainer.robotAuto.setSelectedLevel(RobotContainer.configureLevelSupplier());
+                System.out.println("set new targets");
+            }));
         }
 
         HomeToReef.pidTune();
