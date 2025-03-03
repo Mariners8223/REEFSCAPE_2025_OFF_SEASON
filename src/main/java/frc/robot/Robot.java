@@ -74,24 +74,16 @@ public class Robot extends LoggedRobot
 
         if(isReal()){
             switch (Constants.ROBOT_TYPE){
-                case COMPETITION -> {
+                case DEVELOPMENT -> {
                     Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
                     Logger.addDataReceiver(new NT4Publisher());
                 }
 
-                case DEVELOPMENT -> {
+                case COMPETITION -> {
                     Logger.addDataReceiver(new WPILOGWriter("/U"));
                 }
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
-            }
-//            new PowerDistribution(1, ModuleType.kRev);
-            if(Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT){
-                Logger.addDataReceiver(new NT4Publisher());
-                Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
-            } 
-            else{
-                Logger.addDataReceiver(new WPILOGWriter("/U"));
             }
         }
         else{

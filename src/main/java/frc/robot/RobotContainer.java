@@ -60,7 +60,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
 
 public class RobotContainer {
@@ -73,7 +72,6 @@ public class RobotContainer {
     public static Climb climb;
 
     public static LoggedDashboardChooser<Command> autoChooser;
-    public static DriveBaseSYSID driveBaseSYSID;
 
     public static CommandXboxController driveController;
     public static CommandGenericHID operatorController;
@@ -103,6 +101,13 @@ public class RobotContainer {
 
         configureDriveBindings();
         configureOperatorBinding();
+
+        // ElevatorSYSID elevatorSYSID = new ElevatorSYSID(elevator);
+
+        // driveController.a().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kForward));
+        // driveController.x().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kReverse));
+        // driveController.b().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kForward));
+        // driveController.y().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kReverse));
 
         //  configureCamera();
         if (RobotBase.isReal()) {

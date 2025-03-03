@@ -42,7 +42,7 @@ public class ElevatorConstants {
 
     public static class LeadMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-        public static final int MOTOR_ID = 16;
+        public static final int MOTOR_ID = 17;
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         
@@ -51,7 +51,7 @@ public class ElevatorConstants {
 
     public static class FollowMotor{
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
-        public static final int MOTOR_ID = 17;
+        public static final int MOTOR_ID = 16;
         public static final boolean IS_BRUSHLESS = true;
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
 
@@ -62,11 +62,11 @@ public class ElevatorConstants {
     public static final double Y_ON_ROBOT = 0;
     public static final double Z_OFFSET = -0.6;
 
-    public static final double kV = 1.6819;
-    public static final double kA = 0.24043;
+    public static final double kV = 1.7211;
+    public static final double kA = 0.15653;
     public static final double ELEVATOR_TOLERANCE = 0.04;
 
-    public static final Constraints PROFILE = new Constraints(2.3, 11);
+    public static final Constraints PROFILE = new Constraints(5, 12);
 
     public static final double ELEVATOR_WEIGHT = 1;
     public static final double PULLEY_RADIUS = 0.024;
@@ -81,9 +81,9 @@ public class ElevatorConstants {
         1.5,
         0.0,
         0,
-        0.3,
+        0,
         ELEVATOR_TOLERANCE,
         0.01);
-    public static final double FEED_FORWARD = 0.38946;
-    public static final double STATIC_FEEDFORWARD = 0.30782;
+    public static final double FEED_FORWARD = 0.34285;
+    public static final double STATIC_FEEDFORWARD = 0.07;
 }
