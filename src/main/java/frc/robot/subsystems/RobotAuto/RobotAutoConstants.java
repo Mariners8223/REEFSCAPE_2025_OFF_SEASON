@@ -31,7 +31,7 @@ public class RobotAutoConstants {
                         ElevatorConstants.ElevatorLevel.L4, new HomeToReefPIDXY(10, 12, 1, XY_TOLERANCE, 0.5)
                 );
 
-        public static Map<ElevatorConstants.ElevatorLevel, HomeToReefPIDTheta> THETA_PID_CONSTANTS =
+        public static final Map<ElevatorConstants.ElevatorLevel, HomeToReefPIDTheta> THETA_PID_CONSTANTS =
                 Map.of(
                         ElevatorConstants.ElevatorLevel.Bottom, new HomeToReefPIDTheta(14, 20, 0, THETA_TOLERANCE, 0.5),
                         ElevatorConstants.ElevatorLevel.L1, new HomeToReefPIDTheta(14, 20, 0, THETA_TOLERANCE, 0.5),

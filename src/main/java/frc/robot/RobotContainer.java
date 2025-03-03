@@ -111,8 +111,9 @@ public class RobotContainer {
 
         //  configureCamera();
         if (RobotBase.isReal()) {
-            CameraServer.startAutomaticCapture();
-            CameraServer.getServer().getSource().setFPS(15);
+            // CameraServer.startAutomaticCapture();
+            // CameraServer.getServer().getSource().
+            // CameraServer.getServer().getSource().setFPS(15);
         } else {
             //until we have real driver station
             SmartDashboard.putNumber("target Reef", 1);
@@ -147,10 +148,20 @@ public class RobotContainer {
             operatorController.pov(i * 90).onTrue(new InstantCommand(() -> robotAuto.setSelectedLevel(level)));
         }
 
-        // operatorController.button(13).onTrue(new InstantCommand(() ->
-        //         robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
-        operatorController.button(13).whileTrue(new BallDropOnForLow(ballDropping)).and(() -> !robotAuto.getSelectedReef().isBallInUpPosition()).or(() -> robotAuto.getSelectedReef() == null);
-        operatorController.button(13).whileTrue(new BallDropOnForHigh(ballDropping)).and(() -> robotAuto.getSelectedReef().isBallInUpPosition());
+        BooleanSupplier isBallDropUp = () -> {
+            ReefLocation selectedReef = robotAuto.getSelectedReef();
+
+            if(selectedReef == null) return true;
+
+            return selectedReef.isBallInUpPosition();
+        };
+
+        // // operatorController.button(13).onTrue(new InstantCommand(() ->
+        // //         robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
+        operatorController.button(13).whileTrue(new SequentialCommandGroup(
+            new BallDropOnForLow(ballDropping).onlyIf(() -> !isBallDropUp.getAsBoolean()),
+            new BallDropOnForHigh(ballDropping).onlyIf(isBallDropUp)
+        ));
         operatorController.button(13).onFalse(new BallDropOff(ballDropping));
 
         //funnel flipping
@@ -262,6 +273,10 @@ public class RobotContainer {
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
         driveController.povUp().whileTrue(new MinorAdjust(driveBase, Direcation.FORWARD));
         driveController.povDown().whileTrue(new MinorAdjust(driveBase, Direcation.BACKWARDS));
+        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, Direcation.FRONT_LEFT));
+        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, Direcation.FRONT_RIGHT));
+        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, Direcation.BACK_LEFT));
+        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, Direcation.BACK_RIGHT));
     }
 
     public static void configNamedCommands() {
