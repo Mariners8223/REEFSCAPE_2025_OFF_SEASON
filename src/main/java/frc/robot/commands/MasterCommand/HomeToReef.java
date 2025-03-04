@@ -70,6 +70,10 @@ public class HomeToReef extends Command {
         YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getYController();
         ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).getThetaController();
 
+        XController.reset();
+        YController.reset();
+        ThetaController.reset();
+
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
