@@ -16,11 +16,8 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.Elevator.MoveToLevel;
@@ -34,7 +31,6 @@ import org.littletonrobotics.junction.LoggedRobot;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.NT4Publisher;
@@ -78,24 +74,16 @@ public class Robot extends LoggedRobot
 
         if(isReal()){
             switch (Constants.ROBOT_TYPE){
-                case COMPETITION -> {
+                case DEVELOPMENT -> {
                     Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
                     Logger.addDataReceiver(new NT4Publisher());
                 }
 
-                case DEVELOPMENT -> {
+                case COMPETITION -> {
                     Logger.addDataReceiver(new WPILOGWriter("/U"));
                 }
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
-            }
-            new PowerDistribution(1, ModuleType.kRev);
-            if(Constants.ROBOT_TYPE == Constants.RobotType.DEVELOPMENT){
-                Logger.addDataReceiver(new NT4Publisher());
-                Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
-            } 
-            else{
-                Logger.addDataReceiver(new WPILOGWriter("/U"));
             }
         }
         else{
@@ -258,7 +246,7 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.cancel();
         }
-        moveToBottom.schedule();
+        // moveToBottom.schedule();
     }
     
     

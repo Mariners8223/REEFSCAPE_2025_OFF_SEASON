@@ -12,15 +12,12 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 public class RobotAuto extends SubsystemBase {
     private Constants.ReefLocation selectedReef = null;
     private ElevatorConstants.ElevatorLevel selectedLevel = null;
-    private boolean dropBallInCycle = false;
-    
+
     public RobotAuto() {
         SmartDashboard.putBoolean("Level 1", false);
         SmartDashboard.putBoolean("Level 2", false);
         SmartDashboard.putBoolean("Level 3", false);
         SmartDashboard.putBoolean("Level 4", false);
-
-        SmartDashboard.putBoolean("drop ball", false);
     }
 
     public Constants.ReefLocation getSelectedReef() {
@@ -29,10 +26,6 @@ public class RobotAuto extends SubsystemBase {
 
     public ElevatorConstants.ElevatorLevel getSelectedLevel() {
         return selectedLevel;
-    }
-
-    public boolean shouldDropBallInCycle() {
-        return dropBallInCycle;
     }
 
     public void setSelectedReef(Constants.ReefLocation reef) {
@@ -69,13 +62,6 @@ public class RobotAuto extends SubsystemBase {
         selectedLevel = level;
 
         Logger.recordOutput("Selection/Level", name);
-    }
-
-    public void setDropBallInCycle(boolean dropBall) {
-        Logger.recordOutput("Selection/Should Drop Ball", dropBall);
-
-        SmartDashboard.putBoolean("drop ball", dropBall);
-        dropBallInCycle = dropBall;
     }
 
 }

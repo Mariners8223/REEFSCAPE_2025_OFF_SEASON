@@ -1,6 +1,7 @@
 package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Elevator.ElevatorConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -16,37 +17,59 @@ import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
+    private ElevatorConstants.ElevatorLevel desiredLevel;
 
-    private static final PIDController XController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
-    private static final PIDController YController = RobotAutoConstants.HomingConstants.XY_PID.createPIDController();
-    private static final PIDController ThetaController = RobotAutoConstants.HomingConstants.THETA_PID.createPIDController();
+    private PIDController XController;
+    private PIDController YController;
+    private PIDController ThetaController;
 
     private int timer = 0;
 
-    public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
+    public HomeToReef(DriveBase driveBase, ReefLocation targetReef, ElevatorConstants.ElevatorLevel desiredLevel) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
+        this.desiredLevel = desiredLevel;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(driveBase);
-
-        ThetaController.enableContinuousInput(-Math.PI, Math.PI);
     }
 
-    public void setTargetPose(ReefLocation targetPose) {
+    public void setTargetPose(ReefLocation targetPose){
         this.targetReef = targetPose;
+        this.desiredLevel = ElevatorConstants.ElevatorLevel.Bottom;
 
         Logger.recordOutput("home to reef/target Pose", targetPose);
+        Logger.recordOutput("home to reef/target Level", desiredLevel);
+        Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
+    }
+
+    public void setTargetPose(ReefLocation targetPose, ElevatorConstants.ElevatorLevel targetLevel){
+        this.targetReef = targetPose;
+        this.desiredLevel = targetLevel;
+
+        Logger.recordOutput("home to reef/target Pose", targetPose);
+        Logger.recordOutput("home to reef/target Level", targetLevel);
+        Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
     }
 
     public static void pidTune(){
-        SmartDashboard.putData(XController);
-        SmartDashboard.putData(YController);
-        SmartDashboard.putData(ThetaController);
+        for(ElevatorConstants.ElevatorLevel level : ElevatorConstants.ElevatorLevel.values()){
+            PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getXController();
+            PIDController YController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getYController();
+            PIDController ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(level).getThetaController();
+
+            SmartDashboard.putData("X PID " + level, XController);
+            SmartDashboard.putData("Y PID " + level, YController);
+            SmartDashboard.putData("Theta PID " + level, ThetaController);
+        }
     }
 
     @Override
     public void initialize() {
+        XController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getXController();
+        YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getYController();
+        ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).getThetaController();
+
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
@@ -68,15 +91,24 @@ public class HomeToReef extends Command {
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
 
-        double maxOutput = RobotAutoConstants.HomingConstants.MAX_HOME_SPEED_METERS_PER_SECOND;
-        xOutput = MathUtil.clamp(xOutput, -maxOutput, maxOutput);
-        yOutput = MathUtil.clamp(yOutput, -maxOutput, maxOutput);
+        double upperLimitXY = RobotAutoConstants.UPPER_SPEED_LIMIT_XY;
+        double lowerLimitXY = RobotAutoConstants.LOWER_SPEED_LIMIT_XY;
 
-        maxOutput = RobotAutoConstants.HomingConstants.MAX_HOME_SPEED_RADIANS_PER_SECOND;
-        thetaOutput = MathUtil.clamp(thetaOutput, -maxOutput, maxOutput);
+        double upperLimitTheta = RobotAutoConstants.UPPER_SPEED_LIMIT_THETA;
+        double lowerLimitTheta = RobotAutoConstants.LOWER_SPEED_LIMIT_THETA;
 
-        double XY_DEADBAND = RobotAutoConstants.HomingConstants.XY_DEADBAND;
-        double THETA_DEADBAND = RobotAutoConstants.HomingConstants.THETA_DEADBAND;
+        double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
+        double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
+
+        double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
+
+        xOutput = MathUtil.clamp(xOutput, -maxXOutput, maxXOutput);
+        yOutput = MathUtil.clamp(yOutput, -maxYOutput, maxYOutput);
+
+        thetaOutput = MathUtil.clamp(thetaOutput, -maxThetaOutput, maxThetaOutput);
+
+        double XY_DEADBAND = RobotAutoConstants.XY_DEADBAND;
+        double THETA_DEADBAND = RobotAutoConstants.THETA_DEADBAND;
 
         Logger.recordOutput("home to reef/x output", xOutput);
         Logger.recordOutput("home to reef/y output", yOutput);
@@ -95,6 +127,12 @@ public class HomeToReef extends Command {
                 ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
 
         driveBase.drive(robotRelativeSpeeds);
+    }
+
+    private double getClampValue(double error, double upperLimit, double lowerLimit){
+        double value = Math.abs(error) * upperLimit;
+
+        return Math.max(value, lowerLimit);
     }
 
     @Override

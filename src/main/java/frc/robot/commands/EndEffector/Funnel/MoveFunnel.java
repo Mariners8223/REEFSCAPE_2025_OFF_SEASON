@@ -8,11 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
-public class moveFunnel extends Command {
+public class MoveFunnel extends Command {
   private final EndEffector endEffector;
   private final double target;
 
-  public moveFunnel(EndEffector endEffector, double target){
+  public MoveFunnel(EndEffector endEffector, double target){
     this.endEffector = endEffector;
     this.target = target;
     addRequirements(endEffector);

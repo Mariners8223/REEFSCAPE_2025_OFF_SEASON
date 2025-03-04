@@ -11,38 +11,42 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MinorAdjust extends Command {
   public static enum Direcation{
-    LEFT,
-    RIGHT,
-    FORWARD,
-    BACKWARDS
+    LEFT(0, 0.3),
+    RIGHT(0, -0.3),
+    FORWARD(0.3, 0),
+    BACKWARDS(-0.3, 0),
+    FRONT_RIGHT(0.3, -0.3),
+    FRONT_LEFT(0.3, 0.3),
+    BACK_RIGHT(-0.3, -0.3),
+    BACK_LEFT(-0.3, 0.3);
+
+    private final double vX;
+    private final double vY;
+
+    Direcation(double vX, double vY){
+      this.vX = vX;
+      this.vY = vY;
+    }
+
+    public double getVX(){
+      return vX;
+    }
+
+    public double getVY(){
+      return vY;
+    }
   }
 
   private final DriveBase driveBase;
 
-  private double outputY = 0;
-  private double outputX = 0;
+  private final Direcation direcation;
+
   /** Creates a new MinorAdjust. */
   public MinorAdjust(DriveBase driveBase, Direcation direcation) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveBase = driveBase;
 
-    switch (direcation) {
-      case LEFT:
-        outputY = 0.3;
-        break;
-    
-      case RIGHT:
-        outputY = -0.3;
-        break;
-
-      case FORWARD:
-        outputX = 0.3;
-        break;
-
-      case BACKWARDS:
-        outputX = -0.3;
-        break;
-    }
+    this.direcation = direcation;
 
     addRequirements(driveBase);
   }
@@ -50,7 +54,7 @@ public class MinorAdjust extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driveBase.drive(new ChassisSpeeds(outputX, outputY, 0));
+    driveBase.drive(new ChassisSpeeds(direcation.getVX(), direcation.getVY(), 0));
   }
 
   // Called once the command ends or is interrupted.
