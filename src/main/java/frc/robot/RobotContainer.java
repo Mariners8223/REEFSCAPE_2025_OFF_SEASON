@@ -11,12 +11,12 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.events.EventTrigger;
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -60,6 +60,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
 
 public class RobotContainer {
@@ -99,8 +100,17 @@ public class RobotContainer {
         configNamedCommands();
         configChooser();
 
+        // driveController.start().onTrue(driveBase.resetOnlyDirection());
+
+        // DriveBaseSYSID driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+
+        // driveController.a().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kForward));
+        // driveController.b().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kReverse));
+        // driveController.x().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kForward));
+        // driveController.y().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kReverse));
         configureDriveBindings();
         configureOperatorBinding();
+        
 
         // ElevatorSYSID elevatorSYSID = new ElevatorSYSID(elevator);
 

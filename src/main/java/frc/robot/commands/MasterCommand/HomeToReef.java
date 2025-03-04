@@ -40,6 +40,7 @@ public class HomeToReef extends Command {
 
         Logger.recordOutput("home to reef/target Pose", targetPose);
         Logger.recordOutput("home to reef/target Level", desiredLevel);
+        Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
     }
 
     public void setTargetPose(ReefLocation targetPose, ElevatorConstants.ElevatorLevel targetLevel){
@@ -48,6 +49,7 @@ public class HomeToReef extends Command {
 
         Logger.recordOutput("home to reef/target Pose", targetPose);
         Logger.recordOutput("home to reef/target Level", targetLevel);
+        Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
     }
 
     public static void pidTune(){
