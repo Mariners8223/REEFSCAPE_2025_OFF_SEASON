@@ -173,7 +173,7 @@ public class RobotContainer {
         operatorController.button(13).onFalse(new BallDropOff(ballDropping));
 
         //funnel flipping
-        operatorController.axisLessThan(0, -0.5).and(() -> !endEffector.isGpLoaded()).onTrue(new ToggleFunnel(endEffector));
+        operatorController.axisLessThan(0, -0.5).onTrue(new ToggleFunnel(endEffector));
 
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->

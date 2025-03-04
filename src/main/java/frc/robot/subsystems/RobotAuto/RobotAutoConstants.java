@@ -27,7 +27,7 @@ public class RobotAutoConstants {
         public static final Map<ElevatorConstants.ElevatorLevel, HomeToReefPIDXY> XY_PID_CONSTANTS =
                 Map.of(
                         ElevatorConstants.ElevatorLevel.Bottom, new HomeToReefPIDXY(9, 12, 0.7, XY_TOLERANCE, 0.1),
-                        ElevatorConstants.ElevatorLevel.L1, new HomeToReefPIDXY(12, 18, 0.4, XY_TOLERANCE * 3, 0.1),
+                        ElevatorConstants.ElevatorLevel.L1, new HomeToReefPIDXY(12, 18, 0.4, XY_TOLERANCE * 1.5, 0.1),
                         ElevatorConstants.ElevatorLevel.L2, new HomeToReefPIDXY(9, 12, 0.7, XY_TOLERANCE, 0.1),
                         ElevatorConstants.ElevatorLevel.L3, new HomeToReefPIDXY(10, 15, 0.8, XY_TOLERANCE, 0.1),
                         ElevatorConstants.ElevatorLevel.L4, new HomeToReefPIDXY(6, 20, 0.5, XY_TOLERANCE, 0.1)
@@ -36,7 +36,7 @@ public class RobotAutoConstants {
         public static final Map<ElevatorConstants.ElevatorLevel, HomeToReefPIDTheta> THETA_PID_CONSTANTS =
                 Map.of(
                         ElevatorConstants.ElevatorLevel.Bottom, new HomeToReefPIDTheta(6, 15, 0, THETA_TOLERANCE, THETA_IZONE),
-                        ElevatorConstants.ElevatorLevel.L1, new HomeToReefPIDTheta(6, 15, 0, THETA_TOLERANCE * 2, THETA_IZONE),
+                        ElevatorConstants.ElevatorLevel.L1, new HomeToReefPIDTheta(6, 15, 0, THETA_TOLERANCE, THETA_IZONE),
                         ElevatorConstants.ElevatorLevel.L2, new HomeToReefPIDTheta(6, 15, 0, THETA_TOLERANCE, THETA_IZONE),
                         ElevatorConstants.ElevatorLevel.L3, new HomeToReefPIDTheta(6, 15, 0, THETA_TOLERANCE, THETA_IZONE),
                         ElevatorConstants.ElevatorLevel.L4, new HomeToReefPIDTheta(6, 11, 0, THETA_TOLERANCE, THETA_IZONE)
