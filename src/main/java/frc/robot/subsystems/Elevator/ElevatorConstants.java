@@ -13,10 +13,10 @@ import frc.util.MarinersController.MarinersSparkBase.MotorType;
 public class ElevatorConstants {
     public enum ElevatorLevel{
         Bottom(0.65),
-        L1(0.75),
+        L1(0.73),
         L2(0.91),
-        L3(1.35),
-        L4(1.96);
+        L3(1.3),
+        L4(1.935);
 
         private final double height;
 
@@ -62,10 +62,10 @@ public class ElevatorConstants {
 
     public static final double kV = 1.7211;
     public static final double kA = 0.15653;
-    public static final double ELEVATOR_TOLERANCE = 0.04;
+    public static final double ELEVATOR_TOLERANCE = 0.015;
 
     // public static final Constraints PROFILE = new Constraints(5, 12);
-    public static final Constraints PROFILE = new Constraints(5, 6);
+    public static final Constraints PROFILE = new Constraints(5, 9);
 
     public static final double ELEVATOR_WEIGHT = 1;
     public static final double PULLEY_RADIUS = 0.024;
@@ -78,11 +78,11 @@ public class ElevatorConstants {
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
         1.5,
-        0.0,
+        10,
         0,
         0,
         ELEVATOR_TOLERANCE,
-        0.01);
+        0.02);
     public static final double FEED_FORWARD = 0.34285;
     public static final double STATIC_FEEDFORWARD = 0.07;
 }

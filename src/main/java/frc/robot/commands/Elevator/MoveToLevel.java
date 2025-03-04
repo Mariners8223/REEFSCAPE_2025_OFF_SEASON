@@ -36,7 +36,7 @@ public class MoveToLevel extends Command {
   @Override
   public void end(boolean interrupted) {
     if(interrupted){
-      elevator.moveMotorByPosition(ElevatorLevel.Bottom);
+      // elevator.moveMotorByPosition(ElevatorLevel.Bottom);
     }
   }
 

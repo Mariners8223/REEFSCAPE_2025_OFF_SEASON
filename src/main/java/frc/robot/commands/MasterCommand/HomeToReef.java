@@ -91,6 +91,21 @@ public class HomeToReef extends Command {
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
 
+        double XY_DEADBAND = RobotAutoConstants.XY_DEADBAND;
+        double THETA_DEADBAND = RobotAutoConstants.THETA_DEADBAND;
+
+        Logger.recordOutput("home to reef/x output", xOutput);
+        Logger.recordOutput("home to reef/y output", yOutput);
+        Logger.recordOutput("home to reef/theta output", thetaOutput);
+
+        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(
+                xOutput,
+                yOutput,
+                thetaOutput);
+
+        ChassisSpeeds robotRelativeSpeeds =
+                ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
+
         double upperLimitXY = RobotAutoConstants.UPPER_SPEED_LIMIT_XY;
         double lowerLimitXY = RobotAutoConstants.LOWER_SPEED_LIMIT_XY;
 
@@ -102,29 +117,13 @@ public class HomeToReef extends Command {
 
         double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
 
-        xOutput = MathUtil.clamp(xOutput, -maxXOutput, maxXOutput);
-        yOutput = MathUtil.clamp(yOutput, -maxYOutput, maxYOutput);
+        robotRelativeSpeeds.vxMetersPerSecond = MathUtil.clamp(robotRelativeSpeeds.vxMetersPerSecond, -maxXOutput, maxXOutput);
+        robotRelativeSpeeds.vyMetersPerSecond = MathUtil.clamp(robotRelativeSpeeds.vyMetersPerSecond, -maxYOutput, maxYOutput);
+        robotRelativeSpeeds.omegaRadiansPerSecond = MathUtil.clamp(robotRelativeSpeeds.omegaRadiansPerSecond, -maxThetaOutput, maxThetaOutput);
 
-        thetaOutput = MathUtil.clamp(thetaOutput, -maxThetaOutput, maxThetaOutput);
-
-        double XY_DEADBAND = RobotAutoConstants.XY_DEADBAND;
-        double THETA_DEADBAND = RobotAutoConstants.THETA_DEADBAND;
-
-        Logger.recordOutput("home to reef/x output", xOutput);
-        Logger.recordOutput("home to reef/y output", yOutput);
-        Logger.recordOutput("home to reef/theta output", thetaOutput);
-
-        if(Math.abs(xOutput) <= XY_DEADBAND) xOutput = 0;
-        if(Math.abs(yOutput) <= XY_DEADBAND) yOutput = 0;
-        if(Math.abs(thetaOutput) <= THETA_DEADBAND) thetaOutput = 0;
-
-        ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(
-                xOutput,
-                yOutput,
-                thetaOutput);
-
-        ChassisSpeeds robotRelativeSpeeds =
-                ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
+        if(Math.abs(robotRelativeSpeeds.vxMetersPerSecond) <= XY_DEADBAND) robotRelativeSpeeds.vxMetersPerSecond = 0;
+        if(Math.abs(robotRelativeSpeeds.vyMetersPerSecond) <= XY_DEADBAND) robotRelativeSpeeds.vyMetersPerSecond = 0;
+        if(Math.abs(robotRelativeSpeeds.omegaRadiansPerSecond) <= THETA_DEADBAND) robotRelativeSpeeds.omegaRadiansPerSecond = 0;
 
         driveBase.drive(robotRelativeSpeeds);
     }
@@ -152,7 +151,7 @@ public class HomeToReef extends Command {
             timer = 0;
         }
 
-        return timer >= 10;
+        return timer >= 20;
     }
 
     @Override

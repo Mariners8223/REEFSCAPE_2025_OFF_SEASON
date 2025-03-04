@@ -89,7 +89,7 @@ public class EndEffector extends SubsystemBase {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
 
-        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().toString();
+        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().getName();
         Logger.recordOutput("EndEffector/Current Command", currentCommandName);
     }
 }

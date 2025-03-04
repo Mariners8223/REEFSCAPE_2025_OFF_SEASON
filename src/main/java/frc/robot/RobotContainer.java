@@ -230,17 +230,17 @@ public class RobotContainer {
 
 //        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
 
-        Command resetSelection = new InstantCommand(() -> {
-            robotAuto.setSelectedLevel(null);
-            robotAuto.setSelectedReef(null);
-        });
+        // Command resetSelection = new InstantCommand(() -> {
+        //     robotAuto.setSelectedLevel(null);
+        //     robotAuto.setSelectedReef(null);
+        // });
 
         BooleanSupplier robotBelowCertainSpeed = () -> {
             // speed is below 1 m/s total and below 1 omega
             return driveBase.getVelocity() < 1;
         };
 
-        Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
+        // Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
 
         Trigger mainCycleTrigger = driveController.leftTrigger();
         Trigger leftFeeder = driveController.leftBumper();
@@ -252,8 +252,8 @@ public class RobotContainer {
         Trigger semiAuto = driveController.a();
 
         // main cycle
-        mainCycleTrigger.and(isCycleReady).whileTrue(masterCommand);
-        mainCycleTrigger.onFalse(resetSelectionAdvanced.andThen(new MoveToLevel(elevator, ElevatorLevel.Bottom)));
+        mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady).withName("Master Command"));
+        mainCycleTrigger.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         // feeder path finder
         rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
