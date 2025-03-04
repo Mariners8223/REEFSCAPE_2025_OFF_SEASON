@@ -32,12 +32,12 @@ public class DriveBaseConstants {
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
                 3.5,
-                6, //TODO find a good value for this
+                8, //TODO find a good value for this
                 5,
                 25); //the constraints for pathPlanner
 
-        public static final PIDFGains THETA_PID = new PIDFGains(1.1, 0.01, 0); //the pid gains for the PID Controller of the robot angle, units are radians per second
-        public static final PIDFGains XY_PID = new PIDFGains(1.2, 0.2, 0.01); //the pid gains for the pid controller of the robot's velocity, units are meters per second
+        public static final PIDFGains THETA_PID = new PIDFGains(1.5, 0.01, 0); //the pid gains for the PID Controller of the robot angle, units are radians per second
+        public static final PIDFGains XY_PID = new PIDFGains(1, 0, 0); //the pid gains for the pid controller of the robot's velocity, units are meters per second
     }
 
     public static final int PIGEON_ID = 2;

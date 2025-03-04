@@ -246,7 +246,7 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.cancel();
         }
-        moveToBottom.schedule();
+        // moveToBottom.schedule();
     }
     
     
