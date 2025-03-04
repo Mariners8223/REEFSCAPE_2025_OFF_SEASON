@@ -58,8 +58,8 @@ public class EndEffector extends SubsystemBase {
     }
 
     public void setLoadedValue(boolean value) {
-        Logger.recordOutput("EndEffector/gp loaded", value);
-        SmartDashboard.putBoolean("Is Gp Loaded", value);
+        Logger.recordOutput("EndEffector/GP loaded", value);
+        SmartDashboard.putBoolean("Is GP Loaded", value);
         isGpLoaded = value;
     }
 
@@ -89,11 +89,7 @@ public class EndEffector extends SubsystemBase {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
 
-        String currentCommandName = "None";
-        if(getCurrentCommand() != null) {
-            currentCommandName = getCurrentCommand().getName();
-        }
-
+        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().toString();
         Logger.recordOutput("EndEffector/Current Command", currentCommandName);
     }
 }
