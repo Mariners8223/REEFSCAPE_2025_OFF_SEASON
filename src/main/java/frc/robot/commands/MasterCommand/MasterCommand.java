@@ -47,7 +47,7 @@ public class MasterCommand extends Command {
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         // eject phase (releasing the game piece)
-        ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1);
+        ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1_LEFT);
 
         // elevator to home phase (moving the elevator to the home position)
         Command elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
@@ -85,16 +85,20 @@ public class MasterCommand extends Command {
         // homeToReefEndless.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);
-        ejectCommand.setLevel(getMotorPower(level));
+        ejectCommand.setLevel(getMotorPower(level, targetReef));
 
         coralCommand.initialize();
     }
 
-    public static EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level) {
+    public static EndEffectorConstants.MotorPower getMotorPower(ElevatorConstants.ElevatorLevel level, ReefLocation targetReef) {
+        if(targetReef == null) targetReef = ReefLocation.REEF_1;
+
         return switch (level) {
+            case L1 -> targetReef.ordinal()%2 == 0 ?
+                    EndEffectorConstants.MotorPower.L1_LEFT : EndEffectorConstants.MotorPower.L1_RIGHT;
             case L2, L3 -> EndEffectorConstants.MotorPower.L2_3;
             case L4 -> EndEffectorConstants.MotorPower.L4;
-            default -> EndEffectorConstants.MotorPower.L1;
+            default -> EndEffectorConstants.MotorPower.L1_LEFT;
         };
     }
 

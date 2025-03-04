@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -60,7 +59,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.DriveTrain.DriveBaseSYSID;
 
 
 public class RobotContainer {
@@ -184,7 +182,7 @@ public class RobotContainer {
 
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
-                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel));
+                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
         new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded())
                 .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
@@ -298,9 +296,9 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("move l4", new MoveToLevel(elevator, ElevatorLevel.L4));
 
-        Eject eject = new Eject(endEffector, MotorPower.L1);
+        Eject eject = new Eject(endEffector, MotorPower.L1_LEFT);
         NamedCommands.registerCommand("eject", new SequentialCommandGroup(
-                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel()))),
+                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))),
                 eject,
                 new MoveToLevel(elevator, ElevatorLevel.Bottom)
         ));

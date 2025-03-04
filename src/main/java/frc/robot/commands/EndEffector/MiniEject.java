@@ -5,6 +5,7 @@
 package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.commands.MasterCommand.MasterCommand;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -18,11 +19,13 @@ import java.util.function.Supplier;
 public class MiniEject extends Command {
   private final EndEffector endEffector;
   private final Supplier<ElevatorConstants.ElevatorLevel> levelSupplier;
+  private final Supplier<Constants.ReefLocation> targetReefSupplier;
   private ElevatorConstants.ElevatorLevel currentLevel;
   /** Creates a new MiniEject. */
-  public MiniEject(EndEffector endEffector, Supplier<ElevatorConstants.ElevatorLevel> levelSupplier) {
+  public MiniEject(EndEffector endEffector, Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.endEffector = endEffector;
+    this.targetReefSupplier = targetReefSupplier;
     this.levelSupplier = levelSupplier;
 
     addRequirements(endEffector);
@@ -37,7 +40,7 @@ public class MiniEject extends Command {
     currentLevel = levelSupplier.get();
 
     if(currentLevel != null && currentLevel != ElevatorLevel.Bottom){
-      EndEffectorConstants.MotorPower motorPower = MasterCommand.getMotorPower(currentLevel);
+      EndEffectorConstants.MotorPower motorPower = MasterCommand.getMotorPower(currentLevel, targetReefSupplier.get());
 
       rightValue = motorPower.rightMotorPower;
       leftValue = motorPower.leftMotorPower;
