@@ -36,5 +36,6 @@ public class RobotAutoConstants {
             THETA_PID.setTolerance(THETA_TOLERANCE);
 
             TRANSLATION_PID.setSetpoint(0);
+            THETA_PID.enableContinuousInput(-Math.PI, Math.PI);
         }
 }
