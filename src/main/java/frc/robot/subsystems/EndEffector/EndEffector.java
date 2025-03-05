@@ -18,6 +18,8 @@ public class EndEffector extends SubsystemBase {
     private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
     private boolean isGpLoaded;
 
+    private double funnelTarget;
+
     public EndEffector() {
         if (Robot.isSimulation()) {
             io = new EndEffectorIOSim();
@@ -38,6 +40,8 @@ public class EndEffector extends SubsystemBase {
 
     public void moveFunnel(double target) {
         io.moveFunnel(target);
+        Logger.recordOutput("EndEffector/funnel target", target);
+        funnelTarget = target;
     }
 
     public void setFunnelVoltage(double voltage) {
@@ -65,6 +69,10 @@ public class EndEffector extends SubsystemBase {
 
     public double getFunnelPosition() {
         return inputs.funnelPosition;
+    }
+
+    public double getFunnelTarget(){
+        return funnelTarget;
     }
 
     public boolean isGpLoaded() {
