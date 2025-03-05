@@ -7,13 +7,6 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import java.util.Map;
 
 public class RobotAutoConstants {
-
-        public static double LOWER_SPEED_LIMIT_XY = 0.8;
-        public static double UPPER_SPEED_LIMIT_XY = 2;
-
-        public static double LOWER_SPEED_LIMIT_THETA = 1;
-        public static double UPPER_SPEED_LIMIT_THETA = 4;
-
         public static double XY_DEADBAND = 0.2;
         public static double THETA_DEADBAND = 0.4;
 

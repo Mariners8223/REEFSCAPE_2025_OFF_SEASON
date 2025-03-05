@@ -20,8 +20,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
@@ -46,8 +44,6 @@ public class Robot extends LoggedRobot
     private static final Field2d field = new Field2d();
     public static boolean isRedAlliance = false;
     private static AprilTagFieldLayout apriltagField;
-
-    private final Command moveToBottom;
 
     private int driverStationCheckTimer = 0;
     
@@ -129,8 +125,6 @@ public class Robot extends LoggedRobot
         Logger.recordOutput("Zero 3D", new Pose3d());
 
         new RobotContainer();
-
-        moveToBottom = new MoveToLevel(RobotContainer.elevator, ElevatorConstants.ElevatorLevel.Bottom);
     }
 
     private static void checkFlip() {
