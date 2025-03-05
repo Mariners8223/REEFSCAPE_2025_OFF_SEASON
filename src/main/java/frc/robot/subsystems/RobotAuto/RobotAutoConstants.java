@@ -47,6 +47,10 @@ public class RobotAutoConstants {
                 XController.setTolerance(tolerance);
                 YController.setTolerance(tolerance);
 
+                XController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+                YController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+
+
                 XController.setIZone(iZone);
                 YController.setIZone(iZone);
             }
@@ -68,6 +72,8 @@ public class RobotAutoConstants {
 
                 ThetaController.setTolerance(tolerance);
                 ThetaController.setIZone(iZone);
+
+                ThetaController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
                 ThetaController.enableContinuousInput(-Math.PI, Math.PI);
             }
