@@ -1,0 +1,77 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.898922166433519,
+        "y": 2.7621874414797447
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.626268223614959,
+        "y": 2.62609163806967
+      },
+      "isLocked": false,
+      "linkedName": "reef 10"
+    },
+    {
+      "anchor": {
+        "x": 1.5883319805194804,
+        "y": 1.610450487012987
+      },
+      "prevControl": {
+        "x": 2.2339838008793462,
+        "y": 2.3099066257361756
+      },
+      "nextControl": {
+        "x": 1.4173904220779219,
+        "y": 1.4252637987012986
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0050328638646508,
+        "y": 0.9125504134537334
+      },
+      "prevControl": {
+        "x": 1.4387581168831167,
+        "y": 1.560592532467532
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "feeder 2"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "drop pipe",
+      "waypointRelativePos": 0.0,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 4.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 360.0,
+    "maxAngularAcceleration": 360.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 54.68900000000001
+  },
+  "reversed": false,
+  "folder": "auto right",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": true
+}

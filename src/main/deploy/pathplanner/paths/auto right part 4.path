@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5757203218196234,
-        "y": 2.6697671867142656
+        "x": 3.005722402597402,
+        "y": 2.4651582792207787
       },
       "isLocked": false,
       "linkedName": "reef 11"
     },
     {
       "anchor": {
-        "x": 1.02375,
-        "y": 1.0025
+        "x": 1.7022930194805195,
+        "y": 1.888230519480519
       },
       "prevControl": {
-        "x": 0.8157452983366045,
-        "y": 0.8638131437881662
+        "x": 2.044176136363636,
+        "y": 2.3583198051948044
+      },
+      "nextControl": {
+        "x": 1.3268194048393331,
+        "y": 1.3719542993488876
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.0050328638646508,
+        "y": 0.9125504134537334
+      },
+      "prevControl": {
+        "x": 1.4672483766233766,
+        "y": 1.5890827922077917
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,14 +47,7 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "drop pipe",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
     "maxAcceleration": 6.0,
