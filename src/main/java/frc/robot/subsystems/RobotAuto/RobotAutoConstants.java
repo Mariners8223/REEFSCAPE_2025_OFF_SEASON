@@ -7,7 +7,7 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import java.util.Map;
 
 public class RobotAutoConstants {
-        public static double XY_DEADBAND = 0.2;
+        public static double XY_DEADBAND = 0;
         public static double THETA_DEADBAND = 0.4;
 
         public static double XY_TOLERANCE = 0.0105;
@@ -19,7 +19,7 @@ public class RobotAutoConstants {
 
         public static final Map<ElevatorConstants.ElevatorLevel, HomeToReefPIDXY> XY_PID_CONSTANTS =
                 Map.of(
-                        ElevatorConstants.ElevatorLevel.Bottom, new HomeToReefPIDXY(9, 12, 0.7, XY_TOLERANCE, 0.1),
+                        ElevatorConstants.ElevatorLevel.Bottom, new HomeToReefPIDXY(15, 5, 0, XY_TOLERANCE, 0.1),
                         ElevatorConstants.ElevatorLevel.L1, new HomeToReefPIDXY(12, 18, 0.4, XY_TOLERANCE * 1.5, 0.1),
                         ElevatorConstants.ElevatorLevel.L2, new HomeToReefPIDXY(9, 12, 0.7, XY_TOLERANCE, 0.1),
                         ElevatorConstants.ElevatorLevel.L3, new HomeToReefPIDXY(10, 15, 0.8, XY_TOLERANCE, 0.1),
@@ -45,7 +45,9 @@ public class RobotAutoConstants {
                 translationController.setTolerance(tolerance);
                 translationController.setSetpoint(0);
 
-                translationController.setIZone(iZone);
+                translationController.setIntegratorRange(-100, 100);
+
+                // translationController.setIZone(iZone);
             }
 
             public PIDController getTranslationController(){

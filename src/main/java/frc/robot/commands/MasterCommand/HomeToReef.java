@@ -55,7 +55,7 @@ public class HomeToReef extends Command {
             PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getTranslationController();
             PIDController ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(level).getThetaController();
 
-            SmartDashboard.putData("X PID " + level, XController);
+            SmartDashboard.putData("Translation PID " + level, XController);
             SmartDashboard.putData("Theta PID " + level, ThetaController);
         }
     }
@@ -70,7 +70,6 @@ public class HomeToReef extends Command {
 
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
 
-        Logger.recordOutput("home to reef/target X", TranslationController.getSetpoint());
         Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
 
         timer = 0;
@@ -82,11 +81,19 @@ public class HomeToReef extends Command {
 
         double distance = robotPose.getTranslation().getDistance(targetReef.getPose().getTranslation());
 
-        double scalar = TranslationController.calculate(distance);
+        Logger.recordOutput("home to reef/ distance", distance);
 
-        double xOutput = scalar * (robotPose.getX() - targetReef.getPose().getX());
+        double scalar = TranslationController.calculate(-distance);
 
-        double yOutput = scalar * (robotPose.getY() - targetReef.getPose().getY());
+        double xError = (targetReef.getPose().getX() - robotPose.getX());
+        double yError = (targetReef.getPose().getY() - robotPose.getY());
+
+        Logger.recordOutput("home to reef/x Error", xError);
+        Logger.recordOutput("home to reef/y Error", yError);
+
+        double xOutput = scalar * xError;
+
+        double yOutput = scalar * yError;
 
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
@@ -115,10 +122,8 @@ public class HomeToReef extends Command {
 
     @Override
     public boolean isFinished() {
-        double xError = TranslationController.getError();
         double thetaError = ThetaController.getError();
 
-        Logger.recordOutput("home to reef/x error", xError);
         Logger.recordOutput("home to reef/theta error", thetaError);
 
         if(TranslationController.atSetpoint() && ThetaController.atSetpoint()){
