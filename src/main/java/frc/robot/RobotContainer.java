@@ -312,7 +312,7 @@ public class RobotContainer {
             HomeToReef homeToReef = new HomeToReef(driveBase, reef, ElevatorLevel.Bottom);
 
             NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1),
-                    homeToReef.beforeStarting(() -> homeToReef.setTargetPose(reef, elevator.getDesiredLevel())));
+                    homeToReef.beforeStarting(() -> homeToReef.setTargetPose(reef)));
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));

@@ -17,17 +17,15 @@ import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
-    private ElevatorConstants.ElevatorLevel desiredLevel;
 
-    private PIDController TranslationController;
-    private PIDController ThetaController;
+    private final PIDController TranslationController = RobotAutoConstants.TRANSLATION_PID;
+    private final PIDController ThetaController = RobotAutoConstants.THETA_PID;
 
     private int timer = 0;
 
     public HomeToReef(DriveBase driveBase, ReefLocation targetReef, ElevatorConstants.ElevatorLevel desiredLevel) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
-        this.desiredLevel = desiredLevel;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(driveBase);
@@ -35,37 +33,18 @@ public class HomeToReef extends Command {
 
     public void setTargetPose(ReefLocation targetPose){
         this.targetReef = targetPose;
-        this.desiredLevel = ElevatorConstants.ElevatorLevel.Bottom;
 
         Logger.recordOutput("home to reef/target Pose", targetPose);
-        Logger.recordOutput("home to reef/target Level", desiredLevel);
-        Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
-    }
-
-    public void setTargetPose(ReefLocation targetPose, ElevatorConstants.ElevatorLevel targetLevel){
-        this.targetReef = targetPose;
-        this.desiredLevel = targetLevel;
-
-        Logger.recordOutput("home to reef/target Pose", targetPose);
-        Logger.recordOutput("home to reef/target Level", targetLevel);
         Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
     }
 
     public static void pidTune(){
-        for(ElevatorConstants.ElevatorLevel level : ElevatorConstants.ElevatorLevel.values()){
-            PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getTranslationController();
-            PIDController ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(level).getThetaController();
-
-            SmartDashboard.putData("Translation PID " + level, XController);
-            SmartDashboard.putData("Theta PID " + level, ThetaController);
-        }
+        SmartDashboard.putData("Translation PID", RobotAutoConstants.TRANSLATION_PID);
+        SmartDashboard.putData("Theta PID", RobotAutoConstants.THETA_PID);
     }
 
     @Override
     public void initialize() {
-        TranslationController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getTranslationController();
-        ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).getThetaController();
-
         TranslationController.reset();
         ThetaController.reset();
 
