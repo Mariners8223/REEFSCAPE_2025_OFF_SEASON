@@ -81,7 +81,7 @@ public class MasterCommand extends Command {
         // setting the target pose for the path command
         pathCommand.setTargetPose(targetReef);
         //setting the target pose for the adjustment phase
-        homeToReef.setTargetPose(targetReef, level);
+        homeToReef.setTargetPose(targetReef);
         // homeToReefEndless.setTargetPose(targetReef);
 
         moveElevatorCommand.changeDesiredlevel(level);

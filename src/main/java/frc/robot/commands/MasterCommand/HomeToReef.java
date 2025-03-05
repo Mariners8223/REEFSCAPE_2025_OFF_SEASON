@@ -17,18 +17,15 @@ import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
-    private ElevatorConstants.ElevatorLevel desiredLevel;
 
-    private PIDController XController;
-    private PIDController YController;
-    private PIDController ThetaController;
+    private final PIDController TranslationController = RobotAutoConstants.TRANSLATION_PID;
+    private final PIDController ThetaController = RobotAutoConstants.THETA_PID;
 
     private int timer = 0;
 
     public HomeToReef(DriveBase driveBase, ReefLocation targetReef, ElevatorConstants.ElevatorLevel desiredLevel) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
-        this.desiredLevel = desiredLevel;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(driveBase);
@@ -36,50 +33,23 @@ public class HomeToReef extends Command {
 
     public void setTargetPose(ReefLocation targetPose){
         this.targetReef = targetPose;
-        this.desiredLevel = ElevatorConstants.ElevatorLevel.Bottom;
 
         Logger.recordOutput("home to reef/target Pose", targetPose);
-        Logger.recordOutput("home to reef/target Level", desiredLevel);
-        Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
-    }
-
-    public void setTargetPose(ReefLocation targetPose, ElevatorConstants.ElevatorLevel targetLevel){
-        this.targetReef = targetPose;
-        this.desiredLevel = targetLevel;
-
-        Logger.recordOutput("home to reef/target Pose", targetPose);
-        Logger.recordOutput("home to reef/target Level", targetLevel);
         Logger.recordOutput("home to reef/target Pose 2d", targetPose.getPose());
     }
 
     public static void pidTune(){
-        for(ElevatorConstants.ElevatorLevel level : ElevatorConstants.ElevatorLevel.values()){
-            PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getXController();
-            PIDController YController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getYController();
-            PIDController ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(level).getThetaController();
-
-            SmartDashboard.putData("X PID " + level, XController);
-            SmartDashboard.putData("Y PID " + level, YController);
-            SmartDashboard.putData("Theta PID " + level, ThetaController);
-        }
+        SmartDashboard.putData("Translation PID", RobotAutoConstants.TRANSLATION_PID);
+        SmartDashboard.putData("Theta PID", RobotAutoConstants.THETA_PID);
     }
 
     @Override
     public void initialize() {
-        XController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getXController();
-        YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getYController();
-        ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).getThetaController();
-
-        XController.reset();
-        YController.reset();
+        TranslationController.reset();
         ThetaController.reset();
 
-        XController.setSetpoint(targetReef.getPose().getX());
-        YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
 
-        Logger.recordOutput("home to reef/target X", XController.getSetpoint());
-        Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
         Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
 
         timer = 0;
@@ -89,8 +59,21 @@ public class HomeToReef extends Command {
     public void execute() {
         Pose2d robotPose = driveBase.getPose();
 
-        double xOutput = XController.calculate(robotPose.getX(), targetReef.getPose().getX());
-        double yOutput = YController.calculate(robotPose.getY(), targetReef.getPose().getY());
+        double distance = robotPose.getTranslation().getDistance(targetReef.getPose().getTranslation());
+
+        Logger.recordOutput("home to reef/ distance", distance);
+
+        double scalar = TranslationController.calculate(-distance);
+
+        double xError = (targetReef.getPose().getX() - robotPose.getX());
+        double yError = (targetReef.getPose().getY() - robotPose.getY());
+
+        Logger.recordOutput("home to reef/x Error", xError);
+        Logger.recordOutput("home to reef/y Error", yError);
+
+        double xOutput = scalar * xError;
+
+        double yOutput = scalar * yError;
 
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
@@ -116,8 +99,8 @@ public class HomeToReef extends Command {
         double upperLimitTheta = RobotAutoConstants.UPPER_SPEED_LIMIT_THETA;
         double lowerLimitTheta = RobotAutoConstants.LOWER_SPEED_LIMIT_THETA;
 
-        double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
-        double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
+        double maxXOutput = getClampValue(xError, upperLimitXY, lowerLimitXY);
+        double maxYOutput = getClampValue(yError, upperLimitXY, lowerLimitXY);
 
         double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
 
@@ -140,15 +123,11 @@ public class HomeToReef extends Command {
 
     @Override
     public boolean isFinished() {
-        double xError = XController.getError();
-        double yError = YController.getError();
         double thetaError = ThetaController.getError();
 
-        Logger.recordOutput("home to reef/x error", xError);
-        Logger.recordOutput("home to reef/y error", yError);
         Logger.recordOutput("home to reef/theta error", thetaError);
 
-        if(XController.atSetpoint() && YController.atSetpoint() && ThetaController.atSetpoint()){
+        if(TranslationController.atSetpoint() && ThetaController.atSetpoint()){
             timer ++;
         }
         else{
