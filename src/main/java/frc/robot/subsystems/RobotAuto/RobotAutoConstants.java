@@ -22,20 +22,23 @@ public class RobotAutoConstants {
 
         public static final double THETA_IZONE = Units.degreesToRadians(10);
 
-        public static final PIDController TRANSLATION_PID = new PIDController(30, 800, 6);
+        public static final PIDController X_PID = new PIDController(30, 600, 6);
+        public static final PIDController Y_PID = new PIDController(30, 600, 6);
         public static final PIDController THETA_PID = new PIDController(14, 3, 1);
 
         static{
-            TRANSLATION_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+            X_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+            Y_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
             THETA_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
-            TRANSLATION_PID.setIZone(0.1);
+            X_PID.setIZone(0.1);
+            Y_PID.setIZone(0.1);
             THETA_PID.setIZone(THETA_IZONE);
 
-            TRANSLATION_PID.setTolerance(XY_TOLERANCE);
+            X_PID.setTolerance(XY_TOLERANCE);
+            Y_PID.setTolerance(XY_TOLERANCE);
             THETA_PID.setTolerance(THETA_TOLERANCE);
 
-            TRANSLATION_PID.setSetpoint(0);
             THETA_PID.enableContinuousInput(-Math.PI, Math.PI);
         }
 }

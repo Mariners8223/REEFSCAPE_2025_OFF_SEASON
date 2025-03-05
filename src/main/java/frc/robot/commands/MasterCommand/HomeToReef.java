@@ -18,7 +18,8 @@ public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
 
-    private final PIDController TranslationController = RobotAutoConstants.TRANSLATION_PID;
+    private final PIDController XController = RobotAutoConstants.X_PID;
+    private final PIDController YController = RobotAutoConstants.Y_PID;
     private final PIDController ThetaController = RobotAutoConstants.THETA_PID;
 
     private int timer = 0;
@@ -39,18 +40,24 @@ public class HomeToReef extends Command {
     }
 
     public static void pidTune(){
-        SmartDashboard.putData("Translation PID", RobotAutoConstants.TRANSLATION_PID);
+        SmartDashboard.putData("X PID", RobotAutoConstants.X_PID);
+        SmartDashboard.putData("Y PID", RobotAutoConstants.Y_PID);
         SmartDashboard.putData("Theta PID", RobotAutoConstants.THETA_PID);
     }
 
     @Override
     public void initialize() {
-        TranslationController.reset();
+        XController.reset();
+        YController.reset();
         ThetaController.reset();
 
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
+        XController.setSetpoint(targetReef.getPose().getX());
+        YController.setSetpoint(targetReef.getPose().getY());
 
         Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
+        Logger.recordOutput("home to reef/target X", XController.getSetpoint());
+        Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
 
         timer = 0;
     }
@@ -61,19 +68,13 @@ public class HomeToReef extends Command {
 
         double distance = robotPose.getTranslation().getDistance(targetReef.getPose().getTranslation());
 
+        double xOutput = XController.calculate(robotPose.getX());
+        double yOutput = YController.calculate(robotPose.getY());
+
         Logger.recordOutput("home to reef/ distance", distance);
 
-        double scalar = TranslationController.calculate(-distance);
-
-        double xError = (targetReef.getPose().getX() - robotPose.getX());
-        double yError = (targetReef.getPose().getY() - robotPose.getY());
-
-        Logger.recordOutput("home to reef/x Error", xError);
-        Logger.recordOutput("home to reef/y Error", yError);
-
-        double xOutput = scalar * xError;
-
-        double yOutput = scalar * yError;
+        Logger.recordOutput("home to reef/x Error", XController.getError());
+        Logger.recordOutput("home to reef/y Error", YController.getError());
 
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
@@ -99,8 +100,8 @@ public class HomeToReef extends Command {
         double upperLimitTheta = RobotAutoConstants.UPPER_SPEED_LIMIT_THETA;
         double lowerLimitTheta = RobotAutoConstants.LOWER_SPEED_LIMIT_THETA;
 
-        double maxXOutput = getClampValue(xError, upperLimitXY, lowerLimitXY);
-        double maxYOutput = getClampValue(yError, upperLimitXY, lowerLimitXY);
+        double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
+        double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
 
         double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
 
@@ -127,7 +128,7 @@ public class HomeToReef extends Command {
 
         Logger.recordOutput("home to reef/theta error", thetaError);
 
-        if(TranslationController.atSetpoint() && ThetaController.atSetpoint()){
+        if(XController.atSetpoint() && ThetaController.atSetpoint()){
             timer ++;
         }
         else{
