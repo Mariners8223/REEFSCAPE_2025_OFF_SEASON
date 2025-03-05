@@ -18,8 +18,7 @@ public class HomeToReef extends Command {
     private ReefLocation targetReef;
     private ElevatorConstants.ElevatorLevel desiredLevel;
 
-    private PIDController XController;
-    private PIDController YController;
+    private PIDController TranslationController;
     private PIDController ThetaController;
 
     private int timer = 0;
@@ -53,32 +52,25 @@ public class HomeToReef extends Command {
 
     public static void pidTune(){
         for(ElevatorConstants.ElevatorLevel level : ElevatorConstants.ElevatorLevel.values()){
-            PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getXController();
-            PIDController YController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getYController();
+            PIDController XController = RobotAutoConstants.XY_PID_CONSTANTS.get(level).getTranslationController();
             PIDController ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(level).getThetaController();
 
             SmartDashboard.putData("X PID " + level, XController);
-            SmartDashboard.putData("Y PID " + level, YController);
             SmartDashboard.putData("Theta PID " + level, ThetaController);
         }
     }
 
     @Override
     public void initialize() {
-        XController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getXController();
-        YController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getYController();
+        TranslationController = RobotAutoConstants.XY_PID_CONSTANTS.get(desiredLevel).getTranslationController();
         ThetaController = RobotAutoConstants.THETA_PID_CONSTANTS.get(desiredLevel).getThetaController();
 
-        XController.reset();
-        YController.reset();
+        TranslationController.reset();
         ThetaController.reset();
 
-        XController.setSetpoint(targetReef.getPose().getX());
-        YController.setSetpoint(targetReef.getPose().getY());
         ThetaController.setSetpoint(targetReef.getPose().getRotation().getRadians());
 
-        Logger.recordOutput("home to reef/target X", XController.getSetpoint());
-        Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
+        Logger.recordOutput("home to reef/target X", TranslationController.getSetpoint());
         Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
 
         timer = 0;
@@ -88,8 +80,13 @@ public class HomeToReef extends Command {
     public void execute() {
         Pose2d robotPose = driveBase.getPose();
 
-        double xOutput = XController.calculate(robotPose.getX(), targetReef.getPose().getX());
-        double yOutput = YController.calculate(robotPose.getY(), targetReef.getPose().getY());
+        double distance = robotPose.getTranslation().getDistance(targetReef.getPose().getTranslation());
+
+        double scalar = TranslationController.calculate(distance);
+
+        double xOutput = scalar * (robotPose.getX() - targetReef.getPose().getX());
+
+        double yOutput = scalar * (robotPose.getY() - targetReef.getPose().getY());
 
         double thetaOutput =
             ThetaController.calculate(robotPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
@@ -118,15 +115,13 @@ public class HomeToReef extends Command {
 
     @Override
     public boolean isFinished() {
-        double xError = XController.getError();
-        double yError = YController.getError();
+        double xError = TranslationController.getError();
         double thetaError = ThetaController.getError();
 
         Logger.recordOutput("home to reef/x error", xError);
-        Logger.recordOutput("home to reef/y error", yError);
         Logger.recordOutput("home to reef/theta error", thetaError);
 
-        if(XController.atSetpoint() && YController.atSetpoint() && ThetaController.atSetpoint()){
+        if(TranslationController.atSetpoint() && ThetaController.atSetpoint()){
             timer ++;
         }
         else{

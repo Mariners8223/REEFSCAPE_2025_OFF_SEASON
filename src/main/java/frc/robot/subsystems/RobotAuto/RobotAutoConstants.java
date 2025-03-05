@@ -36,27 +36,20 @@ public class RobotAutoConstants {
                 );
 
         public static class HomeToReefPIDXY{
-            private final PIDController XController;
-            private final PIDController YController;
+            private final PIDController translationController;
 
 
             public HomeToReefPIDXY(double kp, double ki, double kd, double tolerance, double iZone){
-                XController = new PIDController(kp, ki, kd);
-                YController = new PIDController(kp, ki, kd);
+                translationController = new PIDController(kp, ki, kd);
 
-                XController.setTolerance(tolerance);
-                YController.setTolerance(tolerance);
+                translationController.setTolerance(tolerance);
+                translationController.setSetpoint(0);
 
-                XController.setIZone(iZone);
-                YController.setIZone(iZone);
+                translationController.setIZone(iZone);
             }
 
-            public PIDController getXController(){
-                return XController;
-            }
-
-            public PIDController getYController(){
-                return YController;
+            public PIDController getTranslationController(){
+                return translationController;
             }
         }
 
