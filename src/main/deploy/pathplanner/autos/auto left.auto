@@ -5,21 +5,104 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "path 3 part 1"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto left part 1"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "move l4"
+            "name": "home to reef 5"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "path to reef 4"
+            "name": "eject"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto left part 2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wait until GP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "reset elevator"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto left part 3"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -41,7 +124,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "path 3 part 2"
+                  "pathName": "auto left part 4"
                 }
               },
               {
@@ -49,26 +132,46 @@
                 "data": {
                   "name": "Wait until GP"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "reset elevator"
+                }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "path 3 part 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "move l4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path to reef 3"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto left part 5"
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -81,6 +184,12 @@
           "type": "named",
           "data": {
             "name": "eject"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "reset elevator"
           }
         }
       ]

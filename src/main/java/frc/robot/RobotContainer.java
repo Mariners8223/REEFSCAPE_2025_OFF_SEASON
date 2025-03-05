@@ -317,6 +317,10 @@ public class RobotContainer {
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
+
+        EventTrigger moveElevatorMarker = new EventTrigger("move to selected level");
+
+        NamedCommands.registerCommand("wait to move elevator", new WaitUntilCommand(moveElevatorMarker));
     }
     
 
