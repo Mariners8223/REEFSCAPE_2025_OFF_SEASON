@@ -10,7 +10,6 @@ import com.pathplanner.lib.commands.PathfindingCommand;
 import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -20,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
@@ -120,7 +120,7 @@ public class Robot extends LoggedRobot
         }
 
         SmartDashboard.putData("Field", field);
-        apriltagField = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+        apriltagField = VisionConstants.FIELD_LAYOUT;
 
         Logger.recordOutput("Zero 3D", new Pose3d());
 
