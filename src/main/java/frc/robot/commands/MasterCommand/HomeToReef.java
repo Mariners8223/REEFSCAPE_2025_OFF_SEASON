@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import org.littletonrobotics.junction.Logger;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -113,11 +114,32 @@ public class HomeToReef extends Command {
         ChassisSpeeds robotRelativeSpeeds =
                 ChassisSpeeds.fromFieldRelativeSpeeds(fieldRelativeSpeeds, driveBase.getPose().getRotation());
 
+        double upperLimitXY = RobotAutoConstants.UPPER_SPEED_LIMIT_XY;
+        double lowerLimitXY = RobotAutoConstants.LOWER_SPEED_LIMIT_XY;
+
+        double upperLimitTheta = RobotAutoConstants.UPPER_SPEED_LIMIT_THETA;
+        double lowerLimitTheta = RobotAutoConstants.LOWER_SPEED_LIMIT_THETA;
+
+        double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
+        double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
+
+        double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
+
+        robotRelativeSpeeds.vxMetersPerSecond = MathUtil.clamp(robotRelativeSpeeds.vxMetersPerSecond, -maxXOutput, maxXOutput);
+        robotRelativeSpeeds.vyMetersPerSecond = MathUtil.clamp(robotRelativeSpeeds.vyMetersPerSecond, -maxYOutput, maxYOutput);
+        robotRelativeSpeeds.omegaRadiansPerSecond = MathUtil.clamp(robotRelativeSpeeds.omegaRadiansPerSecond, -maxThetaOutput, maxThetaOutput);
+
         if(Math.abs(robotRelativeSpeeds.vxMetersPerSecond) <= XY_DEADBAND) robotRelativeSpeeds.vxMetersPerSecond = 0;
         if(Math.abs(robotRelativeSpeeds.vyMetersPerSecond) <= XY_DEADBAND) robotRelativeSpeeds.vyMetersPerSecond = 0;
         if(Math.abs(robotRelativeSpeeds.omegaRadiansPerSecond) <= THETA_DEADBAND) robotRelativeSpeeds.omegaRadiansPerSecond = 0;
 
         driveBase.drive(robotRelativeSpeeds);
+    }
+
+    private double getClampValue(double error, double upperLimit, double lowerLimit){
+        double value = Math.abs(error) * upperLimit;
+
+        return Math.max(value, lowerLimit);
     }
 
     @Override
