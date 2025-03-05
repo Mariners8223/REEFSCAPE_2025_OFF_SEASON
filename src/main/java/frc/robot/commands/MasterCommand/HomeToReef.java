@@ -120,8 +120,8 @@ public class HomeToReef extends Command {
         double upperLimitTheta = RobotAutoConstants.UPPER_SPEED_LIMIT_THETA;
         double lowerLimitTheta = RobotAutoConstants.LOWER_SPEED_LIMIT_THETA;
 
-        double maxXOutput = getClampValue(XController.getError(), upperLimitXY, lowerLimitXY);
-        double maxYOutput = getClampValue(YController.getError(), upperLimitXY, lowerLimitXY);
+        double maxXOutput = getClampValue(xError, upperLimitXY, lowerLimitXY);
+        double maxYOutput = getClampValue(yError, upperLimitXY, lowerLimitXY);
 
         double maxThetaOutput = getClampValue(ThetaController.getError(), upperLimitTheta, lowerLimitTheta);
 

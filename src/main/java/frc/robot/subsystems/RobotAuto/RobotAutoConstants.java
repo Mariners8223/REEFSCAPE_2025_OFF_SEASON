@@ -52,13 +52,9 @@ public class RobotAutoConstants {
                 translationController.setTolerance(tolerance);
                 translationController.setSetpoint(0);
 
-                XController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
-                YController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+                translationController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
-
-                translationController.setIntegratorRange(-100, 100);
-
-                // translationController.setIZone(iZone);
+                translationController.setIZone(iZone);
             }
 
             public PIDController getTranslationController(){
@@ -67,21 +63,21 @@ public class RobotAutoConstants {
         }
 
         public static class HomeToReefPIDTheta{
-            private final PIDController ThetaController;
+            private final PIDController thetaController;
 
             public HomeToReefPIDTheta(double kp, double ki, double kd, double tolerance, double iZone){
-                ThetaController = new PIDController(kp, ki, kd);
+                thetaController = new PIDController(kp, ki, kd);
 
-                ThetaController.setTolerance(tolerance);
-                ThetaController.setIZone(iZone);
+                thetaController.setTolerance(tolerance);
+                thetaController.setIZone(iZone);
 
-                ThetaController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+                thetaController.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
 
-                ThetaController.enableContinuousInput(-Math.PI, Math.PI);
+                thetaController.enableContinuousInput(-Math.PI, Math.PI);
             }
 
             public PIDController getThetaController(){
-                return ThetaController;
+                return thetaController;
             }
         }
 }
