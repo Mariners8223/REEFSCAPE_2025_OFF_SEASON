@@ -30,6 +30,9 @@ public class MoveToLevel extends Command {
     if (desiredLevel != null){
       elevator.moveMotorByPosition(desiredLevel);
     }
+    else{
+      elevator.moveMotorByPosition(ElevatorLevel.Bottom);
+    }
   }
 
   // Called once the command ends or is interrupted.

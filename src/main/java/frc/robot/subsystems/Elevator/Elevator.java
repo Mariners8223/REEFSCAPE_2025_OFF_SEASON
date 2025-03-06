@@ -26,6 +26,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void resetMotorEncoder(){
+
     io.resetMotorEncoder();
     currentLevel = ElevatorLevel.Bottom;
   }

@@ -240,7 +240,9 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.cancel();
         }
-        // moveToBottom.schedule();
+        if(RobotContainer.elevator.getDesiredLevel() != null){
+            RobotContainer.elevator.moveMotorByPosition(RobotContainer.elevator.getDesiredLevel());
+        }
     }
     
     
