@@ -22,8 +22,8 @@ public class RobotAutoConstants {
 
         public static final double THETA_IZONE = Units.degreesToRadians(10);
 
-        public static final PIDController X_PID = new PIDController(6, 12, 0.3);
-        public static final PIDController Y_PID = new PIDController(6, 12, 0.3);
+        public static final PIDController X_PID = new PIDController(5, 16, 0.3);
+        public static final PIDController Y_PID = new PIDController(5, 16, 0.3);
         public static final PIDController THETA_PID = new PIDController(14, 3, 1);
 
         static{

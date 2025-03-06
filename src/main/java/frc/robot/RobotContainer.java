@@ -53,6 +53,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -119,9 +120,9 @@ public class RobotContainer {
 
         //  configureCamera();
         if (RobotBase.isReal()) {
-            // CameraServer.startAutomaticCapture();
-            // CameraServer.getServer().getSource().
-            // CameraServer.getServer().getSource().setFPS(15);
+            CameraServer.startAutomaticCapture();
+            CameraServer.getServer().getSource().setResolution(160, 90);
+            CameraServer.getServer().getSource().setFPS(15);
         } else {
             //until we have real driver station
             SmartDashboard.putNumber("target Reef", 1);
