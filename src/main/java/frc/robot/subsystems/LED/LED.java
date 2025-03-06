@@ -4,12 +4,9 @@
 
 package frc.robot.subsystems.LED;
 
-import static edu.wpi.first.units.Units.Hertz;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
 
-import edu.wpi.first.units.FrequencyUnit;
-import edu.wpi.first.units.measure.Frequency;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.LEDPattern;
@@ -52,11 +49,15 @@ public class LED extends SubsystemBase {
     pattern = LEDPattern.gradient(GradientType.kDiscontinuous, colours);
   }
 
+  public void setMovingGradient(int speedPercent, Color... colours){
+    pattern = LEDPattern.gradient(GradientType.kContinuous, colours).scrollAtRelativeSpeed(Percent.per(Second).of(speedPercent));
+  }
+
   public void setRainbow(){
     pattern = LEDPattern.rainbow(255, 255);
   }
 
-  public void setMovingRainbow(){
-    pattern = LEDPattern.rainbow(256, 256).scrollAtRelativeSpeed(Percent.per(Second).of(20));
+  public void setMovingRainbow(int speedPercent){
+    pattern = LEDPattern.rainbow(256, 256).scrollAtRelativeSpeed(Percent.per(Second).of(speedPercent));
   }
 }

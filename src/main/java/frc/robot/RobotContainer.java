@@ -105,14 +105,8 @@ public class RobotContainer {
 
         configureDriveBindings();
         configureOperatorBinding();
-        
 
-        // ElevatorSYSID elevatorSYSID = new ElevatorSYSID(elevator);
-
-        // driveController.a().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kForward));
-        // driveController.x().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kReverse));
-        // driveController.b().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kForward));
-        // driveController.y().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kReverse));
+        startLEDs();
 
         //  configureCamera();
         if (RobotBase.isReal()) {
