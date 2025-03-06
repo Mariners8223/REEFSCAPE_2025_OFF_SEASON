@@ -16,7 +16,7 @@ public class VisionConstants {
     public static final PhotonPoseEstimator.PoseStrategy FALLBACK_STRATEGY =
             PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY;
 
-    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+    public static final AprilTagFieldLayout FIELD_LAYOUT = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
 
     public static final double maxHeightDeviation = 0.1;
     public static final double maxMultiAmbiguity = 0.3;

@@ -130,7 +130,7 @@ public class PIDFGains {
     }
 
     public PIDConstants createPIDConstants(){
-      return new PIDConstants(_kP, _kI, _kD, _iZone);
+      return new PIDConstants(_kP, _kI, _kD, Double.POSITIVE_INFINITY);
     }
 
     public PIDController createPIDController() {

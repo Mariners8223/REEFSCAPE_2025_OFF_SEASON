@@ -36,13 +36,13 @@ public class MoveToLevel extends Command {
   @Override
   public void end(boolean interrupted) {
     if(interrupted){
-      elevator.moveMotorByPosition(ElevatorLevel.Bottom);
+      // elevator.moveMotorByPosition(ElevatorLevel.Bottom);
     }
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevator.getCurrentLevel() == desiredLevel;
+    return elevator.isAtDesiredLevel();
   }
 }

@@ -7,7 +7,7 @@
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 3.0,
+  "defaultMaxAccel": 6.0,
   "defaultMaxAngVel": 360.0,
   "defaultMaxAngAccel": 360.0,
   "defaultNominalVoltage": 12.0,
@@ -31,6 +31,6 @@
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
   "robotFeatures": [
-    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.0,\"y\":-0.065},\"end\":{\"x\":0.6,\"y\":-0.065},\"strokeWidth\":0.02}}"
+    "{\"name\":\"Line\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.0,\"y\":-0.109},\"end\":{\"x\":0.6,\"y\":-0.109},\"strokeWidth\":0.02}}"
   ]
 }

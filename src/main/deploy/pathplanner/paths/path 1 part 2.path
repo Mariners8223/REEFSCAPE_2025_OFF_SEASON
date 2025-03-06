@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.913703246072854,
-        "y": 2.8535918375635445
+        "x": 3.8895339393064527,
+        "y": 2.875877428397091
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5998896285860247,
-        "y": 2.647481595880719
+        "x": 3.5757203218196234,
+        "y": 2.6697671867142656
       },
       "isLocked": false,
       "linkedName": "reef 11"
     },
     {
       "anchor": {
-        "x": 1.0050328638646508,
-        "y": 0.9125504134537334
+        "x": 1.02375,
+        "y": 1.0025
       },
       "prevControl": {
-        "x": 0.7970281622012554,
-        "y": 0.7738635572418997
+        "x": 0.8157452983366045,
+        "y": 0.8638131437881662
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +41,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,

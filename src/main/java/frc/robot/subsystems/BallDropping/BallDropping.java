@@ -47,5 +47,8 @@ public class BallDropping extends SubsystemBase{
     public void periodic() {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
+
+        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().toString();
+        Logger.recordOutput("BallDropping/Current Command", currentCommandName);
     }
 }

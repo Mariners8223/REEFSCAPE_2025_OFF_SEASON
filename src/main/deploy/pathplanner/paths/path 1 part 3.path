@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0050328638646508,
-        "y": 0.9125504134537334
+        "x": 1.02375,
+        "y": 1.0025
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.12975,
-        "y": 1.8019999999999994
+        "x": 3.1484671361353493,
+        "y": 1.8919495865462659
       },
       "isLocked": false,
       "linkedName": "feeder 2"
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 360.0,
     "maxAngularAcceleration": 360.0,
     "nominalVoltage": 12.0,

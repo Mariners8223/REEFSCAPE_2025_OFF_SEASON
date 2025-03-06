@@ -18,6 +18,8 @@ public class EndEffector extends SubsystemBase {
     private final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
     private boolean isGpLoaded;
 
+    private double funnelTarget;
+
     public EndEffector() {
         if (Robot.isSimulation()) {
             io = new EndEffectorIOSim();
@@ -38,6 +40,8 @@ public class EndEffector extends SubsystemBase {
 
     public void moveFunnel(double target) {
         io.moveFunnel(target);
+        Logger.recordOutput("EndEffector/funnel target", target);
+        funnelTarget = target;
     }
 
     public void setFunnelVoltage(double voltage) {
@@ -58,13 +62,17 @@ public class EndEffector extends SubsystemBase {
     }
 
     public void setLoadedValue(boolean value) {
-        Logger.recordOutput("EndEffector/gp loaded", value);
-        SmartDashboard.putBoolean("Is Gp Loaded", value);
+        Logger.recordOutput("EndEffector/GP loaded", value);
+        SmartDashboard.putBoolean("Is GP Loaded", value);
         isGpLoaded = value;
     }
 
     public double getFunnelPosition() {
         return inputs.funnelPosition;
+    }
+
+    public double getFunnelTarget(){
+        return funnelTarget;
     }
 
     public boolean isGpLoaded() {
@@ -89,11 +97,7 @@ public class EndEffector extends SubsystemBase {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
 
-        String currentCommandName = "None";
-        if(getCurrentCommand() != null) {
-            currentCommandName = getCurrentCommand().getName();
-        }
-
-        Logger.recordOutput("Current Command", currentCommandName);
+        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().getName();
+        Logger.recordOutput("EndEffector/Current Command", currentCommandName);
     }
 }
