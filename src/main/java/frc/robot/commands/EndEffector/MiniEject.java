@@ -12,7 +12,6 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 
 import java.util.function.Supplier;
 

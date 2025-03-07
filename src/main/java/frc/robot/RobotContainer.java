@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.Constants.RobotType;
 import frc.robot.commands.BallDropping.BallDropOff;
 import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
@@ -137,7 +138,7 @@ public class RobotContainer {
             }));
         }
 
-        HomeToReef.pidTune();
+        if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
     }
 
     public static void configureOperatorBinding() {
