@@ -298,12 +298,16 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("move l4", new MoveToLevel(elevator, ElevatorLevel.L4));
 
+//        NamedCommands.registerCommand("eject", new SequentialCommandGroup(
+//                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))),
+//                eject,
+//                new MoveToLevel(elevator, ElevatorLevel.Bottom)
+//        ));
+
         Eject eject = new Eject(endEffector, MotorPower.L1_LEFT);
-        NamedCommands.registerCommand("eject", new SequentialCommandGroup(
-                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))),
-                eject,
-                new MoveToLevel(elevator, ElevatorLevel.Bottom)
-        ));
+
+        NamedCommands.registerCommand("eject", eject.beforeStarting(() ->
+                eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))));
 
         NamedCommands.registerCommand("ball drop l2", new BallDropLow(ballDropping));
         NamedCommands.registerCommand("ball drop l3", new BallDropHigh(ballDropping));
