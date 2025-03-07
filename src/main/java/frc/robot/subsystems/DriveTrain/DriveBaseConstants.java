@@ -25,19 +25,19 @@ public class DriveBaseConstants {
         public static final ModuleConfig MODULE_CONFIG = DevBotConstants.MODULE_CONFIG;
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
-                53.3,
+                48,
                 5.502692,
                 MODULE_CONFIG,
                 MODULE_TRANSLATIONS);
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                3.5,
+                3,
                 6, //TODO find a good value for this
                 5,
-                25); //the constraints for pathPlanner
+                10); //the constraints for pathPlanner
 
         public static final PIDFGains THETA_PID = new PIDFGains(2, 2, 0.05); //the pid gains for the PID Controller of the robot angle, units are radians per second
-        public static final PIDFGains XY_PID = new PIDFGains(3, 0, 0);//the pid gains for the pid controller of the robot's velocity, units are meters per second
+        public static final PIDFGains XY_PID = new PIDFGains(2, 0.2, 0.1);//the pid gains for the pid controller of the robot's velocity, units are meters per second
     }
 
     public static final int PIGEON_ID = 2;

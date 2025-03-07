@@ -16,59 +16,22 @@
     },
     {
       "anchor": {
-        "x": 5.340275946511728,
-        "y": 2.1878060136975783
+        "x": 5.166700819672132,
+        "y": 2.2688012295081954
       },
       "prevControl": {
-        "x": 5.746342575554994,
-        "y": 1.91155124306747
-      },
-      "nextControl": {
-        "x": 5.121328969015124,
-        "y": 2.3367597634577812
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 4.898922166433519,
-        "y": 2.7621874414797447
-      },
-      "prevControl": {
-        "x": 5.118343196337412,
-        "y": 2.3936566805259294
+        "x": 5.386121849576025,
+        "y": 1.90027046855438
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "reef 10"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.8318703578663109,
-      "maxWaypointRelativePos": 2.0,
-      "constraints": {
-        "maxVelocity": 4.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 360.0,
-        "maxAngularAcceleration": 360.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "move to selected level",
-      "waypointRelativePos": 1.4307116104868873,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
     "maxAcceleration": 6.0,

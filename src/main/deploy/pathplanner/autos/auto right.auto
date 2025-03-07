@@ -5,35 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "auto right part 1"
-                }
-              },
-              {
-                "type": "sequential",
-                "data": {
-                  "commands": [
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "wait to move elevator"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "move l4"
-                      }
-                    }
-                  ]
-                }
-              }
-            ]
+            "pathName": "auto right part 1"
           }
         },
         {

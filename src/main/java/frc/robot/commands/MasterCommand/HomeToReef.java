@@ -1,7 +1,6 @@
 package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Elevator.ElevatorConstants;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -24,7 +23,7 @@ public class HomeToReef extends Command {
 
     private int timer = 0;
 
-    public HomeToReef(DriveBase driveBase, ReefLocation targetReef, ElevatorConstants.ElevatorLevel desiredLevel) {
+    public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
         // each subsystem used by the command must be passed into the
@@ -60,6 +59,15 @@ public class HomeToReef extends Command {
         Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
 
         timer = 0;
+    }
+
+    public boolean isOutOfTolarance(){
+        Pose2d currentPose = driveBase.getPose();
+
+        return Math.abs(targetReef.getPose().getX() - currentPose.getX()) > XController.getErrorTolerance() ||
+            Math.abs(targetReef.getPose().getY() - currentPose.getY()) > YController.getErrorTolerance() ||
+            Math.abs(targetReef.getPose().getRotation().getRadians() - currentPose.getRotation().getRadians())
+            > ThetaController.getErrorTolerance();
     }
 
     @Override
@@ -128,7 +136,7 @@ public class HomeToReef extends Command {
 
         Logger.recordOutput("home to reef/theta error", thetaError);
 
-        if(XController.atSetpoint() && ThetaController.atSetpoint()){
+        if(XController.atSetpoint() && YController.atSetpoint() && ThetaController.atSetpoint()){
             timer ++;
         }
         else{

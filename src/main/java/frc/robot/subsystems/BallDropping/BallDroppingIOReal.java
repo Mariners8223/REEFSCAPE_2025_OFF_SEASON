@@ -36,6 +36,8 @@ public class BallDroppingIOReal implements BallDroppingIO{
         motor.setMotorInverted(BallDroppingConstants.AngleMotor.IS_INVERTED);
         
         motor.setMaxMinOutput(3, 3);
+
+        motor.setMotorIdleMode(true);
         
         return motor;
     }

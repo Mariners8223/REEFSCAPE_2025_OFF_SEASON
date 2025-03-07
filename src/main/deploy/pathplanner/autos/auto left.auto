@@ -9,9 +9,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "auto left part 1"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto left part 1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 5"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -34,12 +47,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 5"
           }
         },
         {

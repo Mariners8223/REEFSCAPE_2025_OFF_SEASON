@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants;
 import frc.robot.subsystems.DriveTrain.DriveBase;
-import frc.robot.subsystems.Elevator.ElevatorConstants;
 
 import java.util.Set;
 import java.util.function.BooleanSupplier;
@@ -25,7 +24,7 @@ public class RobotToReef extends Command {
         this.targetReefSupplier = targetReefSupplier;
 
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1);
-        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1, ElevatorConstants.ElevatorLevel.Bottom);
+        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
 
         BooleanSupplier isRobotFarFromTarget = () -> MasterCommand.isRobotFarFromTarget(driveBase.getPose(), targetReefSupplier.get().getPose());
 

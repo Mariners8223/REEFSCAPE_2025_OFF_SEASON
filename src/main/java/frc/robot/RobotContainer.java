@@ -277,7 +277,7 @@ public class RobotContainer {
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
                 new WaitCommand(0.5),
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
-        ));
+        ).ignoringDisable(true));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, Direcation.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
@@ -311,10 +311,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         for (ReefLocation reef : ReefLocation.values()) {
-            HomeToReef homeToReef = new HomeToReef(driveBase, reef, ElevatorLevel.Bottom);
+            HomeToReef homeToReef = new HomeToReef(driveBase, reef);
 
             NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1),
-                    homeToReef.beforeStarting(() -> homeToReef.setTargetPose(reef)));
+                    homeToReef.onlyIf(homeToReef::isOutOfTolarance));
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
