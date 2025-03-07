@@ -5,15 +5,48 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "auto right part 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 10"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto right part 1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 10"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -52,9 +85,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "auto right part 3"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto right part 3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 11"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -77,12 +123,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 11"
           }
         },
         {
@@ -121,9 +161,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "auto right part 5"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto right part 5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 12"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -146,12 +199,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 12"
           }
         },
         {

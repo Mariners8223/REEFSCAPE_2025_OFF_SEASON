@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0595650016520026,
-        "y": 0.9798809101060066
+        "x": 1.502861201298701,
+        "y": 0.5135754870129869
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.1556887936315077,
-        "y": 1.4783491654834415
+        "x": 2.4786525974025975,
+        "y": 1.1759740259740261
       },
       "isLocked": false,
-      "linkedName": "feeder 2"
+      "linkedName": null
     },
     {
       "anchor": {
@@ -50,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "move to selected level",
-      "waypointRelativePos": 1.0037453183520613,
+      "waypointRelativePos": 1.7602996254681638,
       "endWaypointRelativePos": null,
       "command": null
     }
