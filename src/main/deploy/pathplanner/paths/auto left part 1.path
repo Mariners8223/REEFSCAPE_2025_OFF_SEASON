@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.496913371458373,
-        "y": 5.781147237913643
+        "x": 5.676684253246753,
+        "y": 6.111911525974026
       },
       "prevControl": {
-        "x": 6.221959511089311,
-        "y": 6.6082237533800035
+        "x": 6.401730392877692,
+        "y": 6.938988041440386
       },
       "nextControl": {
-        "x": 5.218741444005222,
-        "y": 5.463830234370087
+        "x": 5.398512325793603,
+        "y": 5.79459452243047
       },
       "isLocked": false,
       "linkedName": null
@@ -50,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "move to selected level",
-      "waypointRelativePos": 1.7231600270087568,
+      "waypointRelativePos": 1.7958801498127306,
       "endWaypointRelativePos": null,
       "command": null
     }

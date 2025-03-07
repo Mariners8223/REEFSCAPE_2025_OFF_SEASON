@@ -85,9 +85,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "auto left part 3"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto left part 3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 4"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -110,12 +123,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 4"
           }
         },
         {
@@ -154,9 +161,22 @@
           "data": {
             "commands": [
               {
-                "type": "path",
+                "type": "sequential",
                 "data": {
-                  "pathName": "auto left part 5"
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto left part 5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 3"
+                      }
+                    }
+                  ]
                 }
               },
               {
@@ -179,12 +199,6 @@
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 3"
           }
         },
         {
