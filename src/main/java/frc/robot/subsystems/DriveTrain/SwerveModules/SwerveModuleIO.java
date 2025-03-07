@@ -13,6 +13,8 @@ public abstract class SwerveModuleIO{
         public SwerveModuleState currentState = new SwerveModuleState();
 
         public double drivePositionMeters = 0.0;
+
+        public String magentHleath;
     }
 
     /**
@@ -108,6 +110,7 @@ public abstract class SwerveModuleIO{
 
         canCoder.getPosition().setUpdateFrequency(updateRate);
         canCoder.getVelocity().setUpdateFrequency(updateRate);
+        canCoder.getMagnetHealth().setUpdateFrequency(updateRate);
 
 
         canCoder.optimizeBusUtilization();

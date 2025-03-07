@@ -1,12 +1,15 @@
 package frc.robot.subsystems.DriveTrain.SwerveModules;
 
 import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.signals.MagnetHealthValue;
+
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.util.MarinersController.*;
 
 public class SwerveModuleIODevBot extends SwerveModuleIO {
     private final MarinersController driveMotor;
     private final MarinersController steerMotor;
+    private final CANcoder absEncoder;
 
     private final double DRIVE_KA;
 
@@ -50,7 +53,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
         steerMotor.setCurrentLimits(30, 40);
 
-        CANcoder absEncoder = configCANCoder(constants.ABSOLUTE_ENCODER_ID, constants.ABSOLUTE_ZERO_OFFSET, (int) steerMotor.RUN_HZ);
+        absEncoder = configCANCoder(constants.ABSOLUTE_ENCODER_ID, constants.ABSOLUTE_ZERO_OFFSET, (int) steerMotor.RUN_HZ);
 
         steerMotor.setMeasurements(new MarinersMeasurementsCTRE(
                 absEncoder.getPosition(),
@@ -65,6 +68,10 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
         inputs.currentState.speedMetersPerSecond = driveMotor.getVelocity();
 
         inputs.drivePositionMeters = driveMotor.getPosition();
+
+        MagnetHealthValue value = absEncoder.getMagnetHealth().getValue();
+
+        inputs.magentHleath = value.name();
     }
 
     @Override
