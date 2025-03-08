@@ -313,8 +313,10 @@ public class RobotContainer {
 
             // .onlyIf(homeToReef::isOutOfTolarance))
 
-            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1),
-                    homeToReef.andThen(new InstantCommand(() -> robotAuto.setSelectedReef(reef))));
+            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1), homeToReef);
+
+            NamedCommands.registerCommand("set target reef " + (reef.ordinal() + 1), 
+                new InstantCommand(() -> robotAuto.setSelectedReef(reef)));
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));

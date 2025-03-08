@@ -13,6 +13,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "set target reef 5"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "auto left part 1"
@@ -89,6 +95,12 @@
                 "data": {
                   "commands": [
                     {
+                      "type": "named",
+                      "data": {
+                        "name": "set target reef 4"
+                      }
+                    },
+                    {
                       "type": "path",
                       "data": {
                         "pathName": "auto left part 3"
@@ -164,6 +176,12 @@
                 "type": "sequential",
                 "data": {
                   "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "set target reef 3"
+                      }
+                    },
                     {
                       "type": "path",
                       "data": {

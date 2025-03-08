@@ -50,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "move to selected level",
-      "waypointRelativePos": 1.1613774476705234,
+      "waypointRelativePos": 0.7292370020256582,
       "endWaypointRelativePos": null,
       "command": null
     }
