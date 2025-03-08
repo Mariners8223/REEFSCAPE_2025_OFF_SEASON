@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.Elastic;
 import frc.util.LocalADStarAK;
@@ -215,6 +216,7 @@ public class Robot extends LoggedRobot
         autonomousCommand = RobotContainer.getAutoCommand();
 
         Elastic.selectTab(1);
+        RobotContainer.robotAuto.setSelectedLevel(ElevatorLevel.L4);
         
         if (autonomousCommand != null)
         {
@@ -240,7 +242,9 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.cancel();
         }
-        // moveToBottom.schedule();
+        if(RobotContainer.elevator.getDesiredLevel() != null){
+            RobotContainer.elevator.moveMotorByPosition(RobotContainer.elevator.getDesiredLevel());
+        }
     }
     
     

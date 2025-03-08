@@ -43,7 +43,7 @@ public class MasterCommand extends Command {
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1); // setting the default target pose
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
-        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1, ElevatorConstants.ElevatorLevel.Bottom);
+        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         // eject phase (releasing the game piece)

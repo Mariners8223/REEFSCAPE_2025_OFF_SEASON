@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.Constants.RobotType;
 import frc.robot.commands.BallDropping.BallDropOff;
 import frc.robot.commands.BallDropping.BallDropOnForHigh;
 import frc.robot.commands.BallDropping.BallDropOnForLow;
@@ -137,7 +138,7 @@ public class RobotContainer {
             }));
         }
 
-        HomeToReef.pidTune();
+        if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
     }
 
     public static void configureOperatorBinding() {
@@ -185,7 +186,7 @@ public class RobotContainer {
         operatorController.axisLessThan(2, -0.5).and(() ->
                 endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
-        new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded())
+        new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
                 .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
     }
 
@@ -276,7 +277,7 @@ public class RobotContainer {
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
                 new WaitCommand(0.5),
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
-        ));
+        ).ignoringDisable(true));
 
         driveController.povRight().whileTrue(new MinorAdjust(driveBase, Direcation.RIGHT));
         driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
@@ -298,11 +299,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("move l4", new MoveToLevel(elevator, ElevatorLevel.L4));
 
         Eject eject = new Eject(endEffector, MotorPower.L1_LEFT);
-        NamedCommands.registerCommand("eject", new SequentialCommandGroup(
-                new InstantCommand(() -> eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))),
-                eject,
-                new MoveToLevel(elevator, ElevatorLevel.Bottom)
-        ));
+
+        NamedCommands.registerCommand("eject", eject.beforeStarting(() ->
+                eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))));
 
         NamedCommands.registerCommand("ball drop l2", new BallDropLow(ballDropping));
         NamedCommands.registerCommand("ball drop l3", new BallDropHigh(ballDropping));
@@ -310,13 +309,21 @@ public class RobotContainer {
         NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         for (ReefLocation reef : ReefLocation.values()) {
-            HomeToReef homeToReef = new HomeToReef(driveBase, reef, ElevatorLevel.Bottom);
+            HomeToReef homeToReef = new HomeToReef(driveBase, reef);
 
-            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1),
-                    homeToReef.beforeStarting(() -> homeToReef.setTargetPose(reef)));
+            // .onlyIf(homeToReef::isOutOfTolarance))
+
+            NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1), homeToReef);
+
+            NamedCommands.registerCommand("set target reef " + (reef.ordinal() + 1), 
+                new InstantCommand(() -> robotAuto.setSelectedReef(reef)));
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
+
+        EventTrigger moveElevatorMarker = new EventTrigger("move to selected level");
+
+        NamedCommands.registerCommand("wait to move elevator", new WaitUntilCommand(moveElevatorMarker));
     }
     
 

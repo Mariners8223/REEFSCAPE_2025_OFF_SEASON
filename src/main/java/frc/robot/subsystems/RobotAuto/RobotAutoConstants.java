@@ -15,15 +15,15 @@ public class RobotAutoConstants {
         public static final double XY_DEADBAND = 0;
         public static final double THETA_DEADBAND = 0.4;
 
-        public static final double XY_TOLERANCE = 0.0105;
+        public static final double XY_TOLERANCE = 0.015;
         public static final double THETA_TOLERANCE = Units.degreesToRadians(2);
 
         public static final double FAR_FROM_TARGET_DISTANCE = 1;
 
         public static final double THETA_IZONE = Units.degreesToRadians(10);
 
-        public static final PIDController X_PID = new PIDController(5, 10, 0.3);
-        public static final PIDController Y_PID = new PIDController(5, 10, 0.3);
+        public static final PIDController X_PID = new PIDController(8, 9, 0.3);
+        public static final PIDController Y_PID = new PIDController(8, 9, 0.3);
         public static final PIDController THETA_PID = new PIDController(14, 3, 1);
 
         static{

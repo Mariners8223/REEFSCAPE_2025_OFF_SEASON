@@ -3,42 +3,51 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.8581742280206295,
-        "y": 5.667100292220136
+        "x": 4.071422852463314,
+        "y": 5.292553073390386
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.9831742280206295,
-        "y": 5.450593941274026
+        "x": 3.6293683724129773,
+        "y": 5.484524557456499
+      },
+      "isLocked": false,
+      "linkedName": "reef 4"
+    },
+    {
+      "anchor": {
+        "x": 2.1883665151133753,
+        "y": 6.52241006346945
+      },
+      "prevControl": {
+        "x": 2.3607705332636084,
+        "y": 6.341366271734814
+      },
+      "nextControl": {
+        "x": 1.6492065017885822,
+        "y": 7.088589287198206
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.071422852463314,
-        "y": 5.292553073390386
+        "x": 1.4574431988405072,
+        "y": 7.30996798962202
       },
       "prevControl": {
-        "x": 3.9464228524633143,
-        "y": 5.509059424336495
+        "x": 1.6710522528588534,
+        "y": 7.0830535779933665
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "reef 4"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "move to selected level",
-      "waypointRelativePos": 0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 6.0,
@@ -48,13 +57,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.0,
-    "rotation": -59.99999999999999
+    "velocity": 0.3,
+    "rotation": -54.462
   },
   "reversed": false,
-  "folder": "path to...",
+  "folder": "Auto Left",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true

@@ -3,29 +3,45 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.577399395923571,
-        "y": 5.355765823624698
+        "x": 1.570163930666994,
+        "y": 0.6420216077361522
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.452399395923571,
-        "y": 5.139259472678589
+        "x": 2.7809999696280325,
+        "y": 0.7915954713725161
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.364088008397529,
-        "y": 5.002548669962689
+        "x": 3.433076298702186,
+        "y": 2.144642857144504
       },
       "prevControl": {
-        "x": 5.489088008397529,
-        "y": 5.219055020908798
+        "x": 3.045335501479229,
+        "y": 1.5425708542196266
+      },
+      "nextControl": {
+        "x": 3.6262925919332045,
+        "y": 2.4446631838588693
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.8895339393064527,
+        "y": 2.875877428397091
+      },
+      "prevControl": {
+        "x": 3.767836850649351,
+        "y": 2.6360998376623375
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "reef 6"
+      "linkedName": "reef 11"
     }
   ],
   "rotationTargets": [],
@@ -34,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "move to selected level",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.7292370020256582,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -49,13 +65,13 @@
   },
   "goalEndState": {
     "velocity": 0.0,
-    "rotation": -119.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "path to...",
+  "folder": "auto right",
   "idealStartingState": {
-    "velocity": 0.0,
-    "rotation": -119.99999999999999
+    "velocity": 0,
+    "rotation": 52.8690755517905
   },
   "useDefaultConstraints": true
 }

@@ -34,8 +34,8 @@ public class MiniEject extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double rightValue = 0.6;
-    double leftValue = 0.6;
+    double rightValue = 0.4;
+    double leftValue = 0.4;
 
     currentLevel = levelSupplier.get();
 

@@ -5,27 +5,48 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "path 1 part 1"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "move l4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path to reef 11"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 11"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto right part 1"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 10"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
@@ -41,7 +62,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "path 1 part 2"
+                  "pathName": "auto right part 2"
                 }
               },
               {
@@ -49,38 +70,147 @@
                 "data": {
                   "name": "Wait until GP"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "reset elevator"
+                }
               }
             ]
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "path 1 part 3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "move l4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "path to reef 12"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "home to reef 12"
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto right part 3"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 11"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
             "name": "eject"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "auto right part 4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Wait until GP"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "reset elevator"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "auto right part 5"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "home to reef 12"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "wait to move elevator"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "move l4"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "eject"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "reset elevator"
           }
         }
       ]
