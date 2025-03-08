@@ -107,14 +107,6 @@ public class RobotContainer {
         configChooser();
         startLEDs();
 
-        // driveController.start().onTrue(driveBase.resetOnlyDirection());
-
-        // DriveBaseSYSID driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
-
-        // driveController.a().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kForward));
-        // driveController.b().whileTrue(driveBaseSYSID.getDriveMotorsRoutineDynamic(Direction.kReverse));
-        // driveController.x().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kForward));
-        // driveController.y().whileTrue(driveBaseSYSID.getDriveMotorsRoutineQuasistatic(Direction.kReverse));
         configureDriveBindings();
         configureOperatorBinding();
 
