@@ -311,8 +311,10 @@ public class RobotContainer {
         for (ReefLocation reef : ReefLocation.values()) {
             HomeToReef homeToReef = new HomeToReef(driveBase, reef);
 
+            // .onlyIf(homeToReef::isOutOfTolarance))
+
             NamedCommands.registerCommand("home to reef " + (reef.ordinal() + 1),
-                    homeToReef.onlyIf(homeToReef::isOutOfTolarance));
+                    homeToReef.andThen(new InstantCommand(() -> robotAuto.setSelectedReef(reef))));
         }
 
         NamedCommands.registerCommand("Wait until GP", new Intake(endEffector));
