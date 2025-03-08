@@ -9,7 +9,7 @@
       "prevControl": null,
       "nextControl": {
         "x": 2.573082932101338,
-        "y": 1.2780592860834343
+        "y": 1.2780592860834346
       },
       "isLocked": false,
       "linkedName": null
@@ -50,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "move to selected level",
-      "waypointRelativePos": 1.7602996254681638,
+      "waypointRelativePos": 1.101958136394346,
       "endWaypointRelativePos": null,
       "command": null
     }
