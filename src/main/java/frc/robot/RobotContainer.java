@@ -186,8 +186,8 @@ public class RobotContainer {
         operatorController.axisLessThan(2, -0.5).and(() ->
                 endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
-        new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
-                .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
+        // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
+        //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
     }
 
     private static boolean isRobotInClimbArea(){
@@ -251,6 +251,8 @@ public class RobotContainer {
 
         Trigger semiAuto = driveController.a();
 
+        Trigger undoGP = driveController.y();
+
         // main cycle
         mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady).withName("Master Command"));
         mainCycleTrigger.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
@@ -272,6 +274,8 @@ public class RobotContainer {
         semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
+
+        undoGP.onTrue(new InstantCommand(() -> endEffector.setLoadedValue(false)));
 
         new Trigger(isCycleReady).onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),

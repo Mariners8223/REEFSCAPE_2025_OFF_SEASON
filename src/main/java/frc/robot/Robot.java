@@ -75,11 +75,12 @@ public class Robot extends LoggedRobot
             switch (Constants.ROBOT_TYPE){
                 case DEVELOPMENT -> {
                     Logger.addDataReceiver(new NT4Publisher());
+                    break;
                 }
 
-                case COMPETITION -> {
-                    Logger.addDataReceiver(new WPILOGWriter("/U"));
-                }
+                // case COMPETITION -> {
+                //     // Logger.addDataReceiver(new WPILOGWriter("/U"));
+                // }
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
             }
