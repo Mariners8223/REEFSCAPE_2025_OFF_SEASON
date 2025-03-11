@@ -69,10 +69,11 @@ public class Robot extends LoggedRobot
                 break;
         }
 
+        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+
         if(isReal()){
             switch (Constants.ROBOT_TYPE){
                 case DEVELOPMENT -> {
-                    Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
                     Logger.addDataReceiver(new NT4Publisher());
                 }
 
