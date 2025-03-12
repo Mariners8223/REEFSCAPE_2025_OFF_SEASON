@@ -59,6 +59,8 @@ public class HomeToReef extends Command {
         Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
 
         timer = 0;
+
+        driveBase.drive(new ChassisSpeeds());
     }
 
     public boolean isOutOfTolarance(){

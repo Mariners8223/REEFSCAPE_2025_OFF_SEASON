@@ -7,10 +7,10 @@ import edu.wpi.first.math.util.Units;
 public class RobotAutoConstants {
 
         public static final double LOWER_SPEED_LIMIT_XY = 1.5;
-        public static final double UPPER_SPEED_LIMIT_XY = 3;
+        public static final double UPPER_SPEED_LIMIT_XY = 3 * 1.1;
 
         public static double LOWER_SPEED_LIMIT_THETA = 1;
-        public static final double UPPER_SPEED_LIMIT_THETA = 4;
+        public static final double UPPER_SPEED_LIMIT_THETA = 4 * 1.1;
 
         public static final double XY_DEADBAND = 0;
         public static final double THETA_DEADBAND = 0.4;
