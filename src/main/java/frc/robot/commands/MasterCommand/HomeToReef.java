@@ -54,6 +54,12 @@ public class HomeToReef extends Command {
         XController.setSetpoint(targetReef.getPose().getX());
         YController.setSetpoint(targetReef.getPose().getY());
 
+        Pose2d currentPose = driveBase.getPose();
+
+        XController.calculate(currentPose.getX(), targetReef.getPose().getX());
+        YController.calculate(currentPose.getY(), targetReef.getPose().getY());
+        ThetaController.calculate(currentPose.getRotation().getRadians(), targetReef.getPose().getRotation().getRadians());
+
         Logger.recordOutput("home to reef/target Theta", ThetaController.getSetpoint());
         Logger.recordOutput("home to reef/target X", XController.getSetpoint());
         Logger.recordOutput("home to reef/target Y", YController.getSetpoint());
