@@ -9,25 +9,25 @@ import frc.util.PIDFGains;
 public enum DevBotConstants {
     FRONT_LEFT(6, 10, 14,
             false, false, -0.361328125,
-            new PIDFGains(6, 0, 0, 1.8749), //Drive motor PID
+            new PIDFGains(6, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.15113, 1.9058, 0.14576, 0.35464, 1.7245, 0.23146),
 
     FRONT_RIGHT(12, 4, 5,
     false, false, 0.09130859375,
-            new PIDFGains(6, 0, 0, 1.8552), //Drive motor PID
+            new PIDFGains(6, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.15113, 1.9058, 0.14576, 0.28713, 1.6793, 0.17791),
 
     BACK_LEFT(9, 7, 11,
     false, false, -0.00244140625,
-            new PIDFGains(6, 0, 0, 1.9608), //Drive motor PID
+            new PIDFGains(6, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.10073, 1.8816, 0.12503, 0.22659, 1.7941, 0.39017),
 
     BACK_RIGHT(3, 13, 8,
     false, false, -0.3974609375,
-            new PIDFGains(6, 0, 0, 1.8443), //Drive motor PID
+            new PIDFGains(6, 0, 0), //Drive motor PID
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.16066, 1.6962, 0.62667, 0.43868, 1.8036, 0.35004);
 

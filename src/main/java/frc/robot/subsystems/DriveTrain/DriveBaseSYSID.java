@@ -16,9 +16,18 @@ public class DriveBaseSYSID {
 
     private final SysIdRoutine ThetaRoutine;
 
+    private SysIdRoutine.Direction currentDirection = SysIdRoutine.Direction.kForward;
+
     public DriveBaseSYSID(DriveBase driveBase, CommandGenericHID controller) {
 
-        Supplier<Rotation2d> controllerAngle = () -> new Rotation2d(-controller.getRawAxis(1), -controller.getRawAxis(0));
+
+        Supplier<Rotation2d> controllerAngle = () -> {
+            Rotation2d angle = new Rotation2d(-controller.getRawAxis(1), -controller.getRawAxis(0));
+
+            if(currentDirection == SysIdRoutine.Direction.kReverse) return angle.unaryMinus();
+            return angle;
+        };
+
 
         steerMotorsRoutine = new SysIdRoutine(
                 new SysIdRoutine.Config(
@@ -104,7 +113,7 @@ public class DriveBaseSYSID {
      * @return the command to run the routine
      */
     public Command getDriveMotorsRoutineDynamic(SysIdRoutine.Direction direction) {
-        return driveMotorsRoutine.dynamic(direction);
+        return driveMotorsRoutine.dynamic(direction).beforeStarting(() -> currentDirection = direction);
     }
 
     /**
@@ -134,7 +143,7 @@ public class DriveBaseSYSID {
      * @return the command to run the routine
      */
     public Command getDriveMotorsRoutineQuasistatic(SysIdRoutine.Direction direction) {
-        return driveMotorsRoutine.quasistatic(direction);
+        return driveMotorsRoutine.quasistatic(direction).beforeStarting(() -> currentDirection = direction);
     }
 
     /**
