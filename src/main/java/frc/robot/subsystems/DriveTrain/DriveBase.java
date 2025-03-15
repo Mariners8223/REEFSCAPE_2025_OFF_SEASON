@@ -135,13 +135,13 @@ public class DriveBase extends SubsystemBase {
 
         SmartDashboard.putData("Gyro", gyro);
 
-        RobotConfig config;
-        try {
-            config = RobotConfig.fromGUISettings();
-        } catch (IOException | ParseException e) {
-            config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
-            DriverStation.reportError("pathplanner angry " + e.getMessage(), false);
-        }
+        RobotConfig config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
+//        try { //TODO: check if code setting work
+//            config = RobotConfig.fromGUISettings();
+//        } catch (IOException | ParseException e) {
+//            config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
+//            DriverStation.reportError("pathplanner angry " + e.getMessage(), false);
+//        }
 
         PathFollowingController pathPlannerPIDController = new PPHolonomicDriveController(
                 DriveBaseConstants.PathPlanner.XY_PID.createPIDConstants(),
