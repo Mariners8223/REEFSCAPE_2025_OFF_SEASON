@@ -36,7 +36,7 @@ public enum DevBotConstants {
     public static final double WHEEL_RADIUS_METERS = 0.0508;
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
     public static final double MAX_WHEEL_LINEAR_VELOCITY = 4;
-    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 100;
+    public static final int DRIVE_MOTOR_CURRENT_LIMIT = 112;
     public static final int DRIVE_MOTOR_CURRENT_THRESHOLD = 60;
 
     //acceleration and jerk constraints for the drive motor
