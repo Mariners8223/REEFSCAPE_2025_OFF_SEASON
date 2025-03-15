@@ -205,11 +205,12 @@ public class MarinersTalonFX extends MarinersController {
 
         CurrentLimitsConfigs limit = config.CurrentLimits;
 
-        limit.SupplyCurrentLowerLimit = currentLimit;
+        limit.StatorCurrentLimit = currentLimit;
 
         limit.SupplyCurrentLimit = currentThreshold;
 
         limit.SupplyCurrentLimitEnable = true;
+        limit.StatorCurrentLimitEnable = true;
 
         StatusCode error = motor.getConfigurator().apply(limit);
         reportError("Error setting current limits", error);
