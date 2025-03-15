@@ -253,8 +253,6 @@ public class RobotContainer {
         // Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
 
         Trigger mainCycleTrigger = driveController.leftTrigger();
-        Trigger leftFeeder = driveController.leftBumper();
-        Trigger rightFeeder = driveController.rightBumper();
 
         Trigger moveElevator = driveController.x();
         Trigger onlyRobotToReef = driveController.b();
@@ -263,13 +261,11 @@ public class RobotContainer {
 
         Trigger undoGP = driveController.y();
 
+        setFeederBinding(true);
+
         // main cycle
         mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady).withName("Master Command"));
         mainCycleTrigger.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
-
-        // feeder path finder
-        rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
-        leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
         onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null)
                 .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
@@ -278,7 +274,6 @@ public class RobotContainer {
                         new MoveToLevelActive(elevator, robotAuto::getSelectedLevel)
                 .onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
-
 
         semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
         semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
@@ -301,6 +296,24 @@ public class RobotContainer {
         driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, Direcation.FRONT_RIGHT));
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, Direcation.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, Direcation.BACK_RIGHT));
+    }
+
+    public static void setFeederBinding(boolean isBlueAllaince){
+        Trigger leftFeeder;
+        Trigger rightFeeder;
+
+        if(isBlueAllaince){
+            leftFeeder = driveController.leftBumper();
+            rightFeeder = driveController.rightBumper();
+        }
+        else{
+            rightFeeder = driveController.leftBumper();
+            leftFeeder = driveController.rightBumper();
+        }
+
+        leftFeeder.whileTrue(driveBase.pathFindToPathAndFollow(Constants.FeederLocation.LEFT.getPath()));
+        rightFeeder.whileTrue(driveBase.pathFindToPathAndFollow(Constants.FeederLocation.RIGHT.getPath()));
+
     }
 
     public static void configNamedCommands() {

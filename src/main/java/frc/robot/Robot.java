@@ -133,7 +133,6 @@ public class Robot extends LoggedRobot
     private static void checkFlip() {
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
-        // Constants.FeederLocation.checkAlliance(!isRedAlliance);
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
     }
 
@@ -206,6 +205,7 @@ public class Robot extends LoggedRobot
     {
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             checkFlip();
+            RobotContainer.setFeederBinding(!isRedAlliance);
             resetEncoders();
             if(RobotContainer.endEffector != null) RobotContainer.endEffector.setLoadedValue(true);
         }
