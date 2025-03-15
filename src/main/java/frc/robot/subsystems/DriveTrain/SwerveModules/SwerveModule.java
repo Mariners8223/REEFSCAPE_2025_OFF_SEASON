@@ -67,7 +67,10 @@ public class SwerveModule {
             acceleration = -acceleration;
         }
 
-        targetState.cosineScale(inputs.currentState.angle);
+        double cosineValue = targetState.angle.minus(inputs.currentState.angle).getCos();
+
+        targetState.speedMetersPerSecond *= cosineValue;
+        acceleration *= cosineValue;
 
         io.setDriveMotorReference(targetState.speedMetersPerSecond, acceleration);
         io.setSteerMotorReference(targetState.angle.getRotations());

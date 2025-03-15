@@ -27,6 +27,8 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
                 constants.DRIVE_MOTOR_PID,
                 DevBotConstants.DRIVE_GEAR_RATIO / DevBotConstants.WHEEL_CIRCUMFERENCE_METERS);
 
+        driveMotor.setFeedForward(constants.DRIVE_KV);
+
         driveMotor.setMotorInverted(constants.DRIVE_INVERTED);
 
         driveMotor.setCurrentLimits(DevBotConstants.DRIVE_MOTOR_CURRENT_LIMIT, DevBotConstants.DRIVE_MOTOR_CURRENT_THRESHOLD);
