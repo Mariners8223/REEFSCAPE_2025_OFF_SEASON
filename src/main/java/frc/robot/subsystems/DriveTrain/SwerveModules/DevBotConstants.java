@@ -31,7 +31,7 @@ public enum DevBotConstants {
             new PIDFGains(25, 20, 0, 0, 0.001, 0.05), //Steer motor PID
             0.16066, 1.6962, 0.62667, 0.43868, 1.8036, 0.35004);
 
-    public static final double DRIVE_GEAR_RATIO = 6.12;
+    public static final double DRIVE_GEAR_RATIO = 6.75;
     public static final double STEER_GEAR_RATIO = 12.8;
     public static final double WHEEL_RADIUS_METERS = 0.0508;
     public static final double WHEEL_CIRCUMFERENCE_METERS = 2 * Math.PI * WHEEL_RADIUS_METERS;
@@ -50,6 +50,7 @@ public enum DevBotConstants {
         MAX_WHEEL_LINEAR_VELOCITY,
         0.9,
         DCMotor.getKrakenX60(1),
+        DRIVE_GEAR_RATIO,
         DRIVE_MOTOR_CURRENT_LIMIT,
         1);
 
