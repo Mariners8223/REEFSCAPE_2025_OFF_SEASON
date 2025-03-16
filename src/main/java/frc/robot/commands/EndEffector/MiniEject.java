@@ -12,6 +12,7 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 
 import java.util.function.Supplier;
 
@@ -34,8 +35,8 @@ public class MiniEject extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    double rightValue = 0.4;
-    double leftValue = 0.4;
+    double rightValue = MotorPower.INTAKE.rightMotorPower;
+    double leftValue = MotorPower.INTAKE.leftMotorPower;
 
     currentLevel = levelSupplier.get();
 

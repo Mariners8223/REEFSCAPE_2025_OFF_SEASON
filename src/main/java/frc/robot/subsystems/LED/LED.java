@@ -75,7 +75,7 @@ public class LED extends SubsystemBase {
 
     if (controlType != StripControl.TOGETHER){
       sidePattern.applyTo(bufferFront);
-      sidePattern.applyTo(bufferBack);
+      sidePattern.reversed().applyTo(bufferBack);
       middlePattern.applyTo(bufferMiddle);
     }
 

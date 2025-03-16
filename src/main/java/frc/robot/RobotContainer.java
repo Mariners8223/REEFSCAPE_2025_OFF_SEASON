@@ -403,8 +403,8 @@ public class RobotContainer {
         led.setStripControl(StripControl.MIDDLE);
         led.setGradient(Color.kRed, Color.kBlue);
 
-        led.setStripControl(StripControl.SIDES);
-        led.setMovingRainbow(100);
+        led.setStripControl(StripControl.TOGETHER);
+        led.setMovingGradient(50, Color.kMediumBlue, Color.kDeepSkyBlue, Color.kDarkBlue);
 
         (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
             new SequentialCommandGroup(
