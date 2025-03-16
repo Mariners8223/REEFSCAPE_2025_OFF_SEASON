@@ -22,9 +22,9 @@ public class RobotAutoConstants {
 
         public static final double THETA_IZONE = Units.degreesToRadians(10);
 
-        public static final PIDController X_PID = new PIDController(8, 9, 0.3);
-        public static final PIDController Y_PID = new PIDController(8, 9, 0.3);
-        public static final PIDController THETA_PID = new PIDController(14, 3, 1);
+        public static final PIDController X_PID = new PIDController(6, 2, 0.1);
+        public static final PIDController Y_PID = new PIDController(6, 2, 0.1);
+        public static final PIDController THETA_PID = new PIDController(10, 1, 0.2);
 
         static{
             X_PID.setIntegratorRange(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
