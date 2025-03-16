@@ -802,6 +802,11 @@ public abstract class MarinersController {
 
     protected abstract void setPIDFMotor(PIDFGains gains);
 
+    /**
+     * sets the current limit and current threshold for the motor
+     * @param currentLimit the output current soft limit (will try to avoid going above)
+     * @param currentThreshold the current draw the motor will shut off after drawing (can be lower than limit)
+     */
     public abstract void setCurrentLimits(int currentLimit, int currentThreshold);
 
     /**

@@ -17,22 +17,22 @@ public class DriveBaseConstants {
             new Translation2d(-DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2),
             new Translation2d(-DISTANCE_BETWEEN_WHEELS / 2, -DISTANCE_BETWEEN_WHEELS / 2)};
 
-    public static final double THETA_KS = 0.20501;
-    public static final double THETA_KV = 0.83139;
-    public static final double THETA_KA = 0.09286;
+    public static final double THETA_KS = 0.11014;
+    public static final double THETA_KV = 1.0942;
+    public static final double THETA_KA = 0.090032;
 
     public static final class PathPlanner {
         public static final ModuleConfig MODULE_CONFIG = DevBotConstants.MODULE_CONFIG;
 
         public static final RobotConfig ROBOT_CONFIG = new RobotConfig(
-                48,
-                5.502692,
+                63,
+                6,
                 MODULE_CONFIG,
                 MODULE_TRANSLATIONS);
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
-                3,
-                6, //TODO find a good value for this
+                4,
+                7, //TODO find a good value for this
                 5,
                 10); //the constraints for pathPlanner
 

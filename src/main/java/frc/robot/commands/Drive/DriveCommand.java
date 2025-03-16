@@ -16,8 +16,8 @@ public class DriveCommand extends Command {
     private final DriveBase driveBase;
     private final CommandXboxController controller;
 
-    private final double MAX_FREE_WHEEL_SPEED;
-    private final double MAX_OMEGA_RAD_PER_SEC;
+    private static double MAX_FREE_WHEEL_SPEED;
+    private static double MAX_OMEGA_RAD_PER_SEC;
 
     public DriveCommand(DriveBase driveBase, CommandXboxController controller) {
         this.driveBase = driveBase;
@@ -39,6 +39,22 @@ public class DriveCommand extends Command {
 
     public static double deadBand(double value) {
         return Math.abs(value) > 0.1 ? value : 0;
+    }
+
+    public static void halfSpeed(){
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY / 2;
+
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
+
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;        
+    }
+
+    public static void normalSpeed(){
+        MAX_FREE_WHEEL_SPEED = DevBotConstants.MAX_WHEEL_LINEAR_VELOCITY;
+
+        double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
+
+        MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;  
     }
 
 

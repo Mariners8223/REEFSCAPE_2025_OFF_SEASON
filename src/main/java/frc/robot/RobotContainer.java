@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import frc.robot.Constants.FeederLocation;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.Constants.RobotType;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -25,12 +25,12 @@ import frc.robot.commands.BallDropping.BallDropOnForLow;
 import frc.robot.commands.BallDropping.Sequence.BallDropHigh;
 import frc.robot.commands.BallDropping.Sequence.BallDropLow;
 import frc.robot.commands.Climb.ClimbCommand;
+import frc.robot.commands.Drive.DriveCommand;
 import frc.robot.commands.Drive.MinorAdjust;
-import frc.robot.commands.Drive.MinorAdjust.Direcation;
+import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.MoveToLevelActive;
 import frc.robot.commands.EndEffector.Eject;
-import frc.robot.commands.EndEffector.Funnel.MoveFunnel;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
@@ -39,8 +39,8 @@ import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
+import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.EndEffector.EndEffector;
-import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
@@ -105,7 +105,18 @@ public class RobotContainer {
 
         configNamedCommands();
         configChooser();
-        startLEDs();
+
+        driveController.start().onTrue(driveBase.resetOnlyDirection());
+
+        // driveController.a().onTrue(driveBase.startModuleDriveCalibration());
+        // driveController.b().onTrue(driveBase.stopModuleDriveCalibration());
+
+        // DriveBaseSYSID driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
+
+        // driveController.a().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kForward));
+        // driveController.b().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kReverse));
+        // driveController.x().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kForward));
+        // driveController.y().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kReverse));
 
         configureDriveBindings();
         configureOperatorBinding();
@@ -132,6 +143,11 @@ public class RobotContainer {
         }
 
         if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
+
+        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded())
+        .whileTrue(new StartEndCommand(
+            DriveCommand::halfSpeed,
+            DriveCommand::normalSpeed).ignoringDisable(true));
     }
 
     public static void configureOperatorBinding() {
@@ -179,8 +195,8 @@ public class RobotContainer {
         operatorController.axisLessThan(2, -0.5).and(() ->
                 endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
-        new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
-                .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
+        // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
+        //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
     }
 
     private static boolean isRobotInClimbArea(){
@@ -229,28 +245,26 @@ public class RobotContainer {
         // });
 
         BooleanSupplier robotBelowCertainSpeed = () -> {
-            // speed is below 1 m/s total and below 1 omega
+            // speed is below 1 m/s total
             return driveBase.getVelocity() < 1;
         };
 
         // Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
 
         Trigger mainCycleTrigger = driveController.leftTrigger();
-        Trigger leftFeeder = driveController.leftBumper();
-        Trigger rightFeeder = driveController.rightBumper();
 
         Trigger moveElevator = driveController.x();
         Trigger onlyRobotToReef = driveController.b();
 
         Trigger semiAuto = driveController.a();
 
+        Trigger undoGP = driveController.y();
+
+        setFeederBinding(true);
+
         // main cycle
         mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady).withName("Master Command"));
         mainCycleTrigger.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
-
-        // feeder path finder
-        rightFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.RIGHT));
-        leftFeeder.whileTrue(new PathPlannerWrapper(driveBase, FeederLocation.LEFT));
 
         onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null)
                 .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
@@ -260,11 +274,12 @@ public class RobotContainer {
                 .onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
-
         semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
         semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
+
+        undoGP.onTrue(new InstantCommand(() -> endEffector.setLoadedValue(false)));
 
         new Trigger(isCycleReady).onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
@@ -272,14 +287,31 @@ public class RobotContainer {
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0))
         ).ignoringDisable(true));
 
-        driveController.povRight().whileTrue(new MinorAdjust(driveBase, Direcation.RIGHT));
-        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, Direcation.LEFT));
-        driveController.povUp().whileTrue(new MinorAdjust(driveBase, Direcation.FORWARD));
-        driveController.povDown().whileTrue(new MinorAdjust(driveBase, Direcation.BACKWARDS));
-        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, Direcation.FRONT_LEFT));
-        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, Direcation.FRONT_RIGHT));
-        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, Direcation.BACK_LEFT));
-        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, Direcation.BACK_RIGHT));
+        driveController.povRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.RIGHT));
+        driveController.povLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.LEFT));
+        driveController.povUp().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FORWARD));
+        driveController.povDown().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACKWARDS));
+        driveController.povUpLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_LEFT));
+        driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
+        driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
+        driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
+    }
+
+    public static void setFeederBinding(boolean isBlueAllaince){
+        final Trigger leftFeeder;
+        final Trigger rightFeeder;
+
+        if(isBlueAllaince){
+            leftFeeder = driveController.leftBumper();
+            rightFeeder = driveController.rightBumper();
+        }
+        else{
+            rightFeeder = driveController.leftBumper();
+            leftFeeder = driveController.rightBumper();
+        }
+
+        leftFeeder.whileTrue(driveBase.pathFindToPathAndFollow(Constants.FeederLocation.LEFT.getPath()));
+        rightFeeder.whileTrue(driveBase.pathFindToPathAndFollow(Constants.FeederLocation.RIGHT.getPath()));
     }
 
     public static void configNamedCommands() {

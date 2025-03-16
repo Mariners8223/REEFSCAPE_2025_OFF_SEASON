@@ -5,7 +5,9 @@
 package frc.robot.commands.EndEffector.Intake;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -13,7 +15,7 @@ import frc.robot.subsystems.EndEffector.EndEffector;
 public class Intake extends SequentialCommandGroup {
 
   public Intake(EndEffector endEffector) {
-    addCommands(new IntakeStep1(endEffector), new IntakeStep2(endEffector));
+    addCommands(new IntakeStep1(endEffector), new WaitCommand(EndEffectorConstants.MotorPower.INTAKE.ejectTime), new IntakeStep2(endEffector));
   }
   
 }

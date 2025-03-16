@@ -48,7 +48,7 @@ public class Robot extends LoggedRobot
 
     private int driverStationCheckTimer = 0;
     
-    @SuppressWarnings("resource")
+    @SuppressWarnings({ "resource", "incomplete-switch" })
     public Robot() {
         Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
 
@@ -69,16 +69,18 @@ public class Robot extends LoggedRobot
                 break;
         }
 
+        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+
         if(isReal()){
             switch (Constants.ROBOT_TYPE){
                 case DEVELOPMENT -> {
-                    Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
                     Logger.addDataReceiver(new NT4Publisher());
+                    break;
                 }
 
-                case COMPETITION -> {
-                    Logger.addDataReceiver(new WPILOGWriter("/U"));
-                }
+                // case COMPETITION -> {
+                //     // Logger.addDataReceiver(new WPILOGWriter("/U"));
+                // }
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
             }
@@ -131,7 +133,6 @@ public class Robot extends LoggedRobot
     private static void checkFlip() {
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
-        // Constants.FeederLocation.checkAlliance(!isRedAlliance);
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
     }
 
@@ -204,6 +205,7 @@ public class Robot extends LoggedRobot
     {
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             checkFlip();
+            RobotContainer.setFeederBinding(!isRedAlliance);
             resetEncoders();
             if(RobotContainer.endEffector != null) RobotContainer.endEffector.setLoadedValue(true);
         }

@@ -10,7 +10,7 @@ import frc.robot.subsystems.DriveTrain.DriveBase;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MinorAdjust extends Command {
-  public static enum Direcation{
+  public static enum AdjustmentDirection{
     LEFT(0, 0.3),
     RIGHT(0, -0.3),
     FORWARD(0.3, 0),
@@ -23,7 +23,7 @@ public class MinorAdjust extends Command {
     private final double vX;
     private final double vY;
 
-    Direcation(double vX, double vY){
+    AdjustmentDirection(double vX, double vY){
       this.vX = vX;
       this.vY = vY;
     }
@@ -39,10 +39,10 @@ public class MinorAdjust extends Command {
 
   private final DriveBase driveBase;
 
-  private final Direcation direcation;
+  private final AdjustmentDirection direcation;
 
   /** Creates a new MinorAdjust. */
-  public MinorAdjust(DriveBase driveBase, Direcation direcation) {
+  public MinorAdjust(DriveBase driveBase, AdjustmentDirection direcation) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.driveBase = driveBase;
 
