@@ -48,7 +48,7 @@ public class Robot extends LoggedRobot
 
     private int driverStationCheckTimer = 0;
     
-    @SuppressWarnings("resource")
+    @SuppressWarnings({ "resource", "incomplete-switch" })
     public Robot() {
         Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
 
