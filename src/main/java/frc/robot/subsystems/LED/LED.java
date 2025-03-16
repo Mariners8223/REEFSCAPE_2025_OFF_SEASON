@@ -7,42 +7,122 @@ package frc.robot.subsystems.LED;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
 
+import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 
 public class LED extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer buffer;
+  StripControl controlType = StripControl.TOGETHER;
+
+  AddressableLEDBufferView bufferFront;
+  AddressableLEDBufferView bufferMiddle;
+  AddressableLEDBufferView bufferBack;
+
+  LEDPattern defaultPattern;
+  LEDPattern middlePattern;
+  LEDPattern sidePattern;
   LEDPattern pattern;
+
+  public enum StripControl{
+    TOGETHER,
+    MIDDLE,
+    SIDES
+  }
+
   /** Creates a new LED. */
   public LED() {
     led = new AddressableLED(LEDConstants.LED_PORT);
-    led.setLength(LEDConstants.LED_LENGTH);
-    buffer = new AddressableLEDBuffer(LEDConstants.LED_LENGTH);
+    led.setLength(LEDConstants.LED_COUNT_TOTAL);
 
-    pattern = LEDPattern.solid(Robot.isRedAlliance ? Color.kRed : Color.kBlue);
+    buffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT_TOTAL);
+    
+    bufferFront = buffer.createView(0, LEDConstants.LED_LENGTH_FRONT-2);
+    bufferMiddle = buffer.createView(LEDConstants.LED_LENGTH_FRONT - 1, LEDConstants.LED_LENGTH_FRONT + LEDConstants.LED_LENGTH_MIDDLE -2);
+    bufferBack = buffer.createView(LEDConstants.LED_LENGTH_FRONT + LEDConstants.LED_LENGTH_MIDDLE - 1, LEDConstants.LED_COUNT_TOTAL - 1);
+
+    pattern = LEDPattern.kOff;
     pattern.applyTo(buffer);
+
+    middlePattern = pattern;
+    sidePattern = pattern;
 
     led.setData(buffer);
     led.start();
-
-    // LEDPattern.rainbow(0, 0).scrollAtRelativeSpeed(Frequency.ofBaseUnits(1, Hertz));
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    pattern.applyTo(buffer);
+
+    switch (controlType){
+      case SIDES:
+        sidePattern = pattern;
+        break;
+      case MIDDLE:
+        middlePattern = pattern;
+        break;
+      default:
+        pattern.applyTo(buffer);
+    }
+
+    if (controlType != StripControl.TOGETHER){
+      sidePattern.applyTo(bufferFront);
+      sidePattern.applyTo(bufferBack);
+      middlePattern.applyTo(bufferMiddle);
+    }
+
     led.setData(buffer);
+  }
+
+  public void setStripControl(StripControl control){
+    controlType = control;
+  }
+
+  public void setDefaultPattern(boolean isRedAlliance){
+    Color color1 = isRedAlliance ? Color.kRed : Color.kLightBlue;
+    Color color2 = isRedAlliance ? Color.kDarkRed : Color.kDarkBlue;
+
+    defaultPattern = LEDPattern.gradient(GradientType.kContinuous, color1, color2).scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second));
+  }
+
+  public void putDefaultPattern(){
+    pattern = defaultPattern;
+  }
+
+  public InstantCommand putDefaultPatternCommand(){
+    return new InstantCommand(() -> putDefaultPattern());
   }
 
   public void setSolidColour(Color colour){
     pattern = LEDPattern.solid(colour);
+  }
+
+  public InstantCommand SetSolidColourCommand(Color colour){
+    return new InstantCommand(() -> setSolidColour(colour));
+  }
+
+  public void Blink(double seconds){
+    pattern = pattern.blink(Time.ofBaseUnits(seconds, Second));
+  }
+
+  public void Blink(double onSeconds, double offSeconds){
+    pattern = pattern.blink(Time.ofBaseUnits(offSeconds, Second), Time.ofBaseUnits(offSeconds, Second));
+  }
+
+  public InstantCommand BlinkCommand(double seconds){
+    return new InstantCommand(() -> Blink(seconds));
+  }
+
+  public InstantCommand BlinkCommand(double onSeconds, double offSeconds){
+    return new InstantCommand(() -> Blink(onSeconds, offSeconds));
   }
 
   public void setGradient(Color... colours){

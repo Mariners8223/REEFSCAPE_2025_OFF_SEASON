@@ -43,6 +43,7 @@ import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.LED.StripControl;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
@@ -51,6 +52,7 @@ import frc.util.Elastic;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.IntSequenceGenerator;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -62,8 +64,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 
@@ -121,7 +121,9 @@ public class RobotContainer {
         configureDriveBindings();
         configureOperatorBinding();
 
-        startLEDs();
+        configLEDs();
+
+        SmartDashboard.putNumber("Blink Time", 1.2);
 
         //  configureCamera();
         if (RobotBase.isReal()) {
@@ -394,8 +396,32 @@ public class RobotContainer {
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
     }
 
-    private static void startLEDs(){
-        led.setSolidColour(Robot.isRedAlliance ? Color.kRed : Color.kBlue);
+    private static void configLEDs(){
+        led.setDefaultPattern(Robot.isRedAlliance);
+        led.putDefaultPattern();
+
+        led.setStripControl(StripControl.MIDDLE);
+        led.setGradient(Color.kRed, Color.kBlue);
+
+        led.setStripControl(StripControl.SIDES);
+        led.setMovingRainbow(100);
+
+        (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
+            new SequentialCommandGroup(
+                led.SetSolidColourCommand(Color.kGreen),
+                led.BlinkCommand(0.3),
+                new WaitCommand(1.2),
+                led.putDefaultPatternCommand()
+            ));
+        
+        (new Trigger(() -> endEffector.isGpLoaded())).onFalse(
+            new SequentialCommandGroup(
+                led.SetSolidColourCommand(Color.kPurple),
+                led.BlinkCommand(0.3),
+                new WaitCommand(1.52),
+                led.putDefaultPatternCommand()
+            )
+        );
     }
 
     private static void updateFieldFromAuto(String autoName) {
