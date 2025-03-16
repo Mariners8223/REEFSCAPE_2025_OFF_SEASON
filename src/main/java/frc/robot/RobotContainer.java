@@ -41,6 +41,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.LED.LED.StripControl;
@@ -190,12 +191,12 @@ public class RobotContainer {
 
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->
-                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4).whileTrue(new ClimbCommand(climb));
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new ClimbCommand(climb));
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
-                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
+                endEffector.getFunnelPosition() > EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
         // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
         //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));

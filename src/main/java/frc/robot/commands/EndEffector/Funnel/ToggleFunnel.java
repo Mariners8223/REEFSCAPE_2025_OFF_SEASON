@@ -18,7 +18,7 @@ public class ToggleFunnel extends Command {
 
     @Override
     public void initialize() {
-        if(endEffector.getFunnelTarget() < -0.4)
+        if(endEffector.getFunnelTarget() < EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2)
             target = EndEffectorConstants.FunnelMotor.COLLECT_POSITION;
         else
             target = EndEffectorConstants.FunnelMotor.CLIMB_POSITION;

@@ -44,23 +44,23 @@ public class EndEffectorConstants {
     }
 
     public static class FunnelMotor{
-        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.RIO;
+        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final int MOTOR_ID = 23;
 
         public static final boolean IS_INVERTED = true;
 
         public static final PIDFGains PID_GAINS = new PIDFGains(
-            4,
-            8,
+            200,
+            2,
             0,
             0,
             0.0,
-            0.2);
-        public static final double GEAR_RATIO = 9;
+            0.05);
+        public static final double GEAR_RATIO = 45;
 
 
-        public static final double COLLECT_POSITION = 0;
-        public static final double CLIMB_POSITION = -0.78;
-        public static final double TOLERANCE = 0.1;
+        public static final double COLLECT_POSITION = 0.05;
+        public static final double CLIMB_POSITION = -0.3;
+        public static final double TOLERANCE = 0.05;
     }
 }
