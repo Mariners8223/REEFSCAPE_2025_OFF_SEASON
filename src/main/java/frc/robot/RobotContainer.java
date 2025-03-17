@@ -336,7 +336,10 @@ public class RobotContainer {
         NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         for (ReefLocation reef : ReefLocation.values()) {
-            HomeToReef homeToReef = new HomeToReef(driveBase, reef);
+            HomeToReef homeToReef = new HomeToReef(driveBase, reef,
+                (distance) -> {
+                    led.setSolidColour(Color.)
+                });
 
             // .onlyIf(homeToReef::isOutOfTolarance))
 
