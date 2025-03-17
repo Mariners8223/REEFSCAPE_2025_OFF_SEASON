@@ -136,12 +136,6 @@ public class DriveBase extends SubsystemBase {
         SmartDashboard.putData("Gyro", gyro);
 
         RobotConfig config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
-//        try { //TODO: check if code setting work
-//            config = RobotConfig.fromGUISettings();
-//        } catch (IOException | ParseException e) {
-//            config = DriveBaseConstants.PathPlanner.ROBOT_CONFIG;
-//            DriverStation.reportError("pathplanner angry " + e.getMessage(), false);
-//        }
 
         PathFollowingController pathPlannerPIDController = new PPHolonomicDriveController(
                 DriveBaseConstants.PathPlanner.XY_PID.createPIDConstants(),
@@ -160,18 +154,6 @@ public class DriveBase extends SubsystemBase {
                 this);
 
                 setModulesBrakeMode(true);
-
-        // new Trigger(RobotState::isEnabled).whileTrue(new StartEndCommand(() -> // sets the modules to brake mode when the robot is enabled
-        //         setModulesBrakeMode(true)
-        //         , () ->
-        // {
-        //     if (!DriverStation.isFMSAttached()) setModulesBrakeMode(false);
-        // }
-        // ).ignoringDisable(true));
-
-        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
-                this.setDefaultCommand(new DriveCommand(this, RobotContainer.driveController)),
-                this::removeDefaultCommand).ignoringDisable(true));
     }
 
 

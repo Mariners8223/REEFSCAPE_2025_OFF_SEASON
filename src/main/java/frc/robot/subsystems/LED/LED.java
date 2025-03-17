@@ -9,8 +9,7 @@ import static edu.wpi.first.units.Units.Second;
 
 import java.util.function.DoubleSupplier;
 
-import org.littletonrobotics.junction.Logger;
-
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -30,6 +29,9 @@ public class LED extends SubsystemBase {
   AddressableLEDBufferView bufferMiddle;
   AddressableLEDBufferView bufferBack;
 
+  AddressableLEDBufferView bufferFrontHalf;
+  AddressableLEDBufferView bufferBackHalf;
+
   LEDPattern defaultPattern;
   LEDPattern middlePattern;
   LEDPattern sidePattern;
@@ -38,7 +40,8 @@ public class LED extends SubsystemBase {
   public enum StripControl{
     TOGETHER,
     MIDDLE,
-    SIDES
+    SIDES,
+    HALVES
   }
 
   /** Creates a new LED. */
@@ -51,6 +54,9 @@ public class LED extends SubsystemBase {
     bufferFront = buffer.createView(0, LEDConstants.LED_LENGTH_FRONT-2);
     bufferMiddle = buffer.createView(LEDConstants.LED_LENGTH_FRONT - 1, LEDConstants.LED_LENGTH_FRONT + LEDConstants.LED_LENGTH_MIDDLE -2);
     bufferBack = buffer.createView(LEDConstants.LED_LENGTH_FRONT + LEDConstants.LED_LENGTH_MIDDLE - 1, LEDConstants.LED_COUNT_TOTAL - 1);
+
+    bufferFrontHalf = buffer.createView(0, LEDConstants.LED_COUNT_TOTAL / 2 - 1);
+    bufferBackHalf = buffer.createView(LEDConstants.LED_COUNT_TOTAL / 2, LEDConstants.LED_COUNT_TOTAL - 1);
 
     pattern = LEDPattern.kOff;
     pattern.applyTo(buffer);
@@ -73,11 +79,14 @@ public class LED extends SubsystemBase {
       case MIDDLE:
         middlePattern = pattern;
         break;
+      case HALVES:
+        pattern.applyTo(bufferBackHalf);
+        pattern.reversed().applyTo(bufferFrontHalf);
       default:
         pattern.applyTo(buffer);
     }
 
-    if (controlType != StripControl.TOGETHER){
+    if (controlType != StripControl.TOGETHER && controlType != StripControl.HALVES){
       sidePattern.applyTo(bufferFront);
       sidePattern.reversed().applyTo(bufferBack);
       middlePattern.applyTo(bufferMiddle);
@@ -96,7 +105,7 @@ public class LED extends SubsystemBase {
 
   public void setDefaultPattern(boolean isRedAlliance){
     defaultPattern = LEDPattern.gradient(GradientType.kContinuous, isRedAlliance ? LEDConstants.RED_COLORS : LEDConstants.BLUE_COLORS)
-                    .scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second));
+                    .scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second)).atBrightness(Dimensionless.ofBaseUnits(50, Percent));
   }
 
   public void putDefaultPattern(){

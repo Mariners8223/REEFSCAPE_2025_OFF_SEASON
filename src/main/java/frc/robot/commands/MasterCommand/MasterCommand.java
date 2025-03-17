@@ -16,7 +16,6 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
-import frc.robot.RobotContainer;
 
 import java.util.Set;
 import java.util.function.BooleanSupplier;
@@ -44,7 +43,7 @@ public class MasterCommand extends Command {
         pathCommand = new ReefFinderWrapper(driveBase, Constants.ReefLocation.REEF_1); // setting the default target pose
 
         // adjustment phase (minor adjustment to the reef and elevator raising)
-        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1, RobotContainer.ledDistanceConsumer);
+        homeToReef = new HomeToReef(driveBase, Constants.ReefLocation.REEF_1);
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         // eject phase (releasing the game piece)

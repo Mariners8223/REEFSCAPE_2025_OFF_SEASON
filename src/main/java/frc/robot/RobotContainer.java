@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -79,9 +76,6 @@ public class RobotContainer {
     public static Climb climb;
     public static LED led;
 
-    public static Consumer<Double> ledDistanceConsumer;
-    public static Consumer<Double> ledPercentConsumer;
-
     public static LoggedDashboardChooser<Command> autoChooser;
 
     public static CommandXboxController driveController;
@@ -111,7 +105,7 @@ public class RobotContainer {
         configNamedCommands();
         configChooser();
 
-        driveController.start().onTrue(driveBase.resetOnlyDirection());
+        // driveController.start().onTrue(driveBase.resetOnlyDirection());
 
         // driveController.a().onTrue(driveBase.startModuleDriveCalibration());
         // driveController.b().onTrue(driveBase.stopModuleDriveCalibration());
@@ -122,11 +116,10 @@ public class RobotContainer {
         // driveController.b().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kReverse));
         // driveController.x().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kForward));
         // driveController.y().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kReverse));
-
+        configLEDs();
+        
         configureDriveBindings();
         configureOperatorBinding();
-
-        configLEDs();
 
         SmartDashboard.putNumber("Blink Time", 1.2);
 
@@ -244,6 +237,10 @@ public class RobotContainer {
         Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
                 robotAuto::getSelectedLevel, moveElevatorMarker, driveController);
 
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+                driveBase.setDefaultCommand(new DriveCommand(driveBase, RobotContainer.driveController)),
+                driveBase::removeDefaultCommand).ignoringDisable(true));
+
 //        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
 
         // Command resetSelection = new InstantCommand(() -> {
@@ -277,7 +274,7 @@ public class RobotContainer {
                 .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         moveElevator.whileTrue(
-                        new MoveToLevelActive(elevator, robotAuto::getSelectedLevel, ledPercentConsumer)
+                        new MoveToLevelActive(elevator, robotAuto::getSelectedLevel)
                 .onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
@@ -341,11 +338,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("reset elevator", new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         for (ReefLocation reef : ReefLocation.values()) {
-            HomeToReef homeToReef = new HomeToReef(driveBase, reef,
-                (distance) -> {
-                    led.setSolidColour(Color.kWhite);
-                    led.Blink(distance);
-                });
+            HomeToReef homeToReef = new HomeToReef(driveBase, reef);
 
             // .onlyIf(homeToReef::isOutOfTolarance))
 
@@ -406,28 +399,11 @@ public class RobotContainer {
     }
 
     private static void configLEDs(){
-        Function<Double, Double> distanceToFrequency = ((distance) -> {return MathUtil.clamp(Math.exp(-6 * distance + 2), 0.1, 1); });
-        ledDistanceConsumer = (distance) -> {
-                                led.setStripControl(StripControl.TOGETHER);
-                                led.setSolidColour(Color.kWhite);
-                                led.Blink(distanceToFrequency.apply(distance));
-                            };
-        
-        ledPercentConsumer = (percent) -> {
-                                led.setStripControl(StripControl.TOGETHER);
-                                led.putDefaultPattern();
-                                led.setProgressLayer(() -> percent);
-        };
         Color defaultSingleColor = Robot.isRedAlliance ? LEDConstants.RED_COLOR_SINGLE : LEDConstants.BLUE_COLOR_SINGLE;
-
+      
+        led.setStripControl(StripControl.HALVES);
         led.setDefaultPattern(Robot.isRedAlliance);
         led.putDefaultPattern();
-
-        led.setStripControl(StripControl.MIDDLE);
-        led.setGradient(Color.kRed, Color.kBlue);
-
-        led.setStripControl(StripControl.TOGETHER);
-        led.setMovingGradient(50, Color.kMediumBlue, Color.kDeepSkyBlue, Color.kDarkBlue);
 
         (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
             new SequentialCommandGroup(

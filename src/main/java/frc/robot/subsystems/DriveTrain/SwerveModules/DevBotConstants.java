@@ -40,7 +40,7 @@ public enum DevBotConstants {
     public static final int DRIVE_MOTOR_CURRENT_THRESHOLD = 70;
 
     //acceleration and jerk constraints for the drive motor
-    public static final TrapezoidProfile.Constraints DRIVE_CONSTRAINTS = new TrapezoidProfile.Constraints(1, 1);
+    public static final TrapezoidProfile.Constraints DRIVE_CONSTRAINTS = new TrapezoidProfile.Constraints(13, 100);
 
     //velocity and acceleration constraints for the steer motor
     public static final TrapezoidProfile.Constraints STEER_CONSTRAINTS = new TrapezoidProfile.Constraints(20, 25);

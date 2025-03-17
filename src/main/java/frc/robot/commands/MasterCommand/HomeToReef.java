@@ -2,8 +2,6 @@ package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import java.util.function.Consumer;
-
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -19,7 +17,6 @@ import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 public class HomeToReef extends Command {
     private final DriveBase driveBase;
     private ReefLocation targetReef;
-    private final Consumer<Double> distanceConsumer;
 
     private final PIDController XController = RobotAutoConstants.X_PID;
     private final PIDController YController = RobotAutoConstants.Y_PID;
@@ -27,10 +24,9 @@ public class HomeToReef extends Command {
 
     private int timer = 0;
 
-    public HomeToReef(DriveBase driveBase, ReefLocation targetReef, Consumer<Double> distanceConsumer) {
+    public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
-        this.distanceConsumer = distanceConsumer;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(driveBase);
@@ -88,8 +84,6 @@ public class HomeToReef extends Command {
         Pose2d robotPose = driveBase.getPose();
 
         double distance = robotPose.getTranslation().getDistance(targetReef.getPose().getTranslation());
-        distanceConsumer.accept(distance);
-
         double xOutput = XController.calculate(robotPose.getX());
         double yOutput = YController.calculate(robotPose.getY());
 
