@@ -1,6 +1,7 @@
 package frc.robot.commands.MasterCommand;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.math.MathUtil;
@@ -83,7 +84,6 @@ public class HomeToReef extends Command {
         Pose2d robotPose = driveBase.getPose();
 
         double distance = robotPose.getTranslation().getDistance(targetReef.getPose().getTranslation());
-
         double xOutput = XController.calculate(robotPose.getX());
         double yOutput = YController.calculate(robotPose.getY());
 

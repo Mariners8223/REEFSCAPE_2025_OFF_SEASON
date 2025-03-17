@@ -26,7 +26,7 @@ public class EndEffectorConstants {
     public static final double Z_OFFSET = 0.735;
 
     public enum MotorPower{
-        INTAKE(0.5, 0.5, 0.25),
+        INTAKE(0.6, 0.6, 0.25),
         L1_RIGHT(0.65, -0.3, 1),
         L1_LEFT(-0.3, 0.65, 1),
         L2_3(0.4, 0.4, 0.5),
@@ -44,23 +44,23 @@ public class EndEffectorConstants {
     }
 
     public static class FunnelMotor{
-        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.RIO;
+        public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
         public static final int MOTOR_ID = 23;
 
         public static final boolean IS_INVERTED = true;
 
         public static final PIDFGains PID_GAINS = new PIDFGains(
-            4,
-            8,
+            200,
+            2,
             0,
             0,
             0.0,
-            0.2);
-        public static final double GEAR_RATIO = 9;
+            0.05);
+        public static final double GEAR_RATIO = 45;
 
 
-        public static final double COLLECT_POSITION = 0;
-        public static final double CLIMB_POSITION = -0.78;
-        public static final double TOLERANCE = 0.1;
+        public static final double COLLECT_POSITION = 0.05;
+        public static final double CLIMB_POSITION = -0.3;
+        public static final double TOLERANCE = 0.05;
     }
 }

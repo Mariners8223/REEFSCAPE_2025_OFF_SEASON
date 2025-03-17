@@ -22,7 +22,7 @@ public class MoveToLevelActive extends Command {
     @Override
     public void execute() {
         if(targetLevelSupplier.get() != null && targetLevelSupplier.get() != elevator.getDesiredLevel())
-            elevator.moveMotorByPosition(targetLevelSupplier.get());
+            elevator.moveMotorByPosition(targetLevelSupplier.get());        
     }
 
     @Override

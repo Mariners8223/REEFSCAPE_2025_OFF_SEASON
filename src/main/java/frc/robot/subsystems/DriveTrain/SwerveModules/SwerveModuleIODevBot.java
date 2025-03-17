@@ -78,7 +78,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
     @Override
     public void setDriveMotorReference(double reference) {
-        driveMotor.setReference(reference, MarinersController.ControlMode.Velocity);
+        driveMotor.setReference(reference, MarinersController.ControlMode.ProfiledVelocity);
     }
 
     @Override

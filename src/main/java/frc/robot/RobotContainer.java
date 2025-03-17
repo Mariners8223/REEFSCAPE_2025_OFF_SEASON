@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.Constants.RobotType;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -39,9 +38,12 @@ import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
-import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
+import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.LEDConstants;
+import frc.robot.subsystems.LED.LED.StripControl;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
 import frc.robot.subsystems.Vision.Vision;
@@ -60,6 +62,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 
 
@@ -71,6 +74,7 @@ public class RobotContainer {
     public static RobotAuto robotAuto;
     public static Vision vision;
     public static Climb climb;
+    public static LED led;
 
     public static LoggedDashboardChooser<Command> autoChooser;
 
@@ -86,6 +90,7 @@ public class RobotContainer {
         endEffector = new EndEffector();
         ballDropping = new BallDropping();
         climb = new Climb();
+        led = new LED();
         robotAuto = new RobotAuto();
         vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
 
@@ -100,7 +105,7 @@ public class RobotContainer {
         configNamedCommands();
         configChooser();
 
-        driveController.start().onTrue(driveBase.resetOnlyDirection());
+        // driveController.start().onTrue(driveBase.resetOnlyDirection());
 
         // driveController.a().onTrue(driveBase.startModuleDriveCalibration());
         // driveController.b().onTrue(driveBase.stopModuleDriveCalibration());
@@ -111,17 +116,12 @@ public class RobotContainer {
         // driveController.b().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kReverse));
         // driveController.x().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kForward));
         // driveController.y().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kReverse));
-
+        configLEDs();
+        
         configureDriveBindings();
         configureOperatorBinding();
-        
 
-        // ElevatorSYSID elevatorSYSID = new ElevatorSYSID(elevator);
-
-        // driveController.y().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kForward));
-        // driveController.a().whileTrue(elevatorSYSID.getElevatorDynamic(Direction.kReverse));
-        // driveController.b().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kForward));
-        // driveController.x().whileTrue(elevatorSYSID.getElevatorQuasistatic(Direction.kReverse));
+        SmartDashboard.putNumber("Blink Time", 1.2);
 
         //  configureCamera();
         if (RobotBase.isReal()) {
@@ -188,12 +188,12 @@ public class RobotContainer {
 
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->
-                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4).whileTrue(new ClimbCommand(climb));
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new ClimbCommand(climb));
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
-                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
+                endEffector.getFunnelPosition() > EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
         // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
         //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
@@ -236,6 +236,10 @@ public class RobotContainer {
 
         Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
                 robotAuto::getSelectedLevel, moveElevatorMarker, driveController);
+
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+                driveBase.setDefaultCommand(new DriveCommand(driveBase, RobotContainer.driveController)),
+                driveBase::removeDefaultCommand).ignoringDisable(true));
 
 //        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
 
@@ -392,6 +396,42 @@ public class RobotContainer {
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
+    }
+
+    private static void configLEDs(){
+        Color defaultSingleColor = Robot.isRedAlliance ? LEDConstants.RED_COLOR_SINGLE : LEDConstants.BLUE_COLOR_SINGLE;
+      
+        led.setStripControl(StripControl.HALVES);
+        led.setDefaultPattern(Robot.isRedAlliance);
+        led.putDefaultPattern();
+
+        (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
+            new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.TOGETHER),
+                led.SetSolidColourCommand(Color.kGreen),
+                led.BlinkCommand(0.3),
+                new WaitCommand(1.2),
+                led.putDefaultPatternCommand()
+            ));
+        
+        (new Trigger(() -> endEffector.isGpLoaded())).onFalse(
+            new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.TOGETHER),
+                led.SetSolidColourCommand(Color.kPurple),
+                led.BlinkCommand(0.3),
+                new WaitCommand(1.52),
+                led.putDefaultPatternCommand()
+            )
+        );
+
+        (new Trigger(() -> RobotState.isAutonomous())).onTrue(
+            new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.TOGETHER),
+                led.SetSolidColourCommand(defaultSingleColor),
+                led.BlinkCommand(0.8, 0.2)
+            )
+        );
+        (new Trigger(() -> RobotState.isAutonomous())).onFalse(led.putDefaultPatternCommand());
     }
 
     private static void updateFieldFromAuto(String autoName) {
