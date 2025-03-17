@@ -4,6 +4,7 @@ import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 import frc.robot.commands.Drive.RobotRelativeDrive;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.MoveToLevelActive;
@@ -36,7 +37,7 @@ public class SemiAuto extends Command {
 
        moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
-       MoveToLevelActive moveElevatorCommandActive = new MoveToLevelActive(elevator, elevatorLevelSupplier);
+       MoveToLevelActive moveElevatorCommandActive = new MoveToLevelActive(elevator, elevatorLevelSupplier, RobotContainer.ledPercentConsumer);
 
        sequence = new SequentialCommandGroup(
                new ParallelCommandGroup(

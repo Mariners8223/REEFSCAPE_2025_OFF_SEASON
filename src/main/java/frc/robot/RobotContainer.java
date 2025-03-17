@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.events.EventTrigger;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -39,10 +42,10 @@ import frc.robot.subsystems.BallDropping.BallDropping;
 import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
-import frc.robot.subsystems.Elevator.ElevatorSYSID;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.LED.LED;
+import frc.robot.subsystems.LED.LEDConstants;
 import frc.robot.subsystems.LED.LED.StripControl;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
@@ -52,7 +55,6 @@ import frc.util.Elastic;
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
-import com.fasterxml.jackson.annotation.ObjectIdGenerators.IntSequenceGenerator;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -76,6 +78,9 @@ public class RobotContainer {
     public static Vision vision;
     public static Climb climb;
     public static LED led;
+
+    public static Consumer<Double> ledDistanceConsumer;
+    public static Consumer<Double> ledPercentConsumer;
 
     public static LoggedDashboardChooser<Command> autoChooser;
 
@@ -272,7 +277,7 @@ public class RobotContainer {
                 .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
 
         moveElevator.whileTrue(
-                        new MoveToLevelActive(elevator, robotAuto::getSelectedLevel)
+                        new MoveToLevelActive(elevator, robotAuto::getSelectedLevel, ledPercentConsumer)
                 .onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
@@ -338,7 +343,8 @@ public class RobotContainer {
         for (ReefLocation reef : ReefLocation.values()) {
             HomeToReef homeToReef = new HomeToReef(driveBase, reef,
                 (distance) -> {
-                    led.setSolidColour(Color.)
+                    led.setSolidColour(Color.kWhite);
+                    led.Blink(distance);
                 });
 
             // .onlyIf(homeToReef::isOutOfTolarance))
@@ -400,6 +406,20 @@ public class RobotContainer {
     }
 
     private static void configLEDs(){
+        Function<Double, Double> distanceToFrequency = ((distance) -> {return MathUtil.clamp(Math.exp(-6 * distance + 2), 0.1, 1); });
+        ledDistanceConsumer = (distance) -> {
+                                led.setStripControl(StripControl.TOGETHER);
+                                led.setSolidColour(Color.kWhite);
+                                led.Blink(distanceToFrequency.apply(distance));
+                            };
+        
+        ledPercentConsumer = (percent) -> {
+                                led.setStripControl(StripControl.TOGETHER);
+                                led.putDefaultPattern();
+                                led.setProgressLayer(() -> percent);
+        };
+        Color defaultSingleColor = Robot.isRedAlliance ? LEDConstants.RED_COLOR_SINGLE : LEDConstants.BLUE_COLOR_SINGLE;
+
         led.setDefaultPattern(Robot.isRedAlliance);
         led.putDefaultPattern();
 
@@ -411,6 +431,7 @@ public class RobotContainer {
 
         (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
             new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.TOGETHER),
                 led.SetSolidColourCommand(Color.kGreen),
                 led.BlinkCommand(0.3),
                 new WaitCommand(1.2),
@@ -419,12 +440,22 @@ public class RobotContainer {
         
         (new Trigger(() -> endEffector.isGpLoaded())).onFalse(
             new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.TOGETHER),
                 led.SetSolidColourCommand(Color.kPurple),
                 led.BlinkCommand(0.3),
                 new WaitCommand(1.52),
                 led.putDefaultPatternCommand()
             )
         );
+
+        (new Trigger(() -> RobotState.isAutonomous())).onTrue(
+            new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.TOGETHER),
+                led.SetSolidColourCommand(defaultSingleColor),
+                led.BlinkCommand(0.8, 0.2)
+            )
+        );
+        (new Trigger(() -> RobotState.isAutonomous())).onFalse(led.putDefaultPatternCommand());
     }
 
     private static void updateFieldFromAuto(String autoName) {
