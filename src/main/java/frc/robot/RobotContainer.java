@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.Constants.RobotType;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -43,6 +42,7 @@ import frc.robot.subsystems.Climb.Climb;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.EndEffector.EndEffector;
+import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.LED.LEDConstants;
@@ -195,12 +195,12 @@ public class RobotContainer {
 
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->
-                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < -0.4).whileTrue(new ClimbCommand(climb));
+                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new ClimbCommand(climb));
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
-                endEffector.getFunnelPosition() > -0.4).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
+                endEffector.getFunnelPosition() > EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
         // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
         //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
@@ -426,8 +426,8 @@ public class RobotContainer {
         led.setStripControl(StripControl.MIDDLE);
         led.setGradient(Color.kRed, Color.kBlue);
 
-        led.setStripControl(StripControl.SIDES);
-        led.setMovingRainbow(100);
+        led.setStripControl(StripControl.TOGETHER);
+        led.setMovingGradient(50, Color.kMediumBlue, Color.kDeepSkyBlue, Color.kDarkBlue);
 
         (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
             new SequentialCommandGroup(
