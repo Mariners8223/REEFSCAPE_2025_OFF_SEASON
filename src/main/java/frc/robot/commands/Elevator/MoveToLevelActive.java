@@ -4,16 +4,19 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 
 public class MoveToLevelActive extends Command {
     private final Elevator elevator;
     private final Supplier<ElevatorConstants.ElevatorLevel> targetLevelSupplier;
+    private final Consumer<Double> percentConsumer;
 
-    public MoveToLevelActive(Elevator elevator, Supplier<ElevatorConstants.ElevatorLevel> targetLevelSupplier) {
+    public MoveToLevelActive(Elevator elevator, Supplier<ElevatorConstants.ElevatorLevel> targetLevelSupplier, Consumer<Double> percentConsumer) {
         this.elevator = elevator;
         this.targetLevelSupplier = targetLevelSupplier;
+        this.percentConsumer = percentConsumer;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(this.elevator);
@@ -23,6 +26,8 @@ public class MoveToLevelActive extends Command {
     public void execute() {
         if(targetLevelSupplier.get() != null && targetLevelSupplier.get() != elevator.getDesiredLevel())
             elevator.moveMotorByPosition(targetLevelSupplier.get());
+        
+        percentConsumer.accept((targetLevelSupplier.get().getHeight() - elevator.getCurrentHeight()) / targetLevelSupplier.get().getHeight());
     }
 
     @Override

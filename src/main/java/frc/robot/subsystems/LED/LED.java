@@ -7,6 +7,10 @@ package frc.robot.subsystems.LED;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
 
+import java.util.function.DoubleSupplier;
+
+import org.littletonrobotics.junction.Logger;
+
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
@@ -86,11 +90,13 @@ public class LED extends SubsystemBase {
     controlType = control;
   }
 
-  public void setDefaultPattern(boolean isRedAlliance){
-    Color color1 = isRedAlliance ? Color.kRed : Color.kLightBlue;
-    Color color2 = isRedAlliance ? Color.kDarkRed : Color.kDarkBlue;
+  public InstantCommand setStripControlCommand(StripControl control){
+    return new InstantCommand(() -> setStripControl(control));
+  }
 
-    defaultPattern = LEDPattern.gradient(GradientType.kContinuous, color1, color2).scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second));
+  public void setDefaultPattern(boolean isRedAlliance){
+    defaultPattern = LEDPattern.gradient(GradientType.kContinuous, isRedAlliance ? LEDConstants.RED_COLORS : LEDConstants.BLUE_COLORS)
+                    .scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second));
   }
 
   public void putDefaultPattern(){
@@ -139,5 +145,13 @@ public class LED extends SubsystemBase {
 
   public void setMovingRainbow(int speedPercent){
     pattern = LEDPattern.rainbow(256, 256).scrollAtRelativeSpeed(Percent.per(Second).of(speedPercent));
+  }
+
+  public void setProgressLayer(DoubleSupplier percent){
+    pattern = pattern.mask(LEDPattern.progressMaskLayer(percent));
+  }
+
+  public InstantCommand setProgressLayerCOmmand(DoubleSupplier percent){
+    return new InstantCommand(() -> setProgressLayer(percent));
   }
 }
