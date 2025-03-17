@@ -134,6 +134,7 @@ public class Robot extends LoggedRobot
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
         Constants.ReefLocation.checkAlliance(!isRedAlliance);
+        RobotContainer.led.setDefaultPattern(isRedAlliance);
     }
 
     public static void setRobotPoseField(Pose2d pose) {

@@ -23,25 +23,17 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class LED extends SubsystemBase {
   AddressableLED led;
   AddressableLEDBuffer buffer;
-  StripControl controlType = StripControl.TOGETHER;
-
-  AddressableLEDBufferView bufferFront;
-  AddressableLEDBufferView bufferMiddle;
-  AddressableLEDBufferView bufferBack;
+  StripControl controlType = StripControl.ALL;
 
   AddressableLEDBufferView bufferFrontHalf;
   AddressableLEDBufferView bufferBackHalf;
 
   LEDPattern defaultPattern;
-  LEDPattern middlePattern;
-  LEDPattern sidePattern;
   LEDPattern pattern;
 
   public enum StripControl{
-    TOGETHER,
-    MIDDLE,
-    SIDES,
-    HALVES
+    ALL,
+    HALF
   }
 
   /** Creates a new LED. */
@@ -50,19 +42,12 @@ public class LED extends SubsystemBase {
     led.setLength(LEDConstants.LED_COUNT_TOTAL);
 
     buffer = new AddressableLEDBuffer(LEDConstants.LED_COUNT_TOTAL);
-    
-    bufferFront = buffer.createView(0, LEDConstants.LED_LENGTH_FRONT-2);
-    bufferMiddle = buffer.createView(LEDConstants.LED_LENGTH_FRONT - 1, LEDConstants.LED_LENGTH_FRONT + LEDConstants.LED_LENGTH_MIDDLE -2);
-    bufferBack = buffer.createView(LEDConstants.LED_LENGTH_FRONT + LEDConstants.LED_LENGTH_MIDDLE - 1, LEDConstants.LED_COUNT_TOTAL - 1);
 
     bufferFrontHalf = buffer.createView(0, LEDConstants.LED_COUNT_TOTAL / 2 - 1);
     bufferBackHalf = buffer.createView(LEDConstants.LED_COUNT_TOTAL / 2, LEDConstants.LED_COUNT_TOTAL - 1);
 
     pattern = LEDPattern.kOff;
     pattern.applyTo(buffer);
-
-    middlePattern = pattern;
-    sidePattern = pattern;
 
     led.setData(buffer);
     led.start();
@@ -73,23 +58,13 @@ public class LED extends SubsystemBase {
     // This method will be called once per scheduler run
 
     switch (controlType){
-      case SIDES:
-        sidePattern = pattern;
-        break;
-      case MIDDLE:
-        middlePattern = pattern;
-        break;
-      case HALVES:
-        pattern.applyTo(bufferBackHalf);
-        pattern.reversed().applyTo(bufferFrontHalf);
-      default:
-        pattern.applyTo(buffer);
-    }
-
-    if (controlType != StripControl.TOGETHER && controlType != StripControl.HALVES){
-      sidePattern.applyTo(bufferFront);
-      sidePattern.reversed().applyTo(bufferBack);
-      middlePattern.applyTo(bufferMiddle);
+        case ALL:
+            pattern.applyTo(buffer);
+            break;
+        case HALF:
+            pattern.applyTo(bufferFrontHalf);
+            pattern.reversed().applyTo(bufferBackHalf);
+            break;
     }
 
     led.setData(buffer);
@@ -113,7 +88,11 @@ public class LED extends SubsystemBase {
   }
 
   public InstantCommand putDefaultPatternCommand(){
-    return new InstantCommand(() -> putDefaultPattern());
+    InstantCommand command = new InstantCommand(this::putDefaultPattern);
+
+    command.addRequirements(this);
+
+    return command;
   }
 
   public void setSolidColour(Color colour){

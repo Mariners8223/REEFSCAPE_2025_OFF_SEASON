@@ -399,39 +399,42 @@ public class RobotContainer {
     }
 
     private static void configLEDs(){
-        Color defaultSingleColor = Robot.isRedAlliance ? LEDConstants.RED_COLOR_SINGLE : LEDConstants.BLUE_COLOR_SINGLE;
-      
-        led.setStripControl(StripControl.HALVES);
+        led.setStripControl(StripControl.HALF);
         led.setDefaultPattern(Robot.isRedAlliance);
         led.putDefaultPattern();
 
-        (new Trigger(() -> endEffector.isGpLoaded())).onTrue(
-            new SequentialCommandGroup(
-                led.setStripControlCommand(StripControl.TOGETHER),
+        led.setDefaultCommand(led.putDefaultPatternCommand());
+
+        Command gpLoadedCommand = new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.ALL),
                 led.SetSolidColourCommand(Color.kGreen),
                 led.BlinkCommand(0.3),
-                new WaitCommand(1.2),
-                led.putDefaultPatternCommand()
-            ));
-        
-        (new Trigger(() -> endEffector.isGpLoaded())).onFalse(
-            new SequentialCommandGroup(
-                led.setStripControlCommand(StripControl.TOGETHER),
-                led.SetSolidColourCommand(Color.kPurple),
-                led.BlinkCommand(0.3),
-                new WaitCommand(1.52),
-                led.putDefaultPatternCommand()
-            )
-        );
+                new WaitCommand(1.2));
 
-        (new Trigger(() -> RobotState.isAutonomous())).onTrue(
-            new SequentialCommandGroup(
-                led.setStripControlCommand(StripControl.TOGETHER),
-                led.SetSolidColourCommand(defaultSingleColor),
-                led.BlinkCommand(0.8, 0.2)
-            )
-        );
-        (new Trigger(() -> RobotState.isAutonomous())).onFalse(led.putDefaultPatternCommand());
+        gpLoadedCommand.addRequirements(led);
+
+        Command gpUnloadedCommand = new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.ALL),
+                led.SetSolidColourCommand(Color.kRed),
+                led.BlinkCommand(0.3),
+                new WaitCommand(1.2));
+
+        gpUnloadedCommand.addRequirements(led);
+
+        Trigger gpLoadedTrigger = new Trigger(endEffector::isGpLoaded);
+
+        gpLoadedTrigger.onTrue(gpLoadedCommand);
+
+        gpLoadedTrigger.onFalse(gpUnloadedCommand);
+        
+//        (new Trigger(RobotState::isAutonomous)).onTrue(
+//            new SequentialCommandGroup(
+//                led.setStripControlCommand(StripControl.ALL),
+//                led.SetSolidColourCommand(defaultSingleColor),
+//                led.BlinkCommand(0.8, 0.2)
+//            )
+//        );
+//        (new Trigger(RobotState::isAutonomous)).onFalse(led.putDefaultPatternCommand());
     }
 
     private static void updateFieldFromAuto(String autoName) {
