@@ -399,17 +399,16 @@ public class RobotContainer {
     }
 
     private static void configLEDs(){
-        led.setStripControl(StripControl.HALF);
+        led.setStripControl(StripControl.ALL);
         led.setDefaultPattern(Robot.isRedAlliance);
         led.putDefaultPattern();
-
-        led.setDefaultCommand(led.putDefaultPatternCommand());
 
         Command gpLoadedCommand = new SequentialCommandGroup(
                 led.setStripControlCommand(StripControl.ALL),
                 led.SetSolidColourCommand(Color.kGreen),
                 led.BlinkCommand(0.3),
-                new WaitCommand(1.2));
+                new WaitCommand(1.2),
+                led.putDefaultPatternCommand());
 
         gpLoadedCommand.addRequirements(led);
 
@@ -417,7 +416,8 @@ public class RobotContainer {
                 led.setStripControlCommand(StripControl.ALL),
                 led.SetSolidColourCommand(Color.kRed),
                 led.BlinkCommand(0.3),
-                new WaitCommand(1.2));
+                new WaitCommand(1.2),
+                led.putDefaultPatternCommand());
 
         gpUnloadedCommand.addRequirements(led);
 
@@ -426,15 +426,7 @@ public class RobotContainer {
         gpLoadedTrigger.onTrue(gpLoadedCommand);
 
         gpLoadedTrigger.onFalse(gpUnloadedCommand);
-        
-//        (new Trigger(RobotState::isAutonomous)).onTrue(
-//            new SequentialCommandGroup(
-//                led.setStripControlCommand(StripControl.ALL),
-//                led.SetSolidColourCommand(defaultSingleColor),
-//                led.BlinkCommand(0.8, 0.2)
-//            )
-//        );
-//        (new Trigger(RobotState::isAutonomous)).onFalse(led.putDefaultPatternCommand());
+
     }
 
     private static void updateFieldFromAuto(String autoName) {

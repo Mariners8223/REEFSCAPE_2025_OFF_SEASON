@@ -7,6 +7,7 @@ package frc.robot.subsystems.LED;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
 
+import java.util.Map;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.units.measure.Dimensionless;
@@ -15,10 +16,12 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.AddressableLEDBufferView;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.LED.LEDConstants.AllainceColor;
 
 public class LED extends SubsystemBase {
   AddressableLED led;
@@ -79,8 +82,24 @@ public class LED extends SubsystemBase {
   }
 
   public void setDefaultPattern(boolean isRedAlliance){
-    defaultPattern = LEDPattern.gradient(GradientType.kContinuous, isRedAlliance ? LEDConstants.RED_COLORS : LEDConstants.BLUE_COLORS)
-                    .scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second)).atBrightness(Dimensionless.ofBaseUnits(50, Percent));
+
+    AllainceColor allainceColor = isRedAlliance ? AllainceColor.RED : AllainceColor.BLUE;
+    
+    Color color = allainceColor.MOVING_COLOR;
+    Color backgroundColor = allainceColor.BACKGORUND_COLOR;
+
+    Dimensionless colorBrightness = allainceColor.COLOR_BRIGHTNESS;
+    Dimensionless backgorundBrihtness = allainceColor.BACKGROUND_BRIGHTNESS;
+
+    LEDPattern pattern1 = LEDPattern.steps(Map.of(0, color, 0.05, Color.kBlack))
+      .scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second))
+      .atBrightness(colorBrightness);
+
+    LEDPattern whitePattern = LEDPattern.solid(backgroundColor).atBrightness(backgorundBrihtness);
+
+    LEDPattern gradiant = pattern1.overlayOn(pattern1.reversed());
+
+    defaultPattern = gradiant.overlayOn(whitePattern);
   }
 
   public void putDefaultPattern(){
@@ -100,7 +119,11 @@ public class LED extends SubsystemBase {
   }
 
   public InstantCommand SetSolidColourCommand(Color colour){
-    return new InstantCommand(() -> setSolidColour(colour));
+    InstantCommand command = new InstantCommand(() -> setSolidColour(colour));
+
+    command.addRequirements(this);
+
+    return command;
   }
 
   public void Blink(double seconds){
@@ -108,11 +131,19 @@ public class LED extends SubsystemBase {
   }
 
   public void Blink(double onSeconds, double offSeconds){
-    pattern = pattern.blink(Time.ofBaseUnits(offSeconds, Second), Time.ofBaseUnits(offSeconds, Second));
+    pattern = pattern.blink(Time.ofBaseUnits(onSeconds, Second), Time.ofBaseUnits(offSeconds, Second));
   }
 
   public InstantCommand BlinkCommand(double seconds){
-    return new InstantCommand(() -> Blink(seconds));
+    InstantCommand command = new InstantCommand(() -> Blink(seconds));
+
+    command.addRequirements(this);
+
+    return command;
+  }
+
+  public void blinkWithRSL(Color color){
+    pattern = LEDPattern.solid(color).synchronizedBlink(RobotController::getRSLState);
   }
 
   public InstantCommand BlinkCommand(double onSeconds, double offSeconds){

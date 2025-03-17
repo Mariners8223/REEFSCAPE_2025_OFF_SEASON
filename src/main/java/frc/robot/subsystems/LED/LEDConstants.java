@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.LED;
 
+import static edu.wpi.first.units.Units.Percent;
+
+import edu.wpi.first.units.measure.Dimensionless;
 import edu.wpi.first.wpilibj.util.Color;
 
 /** Add your docs here. */
@@ -16,13 +19,23 @@ public class LEDConstants {
 
     public static final int LED_COUNT_TOTAL = LED_LENGTH_BACK + LED_LENGTH_FRONT + LED_LENGTH_MIDDLE;
 
-    public static final double DEFAULT_SCROLL_SPEED = 25;
+    public static final double DEFAULT_SCROLL_SPEED = 20;
 
-    public static final Color[] BLUE_COLORS = {new Color(191,191,255), new Color(120,120, 255),
-                                              new Color(73, 73, 255), new Color(31, 31, 255), new Color(0, 0, 255)};
-    public static final Color BLUE_COLOR_SINGLE = new Color(31, 31, 255);
-    
-    public static final Color[] RED_COLORS = {new Color(255, 136, 136), new Color(251, 90, 90), new Color(244, 48, 48),
-                                              new Color(233, 23, 23), new Color(193, 0, 0)};
-    public static final Color RED_COLOR_SINGLE = new Color(233, 23, 23);
+    public enum AllainceColor{
+        BLUE(Color.kWhite, Color.kDarkBlue, 60, 60),
+        RED(Color.kDarkRed, Color.kBlanchedAlmond, 100, 40);
+
+        public final Color MOVING_COLOR;
+        public final Color BACKGORUND_COLOR;
+
+        public final Dimensionless COLOR_BRIGHTNESS;
+        public final Dimensionless BACKGROUND_BRIGHTNESS;
+
+        AllainceColor(Color color, Color backGround, int colorBrightness, int backgorundBrihtness){
+            MOVING_COLOR = color;
+            BACKGORUND_COLOR = backGround;
+            COLOR_BRIGHTNESS = Percent.of(colorBrightness);
+            BACKGROUND_BRIGHTNESS = Percent.of(backgorundBrihtness);
+        }
+    }
 }
