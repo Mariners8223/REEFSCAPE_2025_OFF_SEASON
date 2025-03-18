@@ -38,7 +38,7 @@ public class VisionConstants {
 
        FUNNEL_CAMERA("FunnelCamera",
            new Transform3d(
-               -0.319, 0.169, 0.55,
+               -0.329, 0.229, 0.55,
                new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(178))));
 
         public final String cameraName;
