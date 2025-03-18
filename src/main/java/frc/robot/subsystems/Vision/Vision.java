@@ -87,7 +87,7 @@ public class Vision extends SubsystemBase {
                     continue;
                 }
 
-                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType());
+                var stdDevs = getStdDevs(frame.averageTargetDistance(), frame.tagCount(), frame.estimationType(), camera);
 
                 poseConsumer.accept(frame.robotPose().toPose2d(), frame.timeStamp(), stdDevs);
 
@@ -139,16 +139,16 @@ public class Vision extends SubsystemBase {
      * @param estimationType     the type of estimation used
      * @return the standard deviations for the pose
      */
-    private Matrix<N3, N1> getStdDevs(double averageTagDistance, double tagCount, VisionIO.EstimationType estimationType) {
+    private Matrix<N3, N1> getStdDevs(double averageTagDistance, double tagCount, VisionIO.EstimationType estimationType, VisionCamera camera) {
         // Calculate standard deviations
         double stdDevFactor =
                 Math.pow(averageTagDistance, 2.0) / tagCount;
 
-        double linearStdDev = VisionConstants.XYstdFactor * stdDevFactor;
-        double angularStdDev = VisionConstants.thetaStdFactor * stdDevFactor;
+        double linearStdDev = camera.constants.XYstdFactor * stdDevFactor;
+        double angularStdDev = camera.constants.thetaStdFactor * stdDevFactor;
         if (estimationType == VisionIO.EstimationType.MULTIPLE_TARGETS) {
-            linearStdDev *= VisionConstants.XYstdFactor;
-            angularStdDev *= VisionConstants.thetaStdFactor;
+            linearStdDev *= camera.constants.XYstdFactor;
+            angularStdDev *= camera.constants.thetaStdFactor;
         }
 
         return VecBuilder.fill(linearStdDev, linearStdDev, angularStdDev);
@@ -166,15 +166,17 @@ public class Vision extends SubsystemBase {
         private final VisionIO camera;
         private final String cameraName;
         private final VisionInputsAutoLogged inputs;
+        private final CameraConstants constants;
 
-        public VisionCamera(VisionIO camera, String cameraName) {
+        public VisionCamera(VisionIO camera, String cameraName, CameraConstants constants) {
             this.camera = camera;
             this.cameraName = cameraName;
             this.inputs = new VisionInputsAutoLogged();
+            this.constants = constants;
         }
 
         public VisionCamera(CameraConstants constants, AprilTagFieldLayout fieldLayout, Supplier<Pose2d> referencePoseSupplier) {
-            this(new VisionIOPhoton(constants, fieldLayout, referencePoseSupplier), constants.cameraName);
+            this(new VisionIOPhoton(constants, fieldLayout, referencePoseSupplier), constants.cameraName, constants);
         }
 
         public VisionCamera(String cameraName){
@@ -185,6 +187,7 @@ public class Vision extends SubsystemBase {
             };
 
             this.cameraName = cameraName;
+            this.constants = CameraConstants.END_EFFECTOR_CAMERA;
             inputs = new VisionInputsAutoLogged();
 
         }

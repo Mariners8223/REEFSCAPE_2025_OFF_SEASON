@@ -26,28 +26,30 @@ public class VisionConstants {
 	public static final int MIDLINE_X = 300;
     public static final int Y_PIXELS = 500;
 
-    public static double XYstdFactor = 0.06;
-    public static double thetaStdFactor = 0.08;
-
-
     public enum CameraConstants{
         END_EFFECTOR_CAMERA("EndEffectorCamera",
             new Transform3d(
-                0.2, 0.085, 0.31,
-                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-15)))), 
+                0.21, 0.075, 0.31,
+                new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-15))),
+                0.06, 0.08), 
 
        FUNNEL_CAMERA("FunnelCamera",
            new Transform3d(
-               -0.329, 0.229, 0.55,
-               new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(178))));
+               -0.329, 0.157, 0.55,
+               new Rotation3d(0, Units.degreesToRadians(-12), Units.degreesToRadians(178))),
+               0.1, 0.08);
 
         public final String cameraName;
+        public final double XYstdFactor;
+        public final double thetaStdFactor;
 
         public final Transform3d robotToCamera;
 
-        CameraConstants(String name, Transform3d robotToCamera){
+        CameraConstants(String name, Transform3d robotToCamera, double xySTD, double thetaSTD){
             this.cameraName = name;
             this.robotToCamera = robotToCamera;
+            this.XYstdFactor = xySTD;
+            this.thetaStdFactor = thetaSTD;
         }
 
         @Override
