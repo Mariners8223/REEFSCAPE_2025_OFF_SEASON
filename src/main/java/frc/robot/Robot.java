@@ -227,7 +227,7 @@ public class Robot extends LoggedRobot
             autonomousCommand.schedule();
         }
         
-        RobotContainer.led.blinkWithRSL(Color.kMidnightBlue);
+        RobotContainer.led.blinkWithRSL(isRedAlliance);
     }
     
     

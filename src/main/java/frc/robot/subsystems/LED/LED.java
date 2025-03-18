@@ -142,7 +142,9 @@ public class LED extends SubsystemBase {
     return command;
   }
 
-  public void blinkWithRSL(Color color){
+  public void blinkWithRSL(boolean isRedAlliance){
+    Color color = isRedAlliance ? AllainceColor.RED.BACKGORUND_COLOR : AllainceColor.BLUE.BACKGORUND_COLOR;
+
     pattern = LEDPattern.solid(color).synchronizedBlink(RobotController::getRSLState);
   }
 
