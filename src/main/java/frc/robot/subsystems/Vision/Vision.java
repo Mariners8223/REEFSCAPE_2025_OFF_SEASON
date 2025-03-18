@@ -32,10 +32,12 @@ public class Vision extends SubsystemBase {
 
     private final VisionConsumer poseConsumer;
 
+    private final Supplier<Boolean> ignoreFunnel;
+
     /**
      * Creates a new Vision.
      */
-    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier) {
+    public Vision(VisionConsumer poseConsumer, Supplier<Pose2d> referncePoseSupplier, Supplier<Boolean> ignoreFunnel) {
 
         int numOfCameras = CameraConstants.values().length;
 
@@ -49,6 +51,7 @@ public class Vision extends SubsystemBase {
         }
 
         this.poseConsumer = poseConsumer;
+        this.ignoreFunnel = ignoreFunnel;
     }
 
     @Override
@@ -83,6 +86,11 @@ public class Vision extends SubsystemBase {
                 }
 
                 if (!checkPoseAmbiguity(frame.poseAmbiguity(), frame.estimationType())) {
+                    rejectedPoses.add(frame.robotPose());
+                    continue;
+                }
+
+                if(ignoreFunnel.get() && camera.constants == CameraConstants.FUNNEL_CAMERA){
                     rejectedPoses.add(frame.robotPose());
                     continue;
                 }

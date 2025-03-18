@@ -24,6 +24,8 @@ public class HomeToReef extends Command {
 
     private int timer = 0;
 
+    private static boolean isRunning =false;
+
     public HomeToReef(DriveBase driveBase, ReefLocation targetReef) {
         this.driveBase = driveBase;
         this.targetReef = targetReef;
@@ -68,6 +70,8 @@ public class HomeToReef extends Command {
         timer = 0;
 
         driveBase.drive(new ChassisSpeeds());
+
+        isRunning = true;
     }
 
     public boolean isOutOfTolarance(){
@@ -138,6 +142,10 @@ public class HomeToReef extends Command {
         return Math.max(value, lowerLimit);
     }
 
+    public static boolean isRunning(){
+        return isRunning;
+    }
+
     @Override
     public boolean isFinished() {
         double thetaError = ThetaController.getError();
@@ -157,5 +165,6 @@ public class HomeToReef extends Command {
     @Override
     public void end(boolean interrupted) {
         driveBase.drive(new ChassisSpeeds());
+        isRunning = false;
     }
 }

@@ -22,10 +22,6 @@ public class VisionConstants {
     public static final double maxMultiAmbiguity = 0.3;
     public static final double maxSingleAmbiguity = 0.1;
 
-	public static final int X_PIXELS = 600;
-	public static final int MIDLINE_X = 300;
-    public static final int Y_PIXELS = 500;
-
     public enum CameraConstants{
         END_EFFECTOR_CAMERA("EndEffectorCamera",
             new Transform3d(

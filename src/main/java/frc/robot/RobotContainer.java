@@ -92,7 +92,7 @@ public class RobotContainer {
         climb = new Climb();
         led = new LED();
         robotAuto = new RobotAuto();
-        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose);
+        vision = new Vision(driveBase::addVisionMeasurement, driveBase::getPose, HomeToReef::isRunning);
 
         endEffector.setDefaultCommand(new Intake(endEffector));
 
