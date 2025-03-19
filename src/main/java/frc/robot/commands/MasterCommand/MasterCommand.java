@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.EjectSequance;
 import frc.robot.subsystems.DriveTrain.DriveBase;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
@@ -30,7 +30,7 @@ public class MasterCommand extends Command {
 
     private final ReefFinderWrapper pathCommand;
     private final MoveToLevel moveElevatorCommand;
-    private final Eject ejectCommand;
+    private final EjectSequance ejectCommand;
     private final HomeToReef homeToReef;
 
     public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, EventTrigger moveElevatorMarker,
@@ -47,7 +47,7 @@ public class MasterCommand extends Command {
         moveElevatorCommand = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
 
         // eject phase (releasing the game piece)
-        ejectCommand = new Eject(endEffector, EndEffectorConstants.MotorPower.L1_LEFT);
+        ejectCommand = new EjectSequance(endEffector, elevator);
 
         // elevator to home phase (moving the elevator to the home position)
         Command elevatorToHome = new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.Bottom);
