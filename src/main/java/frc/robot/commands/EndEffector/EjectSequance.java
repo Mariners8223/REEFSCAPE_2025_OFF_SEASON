@@ -2,7 +2,6 @@ package frc.robot.commands.EndEffector;
 
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.commands.Elevator.MoveToLevel;
-import frc.robot.commands.EndEffector.Intake.Intake;
 import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
@@ -19,10 +18,8 @@ public class EjectSequance extends Command {
 
         group = new ParallelDeadlineGroup(
                 ejectCommand,
-                new SequentialCommandGroup(
-                        // new WaitCommand(EndEffectorConstants.MotorPower.L4.ejectTime / 4),
-                        new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L4_EXTRA)
-                ).onlyIf(() -> ejectCommand.getLevel() == EndEffectorConstants.MotorPower.L4)
+                new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L4_EXTRA)
+                    .onlyIf(() -> ejectCommand.getLevel() == EndEffectorConstants.MotorPower.L4)
         );
 
     }
