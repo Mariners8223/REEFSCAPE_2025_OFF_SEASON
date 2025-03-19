@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4418807363882973,
-        "y": 7.303852905345771
+        "x": 1.174795081967213,
+        "y": 7.01593237704918
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.0083779686642194,
-        "y": 6.84399987415565
+        "x": 2.741292314243135,
+        "y": 6.556079345859059
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "feeder 1"
     },
     {
       "anchor": {
@@ -64,14 +64,14 @@
   "eventMarkers": [
     {
       "name": "move to selected level",
-      "waypointRelativePos": 0.7778528021607122,
+      "waypointRelativePos": 1.706954760297084,
       "endWaypointRelativePos": null,
       "command": null
     }
   ],
   "globalConstraints": {
     "maxVelocity": 4.0,
-    "maxAcceleration": 9.0,
+    "maxAcceleration": 8.0,
     "maxAngularVelocity": 558.0,
     "maxAngularAcceleration": 2177.0,
     "nominalVoltage": 12.0,

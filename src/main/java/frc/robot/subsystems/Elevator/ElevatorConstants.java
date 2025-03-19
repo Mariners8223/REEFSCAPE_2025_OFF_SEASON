@@ -75,7 +75,7 @@ public class ElevatorConstants {
     public static final double PULLEY_EXTENSION_RATIO = PULLEY_RADIUS * 2 * Math.PI * 2;
 
     public static final double SOFT_MINIMUM = ElevatorLevel.Bottom.getHeight();
-    public static final double SOFT_MAXIMUM = ElevatorLevel.L4.getHeight();
+    public static final double SOFT_MAXIMUM = ElevatorLevel.L4_EXTRA.getHeight();
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
         2.25,
