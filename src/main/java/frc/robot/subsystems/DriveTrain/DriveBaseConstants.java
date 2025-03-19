@@ -36,8 +36,8 @@ public class DriveBaseConstants {
                 9.75,
                 38); //the constraints for pathPlanner
 
-        public static final PIDFGains THETA_PID = new PIDFGains(8, 4, 0.05); //the pid gains for the PID Controller of the robot angle, units are radians per second
-        public static final PIDFGains XY_PID = new PIDFGains(5, 2, 0.1);//the pid gains for the pid controller of the robot's velocity, units are meters per second
+        public static final PIDFGains THETA_PID = new PIDFGains(7, 2, 0.05); //the pid gains for the PID Controller of the robot angle, units are radians per second
+        public static final PIDFGains XY_PID = new PIDFGains(5, 0.2, 0.1);//the pid gains for the pid controller of the robot's velocity, units are meters per second
     }
 
     public static final int PIGEON_ID = 2;
