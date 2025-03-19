@@ -32,7 +32,7 @@ public class DriveBaseConstants {
 
         public static final PathConstraints PATH_CONSTRAINTS = new PathConstraints(
                 4,
-                9, //TODO find a good value for this
+                8, //TODO find a good value for this
                 9.75,
                 38); //the constraints for pathPlanner
 

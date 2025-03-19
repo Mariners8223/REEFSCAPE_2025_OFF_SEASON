@@ -20,7 +20,7 @@ public class EjectSequance extends Command {
         group = new ParallelDeadlineGroup(
                 ejectCommand,
                 new SequentialCommandGroup(
-                        new WaitCommand(EndEffectorConstants.MotorPower.L4.ejectTime / 4),
+                        // new WaitCommand(EndEffectorConstants.MotorPower.L4.ejectTime / 4),
                         new MoveToLevel(elevator, ElevatorConstants.ElevatorLevel.L4_EXTRA)
                 ).onlyIf(() -> ejectCommand.getLevel() == EndEffectorConstants.MotorPower.L4)
         );
