@@ -27,13 +27,13 @@ public class VisionConstants {
             new Transform3d(
                 0.21, 0.075, 0.31,
                 new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-15))),
-                0.06, 0.08), 
+                0.2, 0.16), 
 
        FUNNEL_CAMERA("FunnelCamera",
            new Transform3d(
                -0.329, 0.157, 0.55,
                new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(178))),
-               0.1, 0.08);
+               0.2, 0.16);
 
         public final String cameraName;
         public final double XYstdFactor;
