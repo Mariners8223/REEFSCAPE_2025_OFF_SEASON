@@ -16,7 +16,8 @@ public class ElevatorConstants {
         L1(0.72),
         L2(0.88),
         L3(1.28),
-        L4(1.9);
+        L4(1.9),
+        L4_EXTRA(1.92);
 
         private final double height;
 
@@ -62,7 +63,7 @@ public class ElevatorConstants {
 
     public static final double kV = 1.8226;
     public static final double kA = 0.1872;
-    public static final double ELEVATOR_TOLERANCE = 0.015;
+    public static final double ELEVATOR_TOLERANCE = 0.005;
 
     // public static final Constraints PROFILE = new Constraints(5, 12);
     public static final Constraints PROFILE = new Constraints(5, 12);
@@ -74,7 +75,7 @@ public class ElevatorConstants {
     public static final double PULLEY_EXTENSION_RATIO = PULLEY_RADIUS * 2 * Math.PI * 2;
 
     public static final double SOFT_MINIMUM = ElevatorLevel.Bottom.getHeight();
-    public static final double SOFT_MAXIMUM = ElevatorLevel.L4.getHeight();
+    public static final double SOFT_MAXIMUM = ElevatorLevel.L4_EXTRA.getHeight();
 
     public static final PIDFGains PID_GAINS = new PIDFGains(
         2.25,

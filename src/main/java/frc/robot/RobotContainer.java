@@ -29,7 +29,7 @@ import frc.robot.commands.Drive.MinorAdjust;
 import frc.robot.commands.Drive.MinorAdjust.AdjustmentDirection;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.Elevator.MoveToLevelActive;
-import frc.robot.commands.EndEffector.Eject;
+import frc.robot.commands.EndEffector.EjectSequance;
 import frc.robot.commands.EndEffector.MiniEject;
 import frc.robot.commands.EndEffector.Funnel.ToggleFunnel;
 import frc.robot.commands.EndEffector.Intake.Intake;
@@ -42,7 +42,6 @@ import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants.MotorPower;
 import frc.robot.subsystems.LED.LED;
-import frc.robot.subsystems.LED.LEDConstants;
 import frc.robot.subsystems.LED.LED.StripControl;
 import frc.robot.subsystems.RobotAuto.RobotAuto;
 
@@ -327,10 +326,10 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("move l4", new MoveToLevel(elevator, ElevatorLevel.L4));
 
-        Eject eject = new Eject(endEffector, MotorPower.L1_LEFT);
+        EjectSequance eject = new EjectSequance(endEffector, elevator);
 
         NamedCommands.registerCommand("eject", eject.beforeStarting(() ->
-                eject.setLevel(MasterCommand.getMotorPower(elevator.getCurrentLevel(), ReefLocation.REEF_1))));
+                eject.setLevel(MotorPower.L4)));
 
         NamedCommands.registerCommand("ball drop l2", new BallDropLow(ballDropping));
         NamedCommands.registerCommand("ball drop l3", new BallDropHigh(ballDropping));

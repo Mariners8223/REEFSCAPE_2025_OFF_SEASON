@@ -27,6 +27,8 @@ public class Eject extends Command {
     this.motorPower = motorPower;
   }
 
+  public MotorPower getLevel() {return this.motorPower;}
+
   @Override
   public void initialize() {
     endEffector.setLeftMotorPower(motorPower.leftMotorPower);

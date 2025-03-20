@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.Elastic;
