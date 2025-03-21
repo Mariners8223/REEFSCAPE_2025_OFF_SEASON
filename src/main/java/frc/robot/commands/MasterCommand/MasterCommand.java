@@ -8,6 +8,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
+import frc.robot.Robot;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.EjectSequance;
 import frc.robot.subsystems.DriveTrain.DriveBase;
@@ -15,6 +16,7 @@ import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Elevator.ElevatorConstants;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
+import frc.robot.subsystems.LED.LED;
 import frc.robot.subsystems.RobotAuto.RobotAutoConstants;
 
 import java.util.Set;
@@ -34,7 +36,7 @@ public class MasterCommand extends Command {
     private final HomeToReef homeToReef;
 
     public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, EventTrigger moveElevatorMarker,
-                         Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier) {
+                         Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier, LED led) {
 
         this.targetReefSupplier = targetReefSupplier;
         this.levelSupplier = levelSupplier;
@@ -58,6 +60,7 @@ public class MasterCommand extends Command {
 
         // the main command
         coralCommand = new SequentialCommandGroup(
+                led.blinkWithRSLCommand(Robot.isRedAlliance),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 pathCommand.onlyIf(isRobotFarFromTarget),
@@ -69,6 +72,7 @@ public class MasterCommand extends Command {
                         )
                 ),
                 ejectCommand,
+                led.putDefaultPatternCommand(),
                 elevatorToHome
         );
     }

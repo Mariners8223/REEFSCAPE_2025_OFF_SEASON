@@ -231,7 +231,7 @@ public class RobotContainer {
         EventTrigger moveElevatorMarker = new EventTrigger("move to selected level");
 
         Command masterCommand = new MasterCommand(
-                driveBase, elevator, endEffector, moveElevatorMarker, robotAuto::getSelectedLevel, robotAuto::getSelectedReef);
+                driveBase, elevator, endEffector, moveElevatorMarker, robotAuto::getSelectedLevel, robotAuto::getSelectedReef, led);
 
         Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
                 robotAuto::getSelectedLevel, moveElevatorMarker, driveController);
@@ -363,7 +363,37 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("wait to move elevator", new WaitUntilCommand(moveElevatorMarker));
     }
-    
+
+    private static void configLEDs(){
+        led.setStripControl(StripControl.ALL);
+        led.setDefaultPattern(Robot.isRedAlliance);
+        led.putDefaultPattern();
+
+        Command gpLoadedCommand = new SequentialCommandGroup(
+                led.setStripControlCommand(StripControl.ALL),
+                led.SetSolidColourCommand(Color.kGreen),
+                led.BlinkCommand(0.3),
+                new WaitCommand(1.2),
+                led.putDefaultPatternCommand());
+
+        gpLoadedCommand.addRequirements(led);
+
+//        Command gpUnloadedCommand = new SequentialCommandGroup(
+//                led.setStripControlCommand(StripControl.ALL),
+//                led.SetSolidColourCommand(Color.kRed),
+//                led.BlinkCommand(0.3),
+//                new WaitCommand(1.2),
+//                led.putDefaultPatternCommand());
+
+//        gpUnloadedCommand.addRequirements(led);
+
+        Trigger gpLoadedTrigger = new Trigger(endEffector::isGpLoaded);
+
+        gpLoadedTrigger.onTrue(gpLoadedCommand);
+
+//        gpLoadedTrigger.onFalse(gpUnloadedCommand);
+    }
+
 
 
     public static Command getAutoCommand() {
@@ -405,37 +435,6 @@ public class RobotContainer {
 
         new Trigger(RobotState::isEnabled).and(RobotState::isTeleop).onTrue(new InstantCommand(() -> Robot.clearObjectPoseField("AutoPath")).ignoringDisable(true));
         new Trigger(RobotState::isDisabled).and(checkForPathChoiceUpdate).onTrue(new InstantCommand(() -> updateFieldFromAuto(autoChooser.get().getName())).ignoringDisable(true));
-    }
-
-    private static void configLEDs(){
-        led.setStripControl(StripControl.ALL);
-        led.setDefaultPattern(Robot.isRedAlliance);
-        led.putDefaultPattern();
-
-        Command gpLoadedCommand = new SequentialCommandGroup(
-                led.setStripControlCommand(StripControl.ALL),
-                led.SetSolidColourCommand(Color.kGreen),
-                led.BlinkCommand(0.3),
-                new WaitCommand(1.2),
-                led.putDefaultPatternCommand());
-
-        gpLoadedCommand.addRequirements(led);
-
-        Command gpUnloadedCommand = new SequentialCommandGroup(
-                led.setStripControlCommand(StripControl.ALL),
-                led.SetSolidColourCommand(Color.kRed),
-                led.BlinkCommand(0.3),
-                new WaitCommand(1.2),
-                led.putDefaultPatternCommand());
-
-        gpUnloadedCommand.addRequirements(led);
-
-        Trigger gpLoadedTrigger = new Trigger(endEffector::isGpLoaded);
-
-        gpLoadedTrigger.onTrue(gpLoadedCommand);
-
-        gpLoadedTrigger.onFalse(gpUnloadedCommand);
-
     }
 
     private static void updateFieldFromAuto(String autoName) {
