@@ -34,6 +34,7 @@ public class MasterCommand extends Command {
     private final MoveToLevel moveElevatorCommand;
     private final EjectSequance ejectCommand;
     private final HomeToReef homeToReef;
+    private final Runnable setLEDDefaultPattern;
 
     public MasterCommand(DriveBase driveBase, Elevator elevator, EndEffector endEffector, EventTrigger moveElevatorMarker,
                          Supplier<ElevatorConstants.ElevatorLevel> levelSupplier, Supplier<Constants.ReefLocation> targetReefSupplier, LED led) {
@@ -75,6 +76,8 @@ public class MasterCommand extends Command {
                 led.putDefaultPatternCommand(),
                 elevatorToHome
         );
+
+        setLEDDefaultPattern = led::putDefaultPattern;
     }
 
     @Override
@@ -122,6 +125,7 @@ public class MasterCommand extends Command {
     @Override
     public void end(boolean interrupted) {
         coralCommand.end(interrupted);
+        setLEDDefaultPattern.run();
     }
 
     @Override

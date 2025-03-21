@@ -320,11 +320,16 @@ public class RobotContainer {
                 driveBase.pathFindToPathAndFollow(Constants.FeederLocation.LEFT.getPath()),
                 led.putDefaultPatternCommand()
         ));
+
+        leftFeeder.onFalse(led.putDefaultPatternCommand());
+
         rightFeeder.whileTrue(new SequentialCommandGroup(
                 led.blinkWithRSLCommand(!isBlueAlliance),
                 driveBase.pathFindToPathAndFollow(Constants.FeederLocation.RIGHT.getPath()),
                 led.putDefaultPatternCommand()
         ));
+
+        rightFeeder.onFalse(led.putDefaultPatternCommand());
     }
 
     public static void configNamedCommands() {
