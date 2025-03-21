@@ -218,7 +218,7 @@ public class Robot extends LoggedRobot
 
         autonomousCommand = RobotContainer.getAutoCommand();
 
-        Elastic.selectTab(1);
+        Elastic.selectTab(0);
         RobotContainer.robotAuto.setSelectedLevel(ElevatorLevel.L4);
         
         if (autonomousCommand != null)
@@ -243,7 +243,7 @@ public class Robot extends LoggedRobot
     @Override
     public void teleopInit()
     {
-        Elastic.selectTab(0);
+        Elastic.selectTab(1);
 
         if (autonomousCommand != null)
         {

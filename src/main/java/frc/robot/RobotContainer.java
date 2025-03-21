@@ -97,7 +97,7 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             new Trigger(DriverStation::isDSAttached).onTrue(
-                new InstantCommand(() -> Elastic.selectTab(1)).ignoringDisable(true)
+                new InstantCommand(() -> Elastic.selectTab(0)).ignoringDisable(true)
             );
         }
 
@@ -147,6 +147,12 @@ public class RobotContainer {
         .whileTrue(new StartEndCommand(
             DriveCommand::halfSpeed,
             DriveCommand::normalSpeed).ignoringDisable(true));
+
+        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded())
+        .whileTrue(new StartEndCommand(
+        () -> Elastic.selectTab(2),
+        () -> Elastic.selectTab(1)).ignoringDisable(true));
+
     }
 
     public static void configureOperatorBinding() {
