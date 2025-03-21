@@ -300,11 +300,11 @@ public class RobotContainer {
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
     }
 
-    public static void setFeederBinding(boolean isBlueAllaince){
+    public static void setFeederBinding(boolean isBlueAlliance){
         final Trigger leftFeeder;
         final Trigger rightFeeder;
 
-        if(isBlueAllaince){
+        if(isBlueAlliance){
             leftFeeder = driveController.leftBumper();
             rightFeeder = driveController.rightBumper();
         }
@@ -313,8 +313,18 @@ public class RobotContainer {
             leftFeeder = driveController.rightBumper();
         }
 
-        leftFeeder.whileTrue(driveBase.pathFindToPathAndFollow(Constants.FeederLocation.LEFT.getPath()));
-        rightFeeder.whileTrue(driveBase.pathFindToPathAndFollow(Constants.FeederLocation.RIGHT.getPath()));
+
+
+        leftFeeder.whileTrue(new SequentialCommandGroup(
+                led.blinkWithRSLCommand(!isBlueAlliance),
+                driveBase.pathFindToPathAndFollow(Constants.FeederLocation.LEFT.getPath()),
+                led.putDefaultPatternCommand()
+        ));
+        rightFeeder.whileTrue(new SequentialCommandGroup(
+                led.blinkWithRSLCommand(!isBlueAlliance),
+                driveBase.pathFindToPathAndFollow(Constants.FeederLocation.RIGHT.getPath()),
+                led.putDefaultPatternCommand()
+        ));
     }
 
     public static void configNamedCommands() {

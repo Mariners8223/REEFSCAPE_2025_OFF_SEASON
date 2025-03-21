@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.LED.LEDConstants.AllainceColor;
@@ -146,6 +147,14 @@ public class LED extends SubsystemBase {
     Color color = isRedAlliance ? AllainceColor.RED.BACKGORUND_COLOR : AllainceColor.BLUE.BACKGORUND_COLOR;
 
     pattern = LEDPattern.solid(color).synchronizedBlink(RobotController::getRSLState);
+  }
+
+  public Command blinkWithRSLCommand(boolean isRedAlliance){
+    InstantCommand command = new InstantCommand(() -> blinkWithRSL(isRedAlliance));
+
+    command.addRequirements(this);
+
+    return command;
   }
 
   public InstantCommand BlinkCommand(double onSeconds, double offSeconds){
