@@ -62,6 +62,8 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
                 absEncoder.getVelocity(),
                 1
         ));
+
+
     }
 
     @Override
@@ -94,7 +96,7 @@ public class SwerveModuleIODevBot extends SwerveModuleIO {
 
     @Override
     public void setSteerMotorReference(double reference) {
-        steerMotor.setReference(reference, MarinersController.ControlMode.ProfiledPosition);
+        steerMotor.setReference(reference, MarinersController.ControlMode.Position);
     }
 
     @Override
