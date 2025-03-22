@@ -1,5 +1,6 @@
 package frc.robot.commands.Drive;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,6 +20,9 @@ public class DriveCommand extends Command {
     private static double MAX_FREE_WHEEL_SPEED;
     private static double MAX_OMEGA_RAD_PER_SEC;
 
+    private final SlewRateLimiter XlinerSlewLimiter;
+    private final SlewRateLimiter YlinerSlewLimiter;
+
     public DriveCommand(DriveBase driveBase, CommandXboxController controller) {
         this.driveBase = driveBase;
         this.controller = controller;
@@ -30,6 +34,9 @@ public class DriveCommand extends Command {
         double driveBaseRadius = Math.hypot(DISTANCE_BETWEEN_WHEELS / 2, DISTANCE_BETWEEN_WHEELS / 2);
 
         MAX_OMEGA_RAD_PER_SEC = MAX_FREE_WHEEL_SPEED / driveBaseRadius;
+
+        XlinerSlewLimiter = new SlewRateLimiter(DevBotConstants.DRIVE_CONSTRAINTS.maxVelocity);
+        YlinerSlewLimiter = new SlewRateLimiter(DevBotConstants.DRIVE_CONSTRAINTS.maxVelocity);
     }
 
     @Override
@@ -77,6 +84,9 @@ public class DriveCommand extends Command {
         leftX *= R2Axis * MAX_FREE_WHEEL_SPEED;
         leftY *= R2Axis * MAX_FREE_WHEEL_SPEED;
         rightX *= R2Axis * MAX_OMEGA_RAD_PER_SEC;
+
+        leftX = XlinerSlewLimiter.calculate(leftX);
+        leftY = YlinerSlewLimiter.calculate(leftY);
 
         ChassisSpeeds fieldRelativeSpeeds = new ChassisSpeeds(leftX, leftY, rightX);
 
