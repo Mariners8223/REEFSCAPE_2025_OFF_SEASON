@@ -63,7 +63,7 @@ public class ElevatorConstants {
 
     public static final double kV = 1.8226;
     public static final double kA = 0.1872;
-    public static final double ELEVATOR_TOLERANCE = 0.005;
+    public static final double ELEVATOR_TOLERANCE = 0.01;
 
     // public static final Constraints PROFILE = new Constraints(5, 12);
     public static final Constraints PROFILE = new Constraints(5, 12);

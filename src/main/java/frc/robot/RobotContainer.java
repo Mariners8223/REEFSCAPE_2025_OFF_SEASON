@@ -143,15 +143,13 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
 
-        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded())
+        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb())
         .whileTrue(new StartEndCommand(
             DriveCommand::halfSpeed,
             DriveCommand::normalSpeed).ignoringDisable(true));
 
-        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded())
-        .whileTrue(new StartEndCommand(
-        () -> Elastic.selectTab(2),
-        () -> Elastic.selectTab(1)).ignoringDisable(true));
+        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb())
+        .onTrue(new InstantCommand(() -> Elastic.selectTab(2)));
 
     }
 
@@ -193,12 +191,12 @@ public class RobotContainer {
 
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->
-                Timer.getMatchTime() <= 30 && endEffector.getFunnelPosition() < EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new ClimbCommand(climb));
+                Timer.getMatchTime() <= 30 && endEffector.isFunnelInClimb()).whileTrue(new ClimbCommand(climb));
         // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
-                endEffector.getFunnelPosition() > EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
+                !endEffector.isFunnelInClimb()).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
 
         // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
         //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));

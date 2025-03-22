@@ -38,6 +38,10 @@ public class EndEffector extends SubsystemBase {
         io.setLeftMotorPower(PowerToSet);
     }
 
+    public boolean isFunnelInClimb(){
+        return getFunnelPosition() < EndEffectorConstants.FunnelMotor.CLIMB_POSITION / 2;
+    }
+
     public void moveFunnel(double target) {
         io.moveFunnel(target);
         Logger.recordOutput("EndEffector/funnel target", target);
