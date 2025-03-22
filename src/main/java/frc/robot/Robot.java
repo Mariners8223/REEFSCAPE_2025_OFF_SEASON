@@ -213,8 +213,8 @@ public class Robot extends LoggedRobot
 
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
-        Pose2d resetPose = new Pose2d(RobotContainer.driveBase.getPose().getTranslation(), isRedAlliance ? new Rotation2d() : new Rotation2d(Math.PI));
-        RobotContainer.driveBase.reset(resetPose);
+        // Pose2d resetPose = new Pose2d(RobotContainer.driveBase.getPose().getTranslation(), isRedAlliance ? new Rotation2d() : new Rotation2d(Math.PI));
+        // RobotContainer.driveBase.reset(resetPose);
 
         autonomousCommand = RobotContainer.getAutoCommand();
 

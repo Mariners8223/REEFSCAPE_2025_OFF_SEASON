@@ -59,8 +59,8 @@ public class EndEffectorConstants {
         public static final double GEAR_RATIO = 45;
 
 
-        public static final double COLLECT_POSITION = 0.05;
-        public static final double CLIMB_POSITION = -0.3;
+        public static final double COLLECT_POSITION = 0.01;
+        public static final double CLIMB_POSITION = -0.36;
         public static final double TOLERANCE = 0.05;
     }
 }

@@ -11,9 +11,16 @@ import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 public class IntakeStep1 extends Command {
   private final EndEffector endEffector;
 
+  private int timer;
+
   public IntakeStep1(EndEffector endEffector) {
     this.endEffector = endEffector;
     addRequirements(endEffector);
+  }
+
+  @Override
+  public void initialize() {
+    timer = 0;
   }
 
   @Override
@@ -26,6 +33,9 @@ public class IntakeStep1 extends Command {
 
   @Override
   public boolean isFinished() {
-    return endEffector.isGpDetected();
+    if(endEffector.isGpDetected()) timer ++;
+    else timer = 0;
+
+    return timer >= 10;
   }
 }

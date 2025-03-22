@@ -15,11 +15,6 @@ public class IntakeStep2 extends Command {
   }
 
   @Override
-  public void initialize() {
-    if(!endEffector.isGpDetected()) cancel();
-  }
-
-  @Override
   public void end(boolean interrupted) {
     endEffector.stopEndEffectorMotors();
     endEffector.setLoadedValue(!interrupted);
