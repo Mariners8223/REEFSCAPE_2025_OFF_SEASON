@@ -7,6 +7,7 @@ package frc.robot.subsystems.Climb;
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj.RobotState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -44,7 +45,11 @@ public class Climb extends SubsystemBase {
         io.Update(inputs);
         Logger.processInputs(getName(), inputs);
 
-        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().toString();
+        double climbPrecnet = (inputs.height / ClimbConstants.SOFT_MINIMUM) * 100;
+
+        SmartDashboard.putNumber("climb precent", climbPrecnet);
+
+        String currentCommandName = getCurrentCommand() == null ? "Null" : getCurrentCommand().getName();
         Logger.recordOutput("Climb/Current Command", currentCommandName);
     }
 }
