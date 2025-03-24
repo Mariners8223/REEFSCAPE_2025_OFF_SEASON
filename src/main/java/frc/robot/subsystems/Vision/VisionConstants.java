@@ -25,13 +25,13 @@ public class VisionConstants {
     public enum CameraConstants{
         END_EFFECTOR_CAMERA("EndEffectorCamera",
             new Transform3d(
-                0.21, 0.075, 0.31,
+                0.205, 0.081, 0.32,
                 new Rotation3d(0, Units.degreesToRadians(-1), Units.degreesToRadians(-15))),
                 0.2, 0.16), 
 
        FUNNEL_CAMERA("FunnelCamera",
            new Transform3d(
-               -0.329, 0.157, 0.55,
+               -0.34, 0.178, 0.557,
                new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(178))),
                0.2, 0.16);
 
