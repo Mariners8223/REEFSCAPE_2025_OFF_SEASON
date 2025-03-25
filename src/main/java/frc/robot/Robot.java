@@ -171,7 +171,7 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", pdh.getVoltage());
-        Logger.recordOutput("LED power draw", pdh.getCurrent(9) * pdh.getVoltage());
+        Logger.recordOutput("LED power draw", pdh.getCurrent(9) * pdh.getVoltage()); // 23 if switchable
     }
     
     
