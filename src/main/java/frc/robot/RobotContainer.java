@@ -135,10 +135,13 @@ public class RobotContainer {
         Trigger robotReadyClimb = new Trigger(() -> Timer.getMatchTime() < 30 && endEffector.isFunnelInClimb());
 
         robotReadyClimb.onTrue(new InstantCommand(() -> {
-            DriveCommand.halfSpeed();
             Logger.recordOutput("Elastic Tab", "EndGame");
             Elastic.selectTab(2);
         }));
+
+        Trigger robotInClimb = new Trigger(() -> Timer.getMatchTime() < 30 && endEffector.isFunnelInClimb()).and(RobotContainer::isRobotInClimbArea);
+
+        robotInClimb.onFalse(new InstantCommand(DriveCommand::halfSpeed));
 
         new Trigger(() -> !endEffector.isFunnelInClimb()).onTrue(new InstantCommand(() -> {
             DriveCommand.normalSpeed();
@@ -214,6 +217,12 @@ public class RobotContainer {
         System.out.println("new selcted level: " + level);
 
         return ElevatorLevel.values()[level];
+    }
+
+    private static boolean isRobotInClimbArea(){
+        Pose2d robotPose = driveBase.getPose();
+
+        return  robotPose.getX() > 7.5 && robotPose.getX() < 8.5;
     }
 
     public static void configureDriveBindings() {
