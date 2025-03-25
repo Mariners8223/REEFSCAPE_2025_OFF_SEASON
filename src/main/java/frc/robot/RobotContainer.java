@@ -150,7 +150,7 @@ public class RobotContainer {
         new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb())
         .onTrue(new InstantCommand(() -> Elastic.selectTab(2)));
 
-        new Trigger(() -> Robot.pdh.getVoltage() > 8)
+        new Trigger(() -> Robot.pdh.getVoltage() > 7)
                 .whileTrue(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(true)).ignoringDisable(true))
                 .whileFalse(new WaitCommand(10)
                         .andThen(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(false)).ignoringDisable(true)));
