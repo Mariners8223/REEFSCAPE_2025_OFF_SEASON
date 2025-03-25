@@ -102,18 +102,6 @@ public class RobotContainer {
 
         configNamedCommands();
         configChooser();
-
-        // driveController.start().onTrue(driveBase.resetOnlyDirection());
-
-        // driveController.a().onTrue(driveBase.startModuleDriveCalibration());
-        // driveController.b().onTrue(driveBase.stopModuleDriveCalibration());
-
-        // DriveBaseSYSID driveBaseSYSID = new DriveBaseSYSID(driveBase, driveController);
-
-        // driveController.a().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kForward));
-        // driveController.b().whileTrue(driveBaseSYSID.getThetaRoutineDynamic(Direction.kReverse));
-        // driveController.x().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kForward));
-        // driveController.y().whileTrue(driveBaseSYSID.getThetaRoutineQuasistatic(Direction.kReverse));
         configLEDs();
         
         configureDriveBindings();
@@ -142,13 +130,17 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
 
-        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb())
-        .whileTrue(new StartEndCommand(
-            DriveCommand::halfSpeed,
-            DriveCommand::normalSpeed).ignoringDisable(true));
+        Trigger robotReadyClimb = new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb());
 
-        new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb())
-        .onTrue(new InstantCommand(() -> Elastic.selectTab(2)));
+        robotReadyClimb.onTrue(new InstantCommand(() -> {
+            DriveCommand.halfSpeed();
+            Elastic.selectTab(2);
+        }));
+
+        new Trigger(() -> !endEffector.isFunnelInClimb()).onTrue(new InstantCommand(() -> {
+            DriveCommand.normalSpeed();
+            Elastic.selectTab(1);
+        }));
 
     }
 
@@ -177,8 +169,6 @@ public class RobotContainer {
             return selectedReef.isBallInUpPosition();
         };
 
-        // // operatorController.button(13).onTrue(new InstantCommand(() ->
-        // //         robotAuto.setDropBallInCycle(!robotAuto.shouldDropBallInCycle())));
         operatorController.button(13).whileTrue(new SequentialCommandGroup(
             new BallDropOnForLow(ballDropping).onlyIf(() -> !isBallDropUp.getAsBoolean()),
             new BallDropOnForHigh(ballDropping).onlyIf(isBallDropUp)
@@ -191,14 +181,10 @@ public class RobotContainer {
         //climb
         operatorController.axisLessThan(2, -0.5).and(() ->
                 Timer.getMatchTime() <= 30 && endEffector.isFunnelInClimb()).whileTrue(new ClimbCommand(climb));
-        // operatorController.povDownLeft().whileTrue(new ClimbCommand(climb));
 
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
                 !endEffector.isFunnelInClimb()).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
-
-        // new Trigger(() -> Timer.getMatchTime() <= 30).and(() -> isRobotInClimbArea() && !endEffector.isGpLoaded()).and(RobotState::isTeleop)
-        //         .onTrue(new MoveFunnel(endEffector, EndEffectorConstants.FunnelMotor.CLIMB_POSITION));
     }
 
     private static boolean isRobotInClimbArea(){
@@ -243,19 +229,10 @@ public class RobotContainer {
                 driveBase.setDefaultCommand(new DriveCommand(driveBase, RobotContainer.driveController)),
                 driveBase::removeDefaultCommand).ignoringDisable(true));
 
-//        Command moveElevatorToBottom = new MoveToLevel(elevator, ElevatorLevel.Bottom);
-
-        // Command resetSelection = new InstantCommand(() -> {
-        //     robotAuto.setSelectedLevel(null);
-        //     robotAuto.setSelectedReef(null);
-        // });
-
         BooleanSupplier robotBelowCertainSpeed = () -> {
             // speed is below 1 m/s total
             return driveBase.getVelocity() < 1;
         };
-
-        // Command resetSelectionAdvanced = resetSelection.onlyIf(() -> !endEffector.isGpLoaded());
 
         Trigger mainCycleTrigger = driveController.leftTrigger();
 
@@ -386,20 +363,9 @@ public class RobotContainer {
 
         gpLoadedCommand.addRequirements(led);
 
-//        Command gpUnloadedCommand = new SequentialCommandGroup(
-//                led.setStripControlCommand(StripControl.ALL),
-//                led.SetSolidColourCommand(Color.kRed),
-//                led.BlinkCommand(0.3),
-//                new WaitCommand(1.2),
-//                led.putDefaultPatternCommand());
-
-//        gpUnloadedCommand.addRequirements(led);
-
         Trigger gpLoadedTrigger = new Trigger(endEffector::isGpLoaded);
 
         gpLoadedTrigger.onTrue(gpLoadedCommand);
-
-//        gpLoadedTrigger.onFalse(gpUnloadedCommand);
     }
 
 
