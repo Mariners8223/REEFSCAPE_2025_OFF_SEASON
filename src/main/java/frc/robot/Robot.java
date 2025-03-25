@@ -45,6 +45,7 @@ public class Robot extends LoggedRobot
     private static AprilTagFieldLayout apriltagField;
 
     private int driverStationCheckTimer = 0;
+    private boolean ledState = true;
     
     @SuppressWarnings({ "resource", "incomplete-switch" })
     public Robot() {
@@ -129,6 +130,8 @@ public class Robot extends LoggedRobot
         Logger.recordOutput("Zero 3D", new Pose3d());
 
         new RobotContainer();
+
+        SmartDashboard.putBoolean("LED on", true);
     }
 
     private static void checkFlip() {
@@ -172,6 +175,11 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", pdh.getVoltage());
         Logger.recordOutput("LED power draw", pdh.getCurrent(9) * pdh.getVoltage()); // 23 if switchable
+
+        if (SmartDashboard.getBoolean("LED on", true) != ledState) {
+            ledState = !ledState;
+            pdh.setSwitchableChannel(ledState);
+        }
     }
     
     
