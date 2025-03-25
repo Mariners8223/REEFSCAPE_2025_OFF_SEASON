@@ -107,8 +107,6 @@ public class RobotContainer {
         configureDriveBindings();
         configureOperatorBinding();
 
-        SmartDashboard.putNumber("Blink Time", 1.2);
-
         //  configureCamera();
         if (RobotBase.isReal()) {
             CameraServer.startAutomaticCapture();
@@ -130,7 +128,7 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
 
-        Trigger robotReadyClimb = new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && !endEffector.isGpLoaded() && endEffector.isFunnelInClimb());
+        Trigger robotReadyClimb = new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && endEffector.isFunnelInClimb());
 
         robotReadyClimb.onTrue(new InstantCommand(() -> {
             DriveCommand.halfSpeed();

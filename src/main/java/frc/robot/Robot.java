@@ -174,12 +174,7 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", pdh.getVoltage());
-        Logger.recordOutput("LED power draw", pdh.getCurrent(9) * pdh.getVoltage()); // 23 if switchable
-
-        if (SmartDashboard.getBoolean("LED on", true) != ledState) {
-            ledState = !ledState;
-            pdh.setSwitchableChannel(ledState);
-        }
+        // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
     }
     
     
@@ -198,6 +193,12 @@ public class Robot extends LoggedRobot
 
                 isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
             }
+        }
+
+        
+        if (SmartDashboard.getBoolean("LED on", true) != ledState) {
+            ledState = !ledState;
+            pdh.setSwitchableChannel(ledState);
         }
     }
     
@@ -237,6 +238,8 @@ public class Robot extends LoggedRobot
             autonomousCommand.schedule();
         }
         
+        ledState = true;
+        pdh.setSwitchableChannel(true);
         RobotContainer.led.blinkWithRSL(isRedAlliance);
     }
     
