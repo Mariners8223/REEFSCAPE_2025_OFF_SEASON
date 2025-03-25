@@ -192,6 +192,7 @@ public class Robot extends LoggedRobot
                 driverStationCheckTimer = 0;
 
                 isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+                RobotContainer.led.setDefaultPattern(isRedAlliance);
             }
         }
 
@@ -231,6 +232,7 @@ public class Robot extends LoggedRobot
         autonomousCommand = RobotContainer.getAutoCommand();
 
         Elastic.selectTab(0);
+        Logger.recordOutput("Elastic Tab", "auto");
         RobotContainer.robotAuto.setSelectedLevel(ElevatorLevel.L4);
         
         if (autonomousCommand != null)
@@ -258,6 +260,7 @@ public class Robot extends LoggedRobot
     public void teleopInit()
     {
         Elastic.selectTab(1);
+        Logger.recordOutput("Elastic Tab", "Telop");
 
         if (autonomousCommand != null)
         {

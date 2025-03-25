@@ -48,6 +48,7 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.util.Elastic;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -96,7 +97,10 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             new Trigger(DriverStation::isDSAttached).onTrue(
-                new InstantCommand(() -> Elastic.selectTab(0)).ignoringDisable(true)
+                new InstantCommand(() -> {
+                    Elastic.selectTab(0);
+                    Logger.recordOutput("Elastic Tab", "auto");
+                }).ignoringDisable(true)
             );
         }
 
@@ -128,15 +132,17 @@ public class RobotContainer {
 
         if(Constants.ROBOT_TYPE == RobotType.DEVELOPMENT) HomeToReef.pidTune();
 
-        Trigger robotReadyClimb = new Trigger(RobotContainer::isRobotInClimbArea).and(() -> Timer.getMatchTime() < 30 && endEffector.isFunnelInClimb());
+        Trigger robotReadyClimb = new Trigger(() -> Timer.getMatchTime() < 30 && endEffector.isFunnelInClimb());
 
         robotReadyClimb.onTrue(new InstantCommand(() -> {
             DriveCommand.halfSpeed();
+            Logger.recordOutput("Elastic Tab", "EndGame");
             Elastic.selectTab(2);
         }));
 
         new Trigger(() -> !endEffector.isFunnelInClimb()).onTrue(new InstantCommand(() -> {
             DriveCommand.normalSpeed();
+            Logger.recordOutput("Elastic Tab", "Telop");
             Elastic.selectTab(1);
         }));
 
@@ -188,12 +194,6 @@ public class RobotContainer {
         //manual intake
         operatorController.axisLessThan(2, -0.5).and(() ->
                 !endEffector.isFunnelInClimb()).whileTrue(new MiniEject(endEffector, elevator::getCurrentLevel, robotAuto::getSelectedReef));
-    }
-
-    private static boolean isRobotInClimbArea(){
-        Pose2d pose = driveBase.getPose();
-
-        return pose.getX() > 7.5 && pose.getX() < 8.5;
     }
 
     public static ReefLocation configureTargetReefSupplier() {
