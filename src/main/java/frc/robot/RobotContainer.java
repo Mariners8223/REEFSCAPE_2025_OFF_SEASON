@@ -142,6 +142,11 @@ public class RobotContainer {
             Elastic.selectTab(1);
         }));
 
+        new Trigger(() -> Robot.pdh.getVoltage() > 7)
+                .whileTrue(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(true)).ignoringDisable(true))
+                .whileFalse(new WaitCommand(10)
+                        .andThen(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(false)).ignoringDisable(true)));
+
     }
 
     public static void configureOperatorBinding() {

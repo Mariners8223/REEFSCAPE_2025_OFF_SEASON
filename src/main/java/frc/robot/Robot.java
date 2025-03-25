@@ -13,10 +13,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
-import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
@@ -42,11 +39,13 @@ import java.util.List;
 public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
+    public static PowerDistribution pdh;
     private static final Field2d field = new Field2d();
     public static boolean isRedAlliance = false;
     private static AprilTagFieldLayout apriltagField;
 
     private int driverStationCheckTimer = 0;
+    private boolean ledState = true;
     
     @SuppressWarnings({ "resource", "incomplete-switch" })
     public Robot() {
@@ -102,6 +101,9 @@ public class Robot extends LoggedRobot
         SignalLogger.enableAutoLogging(false);
         DataLogManager.stop();
 
+        pdh = new PowerDistribution();
+        pdh.setSwitchableChannel(true);
+
         Logger.start();
         Logger.recordOutput("Bumper Pose", new Pose3d());
 
@@ -128,6 +130,8 @@ public class Robot extends LoggedRobot
         Logger.recordOutput("Zero 3D", new Pose3d());
 
         new RobotContainer();
+
+        SmartDashboard.putBoolean("LED on", true);
     }
 
     private static void checkFlip() {
@@ -169,6 +173,13 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", pdh.getVoltage());
+        Logger.recordOutput("LED power draw", pdh.getCurrent(9) * pdh.getVoltage()); // 23 if switchable
+
+        if (SmartDashboard.getBoolean("LED on", true) != ledState) {
+            ledState = !ledState;
+            pdh.setSwitchableChannel(ledState);
+        }
     }
     
     
