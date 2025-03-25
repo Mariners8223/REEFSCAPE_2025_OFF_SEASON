@@ -242,6 +242,8 @@ public class Robot extends LoggedRobot
         
         ledState = true;
         pdh.setSwitchableChannel(true);
+        SmartDashboard.putBoolean("LED on", true);
+
         RobotContainer.led.blinkWithRSL(isRedAlliance);
     }
     

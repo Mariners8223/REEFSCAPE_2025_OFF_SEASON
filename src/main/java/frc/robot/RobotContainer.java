@@ -284,17 +284,17 @@ public class RobotContainer {
     }
 
     public static void setFeederBinding(boolean isBlueAlliance){
-        final Trigger leftFeeder;
-        final Trigger rightFeeder;
+        final Trigger leftFeeder = driveController.leftBumper();;
+        final Trigger rightFeeder = driveController.rightBumper();
 
-        if(isBlueAlliance){
-            leftFeeder = driveController.leftBumper();
-            rightFeeder = driveController.rightBumper();
-        }
-        else{
-            rightFeeder = driveController.leftBumper();
-            leftFeeder = driveController.rightBumper();
-        }
+        // if(isBlueAlliance){
+        //     leftFeeder = driveController.leftBumper();
+        //     rightFeeder = driveController.rightBumper();
+        // }
+        // else{
+        //     rightFeeder = driveController.leftBumper();
+        //     leftFeeder = driveController.rightBumper();
+        // }
 
 
 

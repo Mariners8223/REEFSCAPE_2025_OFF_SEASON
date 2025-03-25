@@ -29,12 +29,21 @@ public class IntakeStep1 extends Command {
       endEffector.setRightMotorPower(EndEffectorConstants.MotorPower.INTAKE.rightMotorPower);
       endEffector.setLeftMotorPower(EndEffectorConstants.MotorPower.INTAKE.leftMotorPower);
     }
+    else{
+      endEffector.stopEndEffectorMotors();
+    }
   }
 
   @Override
   public boolean isFinished() {
-    if(endEffector.isGpDetected()) timer ++;
-    else timer = 0;
+    if(endEffector.isGpDetected()){
+      if(timer == 0) end(false);
+      timer ++;
+    }
+    else{
+      if(timer != 0) end(true);
+      timer = 0;
+    }
 
     return timer >= 10;
   }
