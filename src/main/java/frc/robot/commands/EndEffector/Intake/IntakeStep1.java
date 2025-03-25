@@ -45,6 +45,6 @@ public class IntakeStep1 extends Command {
       timer = 0;
     }
 
-    return timer >= 10;
+    return timer >= 5;
   }
 }
