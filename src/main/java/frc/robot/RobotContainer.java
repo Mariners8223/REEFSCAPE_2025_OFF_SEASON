@@ -385,7 +385,10 @@ public class RobotContainer {
                 led.SetSolidColourCommand(Color.kGreen),
                 led.BlinkCommand(0.3),
                 new WaitCommand(1.2),
-                led.putDefaultPatternCommand());
+                new InstantCommand(() -> {
+                    if(RobotState.isAutonomous()) led.blinkWithRSLCommand(Color.kOrangeRed);
+                    else led.putDefaultPattern();
+                }));
 
         gpLoadedCommand.addRequirements(led);
 
