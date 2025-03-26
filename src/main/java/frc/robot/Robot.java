@@ -193,6 +193,7 @@ public class Robot extends LoggedRobot
 
                 isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
                 RobotContainer.led.setDefaultPattern(isRedAlliance);
+                RobotContainer.led.putDefaultPattern();
             }
         }
 
