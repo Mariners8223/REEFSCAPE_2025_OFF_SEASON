@@ -77,9 +77,9 @@ public class Robot extends LoggedRobot
                     break;
                 }
 
-                case COMPETITION -> {
-                    Logger.addDataReceiver(new WPILOGWriter("/U"));
-                }
+                // case COMPETITION -> {
+                //     Logger.addDataReceiver(new WPILOGWriter("/U"));
+                // }
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
             }
