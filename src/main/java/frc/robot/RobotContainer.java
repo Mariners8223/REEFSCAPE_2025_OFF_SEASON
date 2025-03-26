@@ -311,22 +311,18 @@ public class RobotContainer {
         final Trigger leftFeeder = driveController.leftBumper();;
         final Trigger rightFeeder = driveController.rightBumper();
 
-        // if(isBlueAlliance){
-        //     leftFeeder = driveController.leftBumper();
-        //     rightFeeder = driveController.rightBumper();
-        // }
-        // else{
-        //     rightFeeder = driveController.leftBumper();
-        //     leftFeeder = driveController.rightBumper();
-        // }
-
         FeederSide side = feederSideChooser.get();
 
         PathPlannerPath rightFeederPath = Constants.FeederLocation.RIGHT.getPath(side);
         PathPlannerPath leftFeederPath = Constants.FeederLocation.LEFT.getPath(side);
 
+        Color color = switch (side){
+            case CLOSE -> Color.kOrangeRed;
+            case AWAY -> new Color(4, 144, 209); //galaxia blue
+        };
+
         leftFeeder.whileTrue(new SequentialCommandGroup(
-                led.blinkWithRSLCommand(!isBlueAlliance),
+                led.blinkWithRSLCommand(color),
                 driveBase.pathFindToPathAndFollow(leftFeederPath),
                 led.putDefaultPatternCommand()
         ));
@@ -334,7 +330,7 @@ public class RobotContainer {
         leftFeeder.onFalse(led.putDefaultPatternCommand());
 
         rightFeeder.whileTrue(new SequentialCommandGroup(
-                led.blinkWithRSLCommand(!isBlueAlliance),
+                led.blinkWithRSLCommand(color),
                 driveBase.pathFindToPathAndFollow(rightFeederPath),
                 led.putDefaultPatternCommand()
         ));

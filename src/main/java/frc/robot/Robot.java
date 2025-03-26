@@ -16,6 +16,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
 import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.Elastic;
@@ -245,7 +246,7 @@ public class Robot extends LoggedRobot
         pdh.setSwitchableChannel(true);
         SmartDashboard.putBoolean("LED on", true);
 
-        RobotContainer.led.blinkWithRSL(isRedAlliance);
+        RobotContainer.led.blinkWithRSL(Color.kOrangeRed);
     }
     
     

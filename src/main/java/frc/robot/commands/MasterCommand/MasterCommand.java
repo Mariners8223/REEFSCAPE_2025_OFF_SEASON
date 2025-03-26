@@ -5,6 +5,7 @@ import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
@@ -61,7 +62,7 @@ public class MasterCommand extends Command {
 
         // the main command
         coralCommand = new SequentialCommandGroup(
-                led.blinkWithRSLCommand(Robot.isRedAlliance),
+                led.blinkWithRSLCommand(Color.kOrangeRed),
                 new ParallelCommandGroup(
                         new SequentialCommandGroup(
                                 pathCommand.onlyIf(isRobotFarFromTarget),
