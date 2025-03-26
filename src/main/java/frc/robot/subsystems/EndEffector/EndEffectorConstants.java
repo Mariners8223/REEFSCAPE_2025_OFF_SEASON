@@ -27,8 +27,8 @@ public class EndEffectorConstants {
 
     public enum MotorPower{
         INTAKE(0.6, 0.6, 0.25),
-        L1_LEFT(0.65, -0.3, 1),
-        L1_RIGHT(-0.3, 0.65, 1),
+        L1_LEFT(0.6, -0.25, 1),
+        L1_RIGHT(-0.25, 0.6, 1),
         L2_3(0.4, 0.4, 0.5),
         L4(0.5, 0.5, 0.5);
 
