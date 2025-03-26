@@ -250,7 +250,7 @@ public class RobotContainer {
                 driveBase, elevator, endEffector, moveElevatorMarker, robotAuto::getSelectedLevel, robotAuto::getSelectedReef, led);
 
         Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
-                robotAuto::getSelectedLevel, moveElevatorMarker, driveController);
+                robotAuto::getSelectedLevel, moveElevatorMarker, driveController, led);
 
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
                 driveBase.setDefaultCommand(new DriveCommand(driveBase, RobotContainer.driveController)),
@@ -277,7 +277,7 @@ public class RobotContainer {
         mainCycleTrigger.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
 
         onlyRobotToReef.and(() -> robotAuto.getSelectedReef() != null)
-                .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef));
+                .whileTrue(new RobotToReef(driveBase, robotAuto::getSelectedReef, led));
 
         moveElevator.whileTrue(
                         new MoveToLevelActive(elevator, robotAuto::getSelectedLevel)
