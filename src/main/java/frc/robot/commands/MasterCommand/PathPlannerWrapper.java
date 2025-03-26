@@ -21,7 +21,7 @@ public class PathPlannerWrapper extends Command{
 
     @Override
     public void initialize() {
-        pathCommand = driveBase.pathFindToPathAndFollow(targetFeeder.getPath());
+        pathCommand = driveBase.pathFindToPathAndFollow(targetFeeder.getAwayPath());
         pathCommand.initialize();
     }
 

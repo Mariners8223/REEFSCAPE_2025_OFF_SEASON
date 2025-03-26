@@ -11,11 +11,14 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.events.EventTrigger;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.Constants.FeederSide;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.Constants.RobotType;
 import frc.robot.commands.BallDropping.BallDropOff;
@@ -77,6 +80,9 @@ public class RobotContainer {
 
     public static LoggedDashboardChooser<Command> autoChooser;
 
+    public static LoggedDashboardChooser<FeederSide> feederSideChooser;
+
+
     public static CommandXboxController driveController;
     public static CommandGenericHID operatorController;
 
@@ -110,6 +116,7 @@ public class RobotContainer {
         
         configureDriveBindings();
         configureOperatorBinding();
+        configFeederChooser();
 
         //  configureCamera();
         if (RobotBase.isReal()) {
@@ -154,6 +161,14 @@ public class RobotContainer {
                 .whileFalse(new WaitCommand(10)
                         .andThen(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(false)).ignoringDisable(true)));
 
+    }
+
+    public static void configFeederChooser(){
+        feederSideChooser = new LoggedDashboardChooser<>("right Feeder chooser");
+
+        feederSideChooser.addDefaultOption("Close", FeederSide.CLOSE);
+
+        feederSideChooser.addOption("Away", FeederSide.AWAY);
     }
 
     public static void configureOperatorBinding() {
@@ -305,11 +320,14 @@ public class RobotContainer {
         //     leftFeeder = driveController.rightBumper();
         // }
 
+        FeederSide side = feederSideChooser.get();
 
+        PathPlannerPath rightFeederPath = Constants.FeederLocation.RIGHT.getPath(side);
+        PathPlannerPath leftFeederPath = Constants.FeederLocation.LEFT.getPath(side);
 
         leftFeeder.whileTrue(new SequentialCommandGroup(
                 led.blinkWithRSLCommand(!isBlueAlliance),
-                driveBase.pathFindToPathAndFollow(Constants.FeederLocation.LEFT.getPath()),
+                driveBase.pathFindToPathAndFollow(leftFeederPath),
                 led.putDefaultPatternCommand()
         ));
 
@@ -317,7 +335,7 @@ public class RobotContainer {
 
         rightFeeder.whileTrue(new SequentialCommandGroup(
                 led.blinkWithRSLCommand(!isBlueAlliance),
-                driveBase.pathFindToPathAndFollow(Constants.FeederLocation.RIGHT.getPath()),
+                driveBase.pathFindToPathAndFollow(rightFeederPath),
                 led.putDefaultPatternCommand()
         ));
 

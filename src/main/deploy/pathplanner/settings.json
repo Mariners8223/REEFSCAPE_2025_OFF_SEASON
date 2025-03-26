@@ -4,8 +4,9 @@
   "holonomicMode": true,
   "pathFolders": [
     "Auto Left",
+    "Path to feeder",
     "auto right",
-    "path to..."
+    "path to reef"
   ],
   "autoFolders": [],
   "defaultMaxVel": 4.0,

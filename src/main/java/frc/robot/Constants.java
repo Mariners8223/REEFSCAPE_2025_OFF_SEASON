@@ -84,23 +84,38 @@ public class Constants {
     }
 
     public static enum FeederLocation {
-        LEFT(1),
+        LEFT(1, 2),
 
-        RIGHT(2);
+        RIGHT(3, 4);
 
-        private PathPlannerPath path;
+        private PathPlannerPath awayPath;
+        private PathPlannerPath closePath;
 
-        public PathPlannerPath getPath(){
-            return path;
+        public PathPlannerPath getAwayPath(){
+            return awayPath;
         }
 
-        FeederLocation(int pathNumber) {
+        public PathPlannerPath getClosePath(){
+            return closePath;
+        }
+
+        public PathPlannerPath getPath(FeederSide side){
+            return side == FeederSide.CLOSE ? closePath : awayPath;
+        }
+
+        FeederLocation(int awayNumber, int closeNumber) {
             try {
-                path = PathPlannerPath.fromPathFile("path to feeder " + pathNumber);
+                awayPath = PathPlannerPath.fromPathFile("path to feeder " + awayNumber);
+                closePath = PathPlannerPath.fromPathFile("path to feeder " + closeNumber);
             } catch (FileVersionException | IOException | ParseException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    public static enum FeederSide{
+        AWAY,
+        CLOSE;
     }
 
     private static Pose2d getEndPose(PathPlannerPath path){
