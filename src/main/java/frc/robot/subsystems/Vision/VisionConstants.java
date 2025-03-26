@@ -33,7 +33,7 @@ public class VisionConstants {
            new Transform3d(
                -0.34, 0.178, 0.557,
                new Rotation3d(0, Units.degreesToRadians(-15), Units.degreesToRadians(177))),
-               0.2, 0.16);
+               0.25, 0.16);
 
         public final String cameraName;
         public final double XYstdFactor;
