@@ -112,11 +112,11 @@ public class RobotContainer {
 
         configNamedCommands();
         configChooser();
+        configFeederChooser();
         configLEDs();
         
         configureDriveBindings();
         configureOperatorBinding();
-        configFeederChooser();
 
         //  configureCamera();
         if (RobotBase.isReal()) {
@@ -164,7 +164,7 @@ public class RobotContainer {
     }
 
     public static void configFeederChooser(){
-        feederSideChooser = new LoggedDashboardChooser<>("right Feeder chooser");
+        feederSideChooser = new LoggedDashboardChooser<>("Feeder side chooser");
 
         feederSideChooser.addDefaultOption("Close", FeederSide.CLOSE);
 
