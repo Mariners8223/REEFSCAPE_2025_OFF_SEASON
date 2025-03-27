@@ -11,13 +11,13 @@ import java.util.Objects;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.events.EventTrigger;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
+import frc.robot.Constants.FeederLocation;
 import frc.robot.Constants.FeederSide;
 import frc.robot.Constants.ReefLocation;
 import frc.robot.Constants.RobotType;
@@ -249,8 +249,8 @@ public class RobotContainer {
         Command masterCommand = new MasterCommand(
                 driveBase, elevator, endEffector, moveElevatorMarker, robotAuto::getSelectedLevel, robotAuto::getSelectedReef, led);
 
-        Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
-                robotAuto::getSelectedLevel, moveElevatorMarker, driveController, led);
+        // Command semiAutoCommand = new SemiAuto(driveBase, elevator, robotAuto::getSelectedReef,
+        //         robotAuto::getSelectedLevel, moveElevatorMarker, driveController, led);
 
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
                 driveBase.setDefaultCommand(new DriveCommand(driveBase, RobotContainer.driveController)),
@@ -270,7 +270,8 @@ public class RobotContainer {
 
         Trigger undoGP = driveController.y();
 
-        setFeederBinding(true);
+        Trigger leftFeeder = driveController.leftBumper();
+        Trigger rightFeeder = driveController.rightBumper();
 
         // main cycle
         mainCycleTrigger.whileTrue(masterCommand.onlyIf(isCycleReady).withName("Master Command"));
@@ -284,12 +285,20 @@ public class RobotContainer {
                 .onlyIf(() -> robotAuto.getSelectedLevel() != null && endEffector.isGpLoaded() && robotBelowCertainSpeed.getAsBoolean())
         );
 
-        semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
-        semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+        // semiAuto.and(isCycleReady).whileTrue(semiAutoCommand);
+        // semiAuto.onFalse(new MoveToLevel(elevator, ElevatorLevel.Bottom));
+
+        semiAuto.onTrue(new InstantCommand(() -> {
+            robotAuto.toggleFeederSide();
+            led.setFeederLED(robotAuto.getFeederSide());
+        }));
 
         driveController.start().onTrue(driveBase.resetOnlyDirection());
 
         undoGP.onTrue(new InstantCommand(() -> endEffector.setLoadedValue(false)));
+
+        rightFeeder.whileTrue(new FeederWrapper(driveBase, robotAuto, led, FeederLocation.RIGHT));
+        leftFeeder.whileTrue(new FeederWrapper(driveBase, robotAuto, led, FeederLocation.LEFT));
 
         new Trigger(isCycleReady).onTrue(new SequentialCommandGroup(
                 new InstantCommand(() -> driveController.setRumble(GenericHID.RumbleType.kBothRumble, 0.25)),
@@ -305,37 +314,6 @@ public class RobotContainer {
         driveController.povUpRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.FRONT_RIGHT));
         driveController.povDownLeft().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_LEFT));
         driveController.povDownRight().whileTrue(new MinorAdjust(driveBase, AdjustmentDirection.BACK_RIGHT));
-    }
-
-    public static void setFeederBinding(boolean isBlueAlliance){
-        final Trigger leftFeeder = driveController.leftBumper();;
-        final Trigger rightFeeder = driveController.rightBumper();
-
-        FeederSide side = feederSideChooser.get();
-
-        PathPlannerPath rightFeederPath = Constants.FeederLocation.RIGHT.getPath(side);
-        PathPlannerPath leftFeederPath = Constants.FeederLocation.LEFT.getPath(side);
-
-        Color color = switch (side){
-            case CLOSE -> Color.kOrangeRed;
-            case AWAY -> new Color(4, 144, 209); //galaxia blue
-        };
-
-        leftFeeder.whileTrue(new SequentialCommandGroup(
-                led.blinkWithRSLCommand(color),
-                driveBase.pathFindToPathAndFollow(leftFeederPath),
-                led.putDefaultPatternCommand()
-        ));
-
-        leftFeeder.onFalse(led.putDefaultPatternCommand());
-
-        rightFeeder.whileTrue(new SequentialCommandGroup(
-                led.blinkWithRSLCommand(color),
-                driveBase.pathFindToPathAndFollow(rightFeederPath),
-                led.putDefaultPatternCommand()
-        ));
-
-        rightFeeder.onFalse(led.putDefaultPatternCommand());
     }
 
     public static void configNamedCommands() {

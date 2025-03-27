@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.FeederSide;
 import frc.robot.subsystems.LED.LEDConstants.AllainceColor;
 
 public class LED extends SubsystemBase {
@@ -34,6 +35,9 @@ public class LED extends SubsystemBase {
 
   LEDPattern defaultPattern;
   LEDPattern pattern;
+
+  LEDPattern closeFeederPattern;
+  LEDPattern awayFeederPattern;
 
   public enum StripControl{
     ALL,
@@ -80,6 +84,27 @@ public class LED extends SubsystemBase {
 
   public InstantCommand setStripControlCommand(StripControl control){
     return new InstantCommand(() -> setStripControl(control));
+  }
+
+  public void configFeederColor(){
+    closeFeederPattern = LEDPattern.solid(FeederSide.CLOSE.color);
+    awayFeederPattern = LEDPattern.solid(FeederSide.AWAY.color);
+  }
+
+  public void setFeederLED(FeederSide side){
+    switch(side){
+      case CLOSE -> {
+        defaultPattern = closeFeederPattern;
+        break;
+      }
+
+      default -> {
+        defaultPattern = awayFeederPattern;
+        break;
+      }
+    }
+
+    pattern = defaultPattern;
   }
 
   public void setDefaultPattern(boolean isRedAlliance){

@@ -8,6 +8,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.FileVersionException;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.wpilibj.util.Color;
+
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -114,8 +116,22 @@ public class Constants {
     }
 
     public static enum FeederSide{
-        AWAY,
-        CLOSE;
+        AWAY(new Color(4, 144, 209)),
+        CLOSE(Color.kOrangeRed);
+
+        public final Color color;
+
+        FeederSide(Color color){
+            this.color = color;
+        }
+
+        @Override
+        public String toString(){
+            switch(this){
+                case CLOSE: return "Close";
+                default: return "Away";
+            }
+        }
     }
 
     private static Pose2d getEndPose(PathPlannerPath path){

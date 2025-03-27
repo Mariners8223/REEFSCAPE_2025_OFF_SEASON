@@ -220,7 +220,6 @@ public class Robot extends LoggedRobot
     {
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             checkFlip();
-            RobotContainer.setFeederBinding(!isRedAlliance);
             resetEncoders();
             RobotContainer.led.setDefaultPattern(isRedAlliance);
             if(RobotContainer.endEffector != null) RobotContainer.endEffector.setLoadedValue(true);
@@ -241,6 +240,8 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.schedule();
         }
+
+        RobotContainer.robotAuto.setFeederSide(RobotContainer.feederSideChooser.get());
         
         ledState = true;
         pdh.setSwitchableChannel(true);
@@ -281,7 +282,10 @@ public class Robot extends LoggedRobot
     
     @SuppressWarnings("RedundantMethodOverride")
     @Override
-    public void teleopExit() {}
+    public void teleopExit() {
+        RobotContainer.led.setDefaultPattern(isRedAlliance);
+        RobotContainer.led.putDefaultPattern();
+    }
     
     
     @Override

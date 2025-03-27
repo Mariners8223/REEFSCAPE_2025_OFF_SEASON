@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.*;
 import frc.robot.Constants;
 import frc.robot.Constants.ReefLocation;
-import frc.robot.Robot;
 import frc.robot.commands.Elevator.MoveToLevel;
 import frc.robot.commands.EndEffector.EjectSequance;
 import frc.robot.subsystems.DriveTrain.DriveBase;

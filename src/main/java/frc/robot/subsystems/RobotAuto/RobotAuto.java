@@ -4,6 +4,8 @@ package frc.robot.subsystems.RobotAuto;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Robot;
+import frc.robot.Constants.FeederSide;
+
 import org.littletonrobotics.junction.Logger;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -12,12 +14,14 @@ import frc.robot.subsystems.Elevator.ElevatorConstants;
 public class RobotAuto extends SubsystemBase {
     private Constants.ReefLocation selectedReef = null;
     private ElevatorConstants.ElevatorLevel selectedLevel = null;
+    private FeederSide selectedSide = FeederSide.AWAY;
 
     public RobotAuto() {
         SmartDashboard.putBoolean("Level 1", false);
         SmartDashboard.putBoolean("Level 2", false);
         SmartDashboard.putBoolean("Level 3", false);
         SmartDashboard.putBoolean("Level 4", false);
+        SmartDashboard.putString("Feeder Side", selectedSide.toString());
     }
 
     public Constants.ReefLocation getSelectedReef() {
@@ -26,6 +30,10 @@ public class RobotAuto extends SubsystemBase {
 
     public ElevatorConstants.ElevatorLevel getSelectedLevel() {
         return selectedLevel;
+    }
+
+    public FeederSide getFeederSide(){
+        return selectedSide;
     }
 
     public void setSelectedReef(Constants.ReefLocation reef) {
@@ -64,5 +72,21 @@ public class RobotAuto extends SubsystemBase {
         Logger.recordOutput("Selection/Level", name);
     }
 
+    public void toggleFeederSide(){
+        FeederSide side = switch(selectedSide){
+            case AWAY -> FeederSide.CLOSE;
+            case CLOSE -> FeederSide.AWAY;
+        };
+
+        setFeederSide(side);
+    }
+
+    public void setFeederSide(FeederSide side){
+        selectedSide = side;
+
+        Logger.recordOutput("Selection/Feeder side", selectedSide);
+
+        SmartDashboard.putString("Feeder Side", selectedSide.toString());
+    }
 }
 
