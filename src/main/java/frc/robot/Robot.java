@@ -267,6 +267,8 @@ public class Robot extends LoggedRobot
         Elastic.selectTab(1);
         Logger.recordOutput("Elastic Tab", "Telop");
 
+        RobotContainer.led.setFeederLED(RobotContainer.robotAuto.getFeederSide());
+
         if (autonomousCommand != null)
         {
             autonomousCommand.cancel();

@@ -57,6 +57,8 @@ public class LED extends SubsystemBase {
     pattern = LEDPattern.kOff;
     pattern.applyTo(buffer);
 
+    configFeederColor();
+
     led.setData(buffer);
     led.start();
   }

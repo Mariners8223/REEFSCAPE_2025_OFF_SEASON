@@ -41,7 +41,7 @@ public class FeederWrapper extends Command {
     FeederSide side = feederSideSupplier.get();
 
     pathCommand = driveBase.pathFindToPathAndFollow(feederLocation.getPath(side));
-    led.blinkWithRSLCommand(side.color);
+    led.blinkWithRSL(side.color);
 
     pathCommand.initialize();
   }
