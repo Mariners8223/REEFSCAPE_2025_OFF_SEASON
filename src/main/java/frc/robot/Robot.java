@@ -23,6 +23,7 @@ import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
+import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.LogFileUtil;
 import org.littletonrobotics.junction.LoggedRobot;
 
@@ -40,7 +41,6 @@ import java.util.List;
 public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
-    public static PowerDistribution pdh;
     private static final Field2d field = new Field2d();
     public static boolean isRedAlliance = false;
     private static AprilTagFieldLayout apriltagField;
@@ -101,9 +101,6 @@ public class Robot extends LoggedRobot
 
         SignalLogger.enableAutoLogging(false);
         DataLogManager.stop();
-
-        pdh = new PowerDistribution();
-        pdh.setSwitchableChannel(true);
 
         Logger.start();
         Logger.recordOutput("Bumper Pose", new Pose3d());
@@ -174,7 +171,7 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
         SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
-        SmartDashboard.putNumber("PDH Voltage", pdh.getVoltage());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
         // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
     }
     
@@ -201,7 +198,7 @@ public class Robot extends LoggedRobot
         
         if (SmartDashboard.getBoolean("LED on", true) != ledState) {
             ledState = !ledState;
-            pdh.setSwitchableChannel(ledState);
+            RobotContainer.led.setLEDState(ledState);
         }
     }
     
@@ -244,7 +241,7 @@ public class Robot extends LoggedRobot
         RobotContainer.robotAuto.setFeederSide(RobotContainer.feederSideChooser.get());
         
         ledState = true;
-        pdh.setSwitchableChannel(true);
+        RobotContainer.led.setLEDState(true);
         SmartDashboard.putBoolean("LED on", true);
 
         RobotContainer.led.blinkWithRSL(Color.kOrangeRed);

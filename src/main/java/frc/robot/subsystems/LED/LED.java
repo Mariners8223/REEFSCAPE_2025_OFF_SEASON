@@ -39,6 +39,8 @@ public class LED extends SubsystemBase {
   LEDPattern closeFeederPattern;
   LEDPattern awayFeederPattern;
 
+  boolean ledOn = true;
+
   public enum StripControl{
     ALL,
     HALF
@@ -64,6 +66,10 @@ public class LED extends SubsystemBase {
     led.start();
   }
 
+  public void setLEDState(boolean isOn){
+    ledOn = isOn;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -77,6 +83,8 @@ public class LED extends SubsystemBase {
             pattern.reversed().applyTo(bufferBackHalf);
             break;
     }
+
+    if(!ledOn) LEDPattern.kOff.applyTo(buffer);
 
     led.setData(buffer);
   }

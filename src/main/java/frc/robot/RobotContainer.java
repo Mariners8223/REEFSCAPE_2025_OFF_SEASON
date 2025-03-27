@@ -51,6 +51,7 @@ import frc.robot.subsystems.Vision.Vision;
 import frc.util.Elastic;
 
 import org.json.simple.parser.ParseException;
+import org.littletonrobotics.conduit.ConduitApi;
 import org.littletonrobotics.junction.Logger;
 import org.littletonrobotics.junction.networktables.LoggedDashboardChooser;
 
@@ -156,10 +157,9 @@ public class RobotContainer {
             Elastic.selectTab(1);
         }));
 
-        new Trigger(() -> Robot.pdh.getVoltage() > 7)
-                .whileTrue(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(true)).ignoringDisable(true))
-                .whileFalse(new WaitCommand(10)
-                        .andThen(new InstantCommand(() -> Robot.pdh.setSwitchableChannel(false)).ignoringDisable(true)));
+        new Trigger(() -> ConduitApi.getInstance().getPDPVoltage() > 7)
+                .whileTrue(new WaitCommand(10).andThen(new InstantCommand(() -> led.setLEDState(true))).ignoringDisable(true))
+                .onFalse(new InstantCommand(() -> led.setLEDState(false)).ignoringDisable(true));
 
     }
 
