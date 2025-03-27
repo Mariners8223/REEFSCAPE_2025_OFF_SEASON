@@ -117,7 +117,7 @@ public class Constants {
 
     public static enum FeederSide{
         AWAY(new Color(4, 144, 209)),
-        CLOSE(Color.kOrangeRed);
+        CLOSE(Color.kPurple);
 
         public final Color color;
 

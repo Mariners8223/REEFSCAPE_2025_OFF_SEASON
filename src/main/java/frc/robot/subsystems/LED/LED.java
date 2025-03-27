@@ -57,7 +57,8 @@ public class LED extends SubsystemBase {
     pattern = LEDPattern.kOff;
     pattern.applyTo(buffer);
 
-    configFeederColor();
+    configFeederColor(FeederSide.CLOSE);
+    configFeederColor(FeederSide.AWAY);
 
     led.setData(buffer);
     led.start();
@@ -88,9 +89,19 @@ public class LED extends SubsystemBase {
     return new InstantCommand(() -> setStripControl(control));
   }
 
-  public void configFeederColor(){
-    closeFeederPattern = LEDPattern.solid(FeederSide.CLOSE.color);
-    awayFeederPattern = LEDPattern.solid(FeederSide.AWAY.color);
+  public void configFeederColor(FeederSide side){
+    Color color = Color.kBlanchedAlmond;
+    Color backgroundColor = side.color;
+
+    LEDPattern pattern1 = LEDPattern.steps(Map.of(0, color, 0.05, Color.kBlack))
+      .scrollAtRelativeSpeed(Percent.of(LEDConstants.DEFAULT_SCROLL_SPEED).per(Second));
+
+    LEDPattern whitePattern = LEDPattern.solid(backgroundColor);
+
+    LEDPattern gradiant = pattern1.overlayOn(pattern1.reversed());
+
+    if(side == FeederSide.CLOSE) closeFeederPattern = gradiant.overlayOn(whitePattern);
+    else awayFeederPattern = gradiant.overlayOn(whitePattern);
   }
 
   public void setFeederLED(FeederSide side){
