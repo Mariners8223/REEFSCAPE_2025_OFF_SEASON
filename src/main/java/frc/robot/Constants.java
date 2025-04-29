@@ -24,7 +24,7 @@ public class Constants {
         REPLAY
     }
 
-    public static final RobotType ROBOT_TYPE = RobotType.COMPETITION;
+    public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT;
 
     public enum ReefLocation {
         REEF_1,
