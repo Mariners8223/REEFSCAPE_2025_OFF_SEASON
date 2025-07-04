@@ -88,6 +88,6 @@ public class EndEffectorIOReal implements EndEffectorIO {
         inputs.rightPower = RightMotor.getMotorOutputPercent();
         inputs.leftPower = LeftMotor.getMotorOutputPercent();
         inputs.funnelPosition = FunnelMotor.getPosition();
-        inputs.beamBreakValue = EndEffectorConstants.BEAM_BREAK_INVERTED != beamBreak.get();
+        inputs.beamBreakValue = EndEffectorConstants.BEAM_BREAK_INVERTED == beamBreak.get();
     }
 }
