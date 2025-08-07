@@ -3,7 +3,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class MotorTesting extends SubsystemBase {
-    MotorTestingIO io;
+    MotorTestingIOReal io;
+    public MotorTesting(){
+        io = new MotorTestingIOReal();
+    }
 
     public void setMotorDutyCycle(double dutyCycle){io.setTestMotorDutyCyle(dutyCycle);}
 

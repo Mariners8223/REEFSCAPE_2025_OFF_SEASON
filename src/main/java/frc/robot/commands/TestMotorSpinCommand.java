@@ -1,19 +1,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.util.MarinersController.ControllerMaster;
+//import frc.util.MarinersController.ControllerMaster;
 import frc.robot.subsystems.MotorTesting;
 
 
 public class TestMotorSpinCommand extends Command {
-    private final ControllerMaster controllerMaster = ControllerMaster.getInstance();
+    //private final ControllerMaster controllerMaster = ControllerMaster.getInstance();
     private final MotorTesting motorTesting;
 
     public TestMotorSpinCommand(MotorTesting motorTesting) {
         this.motorTesting = motorTesting;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
-        addRequirements(this.controllerMaster, this.motorTesting);
+        addRequirements(this.motorTesting);
     }
 
     /**
@@ -63,6 +63,6 @@ public class TestMotorSpinCommand extends Command {
      */
     @Override
     public void end(boolean interrupted) {
-
+        motorTesting.stopMotor();
     }
 }

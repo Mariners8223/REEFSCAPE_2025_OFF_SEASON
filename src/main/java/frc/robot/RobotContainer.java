@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.RobotType;
 import frc.robot.commands.TestMotorSpinCommand;
 import frc.robot.subsystems.MotorTesting;
-import frc.util.Elastic;
 
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.conduit.ConduitApi;

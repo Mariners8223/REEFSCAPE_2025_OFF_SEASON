@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -39,117 +38,25 @@ import java.util.List;
 public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
-    private static final Field2d field = new Field2d();
     public static boolean isRedAlliance = false;
-    private static AprilTagFieldLayout apriltagField;
 
     private int driverStationCheckTimer = 0;
     private boolean ledState = true;
-    
-    @SuppressWarnings({ "resource", "incomplete-switch" })
-    public Robot() {
-        Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
-
-        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
-
-        if(isReal()){
-            switch (Constants.ROBOT_TYPE){
-                case DEVELOPMENT -> {
-                    Logger.addDataReceiver(new NT4Publisher());
-                    break;
-                }
-
-                // case COMPETITION -> {
-                //     Logger.addDataReceiver(new WPILOGWriter("/U"));
-                // }
-
-                case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
-            }
-        }
-        else{
-            if(Constants.ROBOT_TYPE == Constants.RobotType.REPLAY){
-                String logPath = LogFileUtil.findReplayLog();
-                ControllerMaster.getInstance().stopLoop();
-
-                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"), AdvantageScopeOpenBehavior.ALWAYS));
-                Logger.setReplaySource(new WPILOGReader(logPath));
-
-                setUseTiming(false);
-            }
-            Logger.addDataReceiver(new NT4Publisher());
-        }
-
-
-        SignalLogger.enableAutoLogging(false);
-        DataLogManager.stop();
-
-        Logger.start();
-        Logger.recordOutput("Bumper Pose", new Pose3d());
-
-        Pathfinding.setPathfinder(new LocalADStarAK());
-        PathPlannerLogging.setLogActivePathCallback((path) ->
-                Logger.recordOutput("PathPlanner/ActivePath", path.toArray(new Pose2d[0])));
-
-        PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
-                Logger.recordOutput("PathPlanner/TargetPose", targetPose));
-
-        PathfindingCommand.warmupCommand().schedule();
-
-
-        ControllerMaster.getInstance();
-
-        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
-            checkFlip();
-            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-        }
-
-
-        Logger.recordOutput("Zero 3D", new Pose3d());
-
+    public Robot(){
         new RobotContainer();
-
-        SmartDashboard.putBoolean("LED on", true);
     }
-
+    
     private static void checkFlip() {
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
 
     }
 
-    public static void setRobotPoseField(Pose2d pose) {
-        if(isRedAlliance){
-            pose = new Pose2d(apriltagField.getFieldLength() - pose.getX(),
-                    apriltagField.getFieldWidth() - pose.getY(),
-                    pose.getRotation().plus(Rotation2d.k180deg));
-        }
-        field.setRobotPose(pose);
-    }
-
-    public static void setObjectPoseFiled(String name, Pose2d pose) {
-        if(isRedAlliance){
-            pose = new Pose2d(apriltagField.getFieldLength() - pose.getX(),
-                    apriltagField.getFieldWidth() - pose.getY(),
-                    pose.getRotation().plus(Rotation2d.k180deg));
-        }
-        field.getObject(name).setPose(pose);
-    }
-
-    public static void clearObjectPoseField(String name) {
-        field.getObject(name).setPoses();
-    }
-
-    public static void setTrajectoryField(String name, List<Pose2d> poses) {
-        field.getObject(name).setPoses(poses);
-    }
     
     @Override
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
-        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
-        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
-        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
         // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
     }
     
@@ -173,11 +80,8 @@ public class Robot extends LoggedRobot
         }
 
         
-        if (SmartDashboard.getBoolean("LED on", true) != ledState) {
-            ledState = !ledState;
-
         }
-    }
+    
     
     @SuppressWarnings("RedundantMethodOverride")
     @Override
@@ -201,8 +105,6 @@ public class Robot extends LoggedRobot
 
 
 
-        Elastic.selectTab(0);
-        Logger.recordOutput("Elastic Tab", "auto");
 
         if (autonomousCommand != null)
         {
@@ -213,7 +115,6 @@ public class Robot extends LoggedRobot
         
         ledState = true;
 
-        SmartDashboard.putBoolean("LED on", true);
 
 
     }
@@ -232,8 +133,6 @@ public class Robot extends LoggedRobot
     @Override
     public void teleopInit()
     {
-        Elastic.selectTab(1);
-        Logger.recordOutput("Elastic Tab", "Telop");
 
 
         if (autonomousCommand != null) {

@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+import frc.util.PIDFGains;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 
@@ -12,11 +13,10 @@ public class MotorTestingIOReal implements MotorTestingIO {
     }
     private MarinersController configureTestMotor(){
         MarinersController motor = new MarinersSparkBase("test motor", MarinersController.ControllerLocation.MOTOR,
-                2, true, MarinersSparkBase.MotorType.SPARK_MAX);
+                5, true, MarinersSparkBase.MotorType.SPARK_MAX);
 
-
-
-
+        motor.setMotorInverted(true);
+        motor.setPIDF(new PIDFGains(0.6660000085830688, 0, 0.005799999926239252));
         motor.setMotorIdleMode(false);
 
         return motor;
