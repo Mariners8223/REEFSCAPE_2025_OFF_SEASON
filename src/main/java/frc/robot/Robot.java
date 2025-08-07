@@ -17,8 +17,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.subsystems.Elevator.ElevatorConstants.ElevatorLevel;
-import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.Elastic;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
@@ -51,23 +49,6 @@ public class Robot extends LoggedRobot
     @SuppressWarnings({ "resource", "incomplete-switch" })
     public Robot() {
         Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
-
-        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
-        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
-        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
-        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
-        switch (BuildConstants.DIRTY) {
-            case 0:
-                Logger.recordMetadata("GitDirty", "All changes committed");
-                break;
-            //noinspection DataFlowIssue
-            case 1:
-                Logger.recordMetadata("GitDirty", "Uncommitted changes");
-                break;
-            default:
-                Logger.recordMetadata("GitDirty", "Unknown");
-                break;
-        }
 
         Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
 
@@ -122,8 +103,6 @@ public class Robot extends LoggedRobot
             isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
         }
 
-        SmartDashboard.putData("Field", field);
-        apriltagField = VisionConstants.FIELD_LAYOUT;
 
         Logger.recordOutput("Zero 3D", new Pose3d());
 
@@ -135,7 +114,7 @@ public class Robot extends LoggedRobot
     private static void checkFlip() {
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
 
-        Constants.ReefLocation.checkAlliance(!isRedAlliance);
+
     }
 
     public static void setRobotPoseField(Pose2d pose) {
@@ -169,7 +148,6 @@ public class Robot extends LoggedRobot
     {
         CommandScheduler.getInstance().run();
         SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
-        SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
         // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
@@ -190,15 +168,14 @@ public class Robot extends LoggedRobot
                 driverStationCheckTimer = 0;
 
                 isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-                RobotContainer.led.setDefaultPattern(isRedAlliance);
-                RobotContainer.led.putDefaultPattern();
+
             }
         }
 
         
         if (SmartDashboard.getBoolean("LED on", true) != ledState) {
             ledState = !ledState;
-            RobotContainer.led.setLEDState(ledState);
+
         }
     }
     
@@ -207,9 +184,6 @@ public class Robot extends LoggedRobot
     public void disabledExit() {}
 
     private void resetEncoders(){
-        if(RobotContainer.elevator != null) RobotContainer.elevator.resetMotorEncoder();
-        if(RobotContainer.endEffector != null) RobotContainer.endEffector.resetFunnelEncoder();
-        if(RobotContainer.ballDropping != null) RobotContainer.ballDropping.resetAngleEncoder();
     }
     
     @Override
@@ -218,8 +192,6 @@ public class Robot extends LoggedRobot
         if(Constants.ROBOT_TYPE == Constants.RobotType.COMPETITION){
             checkFlip();
             resetEncoders();
-            RobotContainer.led.setDefaultPattern(isRedAlliance);
-            if(RobotContainer.endEffector != null) RobotContainer.endEffector.setLoadedValue(true);
         }
 
         isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
@@ -227,24 +199,23 @@ public class Robot extends LoggedRobot
         // Pose2d resetPose = new Pose2d(RobotContainer.driveBase.getPose().getTranslation(), isRedAlliance ? new Rotation2d() : new Rotation2d(Math.PI));
         // RobotContainer.driveBase.reset(resetPose);
 
-        autonomousCommand = RobotContainer.getAutoCommand();
+
 
         Elastic.selectTab(0);
         Logger.recordOutput("Elastic Tab", "auto");
-        RobotContainer.robotAuto.setSelectedLevel(ElevatorLevel.L4);
-        
+
         if (autonomousCommand != null)
         {
             autonomousCommand.schedule();
         }
 
-        RobotContainer.robotAuto.setFeederSide(RobotContainer.feederSideChooser.get());
+
         
         ledState = true;
-        RobotContainer.led.setLEDState(true);
+
         SmartDashboard.putBoolean("LED on", true);
 
-        RobotContainer.led.blinkWithRSL(Color.kOrangeRed);
+
     }
     
     
@@ -254,7 +225,7 @@ public class Robot extends LoggedRobot
     @SuppressWarnings("RedundantMethodOverride")
     @Override
     public void autonomousExit() {
-        RobotContainer.led.putDefaultPattern();
+
     }
     
     
@@ -264,14 +235,9 @@ public class Robot extends LoggedRobot
         Elastic.selectTab(1);
         Logger.recordOutput("Elastic Tab", "Telop");
 
-        RobotContainer.led.setFeederLED(RobotContainer.robotAuto.getFeederSide());
 
-        if (autonomousCommand != null)
-        {
+        if (autonomousCommand != null) {
             autonomousCommand.cancel();
-        }
-        if(RobotContainer.elevator.getDesiredLevel() != null){
-            RobotContainer.elevator.moveMotorByPosition(RobotContainer.elevator.getDesiredLevel());
         }
     }
     
@@ -282,8 +248,8 @@ public class Robot extends LoggedRobot
     @SuppressWarnings("RedundantMethodOverride")
     @Override
     public void teleopExit() {
-        RobotContainer.led.setDefaultPattern(isRedAlliance);
-        RobotContainer.led.putDefaultPattern();
+
+
     }
     
     
