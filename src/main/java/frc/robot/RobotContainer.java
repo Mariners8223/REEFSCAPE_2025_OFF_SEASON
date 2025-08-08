@@ -47,7 +47,8 @@ public class RobotContainer {
         driveController = new CommandXboxController(0);
 
         motorTesting = new MotorTesting();
-        driveController.a().whileTrue(new TestMotorSpinCommand(motorTesting));
+        driveController.a().whileTrue(new TestMotorSpinCommand(motorTesting, -1));
+        driveController.y().whileTrue(new TestMotorSpinCommand(motorTesting, 1));
 
     }
 

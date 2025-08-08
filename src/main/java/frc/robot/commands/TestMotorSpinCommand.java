@@ -8,9 +8,11 @@ import frc.robot.subsystems.MotorTesting;
 public class TestMotorSpinCommand extends Command {
     //private final ControllerMaster controllerMaster = ControllerMaster.getInstance();
     private final MotorTesting motorTesting;
+    private final double dutyCyle;
 
-    public TestMotorSpinCommand(MotorTesting motorTesting) {
+    public TestMotorSpinCommand(MotorTesting motorTesting, double dutyCyle) {
         this.motorTesting = motorTesting;
+        this.dutyCyle = dutyCyle;
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements(this.motorTesting);
@@ -21,7 +23,7 @@ public class TestMotorSpinCommand extends Command {
      */
     @Override
     public void initialize() {
-    motorTesting.setMotorDutyCycle(1);
+    motorTesting.setMotorDutyCycle(dutyCyle);
     }
 
     /**
