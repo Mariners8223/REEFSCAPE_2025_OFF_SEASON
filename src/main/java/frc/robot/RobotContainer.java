@@ -41,14 +41,16 @@ import edu.wpi.first.wpilibj.util.Color;
 public class RobotContainer {
     public static MotorTesting motorTesting;
 
-    public static CommandXboxController driveController;
+    //public static CommandXboxController driveController;
+    public static CommandPS5Controller driveController;
 
     public RobotContainer() {
-        driveController = new CommandXboxController(0);
+        //driveController = new CommandXboxController(0);
+        driveController = new CommandPS5Controller(0);
 
         motorTesting = new MotorTesting();
-        driveController.a().whileTrue(new TestMotorSpinCommand(motorTesting, -1));
-        driveController.y().whileTrue(new TestMotorSpinCommand(motorTesting, 1));
+        driveController.cross().whileTrue(new TestMotorSpinCommand(motorTesting, -1));
+        driveController.triangle().whileTrue(new TestMotorSpinCommand(motorTesting, 1));
 
     }
 

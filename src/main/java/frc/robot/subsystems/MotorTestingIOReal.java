@@ -14,15 +14,9 @@ public class MotorTestingIOReal implements MotorTestingIO {
     private MarinersController configureTestMotor(){
         MarinersController motor = new MarinersSparkBase("test motor",
          MarinersController.ControllerLocation.RIO,
-        5,
-        
-         true,
-         
-         
-         MarinersSparkBase.MotorType.SPARK_MAX,
-         new PIDFGains(0.6660000085830688, 0, 0.005799999926239252),
-         30
-         );
+        5, true, MarinersSparkBase.MotorType.SPARK_MAX, 
+        new PIDFGains(0.6660000085830688, 0, 0.005799999926239252), 30
+        );
 
         motor.setMotorInverted(true);
         motor.setMotorIdleMode(true);
