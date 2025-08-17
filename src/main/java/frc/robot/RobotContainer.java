@@ -37,7 +37,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class RobotContainer {
-    public static MotorTesting motorTesting;
 
     //public static CommandXboxController driveController;
     public static CommandPS5Controller driveController;
@@ -45,10 +44,6 @@ public class RobotContainer {
     public RobotContainer() {
         //driveController = new CommandXboxController(0);
         driveController = new CommandPS5Controller(0);
-
-        motorTesting = new MotorTesting();
-        driveController.cross().whileTrue(new TestMotorSpinCommand(motorTesting, -1));
-        driveController.triangle().whileTrue(new TestMotorSpinCommand(motorTesting, 1));
 
     }
 
