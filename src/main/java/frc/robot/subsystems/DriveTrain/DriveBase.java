@@ -45,6 +45,7 @@ import frc.robot.RobotContainer;
 import java.io.IOException;
 import java.util.function.DoubleSupplier;
 
+
 /**
  * The DriveBase class represents the drivetrain of the robot.
  * It controls the movement and positioning of the robot using swerve drive.
@@ -82,7 +83,7 @@ public class DriveBase extends SubsystemBase {
     /**
      * the inputs of the drive base (all the motor voltages, angles, speeds, etc.) to be logged
      */
-    private final DriveBaseInputsAutoLogged inputs = new DriveBaseInputsAutoLogged();
+    private final DriveBaseInputsAutoLogged inputs = new DriveBaseInputsAutoLogged();   
 
     /**
      * the max speed the wheels can spin (drive motor at max speed)
