@@ -36,6 +36,8 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
+import frc.robot.subsystems.DriveTrain.DriveBase;
+
 public class RobotContainer {
     public static DriveBase driveBase;
 
@@ -45,10 +47,11 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
+
+        configureDriveBindings();
         
     }
 
-   configureDriveBindings();
 
 
    public void configureDriveBindings(){
