@@ -37,22 +37,22 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 public class RobotContainer {
+    public static DriveBase driveBase;
 
-    //public static CommandXboxController driveController;
     public static CommandPS5Controller driveController;
 
     public RobotContainer() {
-        //driveController = new CommandXboxController(0);
         driveController = new CommandPS5Controller(0);
 
+        driveBase = new DriveBase();
+        
     }
 
-//    configureDriveBindings();
-//
-//
-//    public void configureDriveBindings(){
-//        driveController.a().whileTrue(new TestMotorSpinCommand(motorTesting));
-//    }
+   configureDriveBindings();
+
+
+   public void configureDriveBindings(){
+   }
 
 
 }

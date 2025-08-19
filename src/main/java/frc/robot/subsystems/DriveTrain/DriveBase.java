@@ -530,8 +530,6 @@ public class DriveBase extends SubsystemBase {
         Logger.recordOutput("DriveBase/ChassisSpeeds", getChassisSpeeds());
         Logger.recordOutput("DriveBase/targetStates", targetStates);
 
-        Robot.setRobotPoseField(currentPose);
-
         inputs.activeCommand = this.getCurrentCommand() != null ? this.getCurrentCommand().getName() : "None";
 
         Logger.processInputs(getName(), inputs);
