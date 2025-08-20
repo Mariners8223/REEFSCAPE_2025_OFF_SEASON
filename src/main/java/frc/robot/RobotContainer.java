@@ -13,11 +13,13 @@ import java.util.function.BooleanSupplier;
 import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.RobotType;
+import frc.robot.commands.Drive.DriveToCoral;
 
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.conduit.ConduitApi;
@@ -36,6 +38,8 @@ import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
+import frc.robot.subsystems.DriveTrain.DriveBase;
+
 public class RobotContainer {
     public static DriveBase driveBase;
 
@@ -45,13 +49,16 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
-        
+        driveController.().onTrue(driveBase.resetOnlyDirection());
+
+        configureDriveBindings();
+
     }
 
-   configureDriveBindings();
 
 
    public void configureDriveBindings(){
+    driveController.circle().whileTrue(new DriveToCoral(driveBase));
    }
 
 

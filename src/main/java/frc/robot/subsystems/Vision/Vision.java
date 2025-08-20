@@ -59,7 +59,6 @@ public class Vision extends SubsystemBase {
         for (VisionCamera camera : cameras) {
             camera.update();
             camera.log();
-
             SmartDashboard.putBoolean(camera.cameraName + " is connected", camera.inputs.isConnected);
 
             // For logging purposes
