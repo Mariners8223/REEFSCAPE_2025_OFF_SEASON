@@ -43,7 +43,13 @@ public class Robot extends LoggedRobot
     private int driverStationCheckTimer = 0;
     private boolean ledState = true;
     public Robot(){
+        Logger.start();
+        SignalLogger.enableAutoLogging(true);
+        ControllerMaster.getInstance();
         new RobotContainer();
+
+
+
     }
     
     private static void checkFlip() {
