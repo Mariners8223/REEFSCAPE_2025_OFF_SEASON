@@ -1,5 +1,5 @@
 package frc.robot.subsystems.Climb;
 
-public class IOReal {
-
+public class IOReal implements ClimbIO{
+    
 }
