@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.RobotType;
+import frc.robot.commands.Drive.DriveCommand;
 
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.conduit.ConduitApi;
@@ -42,9 +43,12 @@ public class RobotContainer {
     public static DriveBase driveBase;
 
     public static CommandPS5Controller driveController;
+    public static CommandXboxController driveXboxController;
+
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(0);
+        driveController = new CommandPS5Controller(1);
+        driveXboxController = new CommandXboxController(0);
 
         driveBase = new DriveBase();
 
@@ -53,9 +57,12 @@ public class RobotContainer {
     }
 
 
-
-   public void configureDriveBindings(){
+    public void configureDriveBindings(){
+        new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
+            driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
+            driveBase::removeDefaultCommand).ignoringDisable(true));
    }
+   
 
 
 }
