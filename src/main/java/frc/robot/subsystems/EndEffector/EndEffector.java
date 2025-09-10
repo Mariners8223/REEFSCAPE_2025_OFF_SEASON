@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class EndEffector extends SubsystemBase {
   public final EndEffectorIO io;
+  public boolean IsBeamBroke = false;
   /** Creates a new EndEffector. */
   public EndEffector() {
     io = new EndEffectorIOReal();
@@ -16,14 +17,27 @@ public class EndEffector extends SubsystemBase {
   public void spinMotorOppositeWays(double MotorSpeed){
     io.setMotorDutyCycleLeft(MotorSpeed);
     io.setMotorDutyCycleRight(MotorSpeed * -1);
+    IsBeamBroke = false;
+
   }
-  public void StopMotors(){
-    io.stopMotorLeft();
-    io.stopMotorRight();
+  public void StopMotors(double MotorStop){
+    io.stopMotorLeft(MotorStop);
+    io.stopMotorRight(MotorStop);
   }
   public void SetMotorPossition(Double MotorPossition){
     io.setMotorPositionLeft(MotorPossition);
     io.setMotorPositionRight(MotorPossition * -1);
+  }
+  
+  public boolean IsCoralInRobot(boolean IsBeamBroke){
+    if (!IsBeamBroke){
+      IsBeamBroke = io.getBeamBreak();
+
+    }
+
+    return IsBeamBroke;
+     
+
   }
 
   @Override
