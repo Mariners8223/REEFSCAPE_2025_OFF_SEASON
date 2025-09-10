@@ -6,14 +6,14 @@ package frc.robot.subsystems.funnel;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Climb.ClimbIO;
+import frc.robot.subsystems.funnel.funnelIO.raiseFunnel;
 
 public class funnel extends SubsystemBase {
-  /** Creates a new funne. */
+  /** Creates a new funnel. */
   public final ClimbIO io;
-  public funnel() {}
+  public funnel() {
   io = new IOReal();
-}
-    
+  }
   public void setMotorDutyCycle(double MotorPosition){
     io.setMotorDutyCycle(MotorPosition);
   }
@@ -23,8 +23,12 @@ public class funnel extends SubsystemBase {
   public void stopMotor(boolean motorRun){
     io.stopMotor(motorRun);
   }
+  public void raiseFunnel (double motorAngle){
+    io.setMotorPosition(motorAngle);
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+}
 

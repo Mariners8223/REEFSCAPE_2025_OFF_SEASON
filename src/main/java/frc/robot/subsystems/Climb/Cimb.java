@@ -23,6 +23,9 @@ public class Cimb extends SubsystemBase {
   public void stopMotor(boolean motorRun){
     io.stopMotor(motorRun);
   }
+  public void readMotor(double checkFunnelPosition){
+    io.readMotor(checkFunnelPosition);
+  }
 
   @Override
   public void periodic() {

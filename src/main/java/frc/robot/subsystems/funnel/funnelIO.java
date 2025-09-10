@@ -8,6 +8,7 @@ public interface funnelIO {
         double speed;
         double rotations;
         boolean direction;
+        double motorAngle;
     }
     void setMotorDutyCycle(double MotorDutyCycle);
     void setMotorPosition(double MotorPosition);
