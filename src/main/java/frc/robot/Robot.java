@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -42,20 +43,90 @@ public class Robot extends LoggedRobot
 
     private int driverStationCheckTimer = 0;
     private boolean ledState = true;
-    public Robot(){
+    public Robot() {
+        Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
+
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+        switch (BuildConstants.DIRTY) {
+            case 0:
+                Logger.recordMetadata("GitDirty", "All changes committed");
+                break;
+            //noinspection DataFlowIssue
+            case 1:
+                Logger.recordMetadata("GitDirty", "Uncommitted changes");
+                break;
+            default:
+                Logger.recordMetadata("GitDirty", "Unknown");
+                break;
+        }
+
+        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+
+        if(isReal()){
+            switch (Constants.ROBOT_TYPE){
+                case DEVELOPMENT -> {
+                    Logger.addDataReceiver(new NT4Publisher());
+                    break;
+                }
+
+                // case COMPETITION -> {
+                //     Logger.addDataReceiver(new WPILOGWriter("/U"));
+                // }
+
+                case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
+            }
+        }
+        else{
+            if(Constants.ROBOT_TYPE == Constants.RobotType.REPLAY){
+                String logPath = LogFileUtil.findReplayLog();
+                ControllerMaster.getInstance().stopLoop();
+
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"), AdvantageScopeOpenBehavior.ALWAYS));
+                Logger.setReplaySource(new WPILOGReader(logPath));
+
+                setUseTiming(false);
+            }
+            Logger.addDataReceiver(new NT4Publisher());
+        }
+
+
+        SignalLogger.enableAutoLogging(false);
+        DataLogManager.stop();
+
         Logger.start();
-        SignalLogger.enableAutoLogging(true);
+        Logger.recordOutput("Bumper Pose", new Pose3d());
+
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        PathPlannerLogging.setLogActivePathCallback((path) ->
+                Logger.recordOutput("PathPlanner/ActivePath", path.toArray(new Pose2d[0])));
+
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
+                Logger.recordOutput("PathPlanner/TargetPose", targetPose));
+
+        PathfindingCommand.warmupCommand().schedule();
+
+
         ControllerMaster.getInstance();
+
+        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
+            checkFlip();
+            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        }
+
+        Logger.recordOutput("Zero 3D", new Pose3d());
+
         new RobotContainer();
 
-
-
+        SmartDashboard.putBoolean("LED on", true);
     }
+
     
     private static void checkFlip() {
         boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-
-
+    
     }
 
     
@@ -63,8 +134,13 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
         // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
     }
+    
     
     
     @SuppressWarnings("RedundantMethodOverride")
