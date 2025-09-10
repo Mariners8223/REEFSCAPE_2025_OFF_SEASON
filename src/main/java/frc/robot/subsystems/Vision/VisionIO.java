@@ -3,6 +3,7 @@ package frc.robot.subsystems.Vision;
 import edu.wpi.first.math.geometry.Pose3d;
 import org.littletonrobotics.junction.AutoLog;
 
+
 public interface VisionIO {
     VisionFrame[] emptyFrame =
             {new VisionFrame(false, -1, -1, new Pose3d(), 1,
