@@ -2,15 +2,13 @@ package frc.robot.subsystems.funnel;
 
 import org.littletonrobotics.junction.AutoLog;
 
-public interface funnelIO {
+public interface FunnelIO {
     @AutoLog
-    class raiseFunnel  {
-        double speed;
-        double rotations;
-        boolean direction;
-        double motorAngle;
+    class funnelInputs  {
+        double funnelAngle;
     }
     void setMotorDutyCycle(double MotorDutyCycle);
     void setMotorPosition(double MotorPosition);
     void stopMotor(boolean motorRun);
+    double readMotor();
 }

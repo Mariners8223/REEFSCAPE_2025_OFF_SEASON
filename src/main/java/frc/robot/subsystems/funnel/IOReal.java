@@ -1,5 +1,5 @@
 package frc.robot.subsystems.funnel;
 
-public class IOReal implements funnelIO {
+public class IOReal implements FunnelIO {
  
 }

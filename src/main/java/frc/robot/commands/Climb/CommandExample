@@ -7,7 +7,7 @@ public class DriveCommand extends Command {
 
     @Override
     public void initialize() {
-        raiseFunnel (70)
+
     }
 
     @Override

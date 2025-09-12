@@ -10,10 +10,10 @@ public interface ClimbIO {
         double rotations;
         boolean direction;
         double position;
-        double checkFunnelPosition;
+        
     }
     void setMotorDutyCycle(double MotorDutyCycle);
     void setMotorPosition(double MotorPosition);
     void stopMotor(boolean motorRun);
-    void readMotor(double checkFunnelPosition);
+    double readMotor();
 }
