@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.subsystems.Vision.VisionConstants;
 import frc.util.LocalADStarAK;
 import frc.util.MarinersController.ControllerMaster;
 
@@ -40,10 +39,29 @@ public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
     public static boolean isRedAlliance = false;
-
     private int driverStationCheckTimer = 0;
-    private boolean ledState = true;
-    public Robot() {
+
+    private static final Field2d field = new Field2d();
+    private static AprilTagFieldLayout apriltagField;
+
+    public Robot(){
+        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
+            checkFlip();
+            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        }
+
+        configureLogging();
+        configurePathplanning();
+
+
+        SmartDashboard.putData("Field", field);
+        apriltagField = VisionConstants.FIELD_LAYOUT;
+
+        new RobotContainer();
+        ControllerMaster.getInstance();
+    }
+
+    private void configureLogging(){
         Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
 
         Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
@@ -54,7 +72,6 @@ public class Robot extends LoggedRobot
             case 0:
                 Logger.recordMetadata("GitDirty", "All changes committed");
                 break;
-            //noinspection DataFlowIssue
             case 1:
                 Logger.recordMetadata("GitDirty", "Uncommitted changes");
                 break;
@@ -71,10 +88,6 @@ public class Robot extends LoggedRobot
                     Logger.addDataReceiver(new NT4Publisher());
                     break;
                 }
-
-                // case COMPETITION -> {
-                //     Logger.addDataReceiver(new WPILOGWriter("/U"));
-                // }
 
                 case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
             }
@@ -97,7 +110,6 @@ public class Robot extends LoggedRobot
         DataLogManager.stop();
 
         Logger.start();
-        Logger.recordOutput("Bumper Pose", new Pose3d());
 
         Pathfinding.setPathfinder(new LocalADStarAK());
         PathPlannerLogging.setLogActivePathCallback((path) ->
@@ -108,25 +120,22 @@ public class Robot extends LoggedRobot
 
         PathfindingCommand.warmupCommand().schedule();
 
+    }
 
-        ControllerMaster.getInstance();
+    private static void configurePathplanning(){
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        PathPlannerLogging.setLogActivePathCallback((path) ->
+                Logger.recordOutput("PathPlanner/ActivePath", path.toArray(new Pose2d[0])));
 
-        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
-            checkFlip();
-            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-        }
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
+                Logger.recordOutput("PathPlanner/TargetPose", targetPose));
 
-        Logger.recordOutput("Zero 3D", new Pose3d());
-
-        new RobotContainer();
-
-        SmartDashboard.putBoolean("LED on", true);
+        PathfindingCommand.warmupCommand().schedule();
     }
 
     
     private static void checkFlip() {
-        boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-    
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
     }
 
     
@@ -138,7 +147,6 @@ public class Robot extends LoggedRobot
         SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
         SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
         SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
-        // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
     }
     
     
