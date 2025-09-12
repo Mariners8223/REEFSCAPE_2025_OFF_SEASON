@@ -16,9 +16,9 @@ public interface EndEffectorIO {
     }
     void setMotorDutyCycleRight(double RightMotorDutyCycle);
     void stopMotorRight(double RightMotorStop); //right is on the elevator side
-    void setMotorPositionRight(double RightMotorPosition); //right is on the elevator side
+    void brakeMotorRight(Boolean RightMotorbrake); //right is on the elevator side
     void setMotorDutyCycleLeft(double LeftMotorDutyCycle);
     void stopMotorLeft(double LeftMotorStop);
-    void setMotorPositionLeft(double LeftMotorPosition);
-
+    void brakeMotorLeft(Boolean LeftMotorbrake);
+    boolean getBeamBreak();
 }
