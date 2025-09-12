@@ -22,8 +22,8 @@ public class CoralScoring extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.spinMotorOppositeWaysL1(EndEffectorConstants.spinningSpeed); // add a constent folder
-    EndEffectorConstants.spinningTime=0;
+    endEffector.spinMotorOppositeWays(EndEffectorConstants.spinningSpeed); // add a constent folder
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.

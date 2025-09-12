@@ -7,12 +7,14 @@ package frc.robot.subsystems.EndEffector;
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
+import com.ctre.phoenix6.signals.UpdateModeValue;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.EndEffector.EndEffectorIO.EndEffectorInputs;
 
 public class EndEffector extends SubsystemBase {
   public final EndEffectorIO io;
-  public final EndEffectorInputsAutoLogged inputs = EndEffectorInputsAutoLogged();
+  public final EndEffectorInputsAutoLogged inputs = new EndEffectorInputsAutoLogged();
 
   /** Creates a new EndEffector. */
   public EndEffector() {
@@ -23,14 +25,15 @@ public class EndEffector extends SubsystemBase {
     io.setMotorDutyCycleLeft(MotorSpeed);
     io.setMotorDutyCycleRight(MotorSpeed * -1);
   }
-
-  public void StopMotors(double MotorStop){
-    io.stopMotorLeft(MotorStop);
-    io.stopMotorRight(MotorStop);
+  public void spinMotorOppositeWaysL1(double MotorSpeed){
+    io.setMotorDutyCycleLeft(MotorSpeed);
+    io.setMotorDutyCycleRight(MotorSpeed * -0.4);
   }
-  public void brakeMotors(Boolean Motorbrake){
-    io.brakeMotorLeft(Motorbrake);
-    io.brakeMotorRight(Motorbrake);
+  public void StopMotors(){
+    io.stopMotor();
+  }
+  public void brakeMotors(){
+    io.brakeMotor();
   }
   
   public boolean IsCoralInRobot(){
@@ -40,5 +43,6 @@ public class EndEffector extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    io.update(inputs);
   }
 }
