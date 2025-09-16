@@ -6,6 +6,9 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
+
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
@@ -63,10 +66,9 @@ private VictorSPX configureWheelMotor()
     public void setAngle(double angle) {
         armMotor.setReference(angle,ControlMode.Position);
     }
-    @Override
     public void Update(BallDroppingInputs inputs) {
         inputs.armAnglePose = armMotor.getPosition();
-        inputs.ballDropping3DPose = new Pose3d (BallDropConstants.X_ON_ROBOT,BallDropConstants.Y_ON_ROBOT,BallDropConstants.Z_OFFSET,Rotation3d(0,inputs.armAnglePose,0));
+        inputs.ballDropping3DPose = new Pose3d (BallDropConstants.X_ON_ROBOT,BallDropConstants.Y_ON_ROBOT,BallDropConstants.Z_OFFSET,new Rotation3d(0,inputs.armAnglePose,0));
     }
 
 }
