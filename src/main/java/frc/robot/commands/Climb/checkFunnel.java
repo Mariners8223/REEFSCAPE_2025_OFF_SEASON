@@ -1,21 +1,17 @@
-package main.java.frc.robot.commands.Climb;
+package frc.robot.commands.Climb;
+
+import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.funnel.funnel;
 
 public class checkFunnel extends Command {
 
-    public DriveCommand() {
-        private final Climb climb;
-
-        /**
-         * Creates a new Climb.
-         */
-        public ClimbCommand(Climb climb) {
-            this.climb = climb;
-    }
+    public class MoveFunnel extends Command {
+    public double funnelAngle;
+    public final funnel subsystem;
     
-
     @Override
     public void initialize() {
-        climb.readMotor();
+        subsystem.readMotorAngle(null)
     }
 
     @Override
@@ -24,7 +20,7 @@ public class checkFunnel extends Command {
     }
 
     @Override
-    public void end(boolean isInterrupted){
+    public void end(){
     }
 
     @Override

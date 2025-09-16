@@ -4,15 +4,17 @@
 
 package frc.robot.subsystems.funnel;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.Climb.ClimbIO;
-import frc.robot.subsystems.Funnel.funnelIO.raiseFunnel;
+import frc.robot.subsystems.funnel.funnelIO;
+import frc.robot.subsystems.funnel.funnelConstants.FunnelConstants;
 
-public class Funnel extends SubsystemBase {
+public class funnel extends SubsystemBase {
   /** Creates a new funnel. */
-  public final ClimbIO io;
-  public Funnel() {
-  io = new IOReal();
+  public final funnelIO io;
+  public funnel() {
+  io = new funnelIOReal();
   }
   public void setMotorDutyCycle(double MotorPosition){
     io.setMotorDutyCycle(MotorPosition);
@@ -20,14 +22,17 @@ public class Funnel extends SubsystemBase {
   public void setMotorPosition(double MotorPosition){
     io.setMotorPosition(MotorPosition);
   }
-  public void stopMotor(boolean motorRun){
-    io.stopMotor(motorRun);
+  public void stopMotor(){
+    io.stopMotor();
   }
   public void raiseFunnel (double motorAngle){
     io.setMotorPosition(motorAngle);
   }
-  public double readMotor(){
-    return io.readMotor();
+  public boolean isFunnelUp(){
+    if (io.readMotorAngle() > FunnelConstants.FUNNEL_ANGLE_HIGH) {
+      return true;
+    }
+    return false;
   }
 
   @Override

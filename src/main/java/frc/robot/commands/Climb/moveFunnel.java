@@ -2,6 +2,7 @@ package main.java.frc.robot.commands.Climb;
 
 import frc.robot.subsystems.funnel.Funnel;
 import frc.robot.subsystems.funnel.FunnelIO;
+import frc.robot.subsystems.funnel.funnel;
 
 import com.ctre.phoenix.motorcontrol.IFollower;
 
@@ -11,7 +12,7 @@ import frc.robot.subsystems.funnel.FunnelConstants;
 
 public class MoveFunnel extends Command {
     public double funnelAngle;
-    public final Funnel subsystem;
+    public final funnel subsystem;
     public MoveFunnel (Funnel subsystemFunnel){
         subsystem = subsystemFunnel;
     }
@@ -20,13 +21,12 @@ public class MoveFunnel extends Command {
     public void initialize() {
         if (Timer.getMatchTime() < FunnelConstants.START_ENDGAME) cancel();
 
-        if (subsystem.readMotor() < FunnelConstants.FUNNEL_ANGLE_HIGH) {
+        if (subsystem.readMotorAngle() < FunnelConstants.FUNNEL_ANGLE_HIGH) {
             subsystem.setMotorPosition(FunnelConstants.FUNNEL_ANGLE_HIGH);
         }
-        if (subsystem.readMotor() == FunnelConstants.FUNNEL_ANGLE_HIGH) {
+        if (subsystem.readMotorAngle() == FunnelConstants.FUNNEL_ANGLE_HIGH) {
             subsystem.setMotorPosition(FunnelConstants.FUNNEL_ANGLE_LOW);
         }
-
         subsystem.setMotorPosition(FunnelConstants.FUNNEL_ANGLE_HIGH);
 
         

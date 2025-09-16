@@ -7,12 +7,12 @@ import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
 import frc.util.MarinersController.MarinersController.ControlMode;
 
-public class funnelIOReal implements FunnelIO {
+public class funnelIOReal implements funnelIO {
     private final MarinersTalonFX funnelMotor;
     @SuppressWarnings ("unused")
 
     public funnelIOReal(){
-        this.funnelMotor = configureLeadMotor();   
+        this.funnelMotor = configureLeadMotor();
     }
 
     private MarinersTalonFX configureLeadMotor(){
@@ -24,11 +24,22 @@ public class funnelIOReal implements FunnelIO {
     public void setMotorDutyCycle(double MotorDutyCycle) {
         funnelMotor.setDutyCycle(MotorDutyCycle);
     }
+    @Override
     public void setMotorPosition(double MotorPosition) {
         funnelMotor.setReference(MotorPosition, ControlMode.Position);
     }
+    @Override
     public void stopMotor(){
         funnelMotor.stopMotor();
+    }
+
+    @Override
+    public double readMotorAngle() {
+        return funnelMotor.getPosition();
+    }
+
+    public void Update(funnelInputs inputs){
+        inputs.funnelAngle = funnelMotor.getPosition();
     }
 } 
 

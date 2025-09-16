@@ -1,15 +1,16 @@
 
-public package frc.robot.subsystems.funnel;
+package frc.robot.subsystems.funnel;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
+import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
 class funnelConstants {
     
 
     public class FunnelConstants {
-        public static final double FUNNEL_ANGLE_HIGH = 40;
+        public static final double FUNNEL_ANGLE_HIGH = 0.4;
         public static final double START_ENDGAME = 30;
         public static final double FUNNEL_ANGLE_LOW = 0;
     }
