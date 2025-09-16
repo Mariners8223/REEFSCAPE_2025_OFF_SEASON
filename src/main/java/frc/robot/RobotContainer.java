@@ -50,9 +50,9 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-        driveController = new CommandPS5Controller(1);
-        driveXboxController = new CommandXboxController(0);
-        beambreak = new DigitalInput(41);
+        driveController = new CommandPS5Controller(0);
+        driveXboxController = new CommandXboxController(1);
+        beambreak = new DigitalInput(8);
         driveBase = new DriveBase();
         endEffector = new EndEffector();
         configureDriveBindings();
