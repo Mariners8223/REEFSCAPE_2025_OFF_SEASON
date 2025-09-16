@@ -66,8 +66,8 @@ private VictorSPX configureWheelMotor()
 
     @Override
     public void Update(BallDroppingInputs inputs) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'Update'");
+        inputs.armAnglePose = armMotor.getPosition();
+        inputs.ballDropping3DPose = new Pose3d(BallDropConstants.X_ON_ROBOT,BallDropConstants.Y_ON_ROBOT,BallDropConstants.Z_OFFSET,new Rotation3d(0,inputs.armAnglePose,0));
     }
 
 }
