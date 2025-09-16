@@ -11,14 +11,14 @@ public interface BallDropIO {
         double armAnglePose;
     }
 //wheel movment
-    void SetVoltageWheel(double voltage);
+    void setVoltageWheel(double voltage);
     
 //arm movment
-    void ResetMotorEncoder();
+    void resetMotorEncoder();
 
-    double GetAngle();
+    double getAngle();
 
-    void SetAngle(double angle);
+    void setAngle(double angle);
     
 //
     void Update(BallDroppingInputs inputs);
