@@ -10,9 +10,9 @@ import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralScoring extends Command {
+public class scoring extends Command {
    private final EndEffector endEffector;  /** Creates a new CoralScoring. */
-  public CoralScoring(EndEffector endEffector){
+  public scoring(EndEffector endEffector){
     this.endEffector=endEffector;
     
 
