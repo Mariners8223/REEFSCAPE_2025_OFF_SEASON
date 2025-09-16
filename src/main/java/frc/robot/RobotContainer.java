@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.*;
 import frc.robot.Constants.RobotType;
+import frc.robot.commands.BallDrop.BallDropHigh;
 
 import org.json.simple.parser.ParseException;
 import org.littletonrobotics.conduit.ConduitApi;
@@ -35,12 +36,17 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
-
+import frc.robot.subsystems.BallDrop.BallDrop;
 import frc.robot.subsystems.DriveTrain.DriveBase;
+import frc.robot.commands.BallDrop.BallDropHigh;
+import frc.robot.commands.BallDrop.BallDropLow;
+import frc.robot.commands.BallDrop.*;
+
+
 
 public class RobotContainer {
     public static DriveBase driveBase;
-
+    public static BallDrop ballDrop;
     public static CommandPS5Controller driveController;
 
     public RobotContainer() {
@@ -51,10 +57,12 @@ public class RobotContainer {
         configureDriveBindings();
         
     }
-
+    
 
 
    public void configureDriveBindings(){
+    driveController.triangle().whileTrue(new BallDropHigh(ballDrop));
+    driveController.circle().whileTrue(new BallDropLow(ballDrop));
    }
 
 
