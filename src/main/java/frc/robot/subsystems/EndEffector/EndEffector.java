@@ -37,7 +37,7 @@ public class EndEffector extends SubsystemBase {
   }
   
   public boolean IsCoralInRobot(){
-    return inputs.BeamBrake;
+    return inputs.BeamBreak;
   }
 
   @Override

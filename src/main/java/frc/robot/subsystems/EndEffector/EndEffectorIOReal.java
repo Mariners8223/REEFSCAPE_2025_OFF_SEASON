@@ -52,9 +52,11 @@ public void brakeMotor(){
 }
 @Override
 public  boolean getBeamBreak(){
-    return beamBreak.get();
+    return !beamBreak.get();
 }
-public void Update(){
-
+public void update(EndEffectorInputs inputs){
+    inputs.MotorPowerLeft = leftMotor.getMotorOutputPercent();
+    inputs.MotorPowerRight = rightMotor.getMotorOutputPercent();
+    inputs.BeamBreak = !beamBreak.get();
 }
 }

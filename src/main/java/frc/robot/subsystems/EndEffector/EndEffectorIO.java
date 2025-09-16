@@ -7,12 +7,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 public interface EndEffectorIO {
     @AutoLog
     class EndEffectorInputs {
-        boolean BeamBrake;
-        Pose3d pose;
-        double MotorSpeedLeft;
-        double MotorDirectionLeft; 
-        double MotorSpeedRight; //right is on the elevator side
-        double MotorDirectionRight; //right is on the elevator side
+        boolean BeamBreak;
+        double MotorPowerLeft; 
+        double MotorPowerRight; //right is on the elevator side
     }
     void setMotorDutyCycleRight(double RightMotorDutyCycle);  //right is on the elevator side
     void stopMotor();
