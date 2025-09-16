@@ -16,8 +16,8 @@ public class funnelIOReal implements FunnelIO {
 
     private  MarinersTalonFX configureLeadMotor(){
         MarinersTalonFX motor = new MarinersTalonFX("Funnel Motor", funnelConstants.funnelMotor.CONTROLLER_LOCATION,
-            funnelConstants.funnelMotor.MOTOR_ID, funnelConstants.funnelMotor.ROTATION_TO_ANGLE);
+            funnelConstants.funnelMotor.MOTOR_ID, funnelConstants.funnelMotor.ROTATION
+            _TO_ANGLE);
         return motor;
-        
     }
 }
