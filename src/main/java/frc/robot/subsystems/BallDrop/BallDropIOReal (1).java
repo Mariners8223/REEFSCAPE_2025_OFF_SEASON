@@ -1,0 +1,73 @@
+package frc.robot.subsystems.BallDrop;
+
+import java.lang.ModuleLayer.Controller;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import frc.util.MarinersController.MarinersController;
+import frc.util.MarinersController.MarinersSparkBase;
+import frc.util.MarinersController.MarinersTalonFX;
+import frc.util.MarinersController.MarinersController.ControlMode;
+import frc.util.MarinersController.MarinersController.ControllerLocation;
+
+public class BallDropIOReal implements BallDropIO{
+
+ private final VictorSPX wheelMotor;
+ private final MarinersController armMotor;
+
+ public BallDropIOReal()
+ {
+    this.wheelMotor = configureWheelMotor();
+    this.armMotor = configureArmMotor();
+ }
+private MarinersController configureArmMotor(){
+        MarinersSparkBase motor;
+        motor = new MarinersSparkBase("Arm Motor", ControllerLocation.RIO, BallDropConstants.ArmMotor.MOTOR_ID, BallDropConstants.ArmMotor.IS_BRUSHLESS, BallDropConstants.ArmMotor.MOTOR_TYPE, BallDropConstants.ArmMotor.ANGLE_PID);
+
+        motor.enableSoftLimits(BallDropConstants.ArmMotor.SOFT_MINIMUM, BallDropConstants.ArmMotor.SOFT_MAXIMUM);
+
+        motor.setMotorInverted(BallDropConstants.ArmMotor.IS_INVERTED);
+        motor.setMotorIdleMode(true);
+
+        return motor;
+    }
+private VictorSPX configureWheelMotor()
+{
+    VictorSPX motor;
+    motor = new VictorSPX(BallDropConstants.DropperMotor.ID);
+    motor.setInverted(BallDropConstants.DropperMotor.IS_INVERTED);
+    motor.setNeutralMode(NeutralMode.Brake);
+    return motor;
+}
+
+    @Override
+    public void SetVoltageWheel(double voltage) {
+        armMotor.setVoltage(voltage);
+    }
+
+    @Override
+    public void ResetMotorEncoder() {
+        armMotor.resetMotorEncoder();
+    }
+
+    @Override
+    public double GetAngle()
+    {
+        return armMotor.getPosition();
+    }
+
+    @Override
+    public void SetAngle(double angle) {
+        armMotor.setReference(angle,ControlMode.Position);
+    }
+
+    @Override
+    public void Update(BallDroppingInputs inputs) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'Update'");
+    }
+
+}

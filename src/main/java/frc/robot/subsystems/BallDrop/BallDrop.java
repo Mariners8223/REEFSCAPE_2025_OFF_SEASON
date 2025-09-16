@@ -23,12 +23,11 @@ public class BallDrop extends SubsystemBase {
 
   public void resetMotorEncoder()
   {
-    io.resetMotorEncoder();
+    io.ResetMotorEncoder();
   }
-
-  public void SetVoltageArm(double voltage)
+  public double GetAngle()
   {
-    io.SetVoltageArm(voltage);
+    return io.GetAngle();
   }
   
   public void SetAngle(double angle)
