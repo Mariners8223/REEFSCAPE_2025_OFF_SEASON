@@ -9,6 +9,6 @@ public interface FunnelIO {
     }
     void setMotorDutyCycle(double MotorDutyCycle);
     void setMotorPosition(double MotorPosition);
-    void stopMotor(boolean motorRun);
-    double readMotor();
+    void stopMotor();
+    double readMotorAngle(double funnelAngle);
 }

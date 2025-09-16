@@ -5,6 +5,7 @@ import frc.robot.subsystems.funnel.funnelConstants.funnelMotor;
 import frc.util.MarinersController.MarinersController;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersTalonFX;
+import frc.util.MarinersController.MarinersController.ControlMode;
 
 public class funnelIOReal implements FunnelIO {
     private final MarinersTalonFX funnelMotor;
@@ -14,10 +15,260 @@ public class funnelIOReal implements FunnelIO {
         this.funnelMotor = configureLeadMotor();   
     }
 
-    private  MarinersTalonFX configureLeadMotor(){
+    private MarinersTalonFX configureLeadMotor(){
         MarinersTalonFX motor = new MarinersTalonFX("Funnel Motor", funnelConstants.funnelMotor.CONTROLLER_LOCATION,
-            funnelConstants.funnelMotor.MOTOR_ID, funnelConstants.funnelMotor.ROTATION
-            _TO_ANGLE);
+            funnelConstants.funnelMotor.MOTOR_ID, funnelConstants.funnelMotor.ROTATION_TO_ANGLE);
         return motor;
     }
-}
+    @Override
+    public void setMotorDutyCycle(double MotorDutyCycle) {
+        funnelMotor.setDutyCycle(MotorDutyCycle);
+    }
+    public void setMotorPosition(double MotorPosition) {
+        funnelMotor.setReference(MotorPosition, ControlMode.Position);
+    }
+    public void stopMotor(){
+        funnelMotor.stopMotor();
+    }
+} 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//yaga baga duuuduu//
