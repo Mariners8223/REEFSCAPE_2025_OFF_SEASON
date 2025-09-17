@@ -64,11 +64,12 @@ private VictorSPX configureWheelMotor()
     }
     public void setAngle(double angle) {
         armMotor.setReference(angle,ControlMode.Position, calculateFeedForward(armMotor.getPosition()));
+        System.out.println("bro2");
     }
     
     public void Update(BallDroppingInputs inputs) {
         inputs.armAnglePose = armMotor.getPosition();
-        
+
         inputs.ballDropping3DPose = new Pose3d (BallDropConstants.X_ON_ROBOT,BallDropConstants.Y_ON_ROBOT,BallDropConstants.Z_OFFSET,new Rotation3d(0,inputs.armAnglePose,0));
     }
 

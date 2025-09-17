@@ -14,6 +14,7 @@ public BallDropOff(BallDrop ballDrop) {
   public void initialize() {
     ballDrop.stopDropperMotor();
     ballDrop.setAngle(BallDropConstants.ArmMotor.ANGLE_TO_RESET);
+    System.out.println("why we here");
   }
 
   @Override

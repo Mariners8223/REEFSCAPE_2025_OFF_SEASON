@@ -34,6 +34,7 @@ public class BallDrop extends SubsystemBase {
   public void setAngle(double angle)
   {
     io.setAngle(angle);
+    System.out.println("bro");
   }
   public void stopDropperMotor(){
     setVoltageWheel(0);

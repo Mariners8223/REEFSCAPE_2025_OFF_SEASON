@@ -61,8 +61,10 @@ public class RobotContainer {
 
 
    public void configureDriveBindings(){
-    driveController.triangle().whileTrue(new BallDropHigh(ballDrop));
-    driveController.circle().whileTrue(new BallDropLow(ballDrop));
+    driveController.triangle().onTrue(new BallDropHigh(ballDrop));
+    driveController.circle().onTrue(new BallDropLow(ballDrop));
+    driveController.square().onTrue(new BallDropOff(ballDrop));
+
    }
 
 

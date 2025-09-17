@@ -22,23 +22,14 @@ public class BallDropHigh extends Command {
   public void initialize() {
     ballDrop.setAngle(BallDropConstants.ArmMotor.ANGLE_TO_REACH_TOP);
     ballDrop.setVoltageWheel(BallDropConstants.DropperMotor.POWER_TO_REACH);
+    System.out.println("did init");
     
   }
   
-  @Override
-  public void execute(){
-   
-  }
-  
-  @Override
-  public void end(boolean interrupted) {
-    ballDrop.setAngle(BallDropConstants.ArmMotor.ANGLE_TO_RESET);
-    ballDrop.setVoltageWheel(0); 
-  }
 
   @Override
   public boolean isFinished() {
-    //return Math.abs(BallDropConstants.ArmMotor.ANGLE_TO_REACH_LOW - ballDrop.getAngle()) < BallDropConstants.ArmMotor.ANGLE_TOLERANCE;
-    return false;
+    System.out.println("did is finished");
+    return Math.abs(BallDropConstants.ArmMotor.ANGLE_TO_REACH_LOW - ballDrop.getAngle()) < BallDropConstants.ArmMotor.ANGLE_TOLERANCE;
   }
 }
