@@ -65,7 +65,7 @@ public class RobotContainer {
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
         driveController.L1().onTrue(new CoralScoring(endEffector));
-        driveController.R1().onTrue(new scoringL234(endEffector));
+        driveController.R1().onTrue(new scoring(endEffector));
         driveController.touchpad().whileFalse(new collecting(endEffector));
         
    }
