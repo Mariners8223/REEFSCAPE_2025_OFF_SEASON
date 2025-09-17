@@ -35,6 +35,9 @@ public class BallDrop extends SubsystemBase {
   {
     io.setAngle(angle);
   }
+  public void stopDropperMotor(){
+    setVoltageWheel(0);
+  }
 
   @Override
   public void periodic() {
