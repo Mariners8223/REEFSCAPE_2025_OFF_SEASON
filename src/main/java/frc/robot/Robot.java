@@ -43,6 +43,11 @@ public class Robot extends LoggedRobot
     private int driverStationCheckTimer = 0;
     private boolean ledState = true;
     public Robot(){
+        Logger.start();
+        SignalLogger.enableAutoLogging(true);
+        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+        ControllerMaster.getInstance();
+        Logger.recordOutput("Zero 3D", new Pose3d());
         new RobotContainer();
     }
     
