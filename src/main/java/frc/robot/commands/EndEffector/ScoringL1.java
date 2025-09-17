@@ -42,6 +42,6 @@ public class ScoringL1 extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return spinningTime <= 50;
+    return spinningTime >= 50;
   }
 }
