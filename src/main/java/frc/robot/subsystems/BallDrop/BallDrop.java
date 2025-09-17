@@ -11,6 +11,7 @@ import frc.robot.subsystems.BallDrop.BallDropIO.BallDroppingInputs;
 public class BallDrop extends SubsystemBase {
   /** Creates a new BallDrop. */
   private final BallDropIO io;
+  BallDroppingInputsAutoLogged inputs = new BallDroppingInputsAutoLogged();
   public BallDrop() {
     io = new BallDropIOReal();
     
@@ -35,13 +36,8 @@ public class BallDrop extends SubsystemBase {
     io.setAngle(angle);
   }
 
-  public void update(BallDroppingInputs inputs)
-  {
-    io.Update(inputs);
-  }
-  
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    io.Update(inputs);
   }
 }
