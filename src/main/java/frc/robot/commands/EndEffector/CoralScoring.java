@@ -15,7 +15,7 @@ public class CoralScoring extends Command {
    private final EndEffector endEffector;  /** Creates a new CoralScoring. */
   public CoralScoring(EndEffector endEffector){
     this.endEffector=endEffector;
-    
+    addRequirements(endEffector);
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -30,7 +30,7 @@ public class CoralScoring extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    EndEffectorConstants.spinningTime = EndEffectorConstants.spinningTime+1;
+    EndEffectorConstants.spinningTime++;
   }
 
   // Called once the command ends or is interrupted.
@@ -42,8 +42,10 @@ public class CoralScoring extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (EndEffectorConstants.spinningTime >= 50){
+    if (EndEffectorConstants.spinningTime >= 500){
+      
       return false;
+      
     }
     else return true;
     
