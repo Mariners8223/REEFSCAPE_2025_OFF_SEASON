@@ -28,7 +28,7 @@ public class BallDropIOReal implements BallDropIO{
  }
 private MarinersController configureArmMotor(){
         MarinersSparkBase motor;
-        motor = new MarinersSparkBase("Arm Motor", ControllerLocation.RIO, BallDropConstants.ArmMotor.MOTOR_ID, BallDropConstants.ArmMotor.IS_BRUSHLESS, BallDropConstants.ArmMotor.MOTOR_TYPE, BallDropConstants.ArmMotor.ANGLE_PID);
+        motor = new MarinersSparkBase("Arm Motor", ControllerLocation.MOTOR, BallDropConstants.ArmMotor.MOTOR_ID, BallDropConstants.ArmMotor.IS_BRUSHLESS, BallDropConstants.ArmMotor.MOTOR_TYPE, BallDropConstants.ArmMotor.ANGLE_PID);
 
         motor.enableSoftLimits(BallDropConstants.ArmMotor.SOFT_MINIMUM, BallDropConstants.ArmMotor.SOFT_MAXIMUM);
 
@@ -51,22 +51,21 @@ private VictorSPX configureWheelMotor()
         armMotor.setVoltage(voltage);
     }
 
-    @Override
     public void resetMotorEncoder() {
         armMotor.resetMotorEncoder();
     }
 
-    @Override
     public double getAngle()
     {
         return armMotor.getPosition();
     }
-
-    @Override
-    public void setAngle(double angle) {
-        armMotor.setReference(angle,ControlMode.Position);
+    private double calculateFeedForward(double motorRotation){
+        return Math.sin(motorRotation * 2 * Math.PI) * BallDropConstants.ArmMotor.MOTOR_FEED_FORWARD;
     }
-    @Override
+    public void setAngle(double angle) {
+        armMotor.setReference(angle,ControlMode.Position, calculateFeedForward(armMotor.getPosition()));
+    }
+    
     public void Update(BallDroppingInputs inputs) {
         inputs.armAnglePose = armMotor.getPosition();
         inputs.ballDropping3DPose = new Pose3d (BallDropConstants.X_ON_ROBOT,BallDropConstants.Y_ON_ROBOT,BallDropConstants.Z_OFFSET,new Rotation3d(0,inputs.armAnglePose,0));

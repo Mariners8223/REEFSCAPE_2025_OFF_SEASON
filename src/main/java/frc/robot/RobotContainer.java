@@ -53,7 +53,7 @@ public class RobotContainer {
         driveController = new CommandPS5Controller(0);
 
         driveBase = new DriveBase();
-
+        ballDrop = new BallDrop();
         configureDriveBindings();
         
     }

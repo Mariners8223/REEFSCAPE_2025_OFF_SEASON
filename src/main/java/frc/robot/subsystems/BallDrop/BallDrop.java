@@ -10,7 +10,7 @@ import frc.robot.subsystems.BallDrop.BallDropIO.BallDroppingInputs;
 
 public class BallDrop extends SubsystemBase {
   /** Creates a new BallDrop. */
-  private final BallDropIO io;
+  BallDropIO io;
   BallDroppingInputsAutoLogged inputs = new BallDroppingInputsAutoLogged();
   public BallDrop() {
     io = new BallDropIOReal();
