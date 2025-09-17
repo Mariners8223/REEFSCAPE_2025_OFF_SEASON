@@ -8,6 +8,6 @@ public class EndEffectorConstants {
     public static final int motorRightID = 22;
     public static final int motorLeftID = 21;
     public static final int beamBreakPort = 9;
-
+    
 
 }

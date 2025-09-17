@@ -65,8 +65,8 @@ public class RobotContainer {
         new Trigger(RobotState::isTeleop).and(RobotState::isEnabled).whileTrue(new StartEndCommand(() ->
             driveBase.setDefaultCommand(new DriveCommand(driveBase, driveXboxController)),
             driveBase::removeDefaultCommand).ignoringDisable(true));
-        driveController.L1().onTrue(new CoralScoring(endEffector));
-        driveController.R1().onTrue(new scoring(endEffector));
+        driveController.L1().onTrue(new ScoringL1(endEffector));
+        driveController.R1().onTrue(new ScoringL2L3L4(endEffector));
         driveController.touchpad().whileFalse(new collecting(endEffector));
         
    }

@@ -3,19 +3,19 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.EndEffector;
-import edu.wpi.first.wpilibj.SensorUtil;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.subsystems.EndEffector.EndEffector;
 import frc.robot.subsystems.EndEffector.EndEffectorConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class scoring extends Command {
-   private final EndEffector endEffector;  /** Creates a new CoralScoring. */
-  public scoring(EndEffector endEffector){
-    this.endEffector=endEffector;
-    addRequirements(endEffector);
+public class ScoringL1 extends Command {
+  private int spinningTime;
+  private final EndEffector endEffector;
+
+  /** Creates a new ScoringL1. */
+  public ScoringL1(EndEffector endEffector) {
+    this.endEffector = endEffector;
 
     // Use addRequirements() here to declare subsystem dependencies.
   }
@@ -23,14 +23,14 @@ public class scoring extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.spinMotorOppositeWays(EndEffectorConstants.spinningSpeed); // add a constent folder
-    
+    endEffector.spinMotorOppositeWaysL1(EndEffectorConstants.spinningSpeed); // add a constent folder
+    spinningTime=0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    EndEffectorConstants.spinningTime++;
+    spinningTime++;
   }
 
   // Called once the command ends or is interrupted.
@@ -42,10 +42,6 @@ public class scoring extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (EndEffectorConstants.spinningTime >= 500){
-      return false;
-    }
-    else return true;
-    
+    return spinningTime <= 50;
   }
 }
