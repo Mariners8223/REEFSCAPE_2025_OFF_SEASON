@@ -1,4 +1,5 @@
 package frc.robot.subsystems.EndEffector;
+import edu.wpi.first.wpilibj.SensorUtil;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;

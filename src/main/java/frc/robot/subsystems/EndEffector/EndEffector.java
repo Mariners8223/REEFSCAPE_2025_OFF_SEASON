@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.EndEffector;
 
+import edu.wpi.first.wpilibj.SensorUtil;
+
 import org.littletonrobotics.junction.AutoLog;
 import org.littletonrobotics.junction.Logger;
 
