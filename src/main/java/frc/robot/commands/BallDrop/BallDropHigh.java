@@ -10,7 +10,7 @@ import frc.robot.subsystems.BallDrop.BallDropConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class BallDropHigh extends Command {
-  BallDrop ballDrop;
+  BallDrop ballDrop = new BallDrop();
   double timer;
   public BallDropHigh(BallDrop ballDrop) {
     this.ballDrop = ballDrop;
