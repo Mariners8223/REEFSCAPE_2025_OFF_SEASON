@@ -38,7 +38,7 @@ public class BallDropHigh extends Command {
 
   @Override
   public boolean isFinished() {
-    return Math.abs(BallDropConstants.ArmMotor.ANGLE_TO_REACH_LOW - ballDrop.getAngle()) < BallDropConstants.ArmMotor.ANGLE_TOLERANCE;
-    
+    //return Math.abs(BallDropConstants.ArmMotor.ANGLE_TO_REACH_LOW - ballDrop.getAngle()) < BallDropConstants.ArmMotor.ANGLE_TOLERANCE;
+    return false;
   }
 }
