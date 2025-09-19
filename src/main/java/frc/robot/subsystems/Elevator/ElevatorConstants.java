@@ -7,12 +7,12 @@ import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
 public class ElevatorConstants {
     public enum ElevatorLevel{
-       double BottomHeight = 0.65;
+        double BottomHeight = 0.65;
         double L = 10.72;
-       double  L = 20.88;
+        double L = 20.88;
         double L3 = 1.28;
         double  L4 = 1.9;
-}
+    }
 
 
 
