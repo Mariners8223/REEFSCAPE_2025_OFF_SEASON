@@ -39,22 +39,103 @@ public class Robot extends LoggedRobot
 {
     private Command autonomousCommand;
     public static boolean isRedAlliance = false;
-
     private int driverStationCheckTimer = 0;
-    private boolean ledState = true;
+
+    private static final Field2d field = new Field2d();
+    private static AprilTagFieldLayout apriltagField;
+
     public Robot(){
-        Logger.start();
-        SignalLogger.enableAutoLogging(true);
-        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
-        ControllerMaster.getInstance();
-        Logger.recordOutput("Zero 3D", new Pose3d());
+        if(Constants.ROBOT_TYPE != Constants.RobotType.COMPETITION){
+            checkFlip();
+            isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
+        }
+
+        configureLogging();
+        configurePathplanning();
+
+
+        SmartDashboard.putData("Field", field);
+        // apriltagField = VisionConstants.FIELD_LAYOUT;
+
         new RobotContainer();
+        ControllerMaster.getInstance();
     }
+
+    private void configureLogging(){
+        Logger.recordMetadata("Robot Type", Constants.ROBOT_TYPE.name());
+
+        Logger.recordMetadata("BuildDate", BuildConstants.BUILD_DATE);
+        Logger.recordMetadata("GitSHA", BuildConstants.GIT_SHA);
+        Logger.recordMetadata("GitDate", BuildConstants.GIT_DATE);
+        Logger.recordMetadata("GitBranch", BuildConstants.GIT_BRANCH);
+        switch (BuildConstants.DIRTY) {
+            case 0:
+                Logger.recordMetadata("GitDirty", "All changes committed");
+                break;
+            case 1:
+                Logger.recordMetadata("GitDirty", "Uncommitted changes");
+                break;
+            default:
+                Logger.recordMetadata("GitDirty", "Unknown");
+                break;
+        }
+
+        Logger.addDataReceiver(new WPILOGWriter("/media/logs"));
+
+        if(isReal()){
+            switch (Constants.ROBOT_TYPE){
+                case DEVELOPMENT -> {
+                    Logger.addDataReceiver(new NT4Publisher());
+                    break;
+                }
+
+                case REPLAY -> System.out.println("Achievement Unlocked: How did we get here?");
+            }
+        }
+        else{
+            if(Constants.ROBOT_TYPE == Constants.RobotType.REPLAY){
+                String logPath = LogFileUtil.findReplayLog();
+                ControllerMaster.getInstance().stopLoop();
+
+                Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"), AdvantageScopeOpenBehavior.ALWAYS));
+                Logger.setReplaySource(new WPILOGReader(logPath));
+
+                setUseTiming(false);
+            }
+            Logger.addDataReceiver(new NT4Publisher());
+        }
+
+
+        SignalLogger.enableAutoLogging(false);
+        DataLogManager.stop();
+
+        Logger.start();
+
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        PathPlannerLogging.setLogActivePathCallback((path) ->
+                Logger.recordOutput("PathPlanner/ActivePath", path.toArray(new Pose2d[0])));
+
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
+                Logger.recordOutput("PathPlanner/TargetPose", targetPose));
+
+        PathfindingCommand.warmupCommand().schedule();
+
+    }
+
+    private static void configurePathplanning(){
+        Pathfinding.setPathfinder(new LocalADStarAK());
+        PathPlannerLogging.setLogActivePathCallback((path) ->
+                Logger.recordOutput("PathPlanner/ActivePath", path.toArray(new Pose2d[0])));
+
+        PathPlannerLogging.setLogTargetPoseCallback((targetPose) ->
+                Logger.recordOutput("PathPlanner/TargetPose", targetPose));
+
+        PathfindingCommand.warmupCommand().schedule();
+    }
+
     
     private static void checkFlip() {
-        boolean isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
-
-
+        isRedAlliance = DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == DriverStation.Alliance.Red;
     }
 
     
@@ -62,8 +143,12 @@ public class Robot extends LoggedRobot
     public void robotPeriodic()
     {
         CommandScheduler.getInstance().run();
-        // Logger.recordOutput("LED power draw", pdh.getCurrent(23) * pdh.getVoltage());
+        SmartDashboard.putNumber("Battery Voltage", RobotController.getBatteryVoltage());
+        SmartDashboard.putNumber("Robot Velocity", RobotContainer.driveBase.getVelocity());
+        SmartDashboard.putNumber("Match Time", Timer.getMatchTime());
+        SmartDashboard.putNumber("PDH Voltage", ConduitApi.getInstance().getPDPVoltage());
     }
+    
     
     
     @SuppressWarnings("RedundantMethodOverride")
@@ -115,13 +200,6 @@ public class Robot extends LoggedRobot
         {
             autonomousCommand.schedule();
         }
-
-
-        
-        ledState = true;
-
-
-
     }
     
     

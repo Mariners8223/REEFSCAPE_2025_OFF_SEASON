@@ -8,13 +8,13 @@ public class BallDropConstants {
     public class ArmMotor 
     {
 
-    public static final double ANGLE_TO_REACH_TOP = 0.4;
-    public static final double ANGLE_TO_REACH_LOW = 0.25;
+    public static final double ANGLE_TO_REACH_TOP = 2;
+    public static final double ANGLE_TO_REACH_LOW = 1;
     public static final double ANGLE_TO_RESET = 0;
     public static final double ANGLE_TOLERANCE = 0.03;
     
     public static final double SOFT_MINIMUM = 0;
-    public static final double SOFT_MAXIMUM = 0.4;
+    public static final double SOFT_MAXIMUM = 2.5;
     
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
     public static final int MOTOR_ID = 24;
