@@ -22,7 +22,6 @@ public class BallDropHigh extends Command {
     ballDrop.setVoltageWheel(BallDropConstants.DropperMotor.POWER_TO_REACH);
     ballDrop.setAngle(BallDropConstants.ArmMotor.ANGLE_TO_REACH_TOP);
     System.out.println("did init");
-    
   }
   
 

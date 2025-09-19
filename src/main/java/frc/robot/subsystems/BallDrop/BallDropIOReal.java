@@ -59,6 +59,7 @@ private VictorSPX configureWheelMotor()
     {
         return armMotor.getPosition();
     }
+    
     private double calculateFeedForward(double motorRotation){
         return Math.sin(motorRotation * 2 * Math.PI) * BallDropConstants.ArmMotor.MOTOR_FEED_FORWARD;
     }

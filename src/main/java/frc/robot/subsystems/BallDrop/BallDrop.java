@@ -12,10 +12,10 @@ public class BallDrop extends SubsystemBase {
   /** Creates a new BallDrop. */
   BallDropIO io;
   BallDroppingInputsAutoLogged inputs = new BallDroppingInputsAutoLogged();
-  
+
   public BallDrop() {
     io = new BallDropIOReal();
-    
+    this.resetMotorEncoder();
   }
 
   public void setVoltageWheel(double voltage)
