@@ -13,9 +13,6 @@ public class BallDropConstants {
     public static final double ANGLE_TO_RESET = 0;
     public static final double ANGLE_TOLERANCE = 0.03;
     
-
-    public static final double TIME_TO_STAY_UP = 5;
-    
     public static final double SOFT_MINIMUM = 0;
     public static final double SOFT_MAXIMUM = 0.4;
     
