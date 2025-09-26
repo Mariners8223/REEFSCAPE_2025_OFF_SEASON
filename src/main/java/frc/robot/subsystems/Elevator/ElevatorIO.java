@@ -12,8 +12,7 @@ public interface ElevatorIO {
         double elevatorHeight;
     }
 
-    public void GetToDesiredHeight(double Height);
-    public void GetToBottom();
+    public double GetToDesiredHeight(double Height);
     public void SetElevatorSpeed(double speed);
     public void PauseElevatorMotor(boolean pause);
     

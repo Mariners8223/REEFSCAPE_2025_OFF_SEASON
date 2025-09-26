@@ -1,8 +1,10 @@
 package frc.robot.subsystems.Elevator;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
@@ -19,18 +21,22 @@ public class ElevatorIOReal implements ElevatorIO{
     }
 
     public MarinersSparkBase ConfigureLeadMotor(){
-
+        MarinersSparkBase motor = new MarinersSparkBase("LeadMotor", ControllerLocation.RIO, ElevatorConstants.LeadMotor.MOTOR_ID,ElevatorConstants.LeadMotor.IS_BRUSHLESS , ElevatorConstants.LeadMotor.MOTOR_TYPE);
     }
     public MarinersSparkBase ConfigureFollowMotor(){
-        MarinersSparkBase motor = new MarinersSparkBase("follow motor", ControllerLocation.RIO, 16, true, MotorType.SPARK_FLEX, );
+        MarinersSparkBase motor = new MarinersSparkBase("follow motor", ControllerLocation.RIO, ElevatorConstants.FollowMotor.MOTOR_ID, ElevatorConstants.FollowMotor.IS_BRUSHLESS,ElevatorConstants.FollowMotor.MOTOR_TYPE );
     }
-    public void GetToDesiredHeight(double Height){
+    public double GetToDesiredHeight(double Height){
+        return ParallelCommandGroup(
+            LeadMotor.setReference(Height,ControlMode.Position),
+            FollowMotor.setReference(Height,ControlMode.Position)
+
+        );
+
         
     }
 
-    public void GetToBottom(){
-        
-    }
+
 
     public void SetElevatorSpeed(double speed){}
 
