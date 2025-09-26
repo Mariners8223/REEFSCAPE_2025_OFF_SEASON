@@ -18,6 +18,7 @@ public class ElevatorIOReal implements ElevatorIO{
     public ElevatorIOReal(){
         this.LeadMotor =  ConfigureLeadMotor();
         this.FollowMotor =  ConfigureFollowMotor();
+        FollowMotor.setMotorAsFollower(LeadMotor, true);
     }
 
     public MarinersSparkBase ConfigureLeadMotor(){
@@ -26,12 +27,8 @@ public class ElevatorIOReal implements ElevatorIO{
     public MarinersSparkBase ConfigureFollowMotor(){
         MarinersSparkBase motor = new MarinersSparkBase("follow motor", ControllerLocation.RIO, ElevatorConstants.FollowMotor.MOTOR_ID, ElevatorConstants.FollowMotor.IS_BRUSHLESS,ElevatorConstants.FollowMotor.MOTOR_TYPE );
     }
-    public double GetToDesiredHeight(double Height){
-        return ParallelCommandGroup(
-            LeadMotor.setReference(Height,ControlMode.Position),
-            FollowMotor.setReference(Height,ControlMode.Position)
-
-        );
+    public void SetToDesiredHeight(double Height){
+        LeadMotor.setReference(Height, controlMode);
 
         
     }
