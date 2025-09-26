@@ -13,14 +13,14 @@ public class EndEffector extends SubsystemBase{
             
     };
     
-    public void setDutyCycleL234(double EndEffectorConstents.EndEffector.dutyCycle){
-        io.setMotorDutyCycleLeft(EndEffectorConstents.EndEffector.dutyCycle);
-        io.setMotorDutyCycleRight(EndEffectorConstents.EndEffector.dutyCycle*-1);
+    public void setDutyCycleL234(double dutyCycle){
+        io.setMotorDutyCycleLeft(dutyCycle);
+        io.setMotorDutyCycleRight(dutyCycle*-1);
     }
 
-    public void setDutyCycleL1(double EndEffectorConstents.EndEffector.DUTY_CYCLE){
-        io.setMotorDutyCycleLeft(EndEffectorConstents.EndEffector.DUTY_CYCLE*-1);
-        io.setMotorDutyCycleRight(EndEffectorConstents.EndEffector.DUTY_CYCLE*-0.4);
+    public void setDutyCycleL1(double dutyCycle){
+        io.setMotorDutyCycleLeft(dutyCycle*-1);
+        io.setMotorDutyCycleRight(dutyCycle*-0.4);
     }
 
     public void motorStop(){
