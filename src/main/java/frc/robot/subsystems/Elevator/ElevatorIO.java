@@ -8,12 +8,10 @@ public interface ElevatorIO {
     
     @AutoLog
     class ElevatorInputs{
-        Pose3d elevator3DPose;
         double elevatorHeight;
     }
 
     public void SetToDesiredHeight(double Height);
-    public void SetElevatorSpeed(double speed);
     public void PauseElevatorMotor(boolean pause);
     
 

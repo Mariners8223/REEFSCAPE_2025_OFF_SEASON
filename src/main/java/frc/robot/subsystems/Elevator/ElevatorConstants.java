@@ -1,6 +1,7 @@
 package frc.robot.subsystems.Elevator;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
@@ -13,16 +14,16 @@ public class ElevatorConstants {
         L3(1.28),
         L4(1.9);
 
-        private double description;
+        private double height;
 
   
-        private void ElevatorConstants (Double description) {
-            this.description = description;
+        private ElevatorLevel (double height) {
+            this.height = height;
         }
 
 
-        public double getDescription() {
-            return description;
+        public double getHeight() {
+            return height;
         }
     }
 
@@ -36,6 +37,10 @@ public class ElevatorConstants {
         public static final MotorType MOTOR_TYPE = MotorType.SPARK_FLEX;
         
         public static final boolean IS_INVERTED = false;
+
+        public static final TrapezoidProfile TRAPEZOID_PROFILE = new TrapezoidProfile(
+            new Constraints(5, 12)
+        );
     }
     
 
@@ -48,7 +53,14 @@ public class ElevatorConstants {
         public static final boolean IS_INVERTED = true;
 
     }
+
+    public static final double SOFT_MINIMUM = ElevatorLevel.BottomHeight.getHeight();
+    public static final double SOFT_MAXIMUM = ElevatorLevel.L4.getHeight();
+    
+    public static final double GEAR_RAIO = 5;
+    public static final double PULLEY_RADIUS = 0.024;
+    public static final double PULLEY_EXTENSION_RATIO = PULLEY_RADIUS * 2 * Math.PI * 2;
+
+
+    
 }
-{
-public static final double SOFT_MINIMUM = ElevatorLevel.BottomHeight(0.65);
-public static final double SOFT_MAXIMUM = 1.9;}
