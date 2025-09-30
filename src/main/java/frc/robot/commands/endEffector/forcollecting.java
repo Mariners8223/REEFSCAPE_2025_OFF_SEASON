@@ -3,47 +3,46 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands.endEffector;
+
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.endEffector.EndEffector;
 import frc.robot.subsystems.endEffector.EndEffectorConstents;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class scoringL1FRFR extends Command {
+public class forcollecting extends Command {
   private final frc.robot.subsystems.endEffector.EndEffector endEffector;
-  int counter;
-  /** Creates a new scoringL1FRFR. */
-  public scoringL1FRFR(EndEffector endEffector) {
+  
+  /** Creates a new collecting. */
+  public forcollecting(EndEffector endEffector) {
     this.endEffector = endEffector;
     
+
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    endEffector.setDutyCycleL1(EndEffectorConstents.DUTY_CYCLE);
-    counter = 0;
-
+    endEffector.setDutyCycleL234(EndEffectorConstents.DUTY_CYCLE);
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    counter++;
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     endEffector.motorStop();
-    EndEffectorConstents.IsCoralInRobot = false;
-    
+    EndEffectorConstents.IsCoralInRobot = true;
+
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return counter>=50;
+    return false;
   }
 }
