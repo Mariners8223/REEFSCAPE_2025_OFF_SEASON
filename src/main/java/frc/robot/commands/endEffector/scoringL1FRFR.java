@@ -4,28 +4,18 @@
 
 package frc.robot.commands.endEffector;
 
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.endEffector.EndEffector;
-import frc.robot.subsystems.endEffector.EndEffectorConstents;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class collecting extends Command {
-  private final frc.robot.subsystems.endEffector.EndEffector endEffector;
-
-  /** Creates a new collecting. */
-  public collecting(EndEffector endEffector) {
-    c
-    
-
+public class scoringL1FRFR extends Command {
+  /** Creates a new scoringL1FRFR. */
+  public scoringL1FRFR() {
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    endEffector.setDutyCycleL234(EndEffectorConstents.DUTY_CYCLE);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -33,14 +23,11 @@ public class collecting extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    endEffector.motorStop();
-
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return !EndEffectorInputsAutoLog.beambrake;
+    return false;
   }
 }
