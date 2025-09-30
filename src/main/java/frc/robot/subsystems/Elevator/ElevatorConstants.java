@@ -1,12 +1,15 @@
 package frc.robot.subsystems.Elevator;
 
+import java.util.Set;
+
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 import frc.util.MarinersController.MarinersSparkBase;
 import frc.util.MarinersController.MarinersSparkBase.MotorType;
 
-public class ElevatorConstants {
+public class ElevatorConstants<L1> {
     public enum ElevatorLevel{
         BottomHeight(0.65),
         L1(10.72),
@@ -21,12 +24,10 @@ public class ElevatorConstants {
             this.height = height;
         }
 
-
         public double getHeight() {
             return height;
         }
     }
-
 
 
         
@@ -62,5 +63,12 @@ public class ElevatorConstants {
     public static final double PULLEY_EXTENSION_RATIO = PULLEY_RADIUS * 2 * Math.PI * 2;
 
 
-    
+    public static final double TOLERANCE = 0.05;
+
+
+    public interface TOLERANCE {
+
+        public class ElevatorLevel {
+        }
+    }
 }

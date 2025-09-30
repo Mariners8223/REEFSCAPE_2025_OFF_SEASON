@@ -9,10 +9,12 @@ public interface ElevatorIO {
     @AutoLog
     class ElevatorInputs{
         double elevatorHeight;
+        public MarinersSparkBase height;
     }
 
     public void SetToDesiredHeight(double Height);
     public void PauseElevatorMotor(boolean pause);
+    public double getHeight();
     
 
 

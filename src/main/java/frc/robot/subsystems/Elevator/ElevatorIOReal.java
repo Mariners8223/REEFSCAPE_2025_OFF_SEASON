@@ -22,7 +22,7 @@ public class ElevatorIOReal implements ElevatorIO{
     }
 
     public MarinersSparkBase ConfigureLeadMotor(){
-        MarinersSparkBase motor = new MarinersSparkBase("LeadMotor", ControllerLocation.RIO, ElevatorConstants.LeadMotor.MOTOR_ID,ElevatorConstants.LeadMotor.IS_BRUSHLESS , ElevatorConstants.LeadMotor.MOTOR_TYPE);
+        MarinersSparkBase motor = new MarinersSparkBase("LeadMotor", ControllerLocation.RIO, ElevatorConstants.LeadMotor.MOTOR_ID,ElevatorConstants.LeadMotor.IS_BRUSHLESS, ElevatorConstants.LeadMotor.MOTOR_TYPE);
         motor.setProfile(ElevatorConstants.LeadMotor.TRAPEZOID_PROFILE);
     }
     public MarinersSparkBase ConfigureFollowMotor(){
@@ -38,8 +38,12 @@ public class ElevatorIOReal implements ElevatorIO{
         LeadMotor.setMotorIdleMode(pause);
     }
 
-    public void update(ElevatorInputsAutoLogged inputs){
-        inputs.height = LeadMotor.
+    public double getHeight(){
+        return LeadMotor.getPosition();
+    }
+
+    public void update(ElevatorInputs inputs){
+        inputs.height = LeadMotor;
     }
 
 
