@@ -7,7 +7,7 @@ public class DriveCommand extends Command {
 
     @Override
     public void initialize() {
-
+        setMotorDutyCycle(CLIMB_MOTOR_HIGH)
     }
 
     @Override

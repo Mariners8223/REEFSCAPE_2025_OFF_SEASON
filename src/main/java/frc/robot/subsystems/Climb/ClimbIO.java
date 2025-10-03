@@ -6,8 +6,7 @@ import org.littletonrobotics.junction.AutoLog;
 public interface ClimbIO {
     @AutoLog
     class climbing_motor {
-        double speed;
-        double rotations;
+        double climbAngle;
         boolean direction;
         double position;
         
@@ -16,4 +15,6 @@ public interface ClimbIO {
     void setMotorPosition(double MotorPosition);
     void stopMotor(boolean motorRun);
     double readMotor();
+
+    void Update(funnelInputs inputs);
 }
