@@ -9,9 +9,9 @@ class funnelConstants {
     
 
     public class climbConstants {
-        public static final double CLIMB_MOTOR_HIGH; 
+        public static final double CLIMB_MOTOR_HIGH;
         public static final double CLIMB_MOTOR_LOW;
-        public static final double
+        public static final double 
     }
     public static class climnMotor {
         public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
