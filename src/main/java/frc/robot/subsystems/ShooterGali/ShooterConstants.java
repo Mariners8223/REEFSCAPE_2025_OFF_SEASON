@@ -2,7 +2,8 @@ package frc.robot.subsystems.shooterGali;
 
 import frc.util.MarinersController.MarinersController.ControllerLocation;
 
-public class ShooterConstants {
+public class ShooterConstants 
+{
     //TODO: Find all constants!!!
     public static final ControllerLocation CONTROLLER_LOCATION = ControllerLocation.MOTOR;
     public static final int ID = 24;//לשנות
