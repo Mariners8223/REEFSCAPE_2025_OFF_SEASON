@@ -21,12 +21,12 @@ public class Shooter extends  SubsystemBase
 
     public void setVoltage(double voltage) { io.setVoltage(voltage);}
 
-    public void setBackWheelsPower(double power){
-        io.setBackWheelsMotorPower(power);
+    public void setBackMotorPower(double power){
+        io.setBackMotorPower(power);
     }
 
-    public void setFrontWheelsPower(double power){
-        io.setFrontWheelsMotorPower(power);
+    public void setFrontMotorPower(double power){
+        io.setFrontMotorPower(power);
     }
 
     public boolean isGPInside()
@@ -34,7 +34,7 @@ public class Shooter extends  SubsystemBase
         return inputs.beamBreak;
     }
 
-    public void reachAngle(double angleToReach){
+    public void setAngle(double angleToReach){
         io.setAngle(angleToReach);
     }
 

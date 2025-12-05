@@ -11,13 +11,14 @@ public interface ShooterIO
         Pose3d shooter3DPose;
         boolean beamBreak;
     }
-    double getPosition();
 
     void setVoltage(double voltage);
 
-    void setBackWheelsPower(double power)
+    void setBackMotorPower(double power);
 
-    void setFrontWheelsPower(double power)
+    void setFrontMotorPower(double power);
+
+    void stopDropperMotor();
 
     void Update(ShooterInputs inputs);
     
