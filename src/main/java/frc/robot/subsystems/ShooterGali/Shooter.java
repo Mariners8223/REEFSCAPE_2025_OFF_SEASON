@@ -19,14 +19,22 @@ public class Shooter extends  SubsystemBase
         io.resetAngleEncoder();
     }
 
-    public void setVoltage(double voltage) { io.setVoltage(voltage);}
-
     public void setBackMotorPower(double power){
         io.setBackMotorPower(power);
     }
 
     public void setFrontMotorPower(double power){
         io.setFrontMotorPower(power);
+    }
+
+    public void stopFrontMotor()
+    {
+        io.setFrontMotorPower(0);
+    }
+
+    public void stopBackMotor()
+    {
+        io.setBackMotorPower(0);
     }
 
     public boolean isGPInside()

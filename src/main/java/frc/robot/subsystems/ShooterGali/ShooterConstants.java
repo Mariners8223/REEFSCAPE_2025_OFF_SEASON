@@ -26,12 +26,12 @@ public class ShooterConstants
 
     public static class AngleMotor
     {
-        public static final double ANGLE_TOLERANCE = 0.03;
+        public static final double ANGLE_TOLERANCE = 0.3;
         public static final double ANGLE_TO_RESET = 0;
-        public static final double ANGLE_TO_REACH = 45;
+        public static final double ANGLE_TO_REACH = 55;
     }
     
-    public static final double POWER_TO_REACH = 0.8; //what power to use for the shoot, need to check
+    public static final double POWER_TO_REACH = 0.8; //what power to use for the shoot, need to calc!
     public static final double GRAVITY_PHISICS = 9.8066;
 
 }

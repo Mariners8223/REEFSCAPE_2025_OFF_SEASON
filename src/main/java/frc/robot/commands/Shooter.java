@@ -35,8 +35,8 @@ public class Shooter extends Command {
   @Override
   public void end(boolean interrupted) 
   {
-    shooter.stopDropperMotor();
-    shooter.stopDropperMotor();
+    shooter.stopFrontMotor();
+    shooter.stopBackMotor();
     shooter.setAngle(AngleMotor.ANGLE_TO_RESET);
   }
 

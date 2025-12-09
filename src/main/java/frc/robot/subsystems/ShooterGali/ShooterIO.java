@@ -12,13 +12,13 @@ public interface ShooterIO
         boolean beamBreak;
     }
 
-    void setVoltage(double voltage);
-
     void setBackMotorPower(double power);
 
     void setFrontMotorPower(double power);
 
-    void stopDropperMotor();
+    void stopFrontMotor();
+
+    void stopBackMotor();
 
     void Update(ShooterInputs inputs);
     
