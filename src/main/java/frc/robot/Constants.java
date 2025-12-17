@@ -25,4 +25,5 @@ public class Constants {
     }
 
     public static final RobotType ROBOT_TYPE = RobotType.DEVELOPMENT;
+    public static final int num = 10;
 }
