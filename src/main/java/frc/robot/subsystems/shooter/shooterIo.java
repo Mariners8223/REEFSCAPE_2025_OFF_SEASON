@@ -6,18 +6,19 @@ import edu.wpi.first.math.geometry.Pose3d;
 public interface shooterIO
 {
     @AutoLog
-    class shooterInputes
+    class shooterInputs
     {
         double frontPower;
         double backPower;
+        double reachedAngle;
         boolean beamBreakValue;
         Pose3d location;
     }
 
     void frontSpin(double power);
     void backSpin(double power);
-    boolean isGpIn();
+    void setAngleTo(double angle);
 
-    void update(shooterInputes inputes);
+    void update(shooterInputs inputs);
 }
 

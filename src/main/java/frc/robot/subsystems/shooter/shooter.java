@@ -19,8 +19,20 @@ public class shooter extends SubsystemBase {
         backSpin(power);
     }
 
+    public void setAngleTo(double angle)
+    {
+        setAngleTo(angle);
+    }
+
+  
     public boolean isGpIn()
     {
         return input.beamBreakValue;
+    }
+
+
+    public void periodic()
+    {
+        io.updateInputs(inputs);
     }
 }
